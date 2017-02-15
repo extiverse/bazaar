@@ -20,7 +20,8 @@
         "source": "https://github.com/flagrow/bazaar"
     },
     "require": {
-        "flarum/core": "^0.1.0-beta.6"
+        "flarum/core": "^0.1.0-beta.6",
+        "composer/composer": "^1.3"
     },
     "extra": {
         "flarum-extension": {
