@@ -2,6 +2,7 @@
 
 namespace Flagrow\Bazaar\Api\Controllers;
 
+use Flagrow\Bazaar\Api\Serializer\ExtensionSerializer;
 use Flagrow\Bazaar\Extension\ExtensionManager;
 use Flarum\Api\Controller\AbstractResourceController;
 use Flarum\Core\Access\AssertPermissionTrait;
@@ -11,6 +12,11 @@ use Tobscure\JsonApi\Document;
 class UpdateExtensionController extends AbstractResourceController
 {
     use AssertPermissionTrait;
+
+    /**
+     * {@inheritdoc}
+     */
+    public $serializer = ExtensionSerializer::class;
 
     /**
      * @var ExtensionManager
