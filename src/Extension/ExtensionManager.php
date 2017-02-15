@@ -11,7 +11,7 @@ class ExtensionManager extends BaseManager
     /**
      * @var ComposerFileEditor
      */
-    protected $composerFileEditor;
+    protected static $composerFileEditor;
 
     /**
      * @var ComposerCommand
@@ -20,7 +20,11 @@ class ExtensionManager extends BaseManager
 
     protected function getFileEditor()
     {
-        return new ComposerFileEditor($this->filesystem->get($this->getComposerJsonPath()));
+        if (!static::$composerFileEditor) {
+            static::$composerFileEditor = new ComposerFileEditor($this->filesystem->get($this->getComposerJsonPath()));
+        }
+
+        return static::$composerFileEditor;
     }
 
     protected function getCommand()
