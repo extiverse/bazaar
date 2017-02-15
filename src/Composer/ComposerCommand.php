@@ -23,7 +23,7 @@ class ComposerCommand
     {
         $input = new ArrayInput($commands);
         $output = new BufferedOutput;
-        $returnCode = $application->run($input, $output);
+        $returnCode = $this->application->run($input, $output);
 
         return $output->fetch();
     }
