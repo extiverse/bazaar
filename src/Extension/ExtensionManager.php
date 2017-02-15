@@ -29,7 +29,7 @@ class ExtensionManager extends BaseManager
 
     protected function getCommand()
     {
-        return new ComposerCommand();
+        return $this->app->make(ComposerCommand::class);
     }
 
     public function install($name, $version)

@@ -2,7 +2,8 @@
 
 namespace Flagrow\Bazaar\Composer;
 
-use Composer\Console\Application;
+use Composer\Console\Application as ComposerApplication;
+use Flarum\Foundation\Application;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;
 
@@ -10,12 +11,15 @@ class ComposerCommand
 {
     protected $application;
 
-    public function __construct()
+    public function __construct(Application $app)
     {
-        // TODO: configure Composer cache path ?
-        // putenv('COMPOSER_HOME=' . __DIR__ . '/../vendor/bin/composer');
+        // Configure a default composer path if it isn't set on the system
+        if (getenv('COMPOSER_HOME') === false) {
+            // TODO: use app basePath() ?
+            putenv('COMPOSER_HOME=' . $app->storagePath().'/composer');
+        }
 
-        $this->application = new Application();
+        $this->application = new ComposerApplication();
         $this->application->setAutoExit(false);
     }
 
