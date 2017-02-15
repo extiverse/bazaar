@@ -6,6 +6,7 @@ use Flagrow\Bazaar\Extension\ExtensionManager;
 use Flarum\Api\Controller\AbstractDeleteController;
 use Flarum\Core\Access\AssertPermissionTrait;
 use Psr\Http\Message\ServerRequestInterface;
+use Zend\Diactoros\Response\EmptyResponse;
 
 class UninstallExtensionController extends AbstractDeleteController
 {
@@ -17,7 +18,7 @@ class UninstallExtensionController extends AbstractDeleteController
     protected $extensions;
 
     /**
-     * @param ExtensionManager $extensions Get our own Extension Manager (does not come from the container)
+     * @param ExtensionManager $extensions
      */
     public function __construct(ExtensionManager $extensions)
     {
@@ -29,12 +30,12 @@ class UninstallExtensionController extends AbstractDeleteController
      */
     protected function delete(ServerRequestInterface $request)
     {
-        return 'lol2';
         $this->assertAdmin($request->getAttribute('actor'));
 
         $name = array_get($request->getQueryParams(), 'name');
 
-        $extension = $this->extensions->getExtension($name);
-        $this->extensions->uninstall($extension);
+        $this->extensions->uninstall($name);
+
+        return new EmptyResponse(204);
     }
 }

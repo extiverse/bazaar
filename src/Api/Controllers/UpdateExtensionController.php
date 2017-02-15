@@ -3,11 +3,12 @@
 namespace Flagrow\Bazaar\Api\Controllers;
 
 use Flagrow\Bazaar\Extension\ExtensionManager;
+use Flarum\Api\Controller\AbstractResourceController;
 use Flarum\Core\Access\AssertPermissionTrait;
-use Flarum\Http\Controller\ControllerInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Tobscure\JsonApi\Document;
 
-class UpdateExtensionController implements ControllerInterface
+class UpdateExtensionController extends AbstractResourceController
 {
     use AssertPermissionTrait;
 
@@ -25,19 +26,21 @@ class UpdateExtensionController implements ControllerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Get the data to be serialized and assigned to the response document.
+     *
+     * @param ServerRequestInterface $request
+     * @param Document $document
+     * @return mixed
      */
-    public function handle(ServerRequestInterface $request)
+    protected function data(ServerRequestInterface $request, Document $document)
     {
-        return 'lol1';
         $this->assertAdmin($request->getAttribute('actor'));
 
-        $install = array_get($request->getParsedBody(), 'install');
-        $version = array_get($request->getParsedBody(), 'version');
         $name = array_get($request->getQueryParams(), 'name');
+        $version = array_get($request->getParsedBody(), 'version');
 
-        if ($install === true) {
-            $this->extensions->install($name, $version); // TODO: version ?
-        }
+        $this->extensions->install($name, $version);
+
+        return $this->extensions->getExtension($name);
     }
 }
