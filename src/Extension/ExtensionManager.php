@@ -2,13 +2,9 @@
 
 namespace Flagrow\Bazaar\Extension;
 
+use Flagrow\Bazaar\Composer\ComposerCommand;
 use Flagrow\Bazaar\Composer\ComposerFileEditor;
-use Flarum\Database\Migrator;
 use Flarum\Extension\ExtensionManager as BaseManager;
-use Flarum\Foundation\Application;
-use Flarum\Settings\SettingsRepositoryInterface;
-use Illuminate\Contracts\Events\Dispatcher;
-use Illuminate\Filesystem\Filesystem;
 
 class ExtensionManager extends BaseManager
 {
@@ -22,19 +18,21 @@ class ExtensionManager extends BaseManager
      */
     protected $composerCommand;
 
-    public function __construct(SettingsRepositoryInterface $config, Application $app, Migrator $migrator, Dispatcher $dispatcher, Filesystem $filesystem)
+    protected function getFileEditor()
     {
-        parent::__construct($config, $app, $migrator, $dispatcher, $filesystem);
+        return new ComposerFileEditor($this->filesystem->get($this->getComposerJsonPath()));
+    }
 
-        $this->composerFileEditor = new ComposerFileEditor($this->filesystem->get($this->getComposerJsonPath()));
-        $this->composerCommand = new ComposerCommand();
+    protected function getCommand()
+    {
+        return new ComposerCommand();
     }
 
     public function install($name, $version)
     {
-        $this->composerFileEditor->addPackage($name, $version);
+        $this->getFileEditor()->addPackage($name, $version);
 
-        $this->composerCommand->update();
+        $this->getCommand()->update();
     }
 
     public function uninstall($name)
@@ -42,9 +40,9 @@ class ExtensionManager extends BaseManager
         // TODO: run the uninstalled event after our own logic
         parent::uninstall($name);
 
-        $this->composerFileEditor->removePackage($name);
+        $this->getFileEditor()->removePackage($name);
 
-        $this->composerCommand->update();
+        $this->getCommand()->update();
     }
 
     protected function getComposerJsonPath()
@@ -54,6 +52,6 @@ class ExtensionManager extends BaseManager
 
     protected function saveComposerFile()
     {
-        $this->filesystem->put($this->getComposerJsonPath(), $this->composerFileEditor->getContents());
+        $this->filesystem->put($this->getComposerJsonPath(), $this->getFileEditor()->getContents());
     }
 }
