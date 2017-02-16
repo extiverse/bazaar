@@ -2,7 +2,7 @@
 
 namespace Flagrow\Bazaar\Listeners;
 
-use Flagrow\Bazaar\Api\Controllers\UpdateExtensionController;
+use Flagrow\Bazaar\Api\Controllers\CreateExtensionController;
 use Flagrow\Bazaar\Api\Controllers\UninstallExtensionController;
 use Flarum\Event\ConfigureApiRoutes;
 use Illuminate\Events\Dispatcher;
@@ -26,11 +26,11 @@ class AddApiControllers
      */
     public function configureApiRoutes(ConfigureApiRoutes $event)
     {
-        // Install / update an extension
-        $event->get(
-            '/bazaar/extensions/{name}',
+        // Install an extension
+        $event->post(
+            '/bazaar/extensions',
             'bazaar.extensions.update',
-            UpdateExtensionController::class
+            CreateExtensionController::class
         );
 
         // Uninstall an extension

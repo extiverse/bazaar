@@ -4,6 +4,7 @@ namespace Flagrow\Bazaar\Extension;
 
 use Flagrow\Bazaar\Composer\ComposerCommand;
 use Flagrow\Bazaar\Composer\ComposerFileEditor;
+use Flagrow\Bazaar\Exception\CannotWriteComposerFileException;
 use Flarum\Extension\ExtensionManager as BaseManager;
 
 class ExtensionManager extends BaseManager
@@ -35,16 +36,21 @@ class ExtensionManager extends BaseManager
     public function install($name, $version)
     {
         $this->getFileEditor()->addPackage($name, $version);
+        $this->saveComposerFile();
 
         $this->getCommand()->update();
     }
 
-    public function uninstall($name)
+    public function uninstall($shortName)
     {
         // TODO: run the uninstalled event after our own logic
-        parent::uninstall($name);
+        parent::uninstall($shortName);
+
+        // Convert shortcode back to package name by looking inside install.json
+        $name = $this->getExtension($shortName)->name;
 
         $this->getFileEditor()->removePackage($name);
+        $this->saveComposerFile();
 
         $this->getCommand()->update();
     }
@@ -56,6 +62,10 @@ class ExtensionManager extends BaseManager
 
     protected function saveComposerFile()
     {
-        $this->filesystem->put($this->getComposerJsonPath(), $this->getFileEditor()->getContents());
+        $contents = $this->filesystem->put($this->getComposerJsonPath(), $this->getFileEditor()->getContents());
+
+        if ($contents === false) {
+            throw new CannotWriteComposerFileException();
+        }
     }
 }

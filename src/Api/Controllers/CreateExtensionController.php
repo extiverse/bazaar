@@ -4,12 +4,12 @@ namespace Flagrow\Bazaar\Api\Controllers;
 
 use Flagrow\Bazaar\Api\Serializer\ExtensionSerializer;
 use Flagrow\Bazaar\Extension\ExtensionManager;
-use Flarum\Api\Controller\AbstractResourceController;
+use Flarum\Api\Controller\AbstractCreateController;
 use Flarum\Core\Access\AssertPermissionTrait;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 
-class UpdateExtensionController extends AbstractResourceController
+class CreateExtensionController extends AbstractCreateController
 {
     use AssertPermissionTrait;
 
@@ -42,7 +42,7 @@ class UpdateExtensionController extends AbstractResourceController
     {
         $this->assertAdmin($request->getAttribute('actor'));
 
-        $name = array_get($request->getQueryParams(), 'name');
+        $name = array_get($request->getParsedBody(), 'name');
         $version = array_get($request->getParsedBody(), 'version');
 
         $this->extensions->install($name, $version);

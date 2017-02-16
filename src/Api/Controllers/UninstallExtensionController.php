@@ -32,9 +32,9 @@ class UninstallExtensionController extends AbstractDeleteController
     {
         $this->assertAdmin($request->getAttribute('actor'));
 
-        $name = array_get($request->getQueryParams(), 'name');
+        $shortName = array_get($request->getQueryParams(), 'name');
 
-        $this->extensions->uninstall($name);
+        $this->extensions->uninstall($shortName);
 
         return new EmptyResponse(204);
     }
