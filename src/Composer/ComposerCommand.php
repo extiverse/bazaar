@@ -2,74 +2,85 @@
 
 namespace Flagrow\Bazaar\Composer;
 
-use Composer\Console\Application as ComposerApplication;
-use Flarum\Foundation\Application;
-use Symfony\Component\Console\ConsoleEvents;
-use Symfony\Component\Console\Event\ConsoleExceptionEvent;
-use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\Console\Output\BufferedOutput;
-use Symfony\Component\EventDispatcher\EventDispatcher;
+use Composer\Installer;
+use Flagrow\Bazaar\Exception\ComposerException;
 
 class ComposerCommand
 {
     /**
-     * @var EventDispatcher
+     * @var string
      */
-    protected $dispatcher;
+    protected $composerHome;
 
     /**
-     * @var ComposerApplication
+     * @var string
      */
-    protected $application;
+    protected $vendorDir;
 
     /**
-     * @var Exception
+     * @var ComposerIO
      */
-    protected $runtimeException = null;
+    protected $io;
 
-    public function __construct(Application $app)
+    /**
+     * @var Installer
+     */
+    protected $installer;
+
+    /**
+     * @param $composerHome
+     * @param $vendorDir
+     */
+    public function __construct($composerHome, $vendorDir)
     {
-        // Configure a default composer path if it isn't set on the system
-        if (getenv('COMPOSER_HOME') === false) {
-            // TODO: use app basePath() ?
-            putenv('COMPOSER_HOME=' . $app->storagePath().'/composer');
+        $this->composerHome = $composerHome;
+        $this->vendorDir = $vendorDir;
+    }
+
+    /**
+     * Setup the underlying Composer Installer command
+     */
+    public function createInstaller()
+    {
+        putenv('COMPOSER_HOME='.$this->composerHome);
+
+        $this->io = new ComposerIO;
+
+        ComposerFactory::setVendorDir($this->vendorDir);
+        $composer = ComposerFactory::create($this->io);
+
+        $this->installer = Installer::create($this->io, $composer);
+    }
+
+    /**
+     * Perform the underlying Composer Installer command and handle output
+     * @return string Command output
+     * @throws ComposerException
+     */
+    public function doInstallerRun()
+    {
+        $exitCode = $this->installer->run();
+
+        if ($exitCode !== 0) {
+            // Exceptions should be caught by the ComposerIO handler
+            // This is only for errors that the installer did not report verbally
+            throw new ComposerException('Installer run error');
         }
 
-        $this->application = new ComposerApplication();
-        $this->application->setAutoExit(false);
-
-        $this->dispatcher = new EventDispatcher();
-        $this->application->setDispatcher($this->dispatcher);
-        $this->configureDispatcher();
+        return $this->io->getOutput();
     }
 
-    protected function configureDispatcher()
-    {
-        $this->dispatcher->addListener(ConsoleEvents::EXCEPTION, function(ConsoleExceptionEvent $event) {
-            // Throw Console Application exceptions into the Flarum Application so it can be catched
-            // Exceptions thrown from this function are never catched by Flarum error handler,
-            // but as this function runs along the `run` method we can save the output and read it after the `run`
-            $this->runtimeException = $event->getException();
-        });
-    }
-
-    public function run(array $commands)
-    {
-        $input = new ArrayInput($commands);
-        $output = new BufferedOutput;
-        $returnCode = $this->application->run($input, $output);
-
-        if (!is_null($this->runtimeException)) {
-            throw $this->runtimeException;
-        }
-
-        return $output->fetch();
-    }
-
+    /**
+     * Runs `composer update`
+     * @return string Command output
+     */
     public function update()
     {
-        return $this->run([
-            'command' => 'update',
-        ]);
+        $this->createInstaller();
+
+        $this->installer->setUpdate(true);
+        $this->installer->setSkipSuggest(true);
+
+        return $this->doInstallerRun();
     }
 }
