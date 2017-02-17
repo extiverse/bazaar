@@ -2,6 +2,7 @@
 
 namespace Flagrow\Bazaar\Api\Serializers;
 
+use Flagrow\Bazaar\Extensions\Extension;
 use Flarum\Api\Serializer\AbstractSerializer;
 
 class ExtensionSerializer extends AbstractSerializer
@@ -18,7 +19,10 @@ class ExtensionSerializer extends AbstractSerializer
      */
     public function getDefaultAttributes($extension)
     {
-        // At the moment we only return the array data from the ExtensionManager
+        if ($extension instanceof Extension) {
+            return $extension->toArray();
+        }
+
         return $extension;
     }
 }
