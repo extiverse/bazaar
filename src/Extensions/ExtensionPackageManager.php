@@ -6,6 +6,7 @@ use Flagrow\Bazaar\Composer\ComposerCommand;
 use Flagrow\Bazaar\Exceptions\FilePermissionException;
 use Flarum\Foundation\Application;
 use Illuminate\Filesystem\Filesystem;
+use Psr\Log\LoggerInterface;
 
 class ExtensionPackageManager
 {
@@ -19,10 +20,16 @@ class ExtensionPackageManager
      */
     protected $filesystem;
 
-    public function __construct(Application $app, Filesystem $filesystem)
+    /**
+     * @var LoggerInterface
+     */
+    protected $log;
+
+    public function __construct(Application $app, Filesystem $filesystem, LoggerInterface $log)
     {
         $this->app = $app;
         $this->filesystem = $filesystem;
+        $this->log = $log;
     }
 
     public function getComposerVendorDir()
@@ -64,10 +71,28 @@ class ExtensionPackageManager
 
         $this->filesystem->deleteDirectory($this->getComposerTmpVendorDir());
 
+        $startTime = $this->beforeCommandStart();
+
         $command = new ComposerCommand($this->getComposerHome(), $this->getComposerTmpVendorDir());
-        $command->update();
+        $output = $command->update();
+
+        $this->logCommandResult($startTime, $output, 'update');
 
         $this->filesystem->deleteDirectory($this->getComposerVendorDir());
         $this->filesystem->move($this->getComposerTmpVendorDir(), $this->getComposerVendorDir());
+    }
+
+    public function beforeCommandStart()
+    {
+        return microtime(true);
+    }
+
+    public function logCommandResult($startTime, $commandOutput, $commandName)
+    {
+        $endTime = microtime(true);
+        $elapsedTime = round($endTime - $startTime); // In s
+        $memoryUsed = round(memory_get_peak_usage()/1000000); // In MB
+
+        $this->log->info('Bazaar: running composer command "'.$commandName.'" (Duration: '.$elapsedTime.'s, Memory: '.$memoryUsed.'MB)'.PHP_EOL.$commandOutput);
     }
 }
