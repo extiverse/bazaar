@@ -3,9 +3,9 @@
 namespace Flagrow\Bazaar\Search;
 
 use Flagrow\Bazaar\Extensions\Extension;
-use Flagrow\Bazaar\Extensions\ExtensionUtils;
 use Flarum\Core\Search\SearchResults;
 use Flarum\Extension\ExtensionManager;
+use Flarum\Settings\SettingsRepositoryInterface;
 use GuzzleHttp\Client;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -16,23 +16,42 @@ class FlagrowIOSearcher extends AbstractExtensionSearcher
      */
     protected $extensionManager;
 
-    public function __construct(ExtensionManager $manager)
+    /**
+     * @var SettingsRepositoryInterface
+     */
+    protected $config;
+
+    /**
+     * @param ExtensionManager $manager
+     * @param SettingsRepositoryInterface $config
+     */
+    public function __construct(ExtensionManager $manager, SettingsRepositoryInterface $config)
     {
         $this->extensionManager = $manager;
+        $this->config = $config;
     }
 
+    /**
+     * Get a Guzzle client configured for Flagrow API
+     * @return Client
+     */
     protected function getClient()
     {
         return new Client([
             'base_uri' => 'http://localhost:8000/api/',
             'headers' => [
                 'Accept' => 'application/json',
-                'Authorization' => 'Bearer [token]',
+                'Authorization' => 'Bearer '.$this->config->get('flagrow.bazaar.api_token'),
             ]
         ]);
     }
 
-    public function createExtension($apiPackage)
+    /**
+     * Create an Extension object and map all data sources
+     * @param array $apiPackage
+     * @return Extension
+     */
+    public function createExtension(array $apiPackage)
     {
         $extension = Extension::createFromAttributes($apiPackage['attributes']);
 
@@ -45,6 +64,9 @@ class FlagrowIOSearcher extends AbstractExtensionSearcher
         return $extension;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function search($limit = null, $offset = 0)
     {
         $responseHtml = $this->getClient()->get('packages', [

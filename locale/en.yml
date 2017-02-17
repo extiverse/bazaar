@@ -1,0 +1,7 @@
+flagrow-bazaar:
+    admin:
+        popup:
+            title: Flagrow Bazaar
+
+            field:
+                apiToken: API token
