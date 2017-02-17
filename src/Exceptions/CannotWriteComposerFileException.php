@@ -1,6 +1,6 @@
 <?php
 
-namespace Flagrow\Bazaar\Exception;
+namespace Flagrow\Bazaar\Exceptions;
 
 class CannotWriteComposerFileException extends \Exception
 {

@@ -2,7 +2,7 @@
 
 namespace Flagrow\Bazaar\Api\Controllers;
 
-use Flagrow\Bazaar\Extension\ExtensionManager;
+use Flagrow\Bazaar\Extensions\ExtensionManager;
 use Flarum\Api\Controller\AbstractDeleteController;
 use Flarum\Core\Access\AssertPermissionTrait;
 use Psr\Http\Message\ServerRequestInterface;

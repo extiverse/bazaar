@@ -1,9 +1,9 @@
 <?php
 
-namespace Flagrow\Bazaar\Extension;
+namespace Flagrow\Bazaar\Extensions;
 
 use Flagrow\Bazaar\Composer\ComposerCommand;
-use Flagrow\Bazaar\Exception\FilePermissionException;
+use Flagrow\Bazaar\Exceptions\FilePermissionException;
 use Flarum\Foundation\Application;
 use Illuminate\Filesystem\Filesystem;
 

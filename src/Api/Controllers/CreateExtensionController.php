@@ -2,8 +2,8 @@
 
 namespace Flagrow\Bazaar\Api\Controllers;
 
-use Flagrow\Bazaar\Api\Serializer\ExtensionSerializer;
-use Flagrow\Bazaar\Extension\ExtensionManager;
+use Flagrow\Bazaar\Api\Serializers\ExtensionSerializer;
+use Flagrow\Bazaar\Extensions\ExtensionManager;
 use Flarum\Api\Controller\AbstractCreateController;
 use Flarum\Core\Access\AssertPermissionTrait;
 use Psr\Http\Message\ServerRequestInterface;

@@ -3,7 +3,7 @@
 namespace Flagrow\Bazaar\Composer;
 
 use Composer\Installer;
-use Flagrow\Bazaar\Exception\ComposerException;
+use Flagrow\Bazaar\Exceptions\ComposerException;
 
 class ComposerCommand
 {

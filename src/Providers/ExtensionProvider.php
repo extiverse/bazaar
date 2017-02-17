@@ -2,7 +2,7 @@
 
 namespace Flagrow\Bazaar\Providers;
 
-use Flagrow\Bazaar\Extension\ExtensionManager;
+use Flagrow\Bazaar\Extensions\ExtensionManager;
 use Flarum\Foundation\AbstractServiceProvider;
 
 class ExtensionProvider extends AbstractServiceProvider

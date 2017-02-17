@@ -1,10 +1,10 @@
 <?php
 
-namespace Flagrow\Bazaar\Extension;
+namespace Flagrow\Bazaar\Extensions;
 
 use Flagrow\Bazaar\Composer\ComposerCommand;
 use Flagrow\Bazaar\Composer\ComposerFileEditor;
-use Flagrow\Bazaar\Exception\CannotWriteComposerFileException;
+use Flagrow\Bazaar\Exceptions\CannotWriteComposerFileException;
 use Flarum\Extension\ExtensionManager as BaseManager;
 
 class ExtensionManager extends BaseManager
