@@ -28,17 +28,12 @@ class ExtensionManager extends BaseManager
         return static::$composerFileEditor;
     }
 
-    protected function getCommand()
-    {
-        return $this->app->make(ComposerCommand::class);
-    }
-
     public function install($name, $version)
     {
         $this->getFileEditor()->addPackage($name, $version);
         $this->saveComposerFile();
 
-        $this->getCommand()->update();
+        $this->updatePackages();
     }
 
     public function uninstall($shortName)
@@ -52,7 +47,7 @@ class ExtensionManager extends BaseManager
         $this->getFileEditor()->removePackage($name);
         $this->saveComposerFile();
 
-        $this->getCommand()->update();
+        $this->updatePackages();
     }
 
     protected function getComposerJsonPath()
@@ -67,5 +62,18 @@ class ExtensionManager extends BaseManager
         if ($contents === false) {
             throw new CannotWriteComposerFileException();
         }
+    }
+
+    public function updatePackages()
+    {
+        $composerHome = $this->app->storagePath().'/composer-home';
+        $vendorDir = $this->app->basePath().'/vendor';
+        $vendorDirTmp = $this->app->storagePath().'/tmp/composer-vendor';
+
+        $this->filesystem->deleteDirectory($vendorDirTmp);
+
+        $command = new ComposerCommand($composerHome, $vendorDirTmp);
+
+        $command->update();
     }
 }
