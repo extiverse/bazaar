@@ -1,5 +1,6 @@
 import Model from 'flarum/Model';
 import mixin from 'flarum/utils/mixin';
+import computed from 'flarum/utils/computed';
 
 export default class Extension extends mixin(Model, {
     package: Model.attribute('package'),
@@ -13,5 +14,8 @@ export default class Extension extends mixin(Model, {
 
     installed: Model.attribute('installed'),
     enabled: Model.attribute('enabled'),
-    installed_version: Model.attribute('installed_version')
+    installed_version: Model.attribute('installed_version'),
+
+    can_install: computed('installed', installed => !installed),
+    can_uninstall: computed('installed', 'enabled', (installed, enabled) => installed && !enabled)
 }) {}

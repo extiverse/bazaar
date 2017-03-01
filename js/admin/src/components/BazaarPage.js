@@ -1,19 +1,40 @@
 import Component from 'flarum/Component';
+import Button from 'flarum/components/Button';
 import ExtensionRepository from 'flagrow/bazaar/utils/ExtensionRepository';
 
 export default class BazaarPage extends Component {
     init() {
         this.repository = new ExtensionRepository;
+        this.repository.loadNextPage();
     }
 
     view() {
         return m('ul', [
             this.repository.extensions().map(
-                extension => m('li', extension.package())
+                extension => m('li', [
+                    extension.package(),
+                    extension.can_install() ? Button.component({
+                        type: 'button',
+                        className: 'Button',
+                        children: 'Install',
+                        onclick: () => {}
+                    }) : '',
+                    extension.can_uninstall() ? Button.component({
+                        type: 'button',
+                        className: 'Button',
+                        children: 'Uninstall',
+                        onclick: () => {}
+                    }) : ''
+                ])
             ),
-            m('li', m('button', {onclick: () => {
-                this.repository.loadNextPage();
-            }}, 'More'))
+            m('li', Button.component({
+                type: 'button',
+                className: 'Button',
+                children: 'More',
+                onclick: () => {
+                    this.repository.loadNextPage();
+                }
+            }))
         ]);
     }
 }

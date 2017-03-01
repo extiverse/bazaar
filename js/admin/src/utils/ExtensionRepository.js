@@ -3,9 +3,9 @@ import app from 'flarum/app';
 export default class ExtensionRepository {
     constructor() {
         this.extensions = m.prop([]);
-        this.currentPage = 0;
-        this.nextPageUrl = app.forum.attribute('apiUrl') + '/bazaar/extensions';
+        this.nextPageUrl = null;
         this.loading = false;
+        this.resetNavigation();
     }
     loadNextPage() {
         if (this.loading || !this.nextPageUrl) {
@@ -28,5 +28,10 @@ export default class ExtensionRepository {
             this.nextPageUrl = result.links.next;
             this.loading = false;
         });
+    }
+    resetNavigation() {
+        this.loading = false; // Might cause problems if an update is in process
+        this.nextPageUrl = app.forum.attribute('apiUrl') + '/bazaar/extensions';
+        this.extensions([]);
     }
 }

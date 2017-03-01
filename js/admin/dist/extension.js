@@ -37,15 +37,17 @@ System.register('flagrow/bazaar/addBazaarPage', ['flarum/extend', 'flarum/app', 
 });;
 'use strict';
 
-System.register('flagrow/bazaar/components/BazaarPage', ['flarum/Component', './ExtensionRepository'], function (_export, _context) {
+System.register('flagrow/bazaar/components/BazaarPage', ['flarum/Component', 'flarum/components/Button', 'flagrow/bazaar/utils/ExtensionRepository'], function (_export, _context) {
     "use strict";
 
-    var Component, ExtensionRepository, BazaarPage;
+    var Component, Button, ExtensionRepository, BazaarPage;
     return {
         setters: [function (_flarumComponent) {
             Component = _flarumComponent.default;
-        }, function (_ExtensionRepository) {
-            ExtensionRepository = _ExtensionRepository.default;
+        }, function (_flarumComponentsButton) {
+            Button = _flarumComponentsButton.default;
+        }, function (_flagrowBazaarUtilsExtensionRepository) {
+            ExtensionRepository = _flagrowBazaarUtilsExtensionRepository.default;
         }],
         execute: function () {
             BazaarPage = function (_Component) {
@@ -60,6 +62,7 @@ System.register('flagrow/bazaar/components/BazaarPage', ['flarum/Component', './
                     key: 'init',
                     value: function init() {
                         this.repository = new ExtensionRepository();
+                        this.repository.loadNextPage();
                     }
                 }, {
                     key: 'view',
@@ -67,10 +70,25 @@ System.register('flagrow/bazaar/components/BazaarPage', ['flarum/Component', './
                         var _this2 = this;
 
                         return m('ul', [this.repository.extensions().map(function (extension) {
-                            return m('li', extension.package());
-                        }), m('li', m('button', { onclick: function onclick() {
+                            return m('li', [extension.package(), extension.can_install() ? Button.component({
+                                type: 'button',
+                                className: 'Button',
+                                children: 'Install',
+                                onclick: function onclick() {}
+                            }) : '', extension.can_uninstall() ? Button.component({
+                                type: 'button',
+                                className: 'Button',
+                                children: 'Uninstall',
+                                onclick: function onclick() {}
+                            }) : '']);
+                        }), m('li', Button.component({
+                            type: 'button',
+                            className: 'Button',
+                            children: 'More',
+                            onclick: function onclick() {
                                 _this2.repository.loadNextPage();
-                            } }, 'More'))]);
+                            }
+                        }))]);
                     }
                 }]);
                 return BazaarPage;
@@ -125,63 +143,6 @@ System.register('flagrow/bazaar/components/BazaarSettingsModal', ['flarum/app', 
 });;
 'use strict';
 
-System.register('flagrow/bazaar/components/ExtensionRepository', ['flarum/app'], function (_export, _context) {
-    "use strict";
-
-    var app, ExtensionRepository;
-    return {
-        setters: [function (_flarumApp) {
-            app = _flarumApp.default;
-        }],
-        execute: function () {
-            ExtensionRepository = function () {
-                function ExtensionRepository() {
-                    babelHelpers.classCallCheck(this, ExtensionRepository);
-
-                    this.extensions = m.prop([]);
-                    this.currentPage = 0;
-                    this.nextPageUrl = app.forum.attribute('apiUrl') + '/bazaar/extensions';
-                    this.loading = false;
-                }
-
-                babelHelpers.createClass(ExtensionRepository, [{
-                    key: 'loadNextPage',
-                    value: function loadNextPage() {
-                        var _this = this;
-
-                        if (this.loading || !this.nextPageUrl) {
-                            return;
-                        }
-
-                        this.loading = true;
-                        app.request({
-                            method: 'GET',
-                            url: this.nextPageUrl
-                        }).then(function (result) {
-                            console.log(result);
-                            var newExtensions = result.data.map(function (data) {
-                                return app.store.createRecord('bazaar-extensions', data);
-                            });
-                            // start/end computation is required for the admin UI to refresh after the new extensions have been loaded
-                            m.startComputation();
-                            _this.extensions(_this.extensions().concat(newExtensions));
-                            m.endComputation();
-                            console.log(newExtensions);
-
-                            _this.nextPageUrl = result.links.next;
-                            _this.loading = false;
-                        });
-                    }
-                }]);
-                return ExtensionRepository;
-            }();
-
-            _export('default', ExtensionRepository);
-        }
-    };
-});;
-'use strict';
-
 System.register('flagrow/bazaar/main', ['flarum/extend', 'flarum/app', 'flagrow/bazaar/components/BazaarSettingsModal', 'flagrow/bazaar/models/Extension', 'flagrow/bazaar/addBazaarPage'], function (_export, _context) {
     "use strict";
 
@@ -213,15 +174,17 @@ System.register('flagrow/bazaar/main', ['flarum/extend', 'flarum/app', 'flagrow/
 });;
 'use strict';
 
-System.register('flagrow/bazaar/models/Extension', ['flarum/Model', 'flarum/utils/mixin'], function (_export, _context) {
+System.register('flagrow/bazaar/models/Extension', ['flarum/Model', 'flarum/utils/mixin', 'flarum/utils/computed'], function (_export, _context) {
     "use strict";
 
-    var Model, mixin, Extension;
+    var Model, mixin, computed, Extension;
     return {
         setters: [function (_flarumModel) {
             Model = _flarumModel.default;
         }, function (_flarumUtilsMixin) {
             mixin = _flarumUtilsMixin.default;
+        }, function (_flarumUtilsComputed) {
+            computed = _flarumUtilsComputed.default;
         }],
         execute: function () {
             Extension = function (_mixin) {
@@ -245,10 +208,81 @@ System.register('flagrow/bazaar/models/Extension', ['flarum/Model', 'flarum/util
 
                 installed: Model.attribute('installed'),
                 enabled: Model.attribute('enabled'),
-                installed_version: Model.attribute('installed_version')
+                installed_version: Model.attribute('installed_version'),
+
+                can_install: computed('installed', function (installed) {
+                    return !installed;
+                }),
+                can_uninstall: computed('installed', 'enabled', function (installed, enabled) {
+                    return installed && !enabled;
+                })
             }));
 
             _export('default', Extension);
+        }
+    };
+});;
+'use strict';
+
+System.register('flagrow/bazaar/utils/ExtensionRepository', ['flarum/app'], function (_export, _context) {
+    "use strict";
+
+    var app, ExtensionRepository;
+    return {
+        setters: [function (_flarumApp) {
+            app = _flarumApp.default;
+        }],
+        execute: function () {
+            ExtensionRepository = function () {
+                function ExtensionRepository() {
+                    babelHelpers.classCallCheck(this, ExtensionRepository);
+
+                    this.extensions = m.prop([]);
+                    this.nextPageUrl = null;
+                    this.loading = false;
+                    this.resetNavigation();
+                }
+
+                babelHelpers.createClass(ExtensionRepository, [{
+                    key: 'loadNextPage',
+                    value: function loadNextPage() {
+                        var _this = this;
+
+                        if (this.loading || !this.nextPageUrl) {
+                            return;
+                        }
+
+                        this.loading = true;
+                        app.request({
+                            method: 'GET',
+                            url: this.nextPageUrl
+                        }).then(function (result) {
+                            console.log(result);
+                            var newExtensions = result.data.map(function (data) {
+                                return app.store.createRecord('bazaar-extensions', data);
+                            });
+                            // start/end computation is required for the admin UI to refresh after the new extensions have been loaded
+                            m.startComputation();
+                            _this.extensions(_this.extensions().concat(newExtensions));
+                            m.endComputation();
+                            console.log(newExtensions);
+
+                            _this.nextPageUrl = result.links.next;
+                            _this.loading = false;
+                        });
+                    }
+                }, {
+                    key: 'resetNavigation',
+                    value: function resetNavigation() {
+                        this.loading = false; // Might cause problems if an update is in process
+                        this.nextPageUrl = app.forum.attribute('apiUrl') + '/bazaar/extensions';
+                        this.extensions([]);
+                    }
+                }]);
+                return ExtensionRepository;
+            }();
+
+            _export('default', ExtensionRepository);
         }
     };
 });
