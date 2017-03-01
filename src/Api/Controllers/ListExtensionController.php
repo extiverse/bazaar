@@ -1,23 +1,19 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: clark
- * Date: 17.02.17
- * Time: 21:23
- */
 
 namespace Flagrow\Bazaar\Api\Controllers;
-
 
 use Flagrow\Bazaar\Api\Serializers\ExtensionSerializer;
 use Flagrow\Bazaar\Search\AbstractExtensionSearcher;
 use Flarum\Api\Controller\AbstractCollectionController;
 use Flarum\Api\UrlGenerator;
+use Flarum\Core\Access\AssertPermissionTrait;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 
 class ListExtensionController extends AbstractCollectionController
 {
+    use AssertPermissionTrait;
+
     /**
      * @inheritdoc
      */
@@ -44,6 +40,8 @@ class ListExtensionController extends AbstractCollectionController
      */
     protected function data(ServerRequestInterface $request, Document $document)
     {
+        $this->assertAdmin($request->getAttribute('actor'));
+
         $offset = $this->extractOffset($request);
 
         // Limit is never used, we use the one from flagrow.io
