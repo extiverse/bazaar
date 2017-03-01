@@ -74,12 +74,16 @@ System.register('flagrow/bazaar/components/BazaarPage', ['flarum/Component', 'fl
                                 type: 'button',
                                 className: 'Button',
                                 children: 'Install',
-                                onclick: function onclick() {}
+                                onclick: function onclick() {
+                                    _this2.repository.installExtension(extension);
+                                }
                             }) : '', extension.can_uninstall() ? Button.component({
                                 type: 'button',
                                 className: 'Button',
                                 children: 'Uninstall',
-                                onclick: function onclick() {}
+                                onclick: function onclick() {
+                                    _this2.repository.uninstallExtension(extension);
+                                }
                             }) : '']);
                         }), m('li', Button.component({
                             type: 'button',
@@ -277,6 +281,40 @@ System.register('flagrow/bazaar/utils/ExtensionRepository', ['flarum/app'], func
                         this.loading = false; // Might cause problems if an update is in process
                         this.nextPageUrl = app.forum.attribute('apiUrl') + '/bazaar/extensions';
                         this.extensions([]);
+                    }
+                }, {
+                    key: 'installExtension',
+                    value: function installExtension(extension) {
+                        var _this2 = this;
+
+                        app.request({
+                            method: 'POST',
+                            url: app.forum.attribute('apiUrl') + '/bazaar/extensions',
+                            data: {
+                                id: extension.id()
+                            }
+                        }).then(function () {
+                            m.startComputation();
+                            _this2.resetNavigation();
+                            m.endComputation();
+                        });
+                    }
+                }, {
+                    key: 'uninstallExtension',
+                    value: function uninstallExtension(extension) {
+                        var _this3 = this;
+
+                        app.request({
+                            method: 'DELETE',
+                            url: app.forum.attribute('apiUrl') + '/bazaar/extensions/:id',
+                            data: {
+                                id: extension.id()
+                            }
+                        }).then(function () {
+                            m.startComputation();
+                            _this3.resetNavigation();
+                            m.endComputation();
+                        });
                     }
                 }]);
                 return ExtensionRepository;

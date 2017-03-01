@@ -17,13 +17,17 @@ export default class BazaarPage extends Component {
                         type: 'button',
                         className: 'Button',
                         children: 'Install',
-                        onclick: () => {}
+                        onclick: () => {
+                            this.repository.installExtension(extension);
+                        }
                     }) : '',
                     extension.can_uninstall() ? Button.component({
                         type: 'button',
                         className: 'Button',
                         children: 'Uninstall',
-                        onclick: () => {}
+                        onclick: () => {
+                            this.repository.uninstallExtension(extension);
+                        }
                     }) : ''
                 ])
             ),

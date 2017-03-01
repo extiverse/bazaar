@@ -49,6 +49,16 @@ class ExtensionPackageManager
         return $this->app->storagePath().'/composer-home';
     }
 
+    protected function getComposerJsonPath()
+    {
+        return $this->app->basePath().'/composer.json';
+    }
+
+    public function getComposerCommand()
+    {
+        return new ComposerCommand($this->getComposerHome(), $this->getComposerTmpVendorDir(), $this->getComposerJsonPath());
+    }
+
     public function checkFilePermissions()
     {
         $pathsToCheck = [
@@ -67,26 +77,70 @@ class ExtensionPackageManager
 
     public function updatePackages()
     {
-        $this->checkFilePermissions();
-
-        $this->filesystem->deleteDirectory($this->getComposerTmpVendorDir());
-
+        $this->prepareDirectories();
         $startTime = $this->beforeCommandStart();
 
-        $command = new ComposerCommand($this->getComposerHome(), $this->getComposerTmpVendorDir());
-        $output = $command->update();
+        $output = $this->getComposerCommand()->update();
 
         $this->logCommandResult($startTime, $output, 'update');
-
-        $this->filesystem->deleteDirectory($this->getComposerVendorDir());
-        $this->filesystem->move($this->getComposerTmpVendorDir(), $this->getComposerVendorDir());
+        $this->switchVendorDirectories();
     }
 
+    public function requirePackage($package)
+    {
+        $this->prepareDirectories();
+        $startTime = $this->beforeCommandStart();
+
+        $output = $this->getComposerCommand()->requires($package);
+
+        $this->logCommandResult($startTime, $output, 'require');
+        $this->switchVendorDirectories();
+    }
+
+    public function removePackage($package)
+    {
+        $this->prepareDirectories();
+        $startTime = $this->beforeCommandStart();
+
+        $output = $this->getComposerCommand()->remove($package);
+
+        $this->logCommandResult($startTime, $output, 'remove');
+        $this->switchVendorDirectories();
+    }
+
+    /**
+     * Helper to get microtime before launching the command
+     * @return float
+     */
     public function beforeCommandStart()
     {
         return microtime(true);
     }
 
+    /**
+     * Directory logic that has to run prior to composer
+     */
+    public function prepareDirectories()
+    {
+        $this->checkFilePermissions();
+        $this->filesystem->deleteDirectory($this->getComposerTmpVendorDir());
+    }
+
+    /**
+     * Directory logic that has to run after composer
+     */
+    public function switchVendorDirectories()
+    {
+        $this->filesystem->deleteDirectory($this->getComposerVendorDir());
+        $this->filesystem->move($this->getComposerTmpVendorDir(), $this->getComposerVendorDir());
+    }
+
+    /**
+     * Write output & stats about the command in the log file
+     * @param $startTime microtime at the start if the command
+     * @param $commandOutput
+     * @param $commandName A name to display in the log with the output & stats
+     */
     public function logCommandResult($startTime, $commandOutput, $commandName)
     {
         $endTime = microtime(true);

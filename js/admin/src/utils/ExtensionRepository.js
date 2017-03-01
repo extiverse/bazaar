@@ -34,4 +34,30 @@ export default class ExtensionRepository {
         this.nextPageUrl = app.forum.attribute('apiUrl') + '/bazaar/extensions';
         this.extensions([]);
     }
+    installExtension(extension) {
+        app.request({
+            method: 'POST',
+            url: app.forum.attribute('apiUrl') + '/bazaar/extensions',
+            data: {
+                id: extension.id()
+            }
+        }).then(() => {
+            m.startComputation();
+            this.resetNavigation();
+            m.endComputation();
+        });
+    }
+    uninstallExtension(extension) {
+        app.request({
+            method: 'DELETE',
+            url: app.forum.attribute('apiUrl') + '/bazaar/extensions/:id',
+            data: {
+                id: extension.id()
+            }
+        }).then(() => {
+            m.startComputation();
+            this.resetNavigation();
+            m.endComputation();
+        });
+    }
 }

@@ -43,7 +43,7 @@ class AddApiControllers
 
         // Uninstall an extension
         $event->delete(
-            '/bazaar/extensions/{name}',
+            '/bazaar/extensions/{id}',
             'bazaar.extensions.delete',
             UninstallExtensionController::class
         );
