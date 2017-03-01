@@ -10,7 +10,7 @@ class ExtensionSerializer extends AbstractSerializer
     /**
      * {@inheritdoc}
      */
-    protected $type = 'extensions';
+    protected $type = 'bazaar-extensions';
 
     /**
      * {@inheritdoc}

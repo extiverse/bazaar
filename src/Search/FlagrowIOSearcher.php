@@ -80,9 +80,7 @@ class FlagrowIOSearcher extends AbstractExtensionSearcher
         $responseJson = json_decode($responseHtml->getBody(), true);
 
         $packages = $responseJson['data'];
-        $pagination = $responseJson['meta']['pagination'];
-
-        $areMoreResults = $pagination['total_pages'] > $pagination['current_page'];
+        $areMoreResults = $responseJson['meta']['pages_total'] > $responseJson['meta']['pages_current'];
 
         $extensions = new Collection();
 
