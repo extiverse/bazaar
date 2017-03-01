@@ -16,7 +16,7 @@ export default class BazaarPage extends Component {
                     extension.can_install() ? Button.component({
                         type: 'button',
                         className: 'Button',
-                        children: 'Install',
+                        children: app.translator.trans('flagrow-bazaar.admin.page.button.install'),
                         onclick: () => {
                             this.repository.installExtension(extension);
                         }
@@ -24,7 +24,7 @@ export default class BazaarPage extends Component {
                     extension.can_uninstall() ? Button.component({
                         type: 'button',
                         className: 'Button',
-                        children: 'Uninstall',
+                        children: app.translator.trans('flagrow-bazaar.admin.page.button.uninstall'),
                         onclick: () => {
                             this.repository.uninstallExtension(extension);
                         }

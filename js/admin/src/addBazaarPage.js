@@ -13,8 +13,8 @@ export default function () {
         items.add('flagrow-bazaar', AdminLinkButton.component({
             href: app.route('flagrow-bazaar'),
             icon: 'shopping-bag',
-            children: 'Bazaar',
-            description: app.translator.trans('flagrow-upload.admin.help_texts.description')
+            children: app.translator.trans('flagrow-bazaar.admin.nav.title'),
+            description: app.translator.trans('flagrow-bazaar.admin.nav.description')
         }));
     });
 }
