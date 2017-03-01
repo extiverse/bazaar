@@ -44,16 +44,17 @@ class ListExtensionController extends AbstractCollectionController
      */
     protected function data(ServerRequestInterface $request, Document $document)
     {
-        $limit = $this->extractLimit($request);
         $offset = $this->extractOffset($request);
 
-        $results = $this->searcher->search($limit, $offset);
+        // Limit is never used, we use the one from flagrow.io
+        // Offset is used as page number, so it does not reflect the true offset
+        $results = $this->searcher->search(null, $offset);
 
         $document->addPaginationLinks(
             $this->url->toRoute('bazaar.extensions.index'),
             $request->getQueryParams(),
             $offset,
-            $limit,
+            1, // Add one to the offset to get next page number
             $results->areMoreResults() ? null : 0
         );
 

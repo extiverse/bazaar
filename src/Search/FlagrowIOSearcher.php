@@ -70,10 +70,8 @@ class FlagrowIOSearcher extends AbstractExtensionSearcher
     public function search($limit = null, $offset = 0)
     {
         $responseHtml = $this->getClient()->get('packages', [
-            'json' => [
-                'page' => $offset,
-                //'offset' => $offset,
-                //'limit' => $limit,
+            'query' => [
+                'page[number]' => $offset + 1, // Offset is zero-based, page number is 1-based
             ],
         ]);
 
