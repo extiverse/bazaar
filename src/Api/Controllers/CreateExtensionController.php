@@ -42,10 +42,9 @@ class CreateExtensionController extends AbstractCreateController
     {
         $this->assertAdmin($request->getAttribute('actor'));
 
-        $name = array_get($request->getParsedBody(), 'name');
-        $version = array_get($request->getParsedBody(), 'version');
+        $extensionId = array_get($request->getParsedBody(), 'id');
 
-        $this->extensions->install($name, $version);
+        $this->extensions->install($extensionId);
 
         return $this->extensions->getExtension($name);
     }

@@ -2,70 +2,30 @@
 
 namespace Flagrow\Bazaar\Extensions;
 
-use Flagrow\Bazaar\Composer\ComposerCommand;
-use Flagrow\Bazaar\Composer\ComposerFileEditor;
-use Flagrow\Bazaar\Exceptions\CannotWriteComposerFileException;
 use Flarum\Extension\ExtensionManager as BaseManager;
 
 class ExtensionManager extends BaseManager
 {
-    /**
-     * @var ComposerFileEditor
-     */
-    protected static $composerFileEditor;
-
-    /**
-     * @var ComposerCommand
-     */
-    protected $composerCommand;
-
-    protected function getFileEditor()
-    {
-        if (!static::$composerFileEditor) {
-            static::$composerFileEditor = new ComposerFileEditor($this->filesystem->get($this->getComposerJsonPath()));
-        }
-
-        return static::$composerFileEditor;
-    }
-
     public function getPackageManager()
     {
         return $this->app->make(ExtensionPackageManager::class);
     }
 
-    public function install($name, $version)
+    public function install($extensionId, $version = null)
     {
-        $this->getFileEditor()->addPackage($name, $version);
-        $this->saveComposerFile();
-
-        $this->getPackageManager()->updatePackages();
+        $package = ExtensionUtils::idToPackage($extensionId);
+        $this->getPackageManager()->requirePackage($package);
     }
 
-    public function uninstall($shortName)
+    public function uninstall($extensionId)
     {
+        // Get the ids we need from the Bazaar extension id
+        $shortName = ExtensionUtils::idToShortName($extensionId);
+        $package   = ExtensionUtils::idToPackage($extensionId);
+
         // TODO: run the uninstalled event after our own logic
         parent::uninstall($shortName);
 
-        // Convert shortcode back to package name by looking inside install.json
-        $name = $this->getExtension($shortName)->name;
-
-        $this->getFileEditor()->removePackage($name);
-        $this->saveComposerFile();
-
-        $this->getPackageManager()->updatePackages();
-    }
-
-    protected function getComposerJsonPath()
-    {
-        return $this->app->basePath().'/composer.json';
-    }
-
-    protected function saveComposerFile()
-    {
-        $contents = $this->filesystem->put($this->getComposerJsonPath(), $this->getFileEditor()->getContents());
-
-        if ($contents === false) {
-            throw new CannotWriteComposerFileException();
-        }
+        $this->getPackageManager()->removePackage($package);
     }
 }

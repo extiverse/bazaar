@@ -1,0 +1,14 @@
+flagrow-bazaar:
+    admin:
+        popup:
+            title: Flagrow Bazaar
+
+            field:
+                apiToken: API token
+        nav:
+            title: Bazaar
+            description: The Flagrow marketplace
+        page:
+            button:
+                install: Install
+                uninstall: Uninstall
