@@ -38,13 +38,13 @@ class FlagrowIOSearcher extends AbstractExtensionSearcher
      */
     protected function getClient()
     {
-        $host = Arr::get(app('flarum.config'),'flagrow', 'https://flagrow.io');
+        $host = Arr::get(app('flarum.config'), 'flagrow', 'https://flagrow.io');
 
         return new Client([
             'base_uri' => "$host/api/",
             'headers' => [
                 'Accept' => 'application/json',
-                'Authorization' => 'Bearer '.$this->config->get('flagrow.bazaar.api_token'),
+                'Authorization' => 'Bearer ' . $this->config->get('flagrow.bazaar.api_token'),
             ]
         ]);
     }
@@ -80,7 +80,7 @@ class FlagrowIOSearcher extends AbstractExtensionSearcher
 
         $json = json_decode($response->getBody(), true);
 
-        $areMoreResults = $json['meta']['pages_total'] > $json['meta']['pages_current'];
+        $areMoreResults = Arr::get($json, 'meta.pages_total', 0) > Arr::get($json, 'meta.pages_current', 0);
 
         $extensions = Collection::make(
             Arr::get($json, 'data', [])
