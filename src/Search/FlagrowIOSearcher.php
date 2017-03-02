@@ -2,6 +2,7 @@
 
 namespace Flagrow\Bazaar\Search;
 
+use Flagrow\Bazaar\Search\FlagrowApi;
 use Flagrow\Bazaar\Extensions\Extension;
 use Flarum\Core\Search\SearchResults;
 use Flarum\Extension\ExtensionManager;
@@ -23,30 +24,20 @@ class FlagrowIOSearcher extends AbstractExtensionSearcher
     protected $config;
 
     /**
+     * @var Client
+     */
+    protected $client;
+
+    /**
      * @param ExtensionManager $manager
      * @param SettingsRepositoryInterface $config
+     * @param FlagrowApi $client
      */
-    public function __construct(ExtensionManager $manager, SettingsRepositoryInterface $config)
+    public function __construct(ExtensionManager $manager, SettingsRepositoryInterface $config, FlagrowApi $client)
     {
         $this->extensionManager = $manager;
         $this->config = $config;
-    }
-
-    /**
-     * Get a Guzzle client configured for Flagrow API
-     * @return Client
-     */
-    protected function getClient()
-    {
-        $host = Arr::get(app('flarum.config'), 'flagrow', 'https://flagrow.io');
-
-        return new Client([
-            'base_uri' => "$host/api/",
-            'headers' => [
-                'Accept' => 'application/json',
-                'Authorization' => 'Bearer ' . $this->config->get('flagrow.bazaar.api_token'),
-            ]
-        ]);
+        $this->client = $client;
     }
 
     /**
@@ -72,7 +63,7 @@ class FlagrowIOSearcher extends AbstractExtensionSearcher
      */
     public function search($limit = null, $offset = 0)
     {
-        $response = $this->getClient()->get('packages', [
+        $response = $this->client->get('packages', [
             'query' => [
                 'page[number]' => $offset + 1, // Offset is zero-based, page number is 1-based
                 'sort' => '-downloads' // Sort by package name per default
