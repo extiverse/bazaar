@@ -11,7 +11,7 @@ export default class ExtensionListItem extends Component {
 
         return <li className={
             'ExtensionListItem ' +
-            (extension.enabled() ? 'enabled ' : 'disabled') +
+            (extension.enabled() ? 'enabled ' : 'disabled ') +
             (extension.installed() ? 'installed' : 'uninstalled') +
             (extension.enabled() && extension.highest_version() && extension.installed_version() != extension.highest_version() ? 'update' : '')
         }>
