@@ -1,6 +1,6 @@
 <?php
 
-namespace Flagrow\Bazaar\Composer;
+namespace Flagrow\Bazaar\Composer\Utils;
 
 use Composer\IO\BufferIO;
 use Flagrow\Bazaar\Exceptions\ComposerException;
