@@ -4,6 +4,7 @@ namespace Flagrow\Bazaar\Extensions;
 
 use Flarum\Extension\Extension as InstalledExtension;
 use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Support\Arr;
 
 class Extension implements Arrayable
 {
@@ -63,20 +64,16 @@ class Extension implements Arrayable
      */
     protected function getAttributeIfPresent($attribute)
     {
-        if (array_key_exists($attribute, $this->attributes)) {
-            return $this->attributes[$attribute];
-        }
-
-        return null;
+        return Arr::get($this->attributes, $attribute);
     }
 
     public function getPackage()
     {
-        if (array_key_exists('name', $this->attributes)) {
-            return $this->attributes['name'];
-        }
-
-        return ExtensionUtils::idToPackage($this->id);
+        return Arr::get(
+            $this->attributes,
+            'name',
+            ExtensionUtils::idToPackage($this->id)
+        );
     }
 
     /**
@@ -84,11 +81,7 @@ class Extension implements Arrayable
      */
     public function getTitle()
     {
-        if (array_key_exists('title', $this->attributes)) {
-            return $this->attributes['title'];
-        }
-
-        return 'Unknown';
+        return Arr::get($this->attributes, 'title', 'Unknown');
     }
 
     /**
@@ -96,11 +89,7 @@ class Extension implements Arrayable
      */
     public function getDescription()
     {
-        if (array_key_exists('description', $this->attributes)) {
-            return $this->attributes['description'];
-        }
-
-        return 'Unknown';
+        return Arr::get($this->attributes, 'description', '');
     }
 
     public function isInstalled()
@@ -137,6 +126,7 @@ class Extension implements Arrayable
             'package' => $this->getPackage(),
             'title' => $this->getTitle(),
             'description' => $this->getDescription(),
+            'icon' => $this->getAttributeIfPresent('icon'),
             'license' => $this->getAttributeIfPresent('license'),
             'stars' => $this->getAttributeIfPresent('stars'),
             'forks' => $this->getAttributeIfPresent('forks'),
@@ -144,6 +134,7 @@ class Extension implements Arrayable
             'installed' => $this->isInstalled(),
             'enabled' => $this->isEnabled(),
             'installed_version' => $this->getInstalledVersion(),
+            'highest_version' => $this->getAttributeIfPresent('highest_version')
         ];
     }
 }
