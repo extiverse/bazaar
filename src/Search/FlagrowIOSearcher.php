@@ -7,7 +7,7 @@ use Flarum\Core\Search\SearchResults;
 use Flarum\Extension\ExtensionManager;
 use Flarum\Settings\SettingsRepositoryInterface;
 use GuzzleHttp\Client;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Arr;
 
 class FlagrowIOSearcher extends AbstractExtensionSearcher
 {
@@ -77,14 +77,13 @@ class FlagrowIOSearcher extends AbstractExtensionSearcher
 
         $responseJson = json_decode($responseHtml->getBody(), true);
 
-        $packages = $responseJson['data'];
         $areMoreResults = $responseJson['meta']['pages_total'] > $responseJson['meta']['pages_current'];
 
-        $extensions = new Collection();
-
-        foreach ($packages as $package) {
-            $extensions->push($this->createExtension($package));
-        }
+        $extensions = collect(
+            Arr::get($responseJson, 'data', [])
+        )->map(function ($package) {
+            return $this->createExtension($package);
+        })->keyBy('id');
 
         return new SearchResults($extensions, $areMoreResults);
     }
