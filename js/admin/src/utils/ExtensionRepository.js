@@ -58,4 +58,23 @@ export default class ExtensionRepository {
             m.endComputation();
         });
     }
+    toggleExtension(extension) {
+        const enabled = extension.enabled();
+
+        app.request({
+            url: app.forum.attribute('apiUrl') + '/extensions/' + id,
+            method: 'PATCH',
+            data: {enabled: !enabled}
+        }).then(() => {
+            m.startComputation();
+            this.resetNavigation();
+            m.endComputation();
+        });
+    }
+    disableExtension(extension) {
+        this.toggleExtension(extension);
+    }
+    enableExtension(extension) {
+        this.toggleExtension(extension);
+    }
 }

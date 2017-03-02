@@ -1,16 +1,20 @@
-import Component from 'flarum/Component';
-import icon from 'flarum/helpers/icon';
-import ItemList from 'flarum/utils/ItemList';
-import Button from 'flarum/components/Button';
-import Dropdown from 'flarum/components/Dropdown';
+import Component from "flarum/Component";
+import icon from "flarum/helpers/icon";
+import ItemList from "flarum/utils/ItemList";
+import Button from "flarum/components/Button";
+import Dropdown from "flarum/components/Dropdown";
 
-export default class ExtensionListItem extends Component
-{
+export default class ExtensionListItem extends Component {
     view() {
         const extension = this.props.extension;
-        const controls = this.controlItems(extension);
+        const controls = this.controlItems(extension).toArray();
 
-        return <li className={'ExtensionListItem ' + (extension.enabled() ? 'enabled ': '') + (extension.installed() ? 'installed' : '')}>
+        return <li className={
+            'ExtensionListItem ' +
+            (extension.enabled() ? 'enabled ' : 'disabled') +
+            (extension.installed() ? 'installed' : 'uninstalled') +
+            (extension.enabled() && extension.highest_version() && extension.installed_version() != extension.highest_version() ? 'update' : '')
+        }>
             <div className="ExtensionListItem-content">
                       <span className="ExtensionListItem-icon ExtensionIcon" style={extension.icon()}>
                         {extension.icon() ? icon(extension.icon().name) : ''}
@@ -46,18 +50,35 @@ export default class ExtensionListItem extends Component
 
         if (extension.installed() && !extension.enabled()) {
             items.add('uninstall', Button.component({
-                icon: 'trash-o',
-                children: app.translator.trans('core.admin.extensions.uninstall_button'),
+                icon: 'minus-square-o',
+                children: app.translator.trans('flagrow-bazaar.admin.page.button.uninstall'),
                 onclick: () => {
                     repository().uninstallExtension(extension);
+                }
+            }));
+            items.add('enable', Button.component({
+                icon: 'check-square-o',
+                children: app.translator.trans('flagrow-bazaar.admin.page.button.enable'),
+                onclick: () => {
+                    repository().enableExtension(extension);
+                }
+            }));
+        }
+
+        if (extension.installed() && extension.enabled()) {
+            items.add('disable', Button.component({
+                icon: 'square-o',
+                children: app.translator.trans('flagrow-bazaar.admin.page.button.disable'),
+                onclick: () => {
+                    repository().disableExtension(extension);
                 }
             }));
         }
 
         if (!extension.installed()) {
             items.add('install', Button.component({
-                icon: '',
-                children: app.translator.trans('core.admin.extensions.install_button'),
+                icon: 'plus-square-o',
+                children: app.translator.trans('flagrow-bazaar.admin.page.button.install'),
                 onclick: () => {
                     repository().installExtension(extension);
                 }

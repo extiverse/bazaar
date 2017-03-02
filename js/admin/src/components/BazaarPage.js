@@ -30,30 +30,14 @@ export default class BazaarPage extends Component {
 
         return m('ul', {className: 'ExtensionList'}, [
             this.repository().extensions().map(
-                extension => m('li', ExtensionListItem.component({extension: extension, repository: this.repository}))
-                //     extension.package(),
-                //     extension.can_install() ? Button.component({
-                //         type: 'button',
-                //         className: 'Button',
-                //         children: app.translator.trans('flagrow-bazaar.admin.page.button.install'),
-                //         onclick: () => {
-                //             this.repository.installExtension(extension);
-                //         }
-                //     }) : '',
-                //     extension.can_uninstall() ? Button.component({
-                //         type: 'button',
-                //         className: 'Button',
-                //         children: app.translator.trans('flagrow-bazaar.admin.page.button.uninstall'),
-                //         onclick: () => {
-                //             this.repository.uninstallExtension(extension);
-                //         }
-                //     }) : ''
-                // ])
+                extension => m('li',
+                    ExtensionListItem.component({extension: extension, repository: this.repository})
+                )
             ),
             m('li', Button.component({
                 type: 'button',
                 className: 'Button',
-                children: 'More',
+                children: app.translator.trans('flagrow-bazaar.admin.page.button.more'),
                 onclick: () => {
                     this.repository().loadNextPage();
                 }

@@ -95,29 +95,10 @@ System.register('flagrow/bazaar/components/BazaarPage', ['flarum/Component', 'fl
 
                         return m('ul', { className: 'ExtensionList' }, [this.repository().extensions().map(function (extension) {
                             return m('li', ExtensionListItem.component({ extension: extension, repository: _this2.repository }));
-                        }
-                        //     extension.package(),
-                        //     extension.can_install() ? Button.component({
-                        //         type: 'button',
-                        //         className: 'Button',
-                        //         children: app.translator.trans('flagrow-bazaar.admin.page.button.install'),
-                        //         onclick: () => {
-                        //             this.repository.installExtension(extension);
-                        //         }
-                        //     }) : '',
-                        //     extension.can_uninstall() ? Button.component({
-                        //         type: 'button',
-                        //         className: 'Button',
-                        //         children: app.translator.trans('flagrow-bazaar.admin.page.button.uninstall'),
-                        //         onclick: () => {
-                        //             this.repository.uninstallExtension(extension);
-                        //         }
-                        //     }) : ''
-                        // ])
-                        ), m('li', Button.component({
+                        }), m('li', Button.component({
                             type: 'button',
                             className: 'Button',
-                            children: 'More',
+                            children: app.translator.trans('flagrow-bazaar.admin.page.button.more'),
                             onclick: function onclick() {
                                 _this2.repository().loadNextPage();
                             }
@@ -174,9 +155,9 @@ System.register('flagrow/bazaar/components/BazaarSettingsModal', ['flarum/app', 
         }
     };
 });;
-'use strict';
+"use strict";
 
-System.register('flagrow/bazaar/components/ExtensionListItem', ['flarum/Component', 'flarum/helpers/icon', 'flarum/utils/ItemList', 'flarum/components/Button', 'flarum/components/Dropdown'], function (_export, _context) {
+System.register("flagrow/bazaar/components/ExtensionListItem", ["flarum/Component", "flarum/helpers/icon", "flarum/utils/ItemList", "flarum/components/Button", "flarum/components/Dropdown"], function (_export, _context) {
     "use strict";
 
     var Component, icon, ItemList, Button, Dropdown, ExtensionListItem;
@@ -202,46 +183,46 @@ System.register('flagrow/bazaar/components/ExtensionListItem', ['flarum/Componen
                 }
 
                 babelHelpers.createClass(ExtensionListItem, [{
-                    key: 'view',
+                    key: "view",
                     value: function view() {
                         var extension = this.props.extension;
-                        var controls = this.controlItems(extension);
+                        var controls = this.controlItems(extension).toArray();
 
                         return m(
-                            'li',
-                            { className: 'ExtensionListItem ' + (extension.enabled() ? 'enabled ' : '') + (extension.installed() ? 'installed' : '') },
+                            "li",
+                            { className: 'ExtensionListItem ' + (extension.enabled() ? 'enabled ' : 'disabled') + (extension.installed() ? 'installed' : 'uninstalled') + (extension.enabled() && extension.highest_version() && extension.installed_version() != extension.highest_version() ? 'update' : '') },
                             m(
-                                'div',
-                                { className: 'ExtensionListItem-content' },
+                                "div",
+                                { className: "ExtensionListItem-content" },
                                 m(
-                                    'span',
-                                    { className: 'ExtensionListItem-icon ExtensionIcon', style: extension.icon() },
+                                    "span",
+                                    { className: "ExtensionListItem-icon ExtensionIcon", style: extension.icon() },
                                     extension.icon() ? icon(extension.icon().name) : ''
                                 ),
                                 controls.length ? m(
                                     Dropdown,
                                     {
-                                        className: 'ExtensionListItem-controls',
-                                        buttonClassName: 'Button Button--icon Button--flat',
-                                        menuClassName: 'Dropdown-menu--right',
-                                        icon: 'ellipsis-h' },
+                                        className: "ExtensionListItem-controls",
+                                        buttonClassName: "Button Button--icon Button--flat",
+                                        menuClassName: "Dropdown-menu--right",
+                                        icon: "ellipsis-h" },
                                     controls
                                 ) : '',
                                 m(
-                                    'label',
-                                    { className: 'ExtensionListItem-title' },
+                                    "label",
+                                    { className: "ExtensionListItem-title" },
                                     extension.title()
                                 ),
                                 m(
-                                    'div',
-                                    { className: 'ExtensionListItem-version' },
+                                    "div",
+                                    { className: "ExtensionListItem-version" },
                                     extension.highest_version()
                                 )
                             )
                         );
                     }
                 }, {
-                    key: 'controlItems',
+                    key: "controlItems",
                     value: function controlItems(extension) {
                         var items = new ItemList();
                         var repository = this.props.repository;
@@ -256,18 +237,35 @@ System.register('flagrow/bazaar/components/ExtensionListItem', ['flarum/Componen
 
                         if (extension.installed() && !extension.enabled()) {
                             items.add('uninstall', Button.component({
-                                icon: 'trash-o',
-                                children: app.translator.trans('core.admin.extensions.uninstall_button'),
+                                icon: 'minus-square-o',
+                                children: app.translator.trans('flagrow-bazaar.admin.page.button.uninstall'),
                                 onclick: function onclick() {
                                     repository().uninstallExtension(extension);
+                                }
+                            }));
+                            items.add('enable', Button.component({
+                                icon: 'check-square-o',
+                                children: app.translator.trans('flagrow-bazaar.admin.page.button.enable'),
+                                onclick: function onclick() {
+                                    repository().enableExtension(extension);
+                                }
+                            }));
+                        }
+
+                        if (extension.installed() && extension.enabled()) {
+                            items.add('disable', Button.component({
+                                icon: 'square-o',
+                                children: app.translator.trans('flagrow-bazaar.admin.page.button.disable'),
+                                onclick: function onclick() {
+                                    repository().disableExtension(extension);
                                 }
                             }));
                         }
 
                         if (!extension.installed()) {
                             items.add('install', Button.component({
-                                icon: '',
-                                children: app.translator.trans('core.admin.extensions.install_button'),
+                                icon: 'plus-square-o',
+                                children: app.translator.trans('flagrow-bazaar.admin.page.button.install'),
                                 onclick: function onclick() {
                                     repository().installExtension(extension);
                                 }
@@ -280,7 +278,7 @@ System.register('flagrow/bazaar/components/ExtensionListItem', ['flarum/Componen
                 return ExtensionListItem;
             }(Component);
 
-            _export('default', ExtensionListItem);
+            _export("default", ExtensionListItem);
         }
     };
 });;
@@ -454,6 +452,33 @@ System.register('flagrow/bazaar/utils/ExtensionRepository', ['flarum/app'], func
                             _this3.resetNavigation();
                             m.endComputation();
                         });
+                    }
+                }, {
+                    key: 'toggleExtension',
+                    value: function toggleExtension(extension) {
+                        var _this4 = this;
+
+                        var enabled = extension.enabled();
+
+                        app.request({
+                            url: app.forum.attribute('apiUrl') + '/extensions/' + id,
+                            method: 'PATCH',
+                            data: { enabled: !enabled }
+                        }).then(function () {
+                            m.startComputation();
+                            _this4.resetNavigation();
+                            m.endComputation();
+                        });
+                    }
+                }, {
+                    key: 'disableExtension',
+                    value: function disableExtension(extension) {
+                        this.toggleExtension(extension);
+                    }
+                }, {
+                    key: 'enableExtension',
+                    value: function enableExtension(extension) {
+                        this.toggleExtension(extension);
                     }
                 }]);
                 return ExtensionRepository;

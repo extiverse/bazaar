@@ -117,6 +117,16 @@ class Extension implements Arrayable
     }
 
     /**
+     * Loads the icon information from the composer.json.
+     *
+     * @return array|null
+     */
+    public function getIcon()
+    {
+        return $this->installedExtension->getIcon();
+    }
+
+    /**
      * @inheritdoc
      */
     public function toArray()
@@ -126,7 +136,7 @@ class Extension implements Arrayable
             'package' => $this->getPackage(),
             'title' => $this->getTitle(),
             'description' => $this->getDescription(),
-            'icon' => $this->getAttributeIfPresent('icon'),
+            'icon' => $this->getIcon(),
             'license' => $this->getAttributeIfPresent('license'),
             'stars' => $this->getAttributeIfPresent('stars'),
             'forks' => $this->getAttributeIfPresent('forks'),
