@@ -40,4 +40,9 @@ trait AssertPackageInstallationTrait
     {
         $this->assertFalse($this->isPackageInstalled($package), 'Package '.$package.' should not be installed');
     }
+
+    public function assertPackageVersionNotInstalled($package, $version)
+    {
+        $this->assertFalse($this->isPackageVersionInstalled($package, $version), 'Version '.$version.' should not be installed for package '.$package);
+    }
 }

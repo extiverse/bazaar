@@ -38,8 +38,14 @@ class ComposerCommand
      * @param array $packages List of packages to update. Empty for all
      * @return ComposerOutput
      */
-    public function update($packages = null)
+    public function update($package = null)
     {
+        $packages = null;
+
+        if (!is_null($package)) {
+            $packages = [$package];
+        }
+
         return (new UpdateCommand($this->env))->run($packages);
     }
 

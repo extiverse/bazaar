@@ -4,7 +4,7 @@ namespace Tests\Bazaar\Composer;
 
 class UpdateCommandTest extends BaseCommandTest
 {
-    public function test_update_existing_package()
+    public function testUpdateExistingPackage()
     {
         $this->setComposerJson([
             'name' => 'flagrow/test',
@@ -16,7 +16,7 @@ class UpdateCommandTest extends BaseCommandTest
 
         // Install an old version on purpose
         $this->getComposerCommand()->update();
-        $this->assertPackageVersionInstalled('nesbot/carbon', '1.22.0');
+        $this->assertPackageInstalled('nesbot/carbon', '1.22.0');
 
         $this->setComposerJson([
             'name' => 'flagrow/test',

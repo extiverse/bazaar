@@ -4,7 +4,7 @@ namespace Tests\Bazaar\Composer;
 
 class RequireCommandTest extends BaseCommandTest
 {
-    public function test_require_new_package()
+    public function testRequireNewPackage()
     {
         $this->setComposerJson([
             'name' => 'flagrow/test',

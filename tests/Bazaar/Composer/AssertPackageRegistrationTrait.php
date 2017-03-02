@@ -36,7 +36,12 @@ trait AssertPackageRegistrationTrait
         }
     }
 
-    public function assertPackageNotRegistered($package, $version)
+    public function assertPackageNotRegistered($package)
+    {
+        $this->assertFalse($this->isPackageVersionRegistered($package, 'Package '.$package.' should not be in composer.json'));
+    }
+
+    public function assertPackageVersionNotRegistered($package, $version)
     {
         $this->assertFalse($this->isPackageVersionRegistered($package, $version, 'Version '.$version.' should not be in composer.json for package '.$package));
     }

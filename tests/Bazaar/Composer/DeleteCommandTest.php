@@ -4,7 +4,7 @@ namespace Tests\Bazaar\Composer;
 
 class DeleteCommandTest extends BaseCommandTest
 {
-    public function test_delete_existing_package()
+    public function testDeleteExistingPackage()
     {
         $this->setComposerJson([
             'name' => 'flagrow/test',
@@ -18,7 +18,7 @@ class DeleteCommandTest extends BaseCommandTest
         $this->assertPackageInstalled('nesbot/carbon');
 
         $this->getComposerCommand()->remove('nesbot/carbon');
-        $this->assertPackageNotInJson('nesbot/carbon');
+        $this->assertPackageNotRegistered('nesbot/carbon');
         $this->assertPackageNotInstalled('nesbot/carbon');
     }
 }

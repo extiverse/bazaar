@@ -4,7 +4,7 @@ namespace Flagrow\Bazaar\Composer;
 
 use Flagrow\Bazaar\Composer\Utils\ComposerFactory;
 use Flagrow\Bazaar\Exceptions\FilePermissionException;
-use Illuminate\Contracts\Filesystem\Filesystem;
+use Illuminate\Filesystem\Filesystem;
 
 class ComposerEnvironment
 {

@@ -4,14 +4,12 @@ namespace Tests\Bazaar\Composer;
 
 use Flagrow\Bazaar\Composer\ComposerCommand;
 use Flagrow\Bazaar\Composer\ComposerEnvironment;
-use Illuminate\Filesystem\FilesystemAdapter;
-use League\Flysystem\Filesystem;
-use League\Flysystem\Adapter\Local;
+use Illuminate\Filesystem\Filesystem;
 use Tests\TestCase;
 
 abstract class BaseCommandTest extends TestCase
 {
-    //use AssertPackageInstallationTrait, AssertPackageRegistrationTrait;
+    use AssertPackageInstallationTrait, AssertPackageRegistrationTrait;
 
     /**
      * @var FilesystemAdapter
@@ -30,7 +28,7 @@ abstract class BaseCommandTest extends TestCase
     {
         parent::__construct();
 
-        $this->filesystem = new FilesystemAdapter(new Filesystem(new Local('/')));
+        $this->filesystem = new Filesystem();
         $this->composerEnv = new ComposerEnvironment($this->getComposerWorkingDir(), $this->getComposerHomeDir(), $this->filesystem);
     }
 
@@ -64,6 +62,7 @@ abstract class BaseCommandTest extends TestCase
     public function resetWorkingDir()
     {
         $this->filesystem->deleteDirectory($this->getComposerWorkingDir());
+        $this->filesystem->makeDirectory($this->getComposerWorkingDir());
     }
 
     /**

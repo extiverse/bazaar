@@ -53,7 +53,7 @@ class ComposerOutput
      */
     public function getOutput()
     {
-        return $this->io->getContents();
+        return $this->io->getOutput();
     }
 
     /**
