@@ -75,6 +75,7 @@ class FlagrowIOSearcher extends AbstractExtensionSearcher
         $response = $this->getClient()->get('packages', [
             'query' => [
                 'page[number]' => $offset + 1, // Offset is zero-based, page number is 1-based
+                'sort' => '-downloads' // Sort by package name per default
             ],
         ]);
 

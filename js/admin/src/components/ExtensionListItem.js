@@ -16,7 +16,7 @@ export default class ExtensionListItem extends Component {
             (extension.enabled() && extension.highest_version() && extension.installed_version() != extension.highest_version() ? 'update' : '')
         }>
             <div className="ExtensionListItem-content">
-                      <span className="ExtensionListItem-icon ExtensionIcon" style={extension.icon()}>
+                      <span className="ExtensionListItem-icon ExtensionIcon" style={extension.icon() || ''}>
                         {extension.icon() ? icon(extension.icon().name) : ''}
                       </span>
                 {controls.length ? (
@@ -29,7 +29,7 @@ export default class ExtensionListItem extends Component {
                         </Dropdown>
                     ) : ''}
                 <label className="ExtensionListItem-title">
-                    {extension.title()}
+                    {extension.title() || extension.package()}
                 </label>
                 <div className="ExtensionListItem-version">{extension.highest_version()}</div>
             </div>

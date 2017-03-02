@@ -196,7 +196,7 @@ System.register("flagrow/bazaar/components/ExtensionListItem", ["flarum/Componen
                                 { className: "ExtensionListItem-content" },
                                 m(
                                     "span",
-                                    { className: "ExtensionListItem-icon ExtensionIcon", style: extension.icon() },
+                                    { className: "ExtensionListItem-icon ExtensionIcon", style: extension.icon() || '' },
                                     extension.icon() ? icon(extension.icon().name) : ''
                                 ),
                                 controls.length ? m(
@@ -211,7 +211,7 @@ System.register("flagrow/bazaar/components/ExtensionListItem", ["flarum/Componen
                                 m(
                                     "label",
                                     { className: "ExtensionListItem-title" },
-                                    extension.title()
+                                    extension.title() || extension.package()
                                 ),
                                 m(
                                     "div",

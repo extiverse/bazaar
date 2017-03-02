@@ -33,7 +33,7 @@ class ExtensionManager extends BaseManager
 
         $this->migrateDown($extension);
 
-        // @TODO this is broken in Flarum b6
+        // @TODO this is broken in Flarum b6, fix is committed
 //        $this->unpublishAssets($extension);
 
         $extension->setInstalled(false);

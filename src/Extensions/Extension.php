@@ -21,7 +21,7 @@ class Extension implements Arrayable
     /**
      * @var InstalledExtension
      */
-    protected $installedExtension = null;
+    protected $installedExtension;
 
     /**
      * @param string $id Extension `vendor/package` identifier
@@ -95,12 +95,15 @@ class Extension implements Arrayable
     public function isInstalled()
     {
         // We dont need to check $this->installedExtension->isInstalled() because it's always true at the moment
-        return is_object($this->installedExtension);
+        return $this->installedExtension !== null;
     }
 
+    /**
+     * @return null|string
+     */
     public function getInstalledVersion()
     {
-        if (is_object($this->installedExtension)) {
+        if ($this->installedExtension) {
             return $this->installedExtension->getVersion();
         }
 
@@ -109,7 +112,7 @@ class Extension implements Arrayable
 
     public function isEnabled()
     {
-        if (is_object($this->installedExtension)) {
+        if ($this->installedExtension) {
             return $this->installedExtension->isEnabled();
         }
 
@@ -123,7 +126,11 @@ class Extension implements Arrayable
      */
     public function getIcon()
     {
-        return $this->installedExtension->getIcon();
+        if ($this->installedExtension) {
+            return $this->installedExtension->getIcon();
+        }
+
+        return null;
     }
 
     /**
