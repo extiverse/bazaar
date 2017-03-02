@@ -122,12 +122,17 @@ class Extension implements Arrayable
     /**
      * Loads the icon information from the composer.json.
      *
+     * Files are not locally or remotely available.
+     *
      * @return array|null
      */
     public function getIcon()
     {
         if ($this->installedExtension) {
             return $this->installedExtension->getIcon();
+        }
+        if (($icon = $this->getAttributeIfPresent('icon'))) {
+            return $icon;
         }
 
         return null;
