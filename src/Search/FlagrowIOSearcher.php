@@ -7,6 +7,7 @@ use Flarum\Core\Search\SearchResults;
 use Flarum\Extension\ExtensionManager;
 use Flarum\Settings\SettingsRepositoryInterface;
 use GuzzleHttp\Client;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Arr;
 
 class FlagrowIOSearcher extends AbstractExtensionSearcher
@@ -37,8 +38,10 @@ class FlagrowIOSearcher extends AbstractExtensionSearcher
      */
     protected function getClient()
     {
+        $host = Arr::get(app('flarum.config'),'flagrow', 'https://flagrow.io');
+
         return new Client([
-            'base_uri' => 'http://localhost:8000/api/',
+            'base_uri' => "$host/api/",
             'headers' => [
                 'Accept' => 'application/json',
                 'Authorization' => 'Bearer '.$this->config->get('flagrow.bazaar.api_token'),
@@ -69,18 +72,18 @@ class FlagrowIOSearcher extends AbstractExtensionSearcher
      */
     public function search($limit = null, $offset = 0)
     {
-        $responseHtml = $this->getClient()->get('packages', [
+        $response = $this->getClient()->get('packages', [
             'query' => [
                 'page[number]' => $offset + 1, // Offset is zero-based, page number is 1-based
             ],
         ]);
 
-        $responseJson = json_decode($responseHtml->getBody(), true);
+        $json = json_decode($response->getBody(), true);
 
-        $areMoreResults = $responseJson['meta']['pages_total'] > $responseJson['meta']['pages_current'];
+        $areMoreResults = $json['meta']['pages_total'] > $json['meta']['pages_current'];
 
-        $extensions = collect(
-            Arr::get($responseJson, 'data', [])
+        $extensions = Collection::make(
+            Arr::get($json, 'data', [])
         )->map(function ($package) {
             return $this->createExtension($package);
         })->keyBy('id');
