@@ -7,7 +7,7 @@ use Flarum\Foundation\AbstractServiceProvider;
 
 class ExtensionProvider extends AbstractServiceProvider
 {
-    public function boot()
+    public function register()
     {
         $this->app->singleton(ExtensionManager::class, ExtensionManager::class);
     }

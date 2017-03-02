@@ -7,6 +7,7 @@ export default class Extension extends mixin(Model, {
     title: Model.attribute('title'),
     description: Model.attribute('description'),
     license: Model.attribute('license'),
+    icon: Model.attribute('icon'),
 
     stars: Model.attribute('stars'),
     forks: Model.attribute('forks'),
@@ -15,6 +16,7 @@ export default class Extension extends mixin(Model, {
     installed: Model.attribute('installed'),
     enabled: Model.attribute('enabled'),
     installed_version: Model.attribute('installed_version'),
+    highest_version: Model.attribute('highest_version'),
 
     can_install: computed('installed', installed => !installed),
     can_uninstall: computed('installed', 'enabled', (installed, enabled) => installed && !enabled)

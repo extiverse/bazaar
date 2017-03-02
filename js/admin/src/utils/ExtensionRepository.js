@@ -17,13 +17,11 @@ export default class ExtensionRepository {
             method: 'GET',
             url: this.nextPageUrl
         }).then(result => {
-            console.log(result);
             const newExtensions = result.data.map(data => app.store.createRecord('bazaar-extensions', data));
             // start/end computation is required for the admin UI to refresh after the new extensions have been loaded
             m.startComputation();
             this.extensions(this.extensions().concat(newExtensions));
             m.endComputation();
-            console.log(newExtensions);
 
             this.nextPageUrl = result.links.next;
             this.loading = false;
@@ -59,5 +57,24 @@ export default class ExtensionRepository {
             this.resetNavigation();
             m.endComputation();
         });
+    }
+    toggleExtension(extension) {
+        const enabled = extension.enabled();
+
+        app.request({
+            url: app.forum.attribute('apiUrl') + '/extensions/' + id,
+            method: 'PATCH',
+            data: {enabled: !enabled}
+        }).then(() => {
+            m.startComputation();
+            this.resetNavigation();
+            m.endComputation();
+        });
+    }
+    disableExtension(extension) {
+        this.toggleExtension(extension);
+    }
+    enableExtension(extension) {
+        this.toggleExtension(extension);
     }
 }

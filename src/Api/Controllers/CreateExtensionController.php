@@ -4,6 +4,7 @@ namespace Flagrow\Bazaar\Api\Controllers;
 
 use Flagrow\Bazaar\Api\Serializers\ExtensionSerializer;
 use Flagrow\Bazaar\Extensions\ExtensionManager;
+use Flagrow\Bazaar\Extensions\ExtensionUtils;
 use Flarum\Api\Controller\AbstractCreateController;
 use Flarum\Core\Access\AssertPermissionTrait;
 use Psr\Http\Message\ServerRequestInterface;
@@ -45,6 +46,8 @@ class CreateExtensionController extends AbstractCreateController
         $extensionId = array_get($request->getParsedBody(), 'id');
 
         $this->extensions->install($extensionId);
+
+        $name = ExtensionUtils::idToShortName($extensionId);
 
         return $this->extensions->getExtension($name);
     }

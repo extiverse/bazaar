@@ -2,12 +2,14 @@
 
 namespace Flagrow\Bazaar\Search;
 
+use Flagrow\Bazaar\Search\FlagrowApi;
 use Flagrow\Bazaar\Extensions\Extension;
 use Flarum\Core\Search\SearchResults;
 use Flarum\Extension\ExtensionManager;
 use Flarum\Settings\SettingsRepositoryInterface;
 use GuzzleHttp\Client;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Arr;
 
 class FlagrowIOSearcher extends AbstractExtensionSearcher
 {
@@ -22,28 +24,20 @@ class FlagrowIOSearcher extends AbstractExtensionSearcher
     protected $config;
 
     /**
+     * @var Client
+     */
+    protected $client;
+
+    /**
      * @param ExtensionManager $manager
      * @param SettingsRepositoryInterface $config
+     * @param FlagrowApi $client
      */
-    public function __construct(ExtensionManager $manager, SettingsRepositoryInterface $config)
+    public function __construct(ExtensionManager $manager, SettingsRepositoryInterface $config, FlagrowApi $client)
     {
         $this->extensionManager = $manager;
         $this->config = $config;
-    }
-
-    /**
-     * Get a Guzzle client configured for Flagrow API
-     * @return Client
-     */
-    protected function getClient()
-    {
-        return new Client([
-            'base_uri' => 'http://localhost:8000/api/',
-            'headers' => [
-                'Accept' => 'application/json',
-                'Authorization' => 'Bearer '.$this->config->get('flagrow.bazaar.api_token'),
-            ]
-        ]);
+        $this->client = $client;
     }
 
     /**
@@ -69,22 +63,22 @@ class FlagrowIOSearcher extends AbstractExtensionSearcher
      */
     public function search($limit = null, $offset = 0)
     {
-        $responseHtml = $this->getClient()->get('packages', [
+        $response = $this->client->get('packages', [
             'query' => [
                 'page[number]' => $offset + 1, // Offset is zero-based, page number is 1-based
+                'sort' => '-downloads' // Sort by package name per default
             ],
         ]);
 
-        $responseJson = json_decode($responseHtml->getBody(), true);
+        $json = json_decode($response->getBody(), true);
 
-        $packages = $responseJson['data'];
-        $areMoreResults = $responseJson['meta']['pages_total'] > $responseJson['meta']['pages_current'];
+        $areMoreResults = Arr::get($json, 'meta.pages_total', 0) > Arr::get($json, 'meta.pages_current', 0);
 
-        $extensions = new Collection();
-
-        foreach ($packages as $package) {
-            $extensions->push($this->createExtension($package));
-        }
+        $extensions = Collection::make(
+            Arr::get($json, 'data', [])
+        )->map(function ($package) {
+            return $this->createExtension($package);
+        })->keyBy('id');
 
         return new SearchResults($extensions, $areMoreResults);
     }

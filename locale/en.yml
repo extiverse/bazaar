@@ -2,13 +2,15 @@ flagrow-bazaar:
     admin:
         popup:
             title: Flagrow Bazaar
-
             field:
                 apiToken: API token
+                apiTokenDescription: In case the token is already present, you're good to go.
         nav:
             title: Bazaar
-            description: The Flagrow marketplace
+            description: The extension marketplace.
         page:
             button:
+                more: More
                 install: Install
                 uninstall: Uninstall
+                enable: Enable
