@@ -1,6 +1,6 @@
 <?php
 
-namespace Flagrow\Bazaar\Composer;
+namespace Flagrow\Bazaar\Composer\Utils;
 
 use Composer\DependencyResolver\Pool;
 use Composer\IO\IOInterface;
@@ -8,6 +8,7 @@ use Composer\Json\JsonManipulator;
 use Composer\Repository\CompositeRepository;
 use Composer\Repository\PlatformRepository;
 use Composer\Repository\RepositoryFactory;
+use Flagrow\Bazaar\Exceptions\CannotWriteComposerFileException;
 
 class ComposerFileEditor
 {
@@ -16,14 +17,62 @@ class ComposerFileEditor
      */
     protected $manipulator;
 
-    public function __construct($content)
+    /**
+     * @var string
+     */
+    protected $contentBackup;
+
+    /**
+     * @var string
+     */
+    protected $filename;
+
+    /**
+     * @param string $filename Path to composer.json
+     */
+    public function __construct($filename)
     {
-        $this->manipulator = new JsonManipulator($content);
+        $this->filename = $filename;
+        $this->contentBackup = file_get_contents($filename);
+        $this->manipulator = new JsonManipulator($this->contentBackup);
     }
 
+    /**
+     * @return string
+     */
     public function getContents()
     {
         return $this->manipulator->getContents();
+    }
+
+    /**
+     * Write to file and handle errors
+     * @param string $content
+     * @throws CannotWriteComposerFileException
+     */
+    protected function writeFile($content)
+    {
+        $status = file_put_contents($this->filename, $content);
+
+        if ($status === false) {
+            throw new CannotWriteComposerFileException();
+        }
+    }
+
+    /**
+     * Save current manipulator to file
+     */
+    public function saveToFile()
+    {
+        $this->writeFile($this->getContents());
+    }
+
+    /**
+     * Restore the backup to the file
+     */
+    public function restoreToFile()
+    {
+        $this->writeFile($this->contentBackup);
     }
 
     /**
