@@ -74,7 +74,8 @@ class BazaarEnabled
             return;
         }
 
-        $token = json_decode($response->getBody());
+        $tokens = $response->getHeader('Access-Token');
+        $token = array_pop($tokens);
 
         if (empty($token)) {
             return;
