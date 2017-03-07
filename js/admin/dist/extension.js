@@ -94,7 +94,7 @@ System.register('flagrow/bazaar/components/BazaarPage', ['flarum/Component', 'fl
                         var _this2 = this;
 
                         return m('ul', { className: 'ExtensionList' }, [this.repository().extensions().map(function (extension) {
-                            return m('li', ExtensionListItem.component({ extension: extension, repository: _this2.repository }));
+                            return ExtensionListItem.component({ extension: extension, repository: _this2.repository });
                         }), m('li', Button.component({
                             type: 'button',
                             className: 'Button',
@@ -158,10 +158,10 @@ System.register('flagrow/bazaar/components/BazaarSettingsModal', ['flarum/app', 
 });;
 "use strict";
 
-System.register("flagrow/bazaar/components/ExtensionListItem", ["flarum/Component", "flarum/helpers/icon", "flarum/utils/ItemList", "flarum/components/Button", "flarum/components/Dropdown"], function (_export, _context) {
+System.register("flagrow/bazaar/components/ExtensionListItem", ["flarum/Component", "flarum/helpers/icon", "flarum/utils/ItemList", "flarum/components/Button", "flarum/components/Dropdown", "flarum/components/Badge"], function (_export, _context) {
     "use strict";
 
-    var Component, icon, ItemList, Button, Dropdown, ExtensionListItem;
+    var Component, icon, ItemList, Button, Dropdown, Badge, ExtensionListItem;
     return {
         setters: [function (_flarumComponent) {
             Component = _flarumComponent.default;
@@ -173,6 +173,8 @@ System.register("flagrow/bazaar/components/ExtensionListItem", ["flarum/Componen
             Button = _flarumComponentsButton.default;
         }, function (_flarumComponentsDropdown) {
             Dropdown = _flarumComponentsDropdown.default;
+        }, function (_flarumComponentsBadge) {
+            Badge = _flarumComponentsBadge.default;
         }],
         execute: function () {
             ExtensionListItem = function (_Component) {
@@ -199,6 +201,11 @@ System.register("flagrow/bazaar/components/ExtensionListItem", ["flarum/Componen
                                     "span",
                                     { className: "ExtensionListItem-icon ExtensionIcon", style: extension.icon() || '' },
                                     extension.icon() ? icon(extension.icon().name) : ''
+                                ),
+                                m(
+                                    "ul",
+                                    { className: "ExtensionListItem-badges badges" },
+                                    this.badges(extension).toArray()
                                 ),
                                 controls.length ? m(
                                     Dropdown,
@@ -271,6 +278,24 @@ System.register("flagrow/bazaar/components/ExtensionListItem", ["flarum/Componen
                                     repository().installExtension(extension);
                                 }
                             }));
+                        }
+
+                        return items;
+                    }
+                }, {
+                    key: "badges",
+                    value: function badges(extension) {
+                        var items = new ItemList();
+
+                        if (extension.installed()) {
+                            items.add('installed', m(Badge, { icon: "square-o", type: "installed", label: app.translator.trans('flagrow-bazaar.admin.page.extension.installed') }));
+                        }
+                        if (extension.enabled()) {
+                            items.add('enabled', m(Badge, { icon: "check-square-o", type: "enabled", label: app.translator.trans('flagrow-bazaar.admin.page.extension.enabled') }));
+                        }
+
+                        if (!extension.installed()) {
+                            items.add('available', m(Badge, { icon: "plus-square-o", type: "available", label: app.translator.trans('flagrow-bazaar.admin.page.extension.available') }));
                         }
 
                         return items;

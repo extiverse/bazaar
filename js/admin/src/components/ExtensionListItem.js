@@ -3,6 +3,7 @@ import icon from "flarum/helpers/icon";
 import ItemList from "flarum/utils/ItemList";
 import Button from "flarum/components/Button";
 import Dropdown from "flarum/components/Dropdown";
+import Badge from 'flarum/components/Badge';
 
 export default class ExtensionListItem extends Component {
     view() {
@@ -19,6 +20,11 @@ export default class ExtensionListItem extends Component {
                       <span className="ExtensionListItem-icon ExtensionIcon" style={extension.icon() || ''}>
                         {extension.icon() ? icon(extension.icon().name) : ''}
                       </span>
+
+
+                <ul className="ExtensionListItem-badges badges">
+                    {this.badges(extension).toArray()}
+                </ul>
                 {controls.length ? (
                         <Dropdown
                             className="ExtensionListItem-controls"
@@ -83,6 +89,29 @@ export default class ExtensionListItem extends Component {
                     repository().installExtension(extension);
                 }
             }));
+        }
+
+        return items;
+    }
+
+    /**
+     * Get the Badge components that apply to this discussion.
+     *
+     * @return {ItemList}
+     * @public
+     */
+    badges(extension) {
+        const items = new ItemList();
+
+        if (extension.installed()) {
+            items.add('installed', <Badge icon="square-o" type="installed" label={app.translator.trans('flagrow-bazaar.admin.page.extension.installed')}/>)
+        }
+        if (extension.enabled()) {
+            items.add('enabled', <Badge icon="check-square-o" type="enabled" label={app.translator.trans('flagrow-bazaar.admin.page.extension.enabled')}/>)
+        }
+
+        if (!extension.installed()) {
+            items.add('available', <Badge icon="plus-square-o" type="available" label={app.translator.trans('flagrow-bazaar.admin.page.extension.available')}/>)
         }
 
         return items;

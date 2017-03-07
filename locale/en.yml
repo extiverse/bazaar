@@ -14,3 +14,7 @@ flagrow-bazaar:
                 install: Install
                 uninstall: Uninstall
                 enable: Enable
+            extension:
+                installed: Extension is installed
+                enabled: Extension is enabled
+                available: Extension is available for download

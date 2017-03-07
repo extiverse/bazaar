@@ -20,6 +20,7 @@ class AddClientAssets
         if ($event->isAdmin()) {
             $event->addAssets([
                 __DIR__.'/../../js/admin/dist/extension.js',
+                __DIR__.'/../../less/extension.less',
             ]);
             $event->addBootstrapper('flagrow/bazaar/main');
         }
