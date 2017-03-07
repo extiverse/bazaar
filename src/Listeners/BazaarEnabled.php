@@ -52,14 +52,9 @@ class BazaarEnabled
         }
 
         $token = $this->settings->get('flagrow.bazaar.api_token');
-        $url = Arr::get(app('flarum.config'), 'url');
 
         if (empty($token) && $this->extensions->isEnabled('flagrow-bazaar')) {
-            $response = $this->client->post('/api/bazaar/beckons', [
-                'json' => [
-                    'url' => $url
-                ]
-            ]);
+            $response = $this->client->post('/api/bazaar/beckons');
 
             $this->storeTokenFromRequest($response);
         }
