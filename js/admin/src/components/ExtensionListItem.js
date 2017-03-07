@@ -6,6 +6,14 @@ import Dropdown from "flarum/components/Dropdown";
 import Badge from 'flarum/components/Badge';
 
 export default class ExtensionListItem extends Component {
+
+
+    config(isInitialized) {
+        if (isInitialized) return;
+
+        if (this.props.extension.description()) this.$().tooltip({container: 'body'});
+    }
+
     view() {
         const extension = this.props.extension;
         const controls = this.controlItems(extension).toArray();
@@ -15,7 +23,7 @@ export default class ExtensionListItem extends Component {
             (extension.enabled() ? 'enabled ' : 'disabled ') +
             (extension.installed() ? 'installed' : 'uninstalled') +
             (extension.enabled() && extension.highest_version() && extension.installed_version() != extension.highest_version() ? 'update' : '')
-        }>
+        } title={extension.description()}>
             <div className="ExtensionListItem-content">
                       <span className="ExtensionListItem-icon ExtensionIcon" style={extension.icon() || ''}>
                         {extension.icon() ? icon(extension.icon().name) : ''}
@@ -104,14 +112,14 @@ export default class ExtensionListItem extends Component {
         const items = new ItemList();
 
         if (extension.installed()) {
-            items.add('installed', <Badge icon="square-o" type="installed" label={app.translator.trans('flagrow-bazaar.admin.page.extension.installed')}/>)
+            items.add('installed', <Badge icon="plus-square" type="installed" label={app.translator.trans('flagrow-bazaar.admin.page.extension.installed')}/>)
         }
         if (extension.enabled()) {
-            items.add('enabled', <Badge icon="check-square-o" type="enabled" label={app.translator.trans('flagrow-bazaar.admin.page.extension.enabled')}/>)
+            items.add('enabled', <Badge icon="check-square" type="enabled" label={app.translator.trans('flagrow-bazaar.admin.page.extension.enabled')}/>)
         }
 
         if (!extension.installed()) {
-            items.add('available', <Badge icon="plus-square-o" type="available" label={app.translator.trans('flagrow-bazaar.admin.page.extension.available')}/>)
+            items.add('available', <Badge icon="square-o" type="available" label={app.translator.trans('flagrow-bazaar.admin.page.extension.available')}/>)
         }
 
         return items;

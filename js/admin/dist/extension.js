@@ -95,14 +95,7 @@ System.register('flagrow/bazaar/components/BazaarPage', ['flarum/Component', 'fl
 
                         return m('ul', { className: 'ExtensionList' }, [this.repository().extensions().map(function (extension) {
                             return ExtensionListItem.component({ extension: extension, repository: _this2.repository });
-                        }), m('li', Button.component({
-                            type: 'button',
-                            className: 'Button',
-                            children: app.translator.trans('flagrow-bazaar.admin.page.button.more'),
-                            onclick: function onclick() {
-                                _this2.repository().loadNextPage();
-                            }
-                        }))]);
+                        })]);
                     }
                 }]);
                 return BazaarPage;
@@ -186,6 +179,13 @@ System.register("flagrow/bazaar/components/ExtensionListItem", ["flarum/Componen
                 }
 
                 babelHelpers.createClass(ExtensionListItem, [{
+                    key: "config",
+                    value: function config(isInitialized) {
+                        if (isInitialized) return;
+
+                        if (this.props.extension.description()) this.$().tooltip({ container: 'body' });
+                    }
+                }, {
                     key: "view",
                     value: function view() {
                         var extension = this.props.extension;
@@ -193,7 +193,7 @@ System.register("flagrow/bazaar/components/ExtensionListItem", ["flarum/Componen
 
                         return m(
                             "li",
-                            { className: 'ExtensionListItem ' + (extension.enabled() ? 'enabled ' : 'disabled ') + (extension.installed() ? 'installed' : 'uninstalled') + (extension.enabled() && extension.highest_version() && extension.installed_version() != extension.highest_version() ? 'update' : '') },
+                            { className: 'ExtensionListItem ' + (extension.enabled() ? 'enabled ' : 'disabled ') + (extension.installed() ? 'installed' : 'uninstalled') + (extension.enabled() && extension.highest_version() && extension.installed_version() != extension.highest_version() ? 'update' : ''), title: extension.description() },
                             m(
                                 "div",
                                 { className: "ExtensionListItem-content" },
@@ -288,14 +288,14 @@ System.register("flagrow/bazaar/components/ExtensionListItem", ["flarum/Componen
                         var items = new ItemList();
 
                         if (extension.installed()) {
-                            items.add('installed', m(Badge, { icon: "square-o", type: "installed", label: app.translator.trans('flagrow-bazaar.admin.page.extension.installed') }));
+                            items.add('installed', m(Badge, { icon: "plus-square", type: "installed", label: app.translator.trans('flagrow-bazaar.admin.page.extension.installed') }));
                         }
                         if (extension.enabled()) {
-                            items.add('enabled', m(Badge, { icon: "check-square-o", type: "enabled", label: app.translator.trans('flagrow-bazaar.admin.page.extension.enabled') }));
+                            items.add('enabled', m(Badge, { icon: "check-square", type: "enabled", label: app.translator.trans('flagrow-bazaar.admin.page.extension.enabled') }));
                         }
 
                         if (!extension.installed()) {
-                            items.add('available', m(Badge, { icon: "plus-square-o", type: "available", label: app.translator.trans('flagrow-bazaar.admin.page.extension.available') }));
+                            items.add('available', m(Badge, { icon: "square-o", type: "available", label: app.translator.trans('flagrow-bazaar.admin.page.extension.available') }));
                         }
 
                         return items;

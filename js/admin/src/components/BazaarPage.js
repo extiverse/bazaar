@@ -32,14 +32,14 @@ export default class BazaarPage extends Component {
             this.repository().extensions().map(
                 extension => ExtensionListItem.component({extension: extension, repository: this.repository})
             ),
-            m('li', Button.component({
-                type: 'button',
-                className: 'Button',
-                children: app.translator.trans('flagrow-bazaar.admin.page.button.more'),
-                onclick: () => {
-                    this.repository().loadNextPage();
-                }
-            }))
+            // m('li', Button.component({
+            //     type: 'button',
+            //     className: 'Button',
+            //     children: app.translator.trans('flagrow-bazaar.admin.page.button.more'),
+            //     onclick: () => {
+            //         this.repository().loadNextPage();
+            //     }
+            // }))
         ]);
     }
 }
