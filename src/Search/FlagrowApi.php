@@ -29,7 +29,8 @@ class FlagrowApi extends Client
             'base_uri' => "$host/api/",
             'headers' => array_merge([
                 'Accept' => 'application/vnd.api+json, application/json',
-                'Bazaar-From' => Arr::get($configFile, 'url')
+                'Bazaar-From' => Arr::get($configFile, 'url'),
+                'Flarum-Version' => app()->version()
             ], $headers)
         ], $config));
     }
