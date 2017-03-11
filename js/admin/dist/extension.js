@@ -294,10 +294,6 @@ System.register("flagrow/bazaar/components/ExtensionListItem", ["flarum/Componen
                             items.add('enabled', m(Badge, { icon: "check-square", type: "enabled", label: app.translator.trans('flagrow-bazaar.admin.page.extension.enabled') }));
                         }
 
-                        if (false && !extension.installed()) {
-                            items.add('available', m(Badge, { icon: "square-o", type: "available", label: app.translator.trans('flagrow-bazaar.admin.page.extension.available') }));
-                        }
-
                         return items;
                     }
                 }]);

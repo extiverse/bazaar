@@ -17,4 +17,3 @@ flagrow-bazaar:
             extension:
                 installed: Extension is installed
                 enabled: Extension is enabled
-                available: Extension is available for download

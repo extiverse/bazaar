@@ -118,10 +118,6 @@ export default class ExtensionListItem extends Component {
             items.add('enabled', <Badge icon="check-square" type="enabled" label={app.translator.trans('flagrow-bazaar.admin.page.extension.enabled')}/>)
         }
 
-        if (false && !extension.installed()) {
-            items.add('available', <Badge icon="square-o" type="available" label={app.translator.trans('flagrow-bazaar.admin.page.extension.available')}/>)
-        }
-
         return items;
     }
 }
