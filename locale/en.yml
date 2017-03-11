@@ -4,7 +4,7 @@ flagrow-bazaar:
             title: Flagrow Bazaar
             field:
                 apiToken: API token
-                apiTokenDescription: In case the token is already present, you're good to go.
+                apiTokenDescription: This api token is required to access the Flagrow extension api. If already set, you're good to go!
         nav:
             title: Bazaar
             description: The extension marketplace.

@@ -57,6 +57,8 @@ class BazaarEnabled
             $response = $this->client->post('/api/bazaar/beckons');
 
             $this->storeTokenFromRequest($response);
+
+            $event->view->setVariable('settings', $this->settings->all());
         }
     }
 
