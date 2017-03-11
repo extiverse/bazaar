@@ -71,7 +71,7 @@ System.register('flagrow/bazaar/components/BazaarPage', ['flarum/Component', 'fl
                     value: function view() {
                         return m(
                             'div',
-                            { className: 'ExtensionsPage' },
+                            { className: 'ExtensionsPage Bazaar' },
                             m(
                                 'div',
                                 { className: 'ExtensionsPage-header' },
@@ -220,6 +220,13 @@ System.register("flagrow/bazaar/components/ExtensionListItem", ["flarum/Componen
                                     "label",
                                     { className: "ExtensionListItem-title" },
                                     extension.title() || extension.package()
+                                ),
+                                m(
+                                    "label",
+                                    { className: "ExtensionListItem-version" },
+                                    app.translator.trans('flagrow-bazaar.admin.page.extension.vendor', {
+                                        vendor: extension.package().split('/')[0]
+                                    })
                                 ),
                                 m(
                                     "div",

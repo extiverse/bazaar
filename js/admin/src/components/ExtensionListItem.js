@@ -45,6 +45,11 @@ export default class ExtensionListItem extends Component {
                 <label className="ExtensionListItem-title">
                     {extension.title() || extension.package()}
                 </label>
+                <label className="ExtensionListItem-version">
+                    {app.translator.trans('flagrow-bazaar.admin.page.extension.vendor', {
+                        vendor: extension.package().split('/')[0]
+                    })}
+                </label>
                 <div className="ExtensionListItem-version">{extension.highest_version()}</div>
             </div>
         </li>;

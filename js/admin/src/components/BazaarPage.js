@@ -11,7 +11,7 @@ export default class BazaarPage extends Component {
 
     view() {
         return (
-            <div className="ExtensionsPage">
+            <div className="ExtensionsPage Bazaar">
                 <div className="ExtensionsPage-header">
                     <div className="container">
                     </div>
