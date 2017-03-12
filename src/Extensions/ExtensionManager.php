@@ -36,7 +36,7 @@ class ExtensionManager
         $this->dispatcher = $dispatcher;
         $this->packageManager = $packageManager;
         // @TODO temporary work around to increase memory
-        ini_set('memory_limit', '1gb');
+        ini_set('memory_limit', '1G');
     }
 
     /**
@@ -45,7 +45,6 @@ class ExtensionManager
      */
     public function install($extensionId, $version = null)
     {
-
         $package = ExtensionUtils::idToPackage($extensionId);
         $this->packageManager->requirePackage($package);
     }
