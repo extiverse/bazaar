@@ -4,35 +4,68 @@ namespace Flagrow\Bazaar\Extensions;
 
 use Flarum\Event\ExtensionWasUninstalled;
 use Flarum\Extension\ExtensionManager as BaseManager;
+use Illuminate\Contracts\Events\Dispatcher;
 
-class ExtensionManager extends BaseManager
+class ExtensionManager
 {
-    public function getPackageManager()
+
+    /**
+     * @var BaseManager
+     */
+    protected $extensions;
+
+    /**
+     * @var Dispatcher
+     */
+    protected $dispatcher;
+
+    /**
+     * @var ExtensionPackageManager
+     */
+    protected $packageManager;
+
+    /**
+     * ExtensionManager constructor.
+     * @param BaseManager $extensions
+     * @param Dispatcher $dispatcher
+     * @param ExtensionPackageManager $packageManager
+     */
+    public function __construct(BaseManager $extensions, Dispatcher $dispatcher, ExtensionPackageManager $packageManager)
     {
-        return $this->app->make(ExtensionPackageManager::class);
+        $this->extensions = $extensions;
+        $this->dispatcher = $dispatcher;
+        $this->packageManager = $packageManager;
+        // @TODO temporary work around to increase memory
+        ini_set('memory_limit', '1gb');
     }
 
+    /**
+     * @param $extensionId
+     * @param null $version
+     */
     public function install($extensionId, $version = null)
     {
-        // @TODO temporary work around to increase memory
-        ini_set('memory_limit', '2gb');
 
         $package = ExtensionUtils::idToPackage($extensionId);
-        $this->getPackageManager()->requirePackage($package);
+        $this->packageManager->requirePackage($package);
     }
 
+    /**
+     * @param string $extensionId
+     */
     public function uninstall($extensionId)
     {
         // Get the ids we need from the Bazaar extension id
         $name = ExtensionUtils::idToShortName($extensionId);
-        $package   = ExtensionUtils::idToPackage($extensionId);
+        $package = ExtensionUtils::idToPackage($extensionId);
 
-        $extension = $this->getExtension($name);
+        $extension = $this->extensions->getExtension($name);
 
-        $this->disable($name);
+        if ($this->extensions->isEnabled($name)) {
+            $this->extensions->disable($name);
+        }
 
-        $this->migrateDown($extension);
-
+        $this->extensions->migrateDown($extension);
         // @TODO this is broken in Flarum b6, fix is committed
 //        $this->unpublishAssets($extension);
 
@@ -43,6 +76,6 @@ class ExtensionManager extends BaseManager
         // TODO: run the uninstalled event after our own logic
 //        parent::uninstall($shortName);
 
-        $this->getPackageManager()->removePackage($package);
+        $this->packageManager->removePackage($package);
     }
 }

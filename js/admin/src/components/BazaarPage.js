@@ -1,5 +1,4 @@
 import Component from 'flarum/Component';
-import Button from 'flarum/components/Button';
 import ExtensionRepository from 'flagrow/bazaar/utils/ExtensionRepository';
 import ExtensionListItem from 'flagrow/bazaar/components/ExtensionListItem';
 
@@ -31,15 +30,7 @@ export default class BazaarPage extends Component {
         return m('ul', {className: 'ExtensionList'}, [
             this.repository().extensions().map(
                 extension => ExtensionListItem.component({extension: extension, repository: this.repository})
-            ),
-            // m('li', Button.component({
-            //     type: 'button',
-            //     className: 'Button',
-            //     children: app.translator.trans('flagrow-bazaar.admin.page.button.more'),
-            //     onclick: () => {
-            //         this.repository().loadNextPage();
-            //     }
-            // }))
+            )
         ]);
     }
 }

@@ -29,7 +29,6 @@ class ExtensionUtils
      */
     public static function idToShortName($id)
     {
-        // This needs to be copied from Flarum\Extension\Extension because it's a protected class method
         list($vendor, $package) = explode('$', $id);
         $package = str_replace(['flarum-ext-', 'flarum-'], '', $package);
         return "$vendor-$package";

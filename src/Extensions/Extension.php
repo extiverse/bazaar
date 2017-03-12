@@ -161,7 +161,8 @@ class Extension implements Arrayable
             'installed' => $this->isInstalled(),
             'enabled' => $this->isEnabled(),
             'installed_version' => $this->getInstalledVersion(),
-            'highest_version' => $this->getAttributeIfPresent('highest_version')
+            'highest_version' => $this->getAttributeIfPresent('highest_version'),
+            'flarum_id' => $this->installedExtension ? $this->installedExtension->getId() : null
         ];
     }
 }

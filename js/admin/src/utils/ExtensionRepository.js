@@ -30,7 +30,7 @@ export default class ExtensionRepository {
     resetNavigation() {
         this.loading = false; // Might cause problems if an update is in process
         this.nextPageUrl = app.forum.attribute('apiUrl') + '/bazaar/extensions';
-        this.extensions([]);
+        // this.extensions([]);
     }
     installExtension(extension) {
         app.request({
@@ -48,10 +48,7 @@ export default class ExtensionRepository {
     uninstallExtension(extension) {
         app.request({
             method: 'DELETE',
-            url: app.forum.attribute('apiUrl') + '/bazaar/extensions/:id',
-            data: {
-                id: extension.id()
-            }
+            url: app.forum.attribute('apiUrl') + '/bazaar/extensions/' + extension.id()
         }).then(() => {
             m.startComputation();
             this.resetNavigation();
@@ -62,7 +59,7 @@ export default class ExtensionRepository {
         const enabled = extension.enabled();
 
         app.request({
-            url: app.forum.attribute('apiUrl') + '/extensions/' + id,
+            url: app.forum.attribute('apiUrl') + '/extensions/' + extension.flarum_id(),
             method: 'PATCH',
             data: {enabled: !enabled}
         }).then(() => {
