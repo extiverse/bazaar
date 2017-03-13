@@ -52,6 +52,7 @@ export default class ExtensionRepository {
         app.request({
             method: 'POST',
             url: app.forum.attribute('apiUrl') + '/bazaar/extensions',
+            timeout: 0,
             data: {
                 id: extension.id()
             }
@@ -75,6 +76,7 @@ export default class ExtensionRepository {
 
         app.request({
             method: 'DELETE',
+            timeout: 0,
             url: app.forum.attribute('apiUrl') + '/bazaar/extensions/' + extension.id()
         }).then(
             this.updateExtension.bind(this, extension, 'installed', false),
