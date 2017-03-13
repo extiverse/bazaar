@@ -1,2 +1,6 @@
-- 0.1.0
- - initial version
+- 0.1.0-beta.3
+  - Removed timeout on install and uninstall xhr calls.
+- 0.1.0-beta.2
+  - Working version.
+- 0.1.0-beta.1
+  - Initial version.
