@@ -499,8 +499,6 @@ System.register('flagrow/bazaar/utils/ExtensionRepository', ['flarum/app'], func
                 }, {
                     key: 'installExtension',
                     value: function installExtension(extension) {
-                        var _this2 = this;
-
                         this.loading(true);
 
                         app.request({
@@ -509,28 +507,34 @@ System.register('flagrow/bazaar/utils/ExtensionRepository', ['flarum/app'], func
                             data: {
                                 id: extension.id()
                             }
-                        }).then(function () {
-                            _this2.updateExtension(extension, 'installed', true);
-                        });
+                        }).then(this.updateExtension.bind(this, extension, 'installed', true), this.installFailure.bind(this, extension));
+                    }
+                }, {
+                    key: 'installFailure',
+                    value: function installFailure(extension) {
+                        this.resetNavigation();
+                        this.loadNextPage();
                     }
                 }, {
                     key: 'uninstallExtension',
                     value: function uninstallExtension(extension) {
-                        var _this3 = this;
-
                         this.loading(true);
 
                         app.request({
                             method: 'DELETE',
                             url: app.forum.attribute('apiUrl') + '/bazaar/extensions/' + extension.id()
-                        }).then(function () {
-                            _this3.updateExtension(extension, 'installed', false);
-                        });
+                        }).then(this.updateExtension.bind(this, extension, 'installed', false), this.uninstallFailure.bind(this, extension));
+                    }
+                }, {
+                    key: 'uninstallFailure',
+                    value: function uninstallFailure(extension) {
+                        this.resetNavigation();
+                        this.loadNextPage();
                     }
                 }, {
                     key: 'toggleExtension',
                     value: function toggleExtension(extension) {
-                        var _this4 = this;
+                        var _this2 = this;
 
                         this.loading(true);
 
@@ -541,7 +545,7 @@ System.register('flagrow/bazaar/utils/ExtensionRepository', ['flarum/app'], func
                             method: 'PATCH',
                             data: { enabled: !enabled }
                         }).then(function () {
-                            _this4.updateExtension(extension, 'enabled', !enabled);
+                            _this2.updateExtension(extension, 'enabled', !enabled);
                         });
                     }
                 }, {

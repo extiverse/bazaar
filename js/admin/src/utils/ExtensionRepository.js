@@ -55,9 +55,15 @@ export default class ExtensionRepository {
             data: {
                 id: extension.id()
             }
-        }).then(() => {
-            this.updateExtension(extension, 'installed', true);
-        });
+        }).then(
+            this.updateExtension.bind(this, extension, 'installed', true),
+            this.installFailure.bind(this, extension)
+        );
+    }
+
+    installFailure(extension) {
+        this.resetNavigation();
+        this.loadNextPage();
     }
 
     /**
@@ -70,9 +76,15 @@ export default class ExtensionRepository {
         app.request({
             method: 'DELETE',
             url: app.forum.attribute('apiUrl') + '/bazaar/extensions/' + extension.id()
-        }).then(() => {
-            this.updateExtension(extension, 'installed', false);
-        });
+        }).then(
+            this.updateExtension.bind(this, extension, 'installed', false),
+            this.uninstallFailure.bind(this, extension)
+        );
+    }
+
+    uninstallFailure(extension) {
+        this.resetNavigation();
+        this.loadNextPage();
     }
 
     /**
