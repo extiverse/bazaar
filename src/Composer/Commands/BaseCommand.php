@@ -65,7 +65,7 @@ abstract class BaseCommand
     }
 
     /**
-     * @return ComposerInstaller
+     * @return Installer
      */
     protected function getInstaller()
     {
@@ -98,7 +98,15 @@ abstract class BaseCommand
         try {
             $this->handle($packages);
 
-            $exitCode = $this->getInstaller()->run();
+            $installer = $this->getInstaller();
+
+            $installer->setUpdate(true);
+            $installer->setSkipSuggest(true);
+            $installer->setUpdateWhitelist($packages);
+            $installer->setWhitelistDependencies(true);
+            $installer->setOptimizeAutoloader(true);
+
+            $exitCode = $installer->run();
 
             if ($exitCode !== 0) {
                 // Exceptions should be caught by the ComposerIO handler

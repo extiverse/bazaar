@@ -1,5 +1,7 @@
 flagrow-bazaar:
     admin:
+        loader:
+            is_loading: Processing..
         popup:
             title: Flagrow Bazaar
             field:

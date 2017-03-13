@@ -18,16 +18,11 @@ class RequireCommand extends BaseCommand
         }
 
         $versionSelector = new VersionSelector($this->getFileEditor()->getPool($this->getIO()));
-        // TODO: php version is ommited when calling findBestCandidate, but it should be to reflect the original require command
+        // TODO: php version is omitted when calling findBestCandidate, but it should be to reflect the original require command
         $bestCandidate = $versionSelector->findBestCandidate($packages[0]);
         $version = $versionSelector->findRecommendedRequireVersion($bestCandidate);
 
         $this->getFileEditor()->addPackage($packages[0], $version);
         $this->getFileEditor()->saveToFile();
-
-        $this->getInstaller()->setUpdate(true);
-        $this->getInstaller()->setSkipSuggest(true);
-        $this->getInstaller()->setUpdateWhitelist($packages);
-        $this->getInstaller()->setWhitelistDependencies(true); // TODO: is false in the original require command
     }
 }

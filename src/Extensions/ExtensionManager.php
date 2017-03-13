@@ -36,7 +36,7 @@ class ExtensionManager
         $this->dispatcher = $dispatcher;
         $this->packageManager = $packageManager;
         // @TODO temporary work around to increase memory
-        ini_set('memory_limit', '1G');
+        @ini_set('memory_limit', '1G');
     }
 
     /**

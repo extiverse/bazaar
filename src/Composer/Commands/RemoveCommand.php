@@ -16,10 +16,5 @@ class RemoveCommand extends BaseCommand
 
         $this->getFileEditor()->removePackage($packages[0]);
         $this->getFileEditor()->saveToFile();
-
-        $this->getInstaller()->setUpdate(true);
-        $this->getInstaller()->setSkipSuggest(true);
-        $this->getInstaller()->setUpdateWhitelist($packages);
-        $this->getInstaller()->setWhitelistDependencies(true);
     }
 }
