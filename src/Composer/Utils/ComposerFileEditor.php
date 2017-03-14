@@ -94,6 +94,20 @@ class ComposerFileEditor
         $this->manipulator->removeSubNode('require', $package);
     }
 
+    public function addRepository($type = 'composer', $url, array $options)
+    {
+        $this->manipulator->addRepository($url, [
+            'type' => $type,
+            'url' => $url,
+            'options' => $options
+        ]);
+    }
+
+    public function removeRepository($url)
+    {
+        $this->manipulator->removeRepository($url);
+    }
+
     /**
      * Get a dependency pool
      * Based on the protected InitCommand::getPool() method of Composer
