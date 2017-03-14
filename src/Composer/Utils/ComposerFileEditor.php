@@ -94,18 +94,35 @@ class ComposerFileEditor
         $this->manipulator->removeSubNode('require', $package);
     }
 
+    /**
+     * @param $url
+     * @return mixed
+     */
+    protected function getNameFromUrl($url)
+    {
+        return str_replace(['.'], ['-'], parse_url($url, PHP_URL_HOST));
+    }
+
+    /**
+     * @param string $type
+     * @param $url
+     * @param array $options
+     */
     public function addRepository($type = 'composer', $url, array $options)
     {
-        $this->manipulator->addRepository($url, [
+        $this->manipulator->addRepository($this->getNameFromUrl($url), [
             'type' => $type,
             'url' => $url,
             'options' => $options
         ]);
     }
 
+    /**
+     * @param $url
+     */
     public function removeRepository($url)
     {
-        $this->manipulator->removeRepository($url);
+        $this->manipulator->removeRepository($this->getNameFromUrl($url));
     }
 
     /**

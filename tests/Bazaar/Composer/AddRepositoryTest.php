@@ -26,7 +26,8 @@ class AddRepositoryTest extends BaseCommandTest
                 ]
             ]
         ]);
+        $editor->saveToFile();
 
-        dd($this->filesystem->get($this->getComposerWorkingDir().'/composer.json'));
+        $this->assertRepositoryRegistered('composer', 'https://flagrow.io/satis');
     }
 }
