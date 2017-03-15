@@ -14,8 +14,7 @@ export default class BazaarSettingsModal extends SettingsModal {
                 m('input', {
                     id: 'bazaar-api-token',
                     className: 'FormControl',
-                    bidi: this.setting('flagrow.bazaar.api_token'),
-                    disabled: this.setting('flagrow.bazaar.api_token')().length > 0
+                    bidi: this.setting('flagrow.bazaar.api_token')
                 }),
                 m('span', app.translator.trans('flagrow-bazaar.admin.popup.field.apiTokenDescription'))
             ])

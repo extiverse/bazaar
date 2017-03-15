@@ -19,7 +19,7 @@ class AddRepositoryTest extends BaseCommandTest
 
         $editor = new ComposerFileEditor($this->composerEnv->getComposerJsonPath());
 
-        $editor->addRepository('composer', 'https://flagrow.io/satis', [
+        $editor->addRepository('flagrow', 'https://flagrow.io/satis', [
             'http' => [
                 'header' => [
                     'Authorization' => 'Bearer foo'

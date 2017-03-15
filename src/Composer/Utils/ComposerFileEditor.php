@@ -104,13 +104,15 @@ class ComposerFileEditor
     }
 
     /**
-     * @param string $type
+     * @param $name
      * @param $url
      * @param array $options
+     * @param string $type
+     * @return bool
      */
-    public function addRepository($type = 'composer', $url, array $options)
+    public function addRepository($name, $url, array $options, $type = 'composer')
     {
-        $this->manipulator->addRepository($this->getNameFromUrl($url), [
+        return $this->manipulator->addRepository($name, [
             'type' => $type,
             'url' => $url,
             'options' => $options
@@ -118,11 +120,12 @@ class ComposerFileEditor
     }
 
     /**
-     * @param $url
+     * @param $name
+     * @return bool
      */
-    public function removeRepository($url)
+    public function removeRepository($name)
     {
-        $this->manipulator->removeRepository($this->getNameFromUrl($url));
+        return $this->manipulator->removeRepository($name);
     }
 
     /**

@@ -16,9 +16,7 @@ class FlagrowApi extends Client
 {
     public function __construct(array $config = [])
     {
-        $configFile = app()->make('flarum.config');
-
-        $host = Arr::get($configFile, 'flagrow', 'https://flagrow.io');
+        $host = static::getFlagrowHost();
         $headers = [];
 
         if ($token = app()->make(SettingsRepositoryInterface::class)->get('flagrow.bazaar.api_token')) {
@@ -29,10 +27,33 @@ class FlagrowApi extends Client
             'base_uri' => "$host/api/",
             'headers' => array_merge([
                 'Accept' => 'application/vnd.api+json, application/json',
-                'Bazaar-From' => Arr::get($configFile, 'url'),
+                'Bazaar-From' => static::getFlarumHost(),
                 'Flarum-Version' => app()->version()
             ], $headers)
         ], $config));
     }
 
+    /**
+     * The hostname to connect with Flagrow.io.
+     *
+     * @return string
+     */
+    public static function getFlagrowHost()
+    {
+        $configFile = app()->make('flarum.config');
+
+        return Arr::get($configFile, 'flagrow', 'https://flagrow.io');
+    }
+
+    /**
+     * The url specified in the config.php.
+     *
+     * @return string
+     */
+    public static function getFlarumHost()
+    {
+        $configFile = app()->make('flarum.config');
+
+        return Arr::get($configFile, 'url');
+    }
 }
