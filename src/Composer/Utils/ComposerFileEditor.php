@@ -95,6 +95,16 @@ class ComposerFileEditor
     }
 
     /**
+     * Add a repository
+     * @param string $name
+     * @param array $config
+     */
+    public function addRepository($name, $config)
+    {
+        $this->manipulator->addRepository($name, $config);
+    }
+
+    /**
      * Get a dependency pool
      * Based on the protected InitCommand::getPool() method of Composer
      * @param IOInterface $io
