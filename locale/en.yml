@@ -17,6 +17,8 @@ flagrow-bazaar:
                 uninstall: Uninstall
                 enable: Enable
                 disable: Disable
+                connect: Connect
+                connectDescription: "Connect your Flarum installation to your personal account on Flagrow.io to unlock new features."
             extension:
                 installed: Extension is installed
                 enabled: Extension is enabled

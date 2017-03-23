@@ -74,10 +74,10 @@ System.register('flagrow/bazaar/components/BazaarLoader', ['flarum/Component', '
 });;
 'use strict';
 
-System.register('flagrow/bazaar/components/BazaarPage', ['flarum/Component', 'flagrow/bazaar/utils/ExtensionRepository', 'flagrow/bazaar/components/ExtensionListItem', 'flagrow/bazaar/components/BazaarLoader'], function (_export, _context) {
+System.register('flagrow/bazaar/components/BazaarPage', ['flarum/Component', 'flagrow/bazaar/utils/ExtensionRepository', 'flagrow/bazaar/components/ExtensionListItem', 'flagrow/bazaar/components/BazaarLoader', 'flarum/components/Button'], function (_export, _context) {
     "use strict";
 
-    var Component, ExtensionRepository, ExtensionListItem, BazaarLoader, BazaarPage;
+    var Component, ExtensionRepository, ExtensionListItem, BazaarLoader, Button, BazaarPage;
     return {
         setters: [function (_flarumComponent) {
             Component = _flarumComponent.default;
@@ -87,6 +87,8 @@ System.register('flagrow/bazaar/components/BazaarPage', ['flarum/Component', 'fl
             ExtensionListItem = _flagrowBazaarComponentsExtensionListItem.default;
         }, function (_flagrowBazaarComponentsBazaarLoader) {
             BazaarLoader = _flagrowBazaarComponentsBazaarLoader.default;
+        }, function (_flarumComponentsButton) {
+            Button = _flarumComponentsButton.default;
         }],
         execute: function () {
             BazaarPage = function (_Component) {
@@ -108,13 +110,31 @@ System.register('flagrow/bazaar/components/BazaarPage', ['flarum/Component', 'fl
                 }, {
                     key: 'view',
                     value: function view() {
+                        var _this2 = this;
+
                         return m(
                             'div',
                             { className: 'ExtensionsPage Bazaar' },
                             m(
                                 'div',
                                 { className: 'ExtensionsPage-header' },
-                                m('div', { className: 'container' })
+                                m(
+                                    'div',
+                                    { className: 'container' },
+                                    Button.component({
+                                        className: 'Button Button--primary',
+                                        icon: 'plug',
+                                        children: app.translator.trans('flagrow-bazaar.admin.page.button.connect'),
+                                        onclick: function onclick() {
+                                            return _this2.connect();
+                                        }
+                                    }),
+                                    m(
+                                        'p',
+                                        null,
+                                        app.translator.trans('flagrow-bazaar.admin.page.button.connectDescription')
+                                    )
+                                )
                             ),
                             m(
                                 'div',
@@ -131,11 +151,30 @@ System.register('flagrow/bazaar/components/BazaarPage', ['flarum/Component', 'fl
                 }, {
                     key: 'items',
                     value: function items() {
-                        var _this2 = this;
+                        var _this3 = this;
 
                         return m('ul', { className: 'ExtensionList' }, [this.repository().extensions().map(function (extension) {
-                            return ExtensionListItem.component({ extension: extension, repository: _this2.repository });
+                            return ExtensionListItem.component({ extension: extension, repository: _this3.repository });
                         })]);
+                    }
+                }, {
+                    key: 'connect',
+                    value: function connect() {
+                        var _this4 = this;
+
+                        app.request({
+                            method: 'GET',
+                            url: app.forum.attribute('apiUrl') + '/bazaar/extensions'
+                        }).then(function (response) {
+                            _this4.processConnectResponse.bind(_this4, response);
+                        });
+                    }
+                }, {
+                    key: 'processConnectResponse',
+                    value: function processConnectResponse(response) {
+                        if (response.status == 200) {
+                            window.open(response.data);
+                        }
                     }
                 }]);
                 return BazaarPage;

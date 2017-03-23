@@ -2,6 +2,7 @@ import Component from 'flarum/Component';
 import ExtensionRepository from 'flagrow/bazaar/utils/ExtensionRepository';
 import ExtensionListItem from 'flagrow/bazaar/components/ExtensionListItem';
 import BazaarLoader from 'flagrow/bazaar/components/BazaarLoader';
+import Button from "flarum/components/Button";
 
 export default class BazaarPage extends Component {
     init() {
@@ -16,6 +17,15 @@ export default class BazaarPage extends Component {
             <div className="ExtensionsPage Bazaar">
                 <div className="ExtensionsPage-header">
                     <div className="container">
+                        {Button.component({
+                            className: 'Button Button--primary',
+                            icon: 'plug',
+                            children: app.translator.trans('flagrow-bazaar.admin.page.button.connect'),
+                            onclick: () => this.connect()
+                        })}
+                        <p>
+                            {app.translator.trans('flagrow-bazaar.admin.page.button.connectDescription')}
+                        </p>
                     </div>
                 </div>
 
@@ -35,5 +45,20 @@ export default class BazaarPage extends Component {
                 extension => ExtensionListItem.component({extension: extension, repository: this.repository})
             )
         ]);
+    }
+
+    connect() {
+        app.request({
+            method: 'GET',
+            url: app.forum.attribute('apiUrl') + '/bazaar/extensions'
+        }).then(response => {
+            this.processConnectResponse.bind(this, response)
+        });
+    }
+
+    processConnectResponse(response) {
+        if (response.status == 200) {
+            window.open(response.data);
+        }
     }
 }
