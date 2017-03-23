@@ -48,17 +48,17 @@ export default class BazaarPage extends Component {
     }
 
     connect() {
+        var popup = window.open();
+
         app.request({
             method: 'GET',
-            url: app.forum.attribute('apiUrl') + '/bazaar/extensions'
+            url: app.forum.attribute('apiUrl') + '/bazaar/connect'
         }).then(response => {
-            this.processConnectResponse.bind(this, response)
+            if (response && response.redirect) {
+                popup.location = response.redirect;
+            } else {
+                popup.close()
+            }
         });
-    }
-
-    processConnectResponse(response) {
-        if (response.status == 200) {
-            window.open(response.data);
-        }
     }
 }

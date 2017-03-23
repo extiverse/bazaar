@@ -160,21 +160,18 @@ System.register('flagrow/bazaar/components/BazaarPage', ['flarum/Component', 'fl
                 }, {
                     key: 'connect',
                     value: function connect() {
-                        var _this4 = this;
+                        var popup = window.open();
 
                         app.request({
                             method: 'GET',
-                            url: app.forum.attribute('apiUrl') + '/bazaar/extensions'
+                            url: app.forum.attribute('apiUrl') + '/bazaar/connect'
                         }).then(function (response) {
-                            _this4.processConnectResponse.bind(_this4, response);
+                            if (response && response.redirect) {
+                                popup.location = response.redirect;
+                            } else {
+                                popup.close();
+                            }
                         });
-                    }
-                }, {
-                    key: 'processConnectResponse',
-                    value: function processConnectResponse(response) {
-                        if (response.status == 200) {
-                            window.open(response.data);
-                        }
                     }
                 }]);
                 return BazaarPage;

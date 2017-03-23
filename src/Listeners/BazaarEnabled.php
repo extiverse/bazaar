@@ -54,7 +54,7 @@ class BazaarEnabled
         $token = $this->settings->get('flagrow.bazaar.api_token');
 
         if (empty($token) && $this->extensions->isEnabled('flagrow-bazaar')) {
-            $response = $this->client->post('/api/bazaar/beckons');
+            $response = $this->client->post('bazaar/beckons');
 
             $this->storeTokenFromRequest($response);
 
