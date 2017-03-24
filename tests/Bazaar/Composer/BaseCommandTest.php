@@ -57,15 +57,6 @@ abstract class BaseCommandTest extends TestCase
     }
 
     /**
-     * @return void
-     */
-    public function resetWorkingDir()
-    {
-        $this->filesystem->deleteDirectory($this->getComposerWorkingDir());
-        $this->filesystem->makeDirectory($this->getComposerWorkingDir());
-    }
-
-    /**
      * @param array|\stdClass $data
      */
     public function setComposerJson($data)
@@ -78,6 +69,14 @@ abstract class BaseCommandTest extends TestCase
      */
     public function setUp()
     {
-        $this->resetWorkingDir();
+        $this->filesystem->makeDirectory($this->getComposerWorkingDir());
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function tearDown()
+    {
+        $this->filesystem->deleteDirectory($this->getComposerWorkingDir());
     }
 }

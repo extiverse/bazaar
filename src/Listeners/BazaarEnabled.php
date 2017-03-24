@@ -2,8 +2,7 @@
 
 namespace Flagrow\Bazaar\Listeners;
 
-use Flagrow\Bazaar\Composer\ComposerEnvironment;
-use Flagrow\Bazaar\Composer\Utils\ComposerFileEditor;
+use Flagrow\Bazaar\Events\TokenSet;
 use Flagrow\Bazaar\Search\FlagrowApi;
 use Flarum\Event\ConfigureWebApp;
 use Flarum\Extension\ExtensionManager;
@@ -27,12 +26,17 @@ class BazaarEnabled
      * @var FlagrowApi
      */
     protected $client;
+    /**
+     * @var Dispatcher
+     */
+    protected $events;
 
-    public function __construct(ExtensionManager $extensions, SettingsRepositoryInterface $settings, FlagrowApi $client)
+    public function __construct(ExtensionManager $extensions, SettingsRepositoryInterface $settings, FlagrowApi $client, Dispatcher $events)
     {
         $this->extensions = $extensions;
         $this->settings = $settings;
         $this->client = $client;
+        $this->events = $events;
     }
 
     /**
@@ -58,7 +62,6 @@ class BazaarEnabled
             $response = $this->client->post('/api/bazaar/beckons');
 
             $this->storeTokenFromRequest($response);
-            $this->configureSatis();
 
             $event->view->setVariable('settings', $this->settings->all());
         }
@@ -81,26 +84,7 @@ class BazaarEnabled
         }
 
         $this->settings->set('flagrow.bazaar.api_token', $token);
-    }
 
-    protected function configureSatis()
-    {
-        $env = app()->make(ComposerEnvironment::class);
-        $editor = new ComposerFileEditor($env->getComposerJsonPath());
-
-        // TODO: if a "repositories" key is already present in composer.json but uses an array instead of an object, the command quietly fails
-        $editor->addRepository('flagrow', [
-            'type' => 'composer',
-            'url' => 'https://flagrow.io/api/satis',
-            'options' => [
-                'http' => [
-                    'header' => [
-                        'Authorization: Bearer ' . $this->settings->get('flagrow.bazaar.api_token'),
-                    ],
-                ],
-            ],
-        ]);
-
-        $editor->saveToFile();
+        $this->events->fire(new TokenSet($token));
     }
 }

@@ -95,13 +95,19 @@ class ComposerFileEditor
     }
 
     /**
-     * Add a repository
-     * @param string $name
-     * @param array $config
+     * @param $name
+     * @param $url
+     * @param array $options
+     * @param string $type
+     * @return bool
      */
-    public function addRepository($name, $config)
+    public function addRepository($name, $url, array $options, $type = 'composer')
     {
-        $this->manipulator->addRepository($name, $config);
+        return $this->manipulator->addRepository($name, [
+            'type' => $type,
+            'url' => $url,
+            'options' => $options
+        ]);
     }
 
     /**
