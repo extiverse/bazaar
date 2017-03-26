@@ -2,6 +2,7 @@
 
 namespace Flagrow\Bazaar\Search;
 
+use Flarum\Extension\ExtensionManager;
 use Flarum\Settings\SettingsRepositoryInterface;
 use GuzzleHttp\Client;
 use Illuminate\Support\Arr;
@@ -16,7 +17,11 @@ class FlagrowApi extends Client
 {
     public function __construct(array $config = [])
     {
-        $configFile = app()->make('flarum.config');
+        /** @var array $configFile */
+        $configFile = app('flarum.config');
+        /** @var ExtensionManager $extensions */
+        $extensions = app(ExtensionManager::class);
+        $bazaar = $extensions->getExtension('flagrow-bazaar');
 
         $host = Arr::get($configFile, 'flagrow', 'https://flagrow.io');
         $headers = [];
@@ -30,7 +35,8 @@ class FlagrowApi extends Client
             'headers' => array_merge([
                 'Accept' => 'application/vnd.api+json, application/json',
                 'Bazaar-From' => Arr::get($configFile, 'url'),
-                'Flarum-Version' => app()->version()
+                'Flarum-Version' => app()->version(),
+                'Bazaar-Version' => $bazaar ? $bazaar->getVersion() : null
             ], $headers)
         ], $config));
     }
