@@ -45,7 +45,7 @@ class AddSatisConfiguration
             [
                 'http' => [
                     'header' => [
-                        "Authorization: Bearer {$event->token}"
+                        "Authorization: 'Bearer {$event->token}'"
                     ]
                 ]
             ]
