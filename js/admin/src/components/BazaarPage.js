@@ -9,30 +9,13 @@ export default class BazaarPage extends Component {
         this.loading = m.prop(false);
         this.repository = m.prop(new ExtensionRepository(this.loading));
         this.repository().loadNextPage();
-        this.connected = app.forum.attribute('flagrow.bazaar.connected') || 0;
+        this.connected = app.data.settings['flagrow.bazaar.connected'] == 1 || false;
     }
 
     view() {
         return m('div', {className: 'ExtensionsPage Bazaar'}, [
             m('div', {className: 'ExtensionsPage-header'}, [
-                m('div', {className: 'container'}, [
-                    this.connected ?
-                        Button.component({
-                            className: 'Button Button--primary',
-                            icon: 'dashboard',
-                            children: app.translator.trans('flagrow-bazaar.admin.page.button.connected'),
-                            onclick: () => window.open('https://flagrow.io/home')
-                        }) :
-                        Button.component({
-                            className: 'Button Button--primary',
-                            icon: 'plug',
-                            children: app.translator.trans('flagrow-bazaar.admin.page.button.connect'),
-                            onclick: () => this.connect()
-                        }),
-                    m('p', [
-                        app.translator.trans('flagrow-bazaar.admin.page.button.connectDescription')
-                    ])
-                ])
+                m('div', {className: 'container'}, this.connectedHeader())
             ]),
             m('div', {className: 'ExtensionsPage-list'}, [
                 m('div', {className: 'container'}, this.items())
@@ -47,6 +30,34 @@ export default class BazaarPage extends Component {
                 extension => ExtensionListItem.component({extension: extension, repository: this.repository})
             )
         ]);
+    }
+
+    connectedHeader() {
+        if (this.connected) {
+            return [
+                Button.component({
+                    className: 'Button Button--primary',
+                    icon: 'dashboard',
+                    children: app.translator.trans('flagrow-bazaar.admin.page.button.connected'),
+                    onclick: () => window.open('https://flagrow.io/home')
+                }),
+                m('p', [
+                    app.translator.trans('flagrow-bazaar.admin.page.button.connectedDescription')
+                ])
+            ]
+        }
+
+        return [
+            Button.component({
+                className: 'Button Button--primary',
+                icon: 'plug',
+                children: app.translator.trans('flagrow-bazaar.admin.page.button.connect'),
+                onclick: () => this.connect()
+            }),
+            m('p', [
+                app.translator.trans('flagrow-bazaar.admin.page.button.connectDescription')
+            ])
+        ]
     }
 
     connect() {

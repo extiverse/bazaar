@@ -105,37 +105,46 @@ System.register("flagrow/bazaar/components/BazaarPage", ["flarum/Component", "fl
                         this.loading = m.prop(false);
                         this.repository = m.prop(new ExtensionRepository(this.loading));
                         this.repository().loadNextPage();
-                        this.connected = app.forum.attribute('flagrow.bazaar.connected') || 0;
+                        this.connected = app.data.settings['flagrow.bazaar.connected'] == 1 || false;
                     }
                 }, {
                     key: "view",
                     value: function view() {
-                        var _this2 = this;
-
-                        return m('div', { className: 'ExtensionsPage Bazaar' }, [m('div', { className: 'ExtensionsPage-header' }, [m('div', { className: 'container' }, [this.connected ? Button.component({
-                            className: 'Button Button--primary',
-                            icon: 'dashboard',
-                            children: app.translator.trans('flagrow-bazaar.admin.page.button.connected'),
-                            onclick: function onclick() {
-                                return window.open('https://flagrow.io/home');
-                            }
-                        }) : Button.component({
-                            className: 'Button Button--primary',
-                            icon: 'plug',
-                            children: app.translator.trans('flagrow-bazaar.admin.page.button.connect'),
-                            onclick: function onclick() {
-                                return _this2.connect();
-                            }
-                        }), m('p', [app.translator.trans('flagrow-bazaar.admin.page.button.connectDescription')])])]), m('div', { className: 'ExtensionsPage-list' }, [m('div', { className: 'container' }, this.items())]), BazaarLoader.component({ loading: this.loading })]);
+                        return m('div', { className: 'ExtensionsPage Bazaar' }, [m('div', { className: 'ExtensionsPage-header' }, [m('div', { className: 'container' }, this.connectedHeader())]), m('div', { className: 'ExtensionsPage-list' }, [m('div', { className: 'container' }, this.items())]), BazaarLoader.component({ loading: this.loading })]);
                     }
                 }, {
                     key: "items",
                     value: function items() {
-                        var _this3 = this;
+                        var _this2 = this;
 
                         return m('ul', { className: 'ExtensionList' }, [this.repository().extensions().map(function (extension) {
-                            return ExtensionListItem.component({ extension: extension, repository: _this3.repository });
+                            return ExtensionListItem.component({ extension: extension, repository: _this2.repository });
                         })]);
+                    }
+                }, {
+                    key: "connectedHeader",
+                    value: function connectedHeader() {
+                        var _this3 = this;
+
+                        if (this.connected) {
+                            return [Button.component({
+                                className: 'Button Button--primary',
+                                icon: 'dashboard',
+                                children: app.translator.trans('flagrow-bazaar.admin.page.button.connected'),
+                                onclick: function onclick() {
+                                    return window.open('https://flagrow.io/home');
+                                }
+                            }), m('p', [app.translator.trans('flagrow-bazaar.admin.page.button.connectedDescription')])];
+                        }
+
+                        return [Button.component({
+                            className: 'Button Button--primary',
+                            icon: 'plug',
+                            children: app.translator.trans('flagrow-bazaar.admin.page.button.connect'),
+                            onclick: function onclick() {
+                                return _this3.connect();
+                            }
+                        }), m('p', [app.translator.trans('flagrow-bazaar.admin.page.button.connectDescription')])];
                     }
                 }, {
                     key: "connect",
