@@ -72,9 +72,9 @@ System.register('flagrow/bazaar/components/BazaarLoader', ['flarum/Component', '
         }
     };
 });;
-'use strict';
+"use strict";
 
-System.register('flagrow/bazaar/components/BazaarPage', ['flarum/Component', 'flagrow/bazaar/utils/ExtensionRepository', 'flagrow/bazaar/components/ExtensionListItem', 'flagrow/bazaar/components/BazaarLoader', 'flarum/components/Button'], function (_export, _context) {
+System.register("flagrow/bazaar/components/BazaarPage", ["flarum/Component", "flagrow/bazaar/utils/ExtensionRepository", "flagrow/bazaar/components/ExtensionListItem", "flagrow/bazaar/components/BazaarLoader", "flarum/components/Button"], function (_export, _context) {
     "use strict";
 
     var Component, ExtensionRepository, ExtensionListItem, BazaarLoader, Button, BazaarPage;
@@ -100,56 +100,36 @@ System.register('flagrow/bazaar/components/BazaarPage', ['flarum/Component', 'fl
                 }
 
                 babelHelpers.createClass(BazaarPage, [{
-                    key: 'init',
+                    key: "init",
                     value: function init() {
                         this.loading = m.prop(false);
                         this.repository = m.prop(new ExtensionRepository(this.loading));
                         this.repository().loadNextPage();
-                        this.loader = BazaarLoader.component({ loading: this.loading });
+                        this.connected = app.forum.attribute('flagrow.bazaar.connected') || 0;
                     }
                 }, {
-                    key: 'view',
+                    key: "view",
                     value: function view() {
                         var _this2 = this;
 
-                        return m(
-                            'div',
-                            { className: 'ExtensionsPage Bazaar' },
-                            m(
-                                'div',
-                                { className: 'ExtensionsPage-header' },
-                                m(
-                                    'div',
-                                    { className: 'container' },
-                                    Button.component({
-                                        className: 'Button Button--primary',
-                                        icon: 'plug',
-                                        children: app.translator.trans('flagrow-bazaar.admin.page.button.connect'),
-                                        onclick: function onclick() {
-                                            return _this2.connect();
-                                        }
-                                    }),
-                                    m(
-                                        'p',
-                                        null,
-                                        app.translator.trans('flagrow-bazaar.admin.page.button.connectDescription')
-                                    )
-                                )
-                            ),
-                            m(
-                                'div',
-                                { className: 'ExtensionsPage-list' },
-                                m(
-                                    'div',
-                                    { className: 'container' },
-                                    this.items()
-                                )
-                            ),
-                            this.loader
-                        );
+                        return m('div', { className: 'ExtensionsPage Bazaar' }, [m('div', { className: 'ExtensionsPage-header' }, [m('div', { className: 'container' }, [this.connected ? Button.component({
+                            className: 'Button Button--primary',
+                            icon: 'dashboard',
+                            children: app.translator.trans('flagrow-bazaar.admin.page.button.connected'),
+                            onclick: function onclick() {
+                                return window.open('https://flagrow.io/home');
+                            }
+                        }) : Button.component({
+                            className: 'Button Button--primary',
+                            icon: 'plug',
+                            children: app.translator.trans('flagrow-bazaar.admin.page.button.connect'),
+                            onclick: function onclick() {
+                                return _this2.connect();
+                            }
+                        }), m('p', [app.translator.trans('flagrow-bazaar.admin.page.button.connectDescription')])])]), m('div', { className: 'ExtensionsPage-list' }, [m('div', { className: 'container' }, this.items())]), BazaarLoader.component({ loading: this.loading })]);
                     }
                 }, {
-                    key: 'items',
+                    key: "items",
                     value: function items() {
                         var _this3 = this;
 
@@ -158,7 +138,7 @@ System.register('flagrow/bazaar/components/BazaarPage', ['flarum/Component', 'fl
                         })]);
                     }
                 }, {
-                    key: 'connect',
+                    key: "connect",
                     value: function connect() {
                         var popup = window.open();
 
@@ -177,7 +157,7 @@ System.register('flagrow/bazaar/components/BazaarPage', ['flarum/Component', 'fl
                 return BazaarPage;
             }(Component);
 
-            _export('default', BazaarPage);
+            _export("default", BazaarPage);
         }
     };
 });;
