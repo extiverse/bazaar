@@ -111,6 +111,10 @@ class FlagrowIOSearcher extends AbstractExtensionSearcher
      */
     protected function getOrSetCache($hash, $callable)
     {
+        if (app()->inDebugMode()) {
+            return $callable();
+        }
+
         $cached = $this->cache->get($hash);
 
         if (!$cached) {
