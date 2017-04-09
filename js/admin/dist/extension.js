@@ -861,10 +861,10 @@ System.register('flagrow/bazaar/utils/TaskRepository', ['flarum/app'], function 
 });;
 "use strict";
 
-System.register("flagrow/bazaar/components/TaskListItem", ["flarum/app", "flarum/Component", "flarum/helpers/icon", "flarum/utils/ItemList", "flarum/components/Button", "flarum/components/Dropdown", "flarum/components/Badge"], function (_export, _context) {
+System.register("flagrow/bazaar/components/TaskListItem", ["flarum/app", "flarum/Component", "flarum/helpers/icon", "flarum/components/Button"], function (_export, _context) {
     "use strict";
 
-    var app, Component, icon, ItemList, Button, Dropdown, Badge, ExtensionListItem;
+    var app, Component, icon, Button, ExtensionListItem;
     return {
         setters: [function (_flarumApp) {
             app = _flarumApp.default;
@@ -872,14 +872,8 @@ System.register("flagrow/bazaar/components/TaskListItem", ["flarum/app", "flarum
             Component = _flarumComponent.default;
         }, function (_flarumHelpersIcon) {
             icon = _flarumHelpersIcon.default;
-        }, function (_flarumUtilsItemList) {
-            ItemList = _flarumUtilsItemList.default;
         }, function (_flarumComponentsButton) {
             Button = _flarumComponentsButton.default;
-        }, function (_flarumComponentsDropdown) {
-            Dropdown = _flarumComponentsDropdown.default;
-        }, function (_flarumComponentsBadge) {
-            Badge = _flarumComponentsBadge.default;
         }],
         execute: function () {
             ExtensionListItem = function (_Component) {

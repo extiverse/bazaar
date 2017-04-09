@@ -22,21 +22,14 @@ class ExtensionManager
     protected $dispatcher;
 
     /**
-     * @var ExtensionPackageManager
-     */
-    protected $packageManager;
-
-    /**
      * ExtensionManager constructor.
      * @param BaseManager $extensions
      * @param Dispatcher $dispatcher
-     * @param ExtensionPackageManager $packageManager
      */
-    public function __construct(BaseManager $extensions, Dispatcher $dispatcher, ExtensionPackageManager $packageManager)
+    public function __construct(BaseManager $extensions, Dispatcher $dispatcher)
     {
         $this->extensions = $extensions;
         $this->dispatcher = $dispatcher;
-        $this->packageManager = $packageManager;
         // @TODO temporary work around to increase memory
         @ini_set('memory_limit', '1G');
     }

@@ -1,10 +1,7 @@
 import app from 'flarum/app';
 import Component from "flarum/Component";
 import icon from "flarum/helpers/icon";
-import ItemList from "flarum/utils/ItemList";
 import Button from "flarum/components/Button";
-import Dropdown from "flarum/components/Dropdown";
-import Badge from 'flarum/components/Badge';
 
 export default class ExtensionListItem extends Component {
     init() {

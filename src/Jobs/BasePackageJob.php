@@ -46,7 +46,7 @@ abstract class BasePackageJob /*implements ShouldQueue*/
             $output = $this->handleComposer($command, $this->task);
 
             $this->task->status = 'success';
-            $this->task->output = $output->getOutput();
+            $this->task->output = $output->getOutput() . "\n--------\nBazaar stats\nDuration: {$output->getDuration()}s\nMemory: {$output->getMemory()}MB";
         } catch (\Exception $e) {
             $this->task->status = 'exception';
             $this->task->output = $e->getMessage();
