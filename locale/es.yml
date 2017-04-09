@@ -1,0 +1,27 @@
+flagrow-bazaar:
+    admin:
+        loader:
+            is_loading: Procesando..
+        popup:
+            title: Bazar de Flagrow
+            field:
+                apiToken: API token
+                apiTokenDescription: Esta API token es necesaria para acceder a la API de Extensiones de Flagrow. Si ya la tienes, ya está todo listo!
+        nav:
+            title: Bazar
+            description: El mercado de extensiones.
+        page:
+            button:
+                more: Más
+                install: Instalar
+                uninstall: Desinstalar
+                enable: Habilitar
+                disable: Deshabilitar
+                connect: Conectar
+                connectDescription: "Conecta tu instalación de Flarum con tu cuenta personal de Flagrow.io para desbloquear nuevas opciones."
+                connected: Panel
+                connectedDescription: "Tu Flarum se ha conectado. Visita el panel en Flagrow.io"
+            extension:
+                installed: Extension instalada
+                enabled: Extension habilitada
+                vendor: Por {vendor}
