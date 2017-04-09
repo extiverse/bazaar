@@ -17,7 +17,7 @@ class RemovePackage extends BasePackageJob
 
     public static function launch($package)
     {
-        $task = Task::build('install', $package);
+        $task = Task::build('uninstall', $package);
         $task->save();
         static::launchJob($task);
     }

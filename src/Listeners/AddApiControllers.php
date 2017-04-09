@@ -4,6 +4,7 @@ namespace Flagrow\Bazaar\Listeners;
 
 use Flagrow\Bazaar\Api\Controllers\CreateExtensionController;
 use Flagrow\Bazaar\Api\Controllers\ListExtensionController;
+use Flagrow\Bazaar\Api\Controllers\ListTaskController;
 use Flagrow\Bazaar\Api\Controllers\UninstallExtensionController;
 use Flarum\Event\ConfigureApiRoutes;
 use Illuminate\Events\Dispatcher;
@@ -46,6 +47,13 @@ class AddApiControllers
             '/bazaar/extensions/{id}',
             'bazaar.extensions.delete',
             UninstallExtensionController::class
+        );
+
+        // List Tasks
+        $event->get(
+            '/bazaar/tasks',
+            'bazaar.tasks.index',
+            ListTaskController::class
         );
     }
 }

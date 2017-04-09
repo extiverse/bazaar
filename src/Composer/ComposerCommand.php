@@ -2,8 +2,6 @@
 
 namespace Flagrow\Bazaar\Composer;
 
-use Composer\Installer;
-use Composer\Package\Version\VersionSelector;
 use Flagrow\Bazaar\Composer\Commands\RemoveCommand;
 use Flagrow\Bazaar\Composer\Commands\RequireCommand;
 use Flagrow\Bazaar\Composer\Commands\UpdateCommand;
@@ -35,7 +33,7 @@ class ComposerCommand
 
     /**
      * Runs `composer update`
-     * @param array $packages List of packages to update. Empty for all
+     * @param string $package
      * @return ComposerOutput
      */
     public function update($package = null)

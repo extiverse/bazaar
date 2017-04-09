@@ -10,6 +10,9 @@ flagrow-bazaar:
         nav:
             title: Bazaar
             description: The extension marketplace.
+        header:
+            extensions: Browse extensions
+            tasks: Tasks history
         page:
             button:
                 more: More
@@ -21,3 +24,19 @@ flagrow-bazaar:
                 installed: Extension is installed
                 enabled: Extension is enabled
                 vendor: By {vendor}
+            task:
+                header:
+                    status: Status
+                    command: Command
+                    output: Output
+                    created_at: Created at
+                    started_at: Started at
+                    finished_at: Finished at
+                status:
+                    success: Success
+                    exception: An exception occured
+                    working: Work in progress
+                    unknown: Unknown
+                command:
+                    install: Install {extension}
+                    uninstall: Uninstall {extension}

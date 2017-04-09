@@ -23,8 +23,6 @@ export default class ExtensionRepository {
             url: this.nextPageUrl
         }).then(result => {
             const newExtensions = result.data.map(data => app.store.createRecord('bazaar-extensions', data));
-            // start/end computation is required for the admin UI to refresh after the new extensions have been loaded
-            // this.extensions(this.extensions().concat(newExtensions));
             this.extensions(newExtensions);
             this.nextPageUrl = result.links.next;
             this.loading(false);
