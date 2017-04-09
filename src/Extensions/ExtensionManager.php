@@ -2,6 +2,8 @@
 
 namespace Flagrow\Bazaar\Extensions;
 
+use Flagrow\Bazaar\Jobs\InstallPackage;
+use Flagrow\Bazaar\Jobs\RemovePackage;
 use Flarum\Event\ExtensionWasUninstalled;
 use Flarum\Extension\ExtensionManager as BaseManager;
 use Illuminate\Contracts\Events\Dispatcher;
@@ -46,7 +48,7 @@ class ExtensionManager
     public function install($extensionId, $version = null)
     {
         $package = ExtensionUtils::idToPackage($extensionId);
-        $this->packageManager->requirePackage($package);
+        InstallPackage::launch($package);
     }
 
     /**
@@ -75,6 +77,6 @@ class ExtensionManager
         // TODO: run the uninstalled event after our own logic
 //        parent::uninstall($shortName);
 
-        $this->packageManager->removePackage($package);
+        RemovePackage::launch($package);
     }
 }
