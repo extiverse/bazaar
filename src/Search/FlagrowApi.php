@@ -2,9 +2,14 @@
 
 namespace Flagrow\Bazaar\Search;
 
+use Flarum\Extension\ExtensionManager;
 use Flarum\Settings\SettingsRepositoryInterface;
 use GuzzleHttp\Client;
+use GuzzleHttp\Handler\CurlHandler;
+use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Middleware;
 use Illuminate\Support\Arr;
+use Psr\Http\Message\ResponseInterface;
 
 /**
  * Class FlagrowApi
@@ -14,21 +19,34 @@ use Illuminate\Support\Arr;
  */
 class FlagrowApi extends Client
 {
+    /**
+     * @var array
+     */
+    protected static $flarumConfig;
+
     public function __construct(array $config = [])
     {
-        $host = static::getFlagrowHost();
+        static::$flarumConfig = app('flarum.config');
+
         $headers = [];
 
         if ($token = app()->make(SettingsRepositoryInterface::class)->get('flagrow.bazaar.api_token')) {
             $headers['Authorization'] = 'Bearer ' . $token;
         }
 
+        $stack = new HandlerStack();
+        $stack->setHandler(new CurlHandler());
+
+        $this->readBazaarConnectedState($stack);
+
         parent::__construct(array_merge([
-            'base_uri' => "$host/api/",
+            'handler' => $stack,
+            'base_uri' => sprintf("%s/api/", static::getFlagrowHost()),
             'headers' => array_merge([
                 'Accept' => 'application/vnd.api+json, application/json',
                 'Bazaar-From' => static::getFlarumHost(),
-                'Flarum-Version' => app()->version()
+                'Flarum-Version' => app()->version(),
+                'Bazaar-Version' => static::getBazaarVersion()
             ], $headers)
         ], $config));
     }
@@ -40,9 +58,7 @@ class FlagrowApi extends Client
      */
     public static function getFlagrowHost()
     {
-        $configFile = app()->make('flarum.config');
-
-        return Arr::get($configFile, 'flagrow', 'https://flagrow.io');
+        return Arr::get(static::$flarumConfig, 'flagrow', 'https://flagrow.io');
     }
 
     /**
@@ -52,8 +68,36 @@ class FlagrowApi extends Client
      */
     public static function getFlarumHost()
     {
-        $configFile = app()->make('flarum.config');
+        return Arr::get(static::$flarumConfig, 'url');
+    }
 
-        return Arr::get($configFile, 'url');
+    /**
+     * @return null|string
+     */
+    public static function getBazaarVersion()
+    {
+        /** @var ExtensionManager $extensions */
+        $extensions = app(ExtensionManager::class);
+        $bazaar = $extensions->getExtension('flagrow-bazaar');
+
+        return $bazaar ? $bazaar->getVersion() : null;
+    }
+
+    /**
+     * Injects updating the connected state for calls to Flagrow.
+     *
+     * @param HandlerStack $stack
+     */
+    protected function readBazaarConnectedState(HandlerStack &$stack)
+    {
+        $stack->push(Middleware::mapResponse(function (ResponseInterface $response) {
+            if ($response->hasHeader('Bazaar-Connected')) {
+                app()->make(SettingsRepositoryInterface::class)->set('flagrow.bazaar.connected', 1);
+            } else {
+                app()->make(SettingsRepositoryInterface::class)->set('flagrow.bazaar.connected', 0);
+            }
+
+            return $response;
+        }));
     }
 }

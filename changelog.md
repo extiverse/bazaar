@@ -1,3 +1,7 @@
+- 0.1.0-beta.4
+  - Allows connecting Bazaar to Flagrow.io to provide a dashboard.
+  - Prevent extension list result caching when debug is on.
+  - IT locale added for beta.3 of this extension.
 - 0.1.0-beta.3
   - Removed timeout on install and uninstall xhr calls.
 - 0.1.0-beta.2

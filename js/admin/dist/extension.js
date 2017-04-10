@@ -72,12 +72,12 @@ System.register('flagrow/bazaar/components/BazaarLoader', ['flarum/Component', '
         }
     };
 });;
-'use strict';
+"use strict";
 
-System.register('flagrow/bazaar/components/BazaarPage', ['flarum/Component', 'flagrow/bazaar/utils/ExtensionRepository', 'flagrow/bazaar/components/ExtensionListItem', 'flagrow/bazaar/components/BazaarLoader'], function (_export, _context) {
+System.register("flagrow/bazaar/components/BazaarPage", ["flarum/Component", "flagrow/bazaar/utils/ExtensionRepository", "flagrow/bazaar/components/ExtensionListItem", "flagrow/bazaar/components/BazaarLoader", "flarum/components/Button"], function (_export, _context) {
     "use strict";
 
-    var Component, ExtensionRepository, ExtensionListItem, BazaarLoader, BazaarPage;
+    var Component, ExtensionRepository, ExtensionListItem, BazaarLoader, Button, BazaarPage;
     return {
         setters: [function (_flarumComponent) {
             Component = _flarumComponent.default;
@@ -87,6 +87,8 @@ System.register('flagrow/bazaar/components/BazaarPage', ['flarum/Component', 'fl
             ExtensionListItem = _flagrowBazaarComponentsExtensionListItem.default;
         }, function (_flagrowBazaarComponentsBazaarLoader) {
             BazaarLoader = _flagrowBazaarComponentsBazaarLoader.default;
+        }, function (_flarumComponentsButton) {
+            Button = _flarumComponentsButton.default;
         }],
         execute: function () {
             BazaarPage = function (_Component) {
@@ -98,38 +100,20 @@ System.register('flagrow/bazaar/components/BazaarPage', ['flarum/Component', 'fl
                 }
 
                 babelHelpers.createClass(BazaarPage, [{
-                    key: 'init',
+                    key: "init",
                     value: function init() {
                         this.loading = m.prop(false);
                         this.repository = m.prop(new ExtensionRepository(this.loading));
                         this.repository().loadNextPage();
-                        this.loader = BazaarLoader.component({ loading: this.loading });
+                        this.connected = app.data.settings['flagrow.bazaar.connected'] == 1 || false;
                     }
                 }, {
-                    key: 'view',
+                    key: "view",
                     value: function view() {
-                        return m(
-                            'div',
-                            { className: 'ExtensionsPage Bazaar' },
-                            m(
-                                'div',
-                                { className: 'ExtensionsPage-header' },
-                                m('div', { className: 'container' })
-                            ),
-                            m(
-                                'div',
-                                { className: 'ExtensionsPage-list' },
-                                m(
-                                    'div',
-                                    { className: 'container' },
-                                    this.items()
-                                )
-                            ),
-                            this.loader
-                        );
+                        return m('div', { className: 'ExtensionsPage Bazaar' }, [m('div', { className: 'ExtensionsPage-header' }, [m('div', { className: 'container' }, this.connectedHeader())]), m('div', { className: 'ExtensionsPage-list' }, [m('div', { className: 'container' }, this.items())]), BazaarLoader.component({ loading: this.loading })]);
                     }
                 }, {
-                    key: 'items',
+                    key: "items",
                     value: function items() {
                         var _this2 = this;
 
@@ -137,11 +121,52 @@ System.register('flagrow/bazaar/components/BazaarPage', ['flarum/Component', 'fl
                             return ExtensionListItem.component({ extension: extension, repository: _this2.repository });
                         })]);
                     }
+                }, {
+                    key: "connectedHeader",
+                    value: function connectedHeader() {
+                        var _this3 = this;
+
+                        if (this.connected) {
+                            return [Button.component({
+                                className: 'Button Button--primary',
+                                icon: 'dashboard',
+                                children: app.translator.trans('flagrow-bazaar.admin.page.button.connected'),
+                                onclick: function onclick() {
+                                    return window.open('https://flagrow.io/home');
+                                }
+                            }), m('p', [app.translator.trans('flagrow-bazaar.admin.page.button.connectedDescription')])];
+                        }
+
+                        return [Button.component({
+                            className: 'Button Button--primary',
+                            icon: 'plug',
+                            children: app.translator.trans('flagrow-bazaar.admin.page.button.connect'),
+                            onclick: function onclick() {
+                                return _this3.connect();
+                            }
+                        }), m('p', [app.translator.trans('flagrow-bazaar.admin.page.button.connectDescription')])];
+                    }
+                }, {
+                    key: "connect",
+                    value: function connect() {
+                        var popup = window.open();
+
+                        app.request({
+                            method: 'GET',
+                            url: app.forum.attribute('apiUrl') + '/bazaar/connect'
+                        }).then(function (response) {
+                            if (response && response.redirect) {
+                                popup.location = response.redirect;
+                            } else {
+                                popup.close();
+                            }
+                        });
+                    }
                 }]);
                 return BazaarPage;
             }(Component);
 
-            _export('default', BazaarPage);
+            _export("default", BazaarPage);
         }
     };
 });;
