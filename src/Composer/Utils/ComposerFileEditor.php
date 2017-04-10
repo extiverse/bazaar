@@ -47,12 +47,12 @@ class ComposerFileEditor
 
     /**
      * Write to file and handle errors
-     * @param string $content
+     * @param string $contents
      * @throws CannotWriteComposerFileException
      */
-    protected function writeFile($content)
+    protected function writeFile($contents)
     {
-        $status = file_put_contents($this->filename, $content);
+        $status = file_put_contents($this->filename, $contents);
 
         if ($status === false) {
             throw new CannotWriteComposerFileException();
