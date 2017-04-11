@@ -102,7 +102,9 @@ abstract class BaseCommand
 
             $installer->setUpdate(true);
             $installer->setSkipSuggest(true);
-            $installer->setUpdateWhitelist($packages);
+            if (!empty($packages)) {
+                $installer->setUpdateWhitelist($packages);
+            }
             $installer->setWhitelistDependencies(true);
             $installer->setOptimizeAutoloader(true);
 

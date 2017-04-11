@@ -2,6 +2,7 @@
 
 <phpunit backupGlobals="false"
          backupStaticAttributes="false"
+         bootstrap="vendor/autoload.php"
          colors="true"
          convertErrorsToExceptions="true"
          convertNoticesToExceptions="true"
@@ -13,7 +14,12 @@
     <testsuites>
         <testsuite name="all">
             <directory suffix="Test.php">./tests</directory>
+            <exclude>./tests/Bazaar/Composer/composer-tests/</exclude>
         </testsuite>
     </testsuites>
-
+    <filter>
+        <whitelist processUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">./src/</directory>
+        </whitelist>
+    </filter>
 </phpunit>

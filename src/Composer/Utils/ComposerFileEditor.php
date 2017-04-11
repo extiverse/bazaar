@@ -47,12 +47,12 @@ class ComposerFileEditor
 
     /**
      * Write to file and handle errors
-     * @param string $content
+     * @param string $contents
      * @throws CannotWriteComposerFileException
      */
-    protected function writeFile($content)
+    protected function writeFile($contents)
     {
-        $status = file_put_contents($this->filename, $content);
+        $status = file_put_contents($this->filename, $contents);
 
         if ($status === false) {
             throw new CannotWriteComposerFileException();
@@ -92,6 +92,22 @@ class ComposerFileEditor
     public function removePackage($package)
     {
         $this->manipulator->removeSubNode('require', $package);
+    }
+
+    /**
+     * @param $name
+     * @param $url
+     * @param array $options
+     * @param string $type
+     * @return bool
+     */
+    public function addRepository($name, $url, array $options, $type = 'composer')
+    {
+        return $this->manipulator->addRepository($name, [
+            'type' => $type,
+            'url' => $url,
+            'options' => $options
+        ]);
     }
 
     /**

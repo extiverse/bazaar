@@ -45,4 +45,19 @@ trait AssertPackageRegistrationTrait
     {
         $this->assertFalse($this->isPackageVersionRegistered($package, $version, 'Version '.$version.' should not be in composer.json for package '.$package));
     }
+
+    public function assertRepositoryRegistered($type, $url)
+    {
+        $json = json_decode($this->filesystem->get($this->getComposerWorkingDir().'/composer.json'), true);
+
+        $found = false;
+
+        foreach (Arr::get($json, 'repositories', []) as $repository) {
+            if (Arr::get($repository, 'url') === $url && Arr::get($repository, 'type') == $type) {
+                $found = true;
+            }
+        }
+
+        $this->assertTrue($found, 'Repository ' . $url . ' of type '. $type . ' not found in composer file');
+    }
 }

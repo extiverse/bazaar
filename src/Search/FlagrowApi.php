@@ -19,15 +19,15 @@ use Psr\Http\Message\ResponseInterface;
  */
 class FlagrowApi extends Client
 {
+    /**
+     * @var array
+     */
+    protected static $flarumConfig;
+
     public function __construct(array $config = [])
     {
-        /** @var array $configFile */
-        $configFile = app('flarum.config');
-        /** @var ExtensionManager $extensions */
-        $extensions = app(ExtensionManager::class);
-        $bazaar = $extensions->getExtension('flagrow-bazaar');
+        static::$flarumConfig = app('flarum.config');
 
-        $host = Arr::get($configFile, 'flagrow', 'https://flagrow.io');
         $headers = [];
 
         if ($token = app()->make(SettingsRepositoryInterface::class)->get('flagrow.bazaar.api_token')) {
@@ -41,14 +41,46 @@ class FlagrowApi extends Client
 
         parent::__construct(array_merge([
             'handler' => $stack,
-            'base_uri' => "$host/api/",
+            'base_uri' => sprintf("%s/api/", static::getFlagrowHost()),
             'headers' => array_merge([
                 'Accept' => 'application/vnd.api+json, application/json',
-                'Bazaar-From' => Arr::get($configFile, 'url'),
+                'Bazaar-From' => static::getFlarumHost(),
                 'Flarum-Version' => app()->version(),
-                'Bazaar-Version' => $bazaar ? $bazaar->getVersion() : null
+                'Bazaar-Version' => static::getBazaarVersion()
             ], $headers)
         ], $config));
+    }
+
+    /**
+     * The hostname to connect with Flagrow.io.
+     *
+     * @return string
+     */
+    public static function getFlagrowHost()
+    {
+        return Arr::get(static::$flarumConfig, 'flagrow', 'https://flagrow.io');
+    }
+
+    /**
+     * The url specified in the config.php.
+     *
+     * @return string
+     */
+    public static function getFlarumHost()
+    {
+        return Arr::get(static::$flarumConfig, 'url');
+    }
+
+    /**
+     * @return null|string
+     */
+    public static function getBazaarVersion()
+    {
+        /** @var ExtensionManager $extensions */
+        $extensions = app(ExtensionManager::class);
+        $bazaar = $extensions->getExtension('flagrow-bazaar');
+
+        return $bazaar ? $bazaar->getVersion() : null;
     }
 
     /**

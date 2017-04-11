@@ -202,8 +202,7 @@ System.register('flagrow/bazaar/components/BazaarSettingsModal', ['flarum/app', 
                         return [m('div', { className: 'Form-group' }, [m('label', { for: 'bazaar-api-token' }, app.translator.trans('flagrow-bazaar.admin.popup.field.apiToken')), m('input', {
                             id: 'bazaar-api-token',
                             className: 'FormControl',
-                            bidi: this.setting('flagrow.bazaar.api_token'),
-                            disabled: this.setting('flagrow.bazaar.api_token')().length > 0
+                            bidi: this.setting('flagrow.bazaar.api_token')
                         }), m('span', app.translator.trans('flagrow-bazaar.admin.popup.field.apiTokenDescription'))])];
                     }
                 }]);

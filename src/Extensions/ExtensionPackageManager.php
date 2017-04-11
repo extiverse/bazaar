@@ -5,49 +5,29 @@ namespace Flagrow\Bazaar\Extensions;
 use Flagrow\Bazaar\Composer\ComposerCommand;
 use Flagrow\Bazaar\Composer\ComposerEnvironment;
 use Flagrow\Bazaar\Composer\ComposerOutput;
-use Flarum\Foundation\Application;
-use Illuminate\Filesystem\Filesystem;
 use Psr\Log\LoggerInterface;
 
 class ExtensionPackageManager
 {
     /**
-     * @var Application
+     * @var ComposerEnvironment
      */
-    protected $app;
-
-    /**
-     * @var Filesystem
-     */
-    protected $filesystem;
+    protected $env;
 
     /**
      * @var LoggerInterface
      */
     protected $log;
 
-    public function __construct(Application $app, Filesystem $filesystem, LoggerInterface $log)
+    public function __construct(ComposerEnvironment $env, LoggerInterface $log)
     {
-        $this->app = $app;
-        $this->filesystem = $filesystem;
+        $this->env = $env;
         $this->log = $log;
-    }
-
-    public function getComposerInstallRoot()
-    {
-        return $this->app->basePath();
-    }
-
-    public function getComposerHome()
-    {
-        return $this->app->storagePath().'/composer-home';
     }
 
     public function getComposerCommand()
     {
-        $env = new ComposerEnvironment($this->getComposerInstallRoot(), $this->getComposerHome(), $this->filesystem);
-
-        return new ComposerCommand($env);
+        return new ComposerCommand($this->env);
     }
 
     public function updatePackages()
