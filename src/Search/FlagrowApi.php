@@ -30,8 +30,8 @@ class FlagrowApi extends Client
 
         $headers = [];
 
-        if ($token = app()->make(SettingsRepositoryInterface::class)->get('flagrow.bazaar.api_token')) {
-            $headers['Authorization'] = 'Bearer ' . $token;
+        if ($token = static::getToken()) {
+            $headers['Authorization'] = "Bearer $token";
         }
 
         $stack = new HandlerStack();
@@ -99,5 +99,13 @@ class FlagrowApi extends Client
 
             return $response;
         }));
+    }
+
+    /**
+     * @return string|null
+     */
+    public static function getToken()
+    {
+        return app()->make(SettingsRepositoryInterface::class)->get('flagrow.bazaar.api_token');
     }
 }

@@ -9,6 +9,7 @@ use Composer\Repository\CompositeRepository;
 use Composer\Repository\PlatformRepository;
 use Composer\Repository\RepositoryFactory;
 use Flagrow\Bazaar\Exceptions\CannotWriteComposerFileException;
+use Illuminate\Support\Arr;
 
 class ComposerFileEditor
 {
@@ -120,7 +121,7 @@ class ComposerFileEditor
     {
         $json = json_decode($this->getContents(), true);
 
-        $pool = new Pool(array_key_exists('minimum-stability', $json) ? $json['minimum-stability'] : 'stable');
+        $pool = new Pool(Arr::get($json, 'minimum-stability', 'stable'));
         $pool->addRepository(new CompositeRepository(array_merge(
             [new PlatformRepository],
             RepositoryFactory::defaultRepos($io)
