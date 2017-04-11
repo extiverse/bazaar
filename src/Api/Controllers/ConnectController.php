@@ -4,7 +4,6 @@ namespace Flagrow\Bazaar\Api\Controllers;
 
 use Flagrow\Bazaar\Search\FlagrowApi;
 use Flarum\Http\Controller\ControllerInterface;
-use Flarum\Settings\SettingsRepositoryInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
 class ConnectController implements ControllerInterface
@@ -13,15 +12,10 @@ class ConnectController implements ControllerInterface
      * @var FlagrowApi
      */
     private $api;
-    /**
-     * @var SettingsRepositoryInterface
-     */
-    private $settings;
 
-    function __construct(FlagrowApi $api, SettingsRepositoryInterface $settings)
+    function __construct(FlagrowApi $api)
     {
         $this->api = $api;
-        $this->settings = $settings;
     }
 
     /**
