@@ -4,7 +4,6 @@ namespace Flagrow\Bazaar\Composer\Utils;
 
 use Composer\DependencyResolver\Pool;
 use Composer\IO\IOInterface;
-use Composer\Json\JsonManipulator;
 use Composer\Repository\CompositeRepository;
 use Composer\Repository\PlatformRepository;
 use Composer\Repository\RepositoryFactory;
