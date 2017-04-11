@@ -10,6 +10,7 @@ export default class BazaarPage extends Component {
         this.repository = m.prop(new ExtensionRepository(this.loading));
         this.repository().loadNextPage();
         this.connected = app.data.settings['flagrow.bazaar.connected'] == 1 || false;
+        this.flagrowHost = app.data.settings['flagrow.bazaar.flagrow-host'] || 'https://flagrow.io';
     }
 
     view() {
@@ -39,7 +40,7 @@ export default class BazaarPage extends Component {
                     className: 'Button Button--primary',
                     icon: 'dashboard',
                     children: app.translator.trans('flagrow-bazaar.admin.page.button.connected'),
-                    onclick: () => window.open('https://flagrow.io/home')
+                    onclick: () => window.open(this.flagrowHost + '/home')
                 }),
                 m('p', [
                     app.translator.trans('flagrow-bazaar.admin.page.button.connectedDescription')

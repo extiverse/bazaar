@@ -106,6 +106,7 @@ System.register("flagrow/bazaar/components/BazaarPage", ["flarum/Component", "fl
                         this.repository = m.prop(new ExtensionRepository(this.loading));
                         this.repository().loadNextPage();
                         this.connected = app.data.settings['flagrow.bazaar.connected'] == 1 || false;
+                        this.flagrowHost = app.data.settings['flagrow.bazaar.flagrow-host'] || 'https://flagrow.io';
                     }
                 }, {
                     key: "view",
@@ -132,7 +133,7 @@ System.register("flagrow/bazaar/components/BazaarPage", ["flarum/Component", "fl
                                 icon: 'dashboard',
                                 children: app.translator.trans('flagrow-bazaar.admin.page.button.connected'),
                                 onclick: function onclick() {
-                                    return window.open('https://flagrow.io/home');
+                                    return window.open(_this3.flagrowHost + '/home');
                                 }
                             }), m('p', [app.translator.trans('flagrow-bazaar.admin.page.button.connectedDescription')])];
                         }
