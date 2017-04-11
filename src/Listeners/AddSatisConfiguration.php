@@ -38,14 +38,13 @@ class AddSatisConfiguration
         $editor = new ComposerFileEditor($env->getComposerJsonPath());
         $host = FlagrowApi::getFlagrowHost() . '/api/satis';
 
-        // TODO: if a "repositories" key is already present in composer.json but uses an array instead of an object, the command quietly fails
         if ($editor->addRepository(
             'flagrow',
             $host,
             [
                 'http' => [
                     'header' => [
-                        "Authorization: 'Bearer {$event->token}'"
+                        "Authorization: Bearer {$event->token}"
                     ]
                 ]
             ]
