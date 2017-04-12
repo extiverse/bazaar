@@ -21,5 +21,7 @@ export default class Extension extends mixin(Model, {
     flarum_id: Model.attribute('flarum_id'),
 
     can_install: computed('installed', installed => !installed),
-    can_uninstall: computed('installed', 'enabled', (installed, enabled) => installed && !enabled)
+    can_uninstall: computed('installed', 'enabled', (installed, enabled) => installed && !enabled),
+
+    favorited: Model.attribute('favorited')
 }) {}

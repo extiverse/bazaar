@@ -17,6 +17,7 @@ export default class ExtensionListItem extends Component {
     view() {
         const extension = this.props.extension;
         const controls = this.controlItems(extension).toArray();
+        const badges = this.badges(extension).toArray();
 
         return <li className={
             'ExtensionListItem ' +
@@ -31,17 +32,17 @@ export default class ExtensionListItem extends Component {
 
 
                 <ul className="ExtensionListItem-badges badges">
-                    {this.badges(extension).toArray()}
+                    {badges}
                 </ul>
                 {controls.length ? (
-                        <Dropdown
-                            className="ExtensionListItem-controls"
-                            buttonClassName="Button Button--icon Button--flat"
-                            menuClassName="Dropdown-menu--right"
-                            icon="ellipsis-h">
-                            {controls}
-                        </Dropdown>
-                    ) : ''}
+                    <Dropdown
+                        className="ExtensionListItem-controls"
+                        buttonClassName="Button Button--icon Button--flat"
+                        menuClassName="Dropdown-menu--right"
+                        icon="ellipsis-h">
+                        {controls}
+                    </Dropdown>
+                ) : ''}
                 <label className="ExtensionListItem-title">
                     {extension.title() || extension.package()}
                 </label>
@@ -58,6 +59,14 @@ export default class ExtensionListItem extends Component {
     controlItems(extension) {
         const items = new ItemList();
         const repository = this.props.repository;
+
+        items.add('favorite', Button.component({
+            icon: 'heart',
+            children: app.translator.trans('core.admin.extensions.favorite_button'),
+            onclick: () => {
+                repository().favoriteExtension(extension);
+            }
+        }));
 
         if (extension.enabled() && app.extensionSettings[name]) {
             items.add('settings', Button.component({
@@ -116,11 +125,18 @@ export default class ExtensionListItem extends Component {
     badges(extension) {
         const items = new ItemList();
 
+        if (extension.favorited()) {
+            items.add('favorited', <Badge icon="heart" type="favorited"
+                                          label={app.translator.trans('flagrow-bazaar.admin.page.extension.favorited')}/>)
+        }
+
         if (extension.installed()) {
-            items.add('installed', <Badge icon="plus-square" type="installed" label={app.translator.trans('flagrow-bazaar.admin.page.extension.installed')}/>)
+            items.add('installed', <Badge icon="plus-square" type="installed"
+                                          label={app.translator.trans('flagrow-bazaar.admin.page.extension.installed')}/>)
         }
         if (extension.enabled()) {
-            items.add('enabled', <Badge icon="check-square" type="enabled" label={app.translator.trans('flagrow-bazaar.admin.page.extension.enabled')}/>)
+            items.add('enabled', <Badge icon="check-square" type="enabled"
+                                        label={app.translator.trans('flagrow-bazaar.admin.page.extension.enabled')}/>)
         }
 
         return items;
