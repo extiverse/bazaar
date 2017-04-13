@@ -16,7 +16,8 @@ export default class ExtensionListItem extends Component {
 
     view() {
         const extension = this.props.extension;
-        const controls = this.controlItems(extension).toArray();
+        const connected = this.props.connected || false;
+        const controls = this.controlItems(extension, connected).toArray();
         const badges = this.badges(extension).toArray();
 
         return <li className={
@@ -56,18 +57,20 @@ export default class ExtensionListItem extends Component {
         </li>;
     }
 
-    controlItems(extension) {
+    controlItems(extension, connected) {
         const items = new ItemList();
         const repository = this.props.repository;
         const favoriteTrans = extension.favorited() ? 'flagrow-bazaar.admin.page.button.remove_favorite_button' : 'flagrow-bazaar.admin.page.button.favorite_button';
 
-        items.add('favorite', Button.component({
-            icon: 'heart',
-            children: app.translator.trans(favoriteTrans),
-            onclick: () => {
-                repository().favoriteExtension(extension);
-            }
-        }));
+        if (connected) {
+            items.add('favorite', Button.component({
+                icon: 'heart',
+                children: app.translator.trans(favoriteTrans),
+                onclick: () => {
+                    repository().favoriteExtension(extension);
+                }
+            }));
+        }
 
         if (extension.enabled() && app.extensionSettings[name]) {
             items.add('settings', Button.component({

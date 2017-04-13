@@ -28,7 +28,11 @@ export default class BazaarPage extends Component {
     items() {
         return m('ul', {className: 'ExtensionList'}, [
             this.repository().extensions().map(
-                extension => ExtensionListItem.component({extension: extension, repository: this.repository})
+                extension => ExtensionListItem.component({
+                    extension: extension,
+                    repository: this.repository,
+                    connected: this.connected
+                })
             )
         ]);
     }

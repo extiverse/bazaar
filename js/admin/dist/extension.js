@@ -119,7 +119,11 @@ System.register("flagrow/bazaar/components/BazaarPage", ["flarum/Component", "fl
                         var _this2 = this;
 
                         return m('ul', { className: 'ExtensionList' }, [this.repository().extensions().map(function (extension) {
-                            return ExtensionListItem.component({ extension: extension, repository: _this2.repository });
+                            return ExtensionListItem.component({
+                                extension: extension,
+                                repository: _this2.repository,
+                                connected: _this2.connected
+                            });
                         })]);
                     }
                 }, {
@@ -254,7 +258,8 @@ System.register("flagrow/bazaar/components/ExtensionListItem", ["flarum/Componen
                     key: "view",
                     value: function view() {
                         var extension = this.props.extension;
-                        var controls = this.controlItems(extension).toArray();
+                        var connected = this.props.connected || false;
+                        var controls = this.controlItems(extension, connected).toArray();
                         var badges = this.badges(extension).toArray();
 
                         return m(
@@ -304,18 +309,20 @@ System.register("flagrow/bazaar/components/ExtensionListItem", ["flarum/Componen
                     }
                 }, {
                     key: "controlItems",
-                    value: function controlItems(extension) {
+                    value: function controlItems(extension, connected) {
                         var items = new ItemList();
                         var repository = this.props.repository;
                         var favoriteTrans = extension.favorited() ? 'flagrow-bazaar.admin.page.button.remove_favorite_button' : 'flagrow-bazaar.admin.page.button.favorite_button';
 
-                        items.add('favorite', Button.component({
-                            icon: 'heart',
-                            children: app.translator.trans(favoriteTrans),
-                            onclick: function onclick() {
-                                repository().favoriteExtension(extension);
-                            }
-                        }));
+                        if (connected) {
+                            items.add('favorite', Button.component({
+                                icon: 'heart',
+                                children: app.translator.trans(favoriteTrans),
+                                onclick: function onclick() {
+                                    repository().favoriteExtension(extension);
+                                }
+                            }));
+                        }
 
                         if (extension.enabled() && app.extensionSettings[name]) {
                             items.add('settings', Button.component({
