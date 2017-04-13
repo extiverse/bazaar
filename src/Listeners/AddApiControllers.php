@@ -39,6 +39,13 @@ class AddApiControllers
             Controllers\CreateExtensionController::class
         );
 
+        // Favorite an extension
+        $event->post(
+            '/bazaar/extensions/{id}/favorite',
+            'bazaar.extensions.favorite',
+            Controllers\FavoriteExtensionController::class
+        );
+
         // Uninstall an extension
         $event->delete(
             '/bazaar/extensions/{id}',

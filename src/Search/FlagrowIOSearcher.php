@@ -2,7 +2,7 @@
 
 namespace Flagrow\Bazaar\Search;
 
-use Flagrow\Bazaar\Extensions\Extension;
+use Flagrow\Bazaar\Traits\ExtensionCreation;
 use Flarum\Core\Search\SearchResults;
 use Flarum\Extension\ExtensionManager;
 use Flarum\Settings\SettingsRepositoryInterface;
@@ -13,6 +13,7 @@ use Illuminate\Support\Arr;
 
 class FlagrowIOSearcher extends AbstractExtensionSearcher
 {
+    use ExtensionCreation;
     /**
      * @var ExtensionManager
      */
@@ -49,24 +50,6 @@ class FlagrowIOSearcher extends AbstractExtensionSearcher
         $this->config = $config;
         $this->client = $client;
         $this->cache = $cache;
-    }
-
-    /**
-     * Create an Extension object and map all data sources
-     * @param array $apiPackage
-     * @return Extension
-     */
-    public function createExtension(array $apiPackage)
-    {
-        $extension = Extension::createFromAttributes($apiPackage['attributes']);
-
-        $installedExtension = $this->extensionManager->getExtension($extension->getShortName());
-
-        if (!is_null($installedExtension)) {
-            $extension->setInstalledExtension($installedExtension);
-        }
-
-        return $extension;
     }
 
     /**

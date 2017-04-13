@@ -131,11 +131,11 @@ System.register("flagrow/bazaar/components/BazaarPage", ["flarum/Component", "fl
                             return [Button.component({
                                 className: 'Button Button--primary',
                                 icon: 'dashboard',
-                                children: app.translator.trans('flagrow-bazaar.admin.page.button.connected'),
+                                children: app.translator.trans('flagrow-bazaar.admin.page.button.connected', { host: this.flagrowHost.replace(/^https?:\/\//, '') }),
                                 onclick: function onclick() {
                                     return window.open(_this3.flagrowHost + '/home');
                                 }
-                            }), m('p', [app.translator.trans('flagrow-bazaar.admin.page.button.connectedDescription')])];
+                            }), m('p', [app.translator.trans('flagrow-bazaar.admin.page.button.connectedDescription', { host: this.flagrowHost.replace(/^https?:\/\//, '') })])];
                         }
 
                         return [Button.component({
@@ -255,6 +255,7 @@ System.register("flagrow/bazaar/components/ExtensionListItem", ["flarum/Componen
                     value: function view() {
                         var extension = this.props.extension;
                         var controls = this.controlItems(extension).toArray();
+                        var badges = this.badges(extension).toArray();
 
                         return m(
                             "li",
@@ -270,7 +271,7 @@ System.register("flagrow/bazaar/components/ExtensionListItem", ["flarum/Componen
                                 m(
                                     "ul",
                                     { className: "ExtensionListItem-badges badges" },
-                                    this.badges(extension).toArray()
+                                    badges
                                 ),
                                 controls.length ? m(
                                     Dropdown,
@@ -306,6 +307,15 @@ System.register("flagrow/bazaar/components/ExtensionListItem", ["flarum/Componen
                     value: function controlItems(extension) {
                         var items = new ItemList();
                         var repository = this.props.repository;
+                        var favoriteTrans = extension.favorited() ? 'flagrow-bazaar.admin.page.button.remove_favorite_button' : 'flagrow-bazaar.admin.page.button.favorite_button';
+
+                        items.add('favorite', Button.component({
+                            icon: 'heart',
+                            children: app.translator.trans(favoriteTrans),
+                            onclick: function onclick() {
+                                repository().favoriteExtension(extension);
+                            }
+                        }));
 
                         if (extension.enabled() && app.extensionSettings[name]) {
                             items.add('settings', Button.component({
@@ -359,11 +369,18 @@ System.register("flagrow/bazaar/components/ExtensionListItem", ["flarum/Componen
                     value: function badges(extension) {
                         var items = new ItemList();
 
+                        if (extension.favorited()) {
+                            items.add('favorited', m(Badge, { icon: "heart", type: "favorited",
+                                label: app.translator.trans('flagrow-bazaar.admin.page.extension.favorited') }));
+                        }
+
                         if (extension.installed()) {
-                            items.add('installed', m(Badge, { icon: "plus-square", type: "installed", label: app.translator.trans('flagrow-bazaar.admin.page.extension.installed') }));
+                            items.add('installed', m(Badge, { icon: "plus-square", type: "installed",
+                                label: app.translator.trans('flagrow-bazaar.admin.page.extension.installed') }));
                         }
                         if (extension.enabled()) {
-                            items.add('enabled', m(Badge, { icon: "check-square", type: "enabled", label: app.translator.trans('flagrow-bazaar.admin.page.extension.enabled') }));
+                            items.add('enabled', m(Badge, { icon: "check-square", type: "enabled",
+                                label: app.translator.trans('flagrow-bazaar.admin.page.extension.enabled') }));
                         }
 
                         return items;
@@ -454,7 +471,9 @@ System.register('flagrow/bazaar/models/Extension', ['flarum/Model', 'flarum/util
                 }),
                 can_uninstall: computed('installed', 'enabled', function (installed, enabled) {
                     return installed && !enabled;
-                })
+                }),
+
+                favorited: Model.attribute('favorited')
             }));
 
             _export('default', Extension);
@@ -559,9 +578,31 @@ System.register('flagrow/bazaar/utils/ExtensionRepository', ['flarum/app'], func
                         this.loadNextPage();
                     }
                 }, {
+                    key: 'favoriteExtension',
+                    value: function favoriteExtension(extension) {
+                        var _this2 = this;
+
+                        app.request({
+                            method: 'post',
+                            url: app.forum.attribute('apiUrl') + '/bazaar/extensions/' + extension.id() + '/favorite',
+                            data: {
+                                favorite: extension.favorited() != true
+                            }
+                        }).then(function (response) {
+
+                            var extension = app.store.createRecord('bazaar-extensions', response.data);
+
+                            // Todo we don't get a Bazaar normalized extension object back.
+                            // this.extensions()[this.getExtensionIndex(extension)] = extension;
+
+                            _this2.resetNavigation();
+                            _this2.loadNextPage();
+                        });
+                    }
+                }, {
                     key: 'toggleExtension',
                     value: function toggleExtension(extension) {
-                        var _this2 = this;
+                        var _this3 = this;
 
                         this.loading(true);
 
@@ -572,7 +613,7 @@ System.register('flagrow/bazaar/utils/ExtensionRepository', ['flarum/app'], func
                             method: 'PATCH',
                             data: { enabled: !enabled }
                         }).then(function () {
-                            _this2.updateExtension(extension, 'enabled', !enabled);
+                            _this3.updateExtension(extension, 'enabled', !enabled);
                         });
                     }
                 }, {

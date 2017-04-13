@@ -62,6 +62,10 @@ export default class ExtensionRepository {
         );
     }
 
+    /**
+     * Handles an installation failure.
+     * @param extension
+     */
     installFailure(extension) {
         this.resetNavigation();
         this.loadNextPage();
@@ -84,13 +88,40 @@ export default class ExtensionRepository {
         );
     }
 
+    /**
+     * Handles an uninstall failure.
+     * @param extension
+     */
     uninstallFailure(extension) {
         this.resetNavigation();
         this.loadNextPage();
     }
 
     /**
-     * Togges an extension (enable or disable).
+     * Processing (de-) favoriting extensions.
+     * @param extension
+     */
+    favoriteExtension(extension) {
+        app.request({
+            method: 'post',
+            url: app.forum.attribute('apiUrl') + '/bazaar/extensions/' + extension.id() + '/favorite',
+            data: {
+                favorite: extension.favorited() != true
+            }
+        }).then(response => {
+
+            let extension = app.store.createRecord('bazaar-extensions', response.data);
+
+            // Todo we don't get a Bazaar normalized extension object back.
+            // this.extensions()[this.getExtensionIndex(extension)] = extension;
+
+            this.resetNavigation();
+            this.loadNextPage();
+        })
+    }
+
+    /**
+     * Toggles an extension (enable or disable).
      * @param extension
      */
     toggleExtension(extension) {
