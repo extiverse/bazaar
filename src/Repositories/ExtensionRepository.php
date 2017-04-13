@@ -78,6 +78,8 @@ class ExtensionRepository
             $json = json_decode($response->getBody()->getContents(), true);
             return $this->createExtension(Arr::get($json, 'data', []));
         }
+
+        return null;
     }
 
     /**
