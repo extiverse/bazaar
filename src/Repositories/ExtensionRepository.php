@@ -36,7 +36,7 @@ class ExtensionRepository
     /**
      * @return SearchResults
      */
-    public function list()
+    public function index()
     {
         $query = [
             'page[size]' => 9999,
