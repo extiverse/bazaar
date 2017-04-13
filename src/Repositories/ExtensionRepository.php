@@ -3,11 +3,13 @@
 namespace Flagrow\Bazaar\Repositories;
 
 use Flagrow\Bazaar\Extensions\Extension;
+use Flagrow\Bazaar\Extensions\ExtensionUtils;
 use Flagrow\Bazaar\Search\FlagrowApi;
 use Flagrow\Bazaar\Traits\Cachable;
 use Flarum\Core\Search\SearchResults;
 use Flarum\Extension\ExtensionManager as CoreManager;
-use Illuminate\Support\Collection;
+use Illuminate\Support\Arr;
+use Illuminate\Database\Eloquent\Collection;
 
 
 class ExtensionRepository
@@ -26,9 +28,8 @@ class ExtensionRepository
      */
     private $client;
 
-    function __construct(Extension $extension, CoreManager $coreManager, FlagrowApi $client)
+    function __construct(CoreManager $coreManager, FlagrowApi $client)
     {
-        $this->extension = $extension;
         $this->coreManager = $coreManager;
         $this->client = $client;
     }
@@ -66,6 +67,20 @@ class ExtensionRepository
     }
 
     /**
+     * @param $id
+     * @return Extension
+     */
+    public function getExtension($id)
+    {
+        $response = $this->client->get("packages/$id");
+
+        if ($response->getStatusCode() == 200) {
+            $json = json_decode($response->getBody()->getContents(), true);
+            return $this->createExtension(Arr::get($json, 'data', []));
+        }
+    }
+
+    /**
      * Create an Extension object and map all data sources.
      * @param array $apiPackage
      * @return Extension
@@ -79,6 +94,8 @@ class ExtensionRepository
         if (!is_null($installedExtension)) {
             $extension->setInstalledExtension($installedExtension);
         }
+
+        $this->flushCacheKey('flagrow.io.search.list');
 
         return $extension;
     }

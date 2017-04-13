@@ -2,15 +2,20 @@
 
 namespace Flagrow\Bazaar\Api\Controllers;
 
+use Flagrow\Bazaar\Api\Serializers\ExtensionSerializer;
+use Flagrow\Bazaar\Repositories\ExtensionRepository;
 use Flagrow\Bazaar\Search\FlagrowApi;
+use Flarum\Api\Controller\AbstractResourceController;
 use Flarum\Core\Exception\PermissionDeniedException;
-use Flarum\Http\Controller\ControllerInterface;
 use Flarum\Settings\SettingsRepositoryInterface;
 use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
+use Tobscure\JsonApi\Document;
 
-class FavoriteExtensionController implements ControllerInterface
+class FavoriteExtensionController extends AbstractResourceController
 {
+
+    public $serializer = ExtensionSerializer::class;
     /**
      * @var FlagrowApi
      */
@@ -19,19 +24,28 @@ class FavoriteExtensionController implements ControllerInterface
      * @var bool
      */
     private $connected;
+    /**
+     * @var ExtensionRepository
+     */
+    private $extensions;
 
-    function __construct(FlagrowApi $api, SettingsRepositoryInterface $settings)
+    function __construct(FlagrowApi $api, SettingsRepositoryInterface $settings, ExtensionRepository $extensions)
     {
         $this->api = $api;
         $this->connected = $settings->get('flagrow.bazaar.connected') === '1';
+        $this->extensions = $extensions;
     }
 
     /**
+     * Get the data to be serialized and assigned to the response document.
+     *
      * @param ServerRequestInterface $request
-     * @return string
+     * @param Document $document
+     * @return mixed
+     * @throws PermissionDeniedException
      * @throws \Exception
      */
-    public function handle(ServerRequestInterface $request)
+    protected function data(ServerRequestInterface $request, Document $document)
     {
         if (!$this->connected) {
             throw new PermissionDeniedException("Bazaar not connected");
@@ -44,7 +58,12 @@ class FavoriteExtensionController implements ControllerInterface
             ]
         ]);
 
-        if (in_array($response->getStatusCode(), [200, 201, 409])) {
+        if (in_array($response->getStatusCode(), [200, 201])) {
+            $json = json_decode($response->getBody()->getContents(), true);
+            return $this->extensions->createExtension(Arr::get($json, 'data', []));
+        }
+
+        if ($response->getStatusCode() === 409) {
             return $response;
         }
 

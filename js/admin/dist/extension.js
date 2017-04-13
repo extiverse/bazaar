@@ -543,6 +543,8 @@ System.register('flagrow/bazaar/utils/ExtensionRepository', ['flarum/app'], func
                 }, {
                     key: 'installExtension',
                     value: function installExtension(extension) {
+                        var _this2 = this;
+
                         this.loading(true);
 
                         app.request({
@@ -552,7 +554,9 @@ System.register('flagrow/bazaar/utils/ExtensionRepository', ['flarum/app'], func
                             data: {
                                 id: extension.id()
                             }
-                        }).then(this.updateExtension.bind(this, extension, 'installed', true), this.installFailure.bind(this, extension));
+                        }).then(function (response) {
+                            _this2.updateExtension(response);
+                        });
                     }
                 }, {
                     key: 'installFailure',
@@ -563,13 +567,17 @@ System.register('flagrow/bazaar/utils/ExtensionRepository', ['flarum/app'], func
                 }, {
                     key: 'uninstallExtension',
                     value: function uninstallExtension(extension) {
+                        var _this3 = this;
+
                         this.loading(true);
 
                         app.request({
                             method: 'DELETE',
                             timeout: 0,
                             url: app.forum.attribute('apiUrl') + '/bazaar/extensions/' + extension.id()
-                        }).then(this.updateExtension.bind(this, extension, 'installed', false), this.uninstallFailure.bind(this, extension));
+                        }).then(function (response) {
+                            _this3.updateExtension(response);
+                        });
                     }
                 }, {
                     key: 'uninstallFailure',
@@ -580,7 +588,9 @@ System.register('flagrow/bazaar/utils/ExtensionRepository', ['flarum/app'], func
                 }, {
                     key: 'favoriteExtension',
                     value: function favoriteExtension(extension) {
-                        var _this2 = this;
+                        var _this4 = this;
+
+                        this.loading(true);
 
                         app.request({
                             method: 'post',
@@ -589,31 +599,24 @@ System.register('flagrow/bazaar/utils/ExtensionRepository', ['flarum/app'], func
                                 favorite: extension.favorited() != true
                             }
                         }).then(function (response) {
-
-                            var extension = app.store.createRecord('bazaar-extensions', response.data);
-
-                            // Todo we don't get a Bazaar normalized extension object back.
-                            // this.extensions()[this.getExtensionIndex(extension)] = extension;
-
-                            _this2.resetNavigation();
-                            _this2.loadNextPage();
+                            _this4.updateExtension(response);
                         });
                     }
                 }, {
                     key: 'toggleExtension',
                     value: function toggleExtension(extension) {
-                        var _this3 = this;
+                        var _this5 = this;
 
                         this.loading(true);
 
                         var enabled = extension.enabled();
 
                         app.request({
-                            url: app.forum.attribute('apiUrl') + '/extensions/' + extension.flarum_id(),
+                            url: app.forum.attribute('apiUrl') + '/bazaar/extensions/' + extension.id(),
                             method: 'PATCH',
                             data: { enabled: !enabled }
-                        }).then(function () {
-                            _this3.updateExtension(extension, 'enabled', !enabled);
+                        }).then(function (response) {
+                            _this5.updateExtension(response);
                         });
                     }
                 }, {
@@ -635,10 +638,13 @@ System.register('flagrow/bazaar/utils/ExtensionRepository', ['flarum/app'], func
                     }
                 }, {
                     key: 'updateExtension',
-                    value: function updateExtension(extension, property, value) {
-                        this.extensions()[this.getExtensionIndex(extension)][property](value);
-                        this.resetNavigation();
-                        this.loadNextPage();
+                    value: function updateExtension(response) {
+                        console.log(this, response);
+                        this.loading(false);
+
+                        var extension = app.store.createRecord('bazaar-extensions', response.data);
+                        this.extensions()[this.getExtensionIndex(extension)] = extension;
+                        m.redraw();
                     }
                 }]);
                 return ExtensionRepository;

@@ -29,4 +29,13 @@ trait Cachable
 
         return $cached;
     }
+
+    /**
+     * @param $hash
+     * @return mixed
+     */
+    protected function flushCacheKey($hash)
+    {
+        return app(Store::class)->forget($hash);
+    }
 }
