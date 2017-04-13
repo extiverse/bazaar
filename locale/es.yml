@@ -1,7 +1,7 @@
 flagrow-bazaar:
     admin:
         loader:
-            is_loading: Procesando..
+            is_loading: Procesando...
         popup:
             title: Bazar de Flagrow
             field:
@@ -20,8 +20,11 @@ flagrow-bazaar:
                 connect: Conectar
                 connectDescription: "Conecta tu instalación de Flarum con tu cuenta personal de Flagrow.io para desbloquear nuevas opciones."
                 connected: Panel
-                connectedDescription: "Tu Flarum se ha conectado. Visita el panel en Flagrow.io"
+                connectedDescription: "Tu Flarum se ha conectado. Visita el panel en Flagrow.io
+                favorite_button: "Marcar extensión en Favoritos"
+                remove_favorite_button: "Remover extensión de Favoritos"
             extension:
                 installed: Extension instalada
                 enabled: Extension habilitada
                 vendor: Por {vendor}
+                favorited: Uno de tus favoritos
