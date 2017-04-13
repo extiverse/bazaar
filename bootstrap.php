@@ -13,5 +13,4 @@ return function (Dispatcher $events, Application $app) {
 
     $app->register(Providers\ComposerEnvironmentProvider::class);
     $app->register(Providers\ExtensionProvider::class);
-    $app->register(Providers\ExtensionSearcherProvider::class);
 };

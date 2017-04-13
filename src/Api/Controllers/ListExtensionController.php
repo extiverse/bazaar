@@ -3,6 +3,7 @@
 namespace Flagrow\Bazaar\Api\Controllers;
 
 use Flagrow\Bazaar\Api\Serializers\ExtensionSerializer;
+use Flagrow\Bazaar\Repositories\ExtensionRepository;
 use Flagrow\Bazaar\Search\AbstractExtensionSearcher;
 use Flarum\Api\Controller\AbstractCollectionController;
 use Flarum\Api\UrlGenerator;
@@ -20,19 +21,18 @@ class ListExtensionController extends AbstractCollectionController
     public $serializer = ExtensionSerializer::class;
 
     /**
-     * @var AbstractExtensionSearcher
-     */
-    protected $searcher;
-
-    /**
      * @var UrlGenerator
      */
     protected $url;
+    /**
+     * @var ExtensionRepository
+     */
+    protected $extensions;
 
-    public function __construct(AbstractExtensionSearcher $searcher, UrlGenerator $url)
+    public function __construct(ExtensionRepository $extensions, UrlGenerator $url)
     {
-        $this->searcher = $searcher;
         $this->url = $url;
+        $this->extensions = $extensions;
     }
 
     /**
@@ -44,9 +44,7 @@ class ListExtensionController extends AbstractCollectionController
 
         $offset = $this->extractOffset($request);
 
-        // Limit is never used, we use the one from flagrow.io
-        // Offset is used as page number, so it does not reflect the true offset
-        $results = $this->searcher->search(null, $offset);
+        $results = $this->extensions->index();
 
         $document->addPaginationLinks(
             $this->url->toRoute('bazaar.extensions.index'),

@@ -77,4 +77,18 @@ class ExtensionManager
 
         $this->packageManager->removePackage($package);
     }
+
+    /**
+     * Attempts to hit the native manager whenever this method does not exist here.
+     *
+     * @info Instead of extending the core manager, we can do an easy fallthrough this way.
+     *
+     * @param $name
+     * @param $arguments
+     * @return mixed
+     */
+    function __call($name, $arguments)
+    {
+        return call_user_func_array([$this->extensions, $name], $arguments);
+    }
 }
