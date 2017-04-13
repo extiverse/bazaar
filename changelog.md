@@ -2,7 +2,8 @@
   - Dutch, Portuguese (thanks @1337god) and Spanish (thanks @AngellitoX) language.
   - Allow favoriting extensions, only if you've connected your Bazaar.
   - Readme added.
-  - Implemented, but disabled, code to allow registering our own satis into the composer.json for private packages.
+  - Implemented, but disabled, code to allow registering our own satis into the composer.json for private packages.ages.
+  - Complete rewrite of the frontend, it no longer refreshes the whole page when doing actions on extensions.
 - 0.1.0-beta.4
   - Allows connecting Bazaar to Flagrow.io to provide a dashboard.
   - Prevent extension list result caching when debug is on.
