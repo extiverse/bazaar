@@ -59,10 +59,11 @@ export default class ExtensionListItem extends Component {
     controlItems(extension) {
         const items = new ItemList();
         const repository = this.props.repository;
+        const favoriteTrans = extension.favorited() ? 'flagrow-bazaar.admin.page.button.remove_favorite_button' : 'flagrow-bazaar.admin.page.button.favorite_button';
 
         items.add('favorite', Button.component({
             icon: 'heart',
-            children: app.translator.trans('core.admin.extensions.favorite_button'),
+            children: app.translator.trans(favoriteTrans),
             onclick: () => {
                 repository().favoriteExtension(extension);
             }

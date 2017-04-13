@@ -39,11 +39,11 @@ export default class BazaarPage extends Component {
                 Button.component({
                     className: 'Button Button--primary',
                     icon: 'dashboard',
-                    children: app.translator.trans('flagrow-bazaar.admin.page.button.connected'),
+                    children: app.translator.trans('flagrow-bazaar.admin.page.button.connected', {host: this.flagrowHost.replace(/^https?:\/\//, '')}),
                     onclick: () => window.open(this.flagrowHost + '/home')
                 }),
                 m('p', [
-                    app.translator.trans('flagrow-bazaar.admin.page.button.connectedDescription')
+                    app.translator.trans('flagrow-bazaar.admin.page.button.connectedDescription', {host: this.flagrowHost.replace(/^https?:\/\//, '')})
                 ])
             ]
         }

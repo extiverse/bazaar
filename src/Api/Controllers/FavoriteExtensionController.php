@@ -39,7 +39,7 @@ class FavoriteExtensionController implements ControllerInterface
 
         $response = $this->api->post('packages/favorite', [
             'form_params' => [
-                'package_id' => Arr::get($request->getParsedBody(), 'extension'),
+                'package_id' => Arr::get($request->getQueryParams(), 'id'),
                 'favorite' => Arr::get($request->getParsedBody(), 'favorite')
             ]
         ]);

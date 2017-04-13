@@ -131,11 +131,11 @@ System.register("flagrow/bazaar/components/BazaarPage", ["flarum/Component", "fl
                             return [Button.component({
                                 className: 'Button Button--primary',
                                 icon: 'dashboard',
-                                children: app.translator.trans('flagrow-bazaar.admin.page.button.connected'),
+                                children: app.translator.trans('flagrow-bazaar.admin.page.button.connected', { host: this.flagrowHost.replace(/^https?:\/\//, '') }),
                                 onclick: function onclick() {
                                     return window.open(_this3.flagrowHost + '/home');
                                 }
-                            }), m('p', [app.translator.trans('flagrow-bazaar.admin.page.button.connectedDescription')])];
+                            }), m('p', [app.translator.trans('flagrow-bazaar.admin.page.button.connectedDescription', { host: this.flagrowHost.replace(/^https?:\/\//, '') })])];
                         }
 
                         return [Button.component({
@@ -307,10 +307,11 @@ System.register("flagrow/bazaar/components/ExtensionListItem", ["flarum/Componen
                     value: function controlItems(extension) {
                         var items = new ItemList();
                         var repository = this.props.repository;
+                        var favoriteTrans = extension.favorited() ? 'flagrow-bazaar.admin.page.button.remove_favorite_button' : 'flagrow-bazaar.admin.page.button.favorite_button';
 
                         items.add('favorite', Button.component({
                             icon: 'heart',
-                            children: app.translator.trans('core.admin.extensions.favorite_button'),
+                            children: app.translator.trans(favoriteTrans),
                             onclick: function onclick() {
                                 repository().favoriteExtension(extension);
                             }
@@ -585,20 +586,17 @@ System.register('flagrow/bazaar/utils/ExtensionRepository', ['flarum/app'], func
                             method: 'post',
                             url: app.forum.attribute('apiUrl') + '/bazaar/extensions/' + extension.id() + '/favorite',
                             data: {
-                                extension: extension.id(),
                                 favorite: extension.favorited() != true
                             }
                         }).then(function (response) {
 
                             var extension = app.store.createRecord('bazaar-extensions', response.data);
 
-                            _this2.extensions()[_this2.getExtensionIndex(extension)] = extension;
+                            // Todo we don't get a Bazaar normalized extension object back.
+                            // this.extensions()[this.getExtensionIndex(extension)] = extension;
 
-                            // if (response.status == 200) {
-                            //     this.updateExtension.bind(this, extension, 'favorited', false);
-                            // } else if (response.status == 201) {
-                            //     this.updateExtension.bind(this, extension, 'favorited', true);
-                            // }
+                            _this2.resetNavigation();
+                            _this2.loadNextPage();
                         });
                     }
                 }, {

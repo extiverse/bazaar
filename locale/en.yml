@@ -18,10 +18,13 @@ flagrow-bazaar:
                 enable: Enable
                 disable: Disable
                 connect: Connect
-                connectDescription: "Connect your Flarum installation to your personal account on Flagrow.io to unlock new features."
+                connectDescription: "Connect your Flarum installation to your personal account on {host} to unlock new features."
                 connected: Dashboard
-                connectedDescription: "Your Flarum is connected, visit the dashboard on Flagrow.io"
+                connectedDescription: "Your Flarum is connected, visit the dashboard on {host}."
+                favorite_button: "Favorite extension"
+                remove_favorite_button: "Remove extension from your favorites"
             extension:
                 installed: Extension is installed
                 enabled: Extension is enabled
                 vendor: By {vendor}
+                favorited: One of your favorites

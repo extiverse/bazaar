@@ -91,6 +91,10 @@ class FlagrowApi extends Client
     protected function readBazaarConnectedState(HandlerStack &$stack)
     {
         $stack->push(Middleware::mapResponse(function (ResponseInterface $response) {
+            if ($response->getStatusCode() > 200) {
+                return $response;
+            }
+
             if ($response->hasHeader('Bazaar-Connected')) {
                 app()->make(SettingsRepositoryInterface::class)->set('flagrow.bazaar.connected', 1);
             } else {
