@@ -31,6 +31,12 @@ For a complete overview of our changes, please visit the [changelog](https://git
 composer require flagrow/bazaar
 ```
 
+Make sure that the following directories and files are writable by the web/php user:
+
+- `composer.json`
+- `composer.lock`
+- `vendor/`
+
 ### UPDATING
 
 ```bash
