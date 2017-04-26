@@ -97,7 +97,7 @@ export default class ExtensionListItem extends Component {
             }));
         }
 
-        if (extension.enabled() && extension.outdated()) {
+        if (extension.installed() && extension.outdated()) {
             items.add('update', Button.component({
                 icon: 'toggle-up',
                 children: app.translator.trans('flagrow-bazaar.admin.page.button.update'),
@@ -139,7 +139,7 @@ export default class ExtensionListItem extends Component {
     badges(extension) {
         const items = new ItemList();
 
-        if (extension.enabled() && extension.outdated()) {
+        if (extension.installed() && extension.outdated()) {
             items.add('favorited', <Badge icon="warning" type="outdated"
                                           label={app.translator.trans('flagrow-bazaar.admin.page.extension.outdated', {new: extension.highest_version()})}/>)
         }

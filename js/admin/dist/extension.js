@@ -349,7 +349,7 @@ System.register("flagrow/bazaar/components/ExtensionListItem", ["flarum/Componen
                             }));
                         }
 
-                        if (extension.enabled() && extension.outdated()) {
+                        if (extension.installed() && extension.outdated()) {
                             items.add('update', Button.component({
                                 icon: 'toggle-up',
                                 children: app.translator.trans('flagrow-bazaar.admin.page.button.update'),
@@ -386,7 +386,7 @@ System.register("flagrow/bazaar/components/ExtensionListItem", ["flarum/Componen
                     value: function badges(extension) {
                         var items = new ItemList();
 
-                        if (extension.enabled() && extension.outdated()) {
+                        if (extension.installed() && extension.outdated()) {
                             items.add('favorited', m(Badge, { icon: "warning", type: "outdated",
                                 label: app.translator.trans('flagrow-bazaar.admin.page.extension.outdated', { new: extension.highest_version() }) }));
                         }
@@ -638,6 +638,8 @@ System.register('flagrow/bazaar/utils/ExtensionRepository', ['flarum/app'], func
                             method: 'PATCH'
                         }).then(function (response) {
                             _this5.updateExtensionInRepository(response);
+                        }).then(function () {
+                            location.reload();
                         });
                     }
                 }, {

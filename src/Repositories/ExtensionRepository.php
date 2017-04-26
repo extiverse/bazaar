@@ -130,15 +130,20 @@ class ExtensionRepository
     {
         $extension = Extension::createFromAttributes($apiPackage['attributes']);
 
+        $this->refreshInstalledExtension($extension);
+
+        $this->flushCacheKey('flagrow.io.search.list');
+
+        return $extension;
+    }
+
+    protected function refreshInstalledExtension(Extension &$extension)
+    {
         $installedExtension = $this->manager->getExtension($extension->getShortName());
 
         if (!is_null($installedExtension)) {
             $extension->setInstalledExtension($installedExtension);
         }
-
-        $this->flushCacheKey('flagrow.io.search.list');
-
-        return $extension;
     }
 
     /**
@@ -171,13 +176,7 @@ class ExtensionRepository
     {
         $extension = $this->getExtension($package);
 
-        if ($version === null) {
-            $version = $extension->getAvailableVersion();
-        }
-
-        $this->packages->requirePackage(
-                sprintf("%s:^%s", $extension->getPackage(), $version)
-        );
+        $this->packages->requirePackage($extension->getPackage());
 
         $this->manager->migrate($extension->getInstalledExtension());
 
@@ -186,6 +185,8 @@ class ExtensionRepository
         $this->events->fire(
             new ExtensionWasUpdated($extension->getInstalledExtension())
         );
+
+        $this->refreshInstalledExtension($extension);
 
         return $extension;
     }

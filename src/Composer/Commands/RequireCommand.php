@@ -18,15 +18,14 @@ class RequireCommand extends BaseCommand
         }
 
         foreach ($packages as $package) {
-            list($package, $version) = explode(':', $package);
-
-            $candidate = $versionSelector->findBestCandidate($package, $version);
+            $candidate = $versionSelector->findBestCandidate($package);
 
             if ($candidate) {
-                $version = $candidate->getPrettyVersion();
+                $this->getFileEditor()->addPackage(
+                    $candidate->getPrettyName(),
+                    $versionSelector->findRecommendedRequireVersion($candidate)
+                );
             }
-
-            $this->getFileEditor()->addPackage($package, $version);
         }
 
         if (!empty($packages)) {

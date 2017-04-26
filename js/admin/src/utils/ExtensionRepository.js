@@ -126,6 +126,8 @@ export default class ExtensionRepository {
             method: 'PATCH'
         }).then(response => {
             this.updateExtensionInRepository(response)
+        }).then(() => {
+            location.reload();
         });
     }
 
