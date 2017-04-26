@@ -1,3 +1,6 @@
+- 0.1.0
+  - Moved our loader modal below the error popup.
+  - Added a contributing document.
 - 0.1.0-beta.5
   - Dutch, Portuguese (thanks @1337god) and Spanish (thanks @AngellitoX) language.
   - Allow favoriting extensions, only if you've connected your Bazaar.
