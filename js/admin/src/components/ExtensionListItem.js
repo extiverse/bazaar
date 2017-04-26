@@ -11,7 +11,7 @@ export default class ExtensionListItem extends Component {
     config(isInitialized) {
         if (isInitialized) return;
 
-        if (this.props.extension.description()) this.$().tooltip({container: 'body'});
+        if (this.props.extension.description()) this.$('.ExtensionIcon').tooltip({container: 'body'});
     }
 
     view() {
@@ -23,11 +23,11 @@ export default class ExtensionListItem extends Component {
         return <li className={
             'ExtensionListItem ' +
             (extension.enabled() ? 'enabled ' : 'disabled ') +
-            (extension.installed() ? 'installed' : 'uninstalled') +
-            (extension.enabled() && extension.highest_version() && extension.installed_version() != extension.highest_version() ? 'update' : '')
-        } title={extension.description()}>
+            (extension.installed() ? 'installed ' : 'uninstalled ') +
+            (extension.outdated() ? 'outdated ' : '')
+        }>
             <div className="ExtensionListItem-content">
-                      <span className="ExtensionListItem-icon ExtensionIcon" style={extension.icon() || ''}>
+                      <span className="ExtensionListItem-icon ExtensionIcon" style={extension.icon() || ''} title={extension.description()}>
                         {extension.icon() ? icon(extension.icon().name) : ''}
                       </span>
 
@@ -47,12 +47,12 @@ export default class ExtensionListItem extends Component {
                 <label className="ExtensionListItem-title">
                     {extension.title() || extension.package()}
                 </label>
-                <label className="ExtensionListItem-version">
+                <label className="ExtensionListItem-vendor">
                     {app.translator.trans('flagrow-bazaar.admin.page.extension.vendor', {
                         vendor: extension.package().split('/')[0]
                     })}
                 </label>
-                <div className="ExtensionListItem-version">{extension.highest_version()}</div>
+                <div className="ExtensionListItem-version">{extension.installed_version() || extension.highest_version()}</div>
             </div>
         </li>;
     }
@@ -97,6 +97,16 @@ export default class ExtensionListItem extends Component {
             }));
         }
 
+        if (extension.enabled() && extension.outdated()) {
+            items.add('update', Button.component({
+                icon: 'toggle-up',
+                children: app.translator.trans('flagrow-bazaar.admin.page.button.update'),
+                onclick: () => {
+                    repository().updateExtension(extension);
+                }
+            }));
+        }
+
         if (extension.installed() && extension.enabled()) {
             items.add('disable', Button.component({
                 icon: 'square-o',
@@ -129,12 +139,17 @@ export default class ExtensionListItem extends Component {
     badges(extension) {
         const items = new ItemList();
 
+        if (extension.enabled() && extension.outdated()) {
+            items.add('favorited', <Badge icon="warning" type="outdated"
+                                          label={app.translator.trans('flagrow-bazaar.admin.page.extension.outdated', {new: extension.highest_version()})}/>)
+        }
+
         if (extension.favorited()) {
             items.add('favorited', <Badge icon="heart" type="favorited"
                                           label={app.translator.trans('flagrow-bazaar.admin.page.extension.favorited')}/>)
         }
 
-        if (extension.installed()) {
+        if (extension.installed() && !extension.enabled()) {
             items.add('installed', <Badge icon="plus-square" type="installed"
                                           label={app.translator.trans('flagrow-bazaar.admin.page.extension.installed')}/>)
         }

@@ -1,3 +1,11 @@
+- 0.1.1
+  - Huge refactoring. Extension manager logic moved into the repository.
+  - Extensions with available updates are now marked Outdated.
+  - Allowing updating of single extensions when outdated.
+  - Flush cache, including manifest (not yet fixed in core), during (de-)installation and updating of packages.
+  - Fixed tooltips overlapping for extension title and badges.
+  - Gave badges a color based on their state indication.
+  - Not showing "installable" badge when extension enabled.
 - 0.1.0
   - Moved our loader modal below the error popup.
   - Added a contributing document.

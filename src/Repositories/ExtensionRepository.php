@@ -7,12 +7,12 @@ use Flagrow\Bazaar\Events\ExtensionWasUpdated;
 use Flagrow\Bazaar\Extensions\Extension;
 use Flagrow\Bazaar\Extensions\ExtensionUtils;
 use Flagrow\Bazaar\Extensions\PackageManager;
+use Flagrow\Bazaar\Jobs\CacheClearJob;
 use Flagrow\Bazaar\Search\FlagrowApi as Api;
 use Flagrow\Bazaar\Traits\Cachable;
 use Flarum\Core\Search\SearchResults;
 use Flarum\Event\ExtensionWasUninstalled;
 use Flarum\Extension\ExtensionManager;
-use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Arr;
@@ -42,9 +42,9 @@ class ExtensionRepository
      */
     protected $events;
     /**
-     * @var Kernel
+     * @var CacheClearJob
      */
-    private $console;
+    private $flush;
 
     /**
      * ExtensionRepository constructor.
@@ -52,20 +52,20 @@ class ExtensionRepository
      * @param PackageManager $packages
      * @param Api $client
      * @param Dispatcher $events
-     * @param Kernel $console
+     * @param CacheClearJob $flush
      */
     function __construct(
         ExtensionManager $manager,
         PackageManager $packages,
         Api $client,
         Dispatcher $events,
-        Kernel $console
+        CacheClearJob $flush
     ) {
         $this->manager = $manager;
         $this->client = $client;
         $this->packages = $packages;
         $this->events = $events;
-        $this->console = $console;
+        $this->flush = $flush;
     }
 
     /**
@@ -153,8 +153,10 @@ class ExtensionRepository
 
         $extension = $this->getExtension($package);
 
+        $this->flush->fire();
+
         $this->events->fire(
-            new ExtensionWasInstalled($extension)
+            new ExtensionWasInstalled($extension->getInstalledExtension())
         );
 
         return $extension;
@@ -162,22 +164,27 @@ class ExtensionRepository
 
     /**
      * @param $package
+     * @param null|string $version
      * @return Extension|null
      */
-    public function updateExtension($package)
+    public function updateExtension($package, $version = null)
     {
-        $this->packages->updatePackage($package);
-
         $extension = $this->getExtension($package);
 
-        $this->manager->migrate($extension);
+        if ($version === null) {
+            $version = $extension->getAvailableVersion();
+        }
 
-        $this->console->call('cache:clear', [
-            '-n' => 1
-        ]);
+        $this->packages->requirePackage(
+                sprintf("%s:^%s", $extension->getPackage(), $version)
+        );
+
+        $this->manager->migrate($extension->getInstalledExtension());
+
+        $this->flush->fire();
 
         $this->events->fire(
-            new ExtensionWasUpdated($extension)
+            new ExtensionWasUpdated($extension->getInstalledExtension())
         );
 
         return $extension;
@@ -195,14 +202,18 @@ class ExtensionRepository
             $this->manager->disable($extension->id);
         }
 
-        $this->manager->migrateDown($extension);
-
-        $extension->getInstalledExtension()->setInstalled(false);
+        $this->manager->migrateDown($extension->getInstalledExtension());
 
         $this->packages->removePackage($package);
 
+        $installedExtension = $extension->getInstalledExtension();
+
+        $extension->setInstalledExtension(null);
+
+        $this->flush->fire();
+
         $this->events->fire(
-            new ExtensionWasUninstalled($extension)
+            new ExtensionWasUninstalled($installedExtension)
         );
 
         return $extension;

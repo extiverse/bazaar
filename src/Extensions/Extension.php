@@ -2,6 +2,7 @@
 
 namespace Flagrow\Bazaar\Extensions;
 
+use Composer\Semver\Comparator;
 use Flarum\Extension\Extension as InstalledExtension;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Arr;
@@ -41,9 +42,9 @@ class Extension implements Arrayable
 
     /**
      * Bind this extension to an installed extension
-     * @param InstalledExtension $extension
+     * @param InstalledExtension|null $extension
      */
-    public function setInstalledExtension(InstalledExtension $extension)
+    public function setInstalledExtension(InstalledExtension $extension = null)
     {
         $this->installedExtension = $extension;
     }
@@ -152,6 +153,28 @@ class Extension implements Arrayable
     }
 
     /**
+     * Whether the package is outdated.
+     *
+     * @return bool|null
+     */
+    public function isOutdated()
+    {
+        if (!$this->isInstalled()) {
+            return null;
+        }
+
+        return Comparator::lessThan(
+            $this->getInstalledVersion(),
+            $this->getAvailableVersion()
+        );
+    }
+
+    public function getAvailableVersion()
+    {
+        return $this->getAttributeIfPresent('highest_version');
+    }
+
+    /**
      * @inheritdoc
      */
     public function toArray()
@@ -169,7 +192,8 @@ class Extension implements Arrayable
             'installed' => $this->isInstalled(),
             'enabled' => $this->isEnabled(),
             'installed_version' => $this->getInstalledVersion(),
-            'highest_version' => $this->getAttributeIfPresent('highest_version'),
+            'highest_version' => $this->getAvailableVersion(),
+            'outdated' => $this->isOutdated(),
             'flarum_id' => $this->installedExtension ? $this->installedExtension->getId() : null,
             'favorited' => $this->getAttributeIfPresent('favorited')
         ];

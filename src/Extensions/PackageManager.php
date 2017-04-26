@@ -27,6 +27,9 @@ class PackageManager
 
     public function getComposerCommand()
     {
+        @ini_set('memory_limit', '1G');
+        @set_time_limit(5 * 60);
+
         return new ComposerCommand($this->env);
     }
 
