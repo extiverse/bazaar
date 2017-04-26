@@ -49,7 +49,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Tests\\": "tests/"
+            "Bazaar\\Tests\\": "tests/"
         }
     }
 }

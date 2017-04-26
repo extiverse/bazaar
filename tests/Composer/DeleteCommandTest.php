@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Bazaar\Composer;
+namespace Bazaar\Tests\Composer;
 
 class DeleteCommandTest extends BaseCommandTest
 {

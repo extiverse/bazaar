@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests;
+namespace Bazaar\Tests;
 
 use PHPUnit_Framework_TestCase;
 
