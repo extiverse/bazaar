@@ -49,6 +49,14 @@ class Extension implements Arrayable
     }
 
     /**
+     * @return InstalledExtension
+     */
+    public function getInstalledExtension()
+    {
+        return $this->installedExtension;
+    }
+
+    /**
      * Get the Flarum extension id to search in the base ExtensionManager
      * @return string Flarum extension manager id
      */

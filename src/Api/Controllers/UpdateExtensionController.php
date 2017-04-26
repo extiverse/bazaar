@@ -3,11 +3,9 @@
 namespace Flagrow\Bazaar\Api\Controllers;
 
 use Flagrow\Bazaar\Api\Serializers\ExtensionSerializer;
-use Flagrow\Bazaar\Extensions\ExtensionUtils;
 use Flagrow\Bazaar\Repositories\ExtensionRepository;
 use Flarum\Api\Controller\AbstractResourceController;
 use Flarum\Core\Access\AssertPermissionTrait;
-use Flarum\Extension\ExtensionManager;
 use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
@@ -20,16 +18,11 @@ class UpdateExtensionController extends AbstractResourceController
     /**
      * @var ExtensionRepository
      */
-    private $extensions;
-    /**
-     * @var ExtensionManager
-     */
-    private $manager;
+    protected $extensions;
 
-    function __construct(ExtensionRepository $extensions, ExtensionManager $manager)
+    function __construct(ExtensionRepository $extensions)
     {
         $this->extensions = $extensions;
-        $this->manager = $manager;
     }
 
     /**
@@ -43,17 +36,8 @@ class UpdateExtensionController extends AbstractResourceController
     {
         $this->assertAdmin($request->getAttribute('actor'));
 
-        $enabled = Arr::get($request->getParsedBody(), 'enabled');
         $id = Arr::get($request->getQueryParams(), 'id');
 
-        $shortName = ExtensionUtils::idToShortName($id);
-
-        if ($enabled === true) {
-            $this->manager->enable($shortName);
-        } else {
-            $this->manager->disable($shortName);
-        }
-
-        return $this->extensions->getExtension($id);
+        return $this->extensions->updateExtension($id);
     }
 }

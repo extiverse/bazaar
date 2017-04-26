@@ -17,10 +17,6 @@ class FavoriteExtensionController extends AbstractResourceController
 
     public $serializer = ExtensionSerializer::class;
     /**
-     * @var FlagrowApi
-     */
-    private $api;
-    /**
      * @var bool
      */
     private $connected;
@@ -31,7 +27,6 @@ class FavoriteExtensionController extends AbstractResourceController
 
     function __construct(FlagrowApi $api, SettingsRepositoryInterface $settings, ExtensionRepository $extensions)
     {
-        $this->api = $api;
         $this->connected = $settings->get('flagrow.bazaar.connected') === '1';
         $this->extensions = $extensions;
     }
@@ -51,22 +46,15 @@ class FavoriteExtensionController extends AbstractResourceController
             throw new PermissionDeniedException("Bazaar not connected");
         }
 
-        $response = $this->api->post('packages/favorite', [
-            'form_params' => [
-                'package_id' => Arr::get($request->getQueryParams(), 'id'),
-                'favorite' => Arr::get($request->getParsedBody(), 'favorite')
-            ]
-        ]);
+        $response = $this->extensions->favorite(
+            Arr::get($request->getQueryParams(), 'id'),
+            Arr::get($request->getParsedBody(), 'favorite')
+        );
 
-        if (in_array($response->getStatusCode(), [200, 201])) {
-            $json = json_decode($response->getBody()->getContents(), true);
-            return $this->extensions->createExtension(Arr::get($json, 'data', []));
-        }
-
-        if ($response->getStatusCode() === 409) {
+        if ($response) {
             return $response;
         }
 
-        throw new \Exception('Connecting failed');
+        throw new \Exception('Could not favorite, connection to service failed.');
     }
 }

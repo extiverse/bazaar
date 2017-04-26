@@ -123,7 +123,7 @@ export default class ExtensionRepository {
         const enabled = extension.enabled();
 
         app.request({
-            url: app.forum.attribute('apiUrl') + '/bazaar/extensions/' + extension.id(),
+            url: app.forum.attribute('apiUrl') + '/bazaar/extensions/' + extension.id() + '/toggle',
             method: 'PATCH',
             data: {enabled: !enabled}
         }).then(response => {
