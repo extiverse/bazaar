@@ -1,6 +1,6 @@
 <?php
 
-namespace Bazaar\Tests\Composer;
+namespace Flagrow\Bazaar\Tests\Composer;
 
 use Flagrow\Bazaar\Composer\Utils\ComposerFileEditor;
 
