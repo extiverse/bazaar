@@ -3,29 +3,33 @@
 namespace Flagrow\Bazaar\Api\Controllers;
 
 use Flagrow\Bazaar\Api\Serializers\ExtensionSerializer;
+use Flagrow\Bazaar\Extensions\ExtensionUtils;
 use Flagrow\Bazaar\Repositories\ExtensionRepository;
 use Flarum\Api\Controller\AbstractResourceController;
 use Flarum\Core\Access\AssertPermissionTrait;
+use Flarum\Extension\ExtensionManager;
+use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 
-class UninstallExtensionController extends AbstractResourceController
+class ToggleExtensionController extends AbstractResourceController
 {
     use AssertPermissionTrait;
 
     public $serializer = ExtensionSerializer::class;
-
     /**
      * @var ExtensionRepository
      */
-    protected $extensions;
-
+    private $extensions;
     /**
-     * @param ExtensionRepository $extensions
+     * @var ExtensionManager
      */
-    public function __construct(ExtensionRepository $extensions)
+    private $manager;
+
+    function __construct(ExtensionRepository $extensions, ExtensionManager $manager)
     {
         $this->extensions = $extensions;
+        $this->manager = $manager;
     }
 
     /**
@@ -39,8 +43,17 @@ class UninstallExtensionController extends AbstractResourceController
     {
         $this->assertAdmin($request->getAttribute('actor'));
 
-        $extensionId = array_get($request->getQueryParams(), 'id');
+        $enabled = Arr::get($request->getParsedBody(), 'enabled');
+        $id = Arr::get($request->getQueryParams(), 'id');
 
-        return $this->extensions->removeExtension($extensionId);
+        $shortName = ExtensionUtils::idToShortName($id);
+
+        if ($enabled === true) {
+            $this->manager->enable($shortName);
+        } else {
+            $this->manager->disable($shortName);
+        }
+
+        return $this->extensions->getExtension($id);
     }
 }

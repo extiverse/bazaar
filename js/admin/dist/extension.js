@@ -252,7 +252,7 @@ System.register("flagrow/bazaar/components/ExtensionListItem", ["flarum/Componen
                     value: function config(isInitialized) {
                         if (isInitialized) return;
 
-                        if (this.props.extension.description()) this.$().tooltip({ container: 'body' });
+                        if (this.props.extension.description()) this.$('.ExtensionIcon').tooltip({ container: 'body' });
                     }
                 }, {
                     key: "view",
@@ -264,13 +264,13 @@ System.register("flagrow/bazaar/components/ExtensionListItem", ["flarum/Componen
 
                         return m(
                             "li",
-                            { className: 'ExtensionListItem ' + (extension.enabled() ? 'enabled ' : 'disabled ') + (extension.installed() ? 'installed' : 'uninstalled') + (extension.enabled() && extension.highest_version() && extension.installed_version() != extension.highest_version() ? 'update' : ''), title: extension.description() },
+                            { className: 'ExtensionListItem ' + (extension.enabled() ? 'enabled ' : 'disabled ') + (extension.installed() ? 'installed ' : 'uninstalled ') + (extension.outdated() ? 'outdated ' : '') },
                             m(
                                 "div",
                                 { className: "ExtensionListItem-content" },
                                 m(
                                     "span",
-                                    { className: "ExtensionListItem-icon ExtensionIcon", style: extension.icon() || '' },
+                                    { className: "ExtensionListItem-icon ExtensionIcon", style: extension.icon() || '', title: extension.description() },
                                     extension.icon() ? icon(extension.icon().name) : ''
                                 ),
                                 m(
@@ -294,7 +294,7 @@ System.register("flagrow/bazaar/components/ExtensionListItem", ["flarum/Componen
                                 ),
                                 m(
                                     "label",
-                                    { className: "ExtensionListItem-version" },
+                                    { className: "ExtensionListItem-vendor" },
                                     app.translator.trans('flagrow-bazaar.admin.page.extension.vendor', {
                                         vendor: extension.package().split('/')[0]
                                     })
@@ -302,7 +302,7 @@ System.register("flagrow/bazaar/components/ExtensionListItem", ["flarum/Componen
                                 m(
                                     "div",
                                     { className: "ExtensionListItem-version" },
-                                    extension.highest_version()
+                                    extension.installed_version() || extension.highest_version()
                                 )
                             )
                         );
@@ -349,6 +349,16 @@ System.register("flagrow/bazaar/components/ExtensionListItem", ["flarum/Componen
                             }));
                         }
 
+                        if (extension.installed() && extension.outdated()) {
+                            items.add('update', Button.component({
+                                icon: 'toggle-up',
+                                children: app.translator.trans('flagrow-bazaar.admin.page.button.update'),
+                                onclick: function onclick() {
+                                    repository().updateExtension(extension);
+                                }
+                            }));
+                        }
+
                         if (extension.installed() && extension.enabled()) {
                             items.add('disable', Button.component({
                                 icon: 'square-o',
@@ -376,12 +386,17 @@ System.register("flagrow/bazaar/components/ExtensionListItem", ["flarum/Componen
                     value: function badges(extension) {
                         var items = new ItemList();
 
+                        if (extension.installed() && extension.outdated()) {
+                            items.add('favorited', m(Badge, { icon: "warning", type: "outdated",
+                                label: app.translator.trans('flagrow-bazaar.admin.page.extension.outdated', { new: extension.highest_version() }) }));
+                        }
+
                         if (extension.favorited()) {
                             items.add('favorited', m(Badge, { icon: "heart", type: "favorited",
                                 label: app.translator.trans('flagrow-bazaar.admin.page.extension.favorited') }));
                         }
 
-                        if (extension.installed()) {
+                        if (extension.installed() && !extension.enabled()) {
                             items.add('installed', m(Badge, { icon: "plus-square", type: "installed",
                                 label: app.translator.trans('flagrow-bazaar.admin.page.extension.installed') }));
                         }
@@ -470,6 +485,7 @@ System.register('flagrow/bazaar/models/Extension', ['flarum/Model', 'flarum/util
                 enabled: Model.attribute('enabled'),
                 installed_version: Model.attribute('installed_version'),
                 highest_version: Model.attribute('highest_version'),
+                outdated: Model.attribute('outdated'),
 
                 flarum_id: Model.attribute('flarum_id'),
 
@@ -562,7 +578,7 @@ System.register('flagrow/bazaar/utils/ExtensionRepository', ['flarum/app'], func
                                 id: extension.id()
                             }
                         }).then(function (response) {
-                            _this2.updateExtension(response);
+                            _this2.updateExtensionInRepository(response);
                         });
                     }
                 }, {
@@ -583,7 +599,7 @@ System.register('flagrow/bazaar/utils/ExtensionRepository', ['flarum/app'], func
                             timeout: 0,
                             url: app.forum.attribute('apiUrl') + '/bazaar/extensions/' + extension.id()
                         }).then(function (response) {
-                            _this3.updateExtension(response);
+                            _this3.updateExtensionInRepository(response);
                         });
                     }
                 }, {
@@ -606,24 +622,41 @@ System.register('flagrow/bazaar/utils/ExtensionRepository', ['flarum/app'], func
                                 favorite: extension.favorited() != true
                             }
                         }).then(function (response) {
-                            _this4.updateExtension(response);
+                            _this4.updateExtensionInRepository(response);
+                        });
+                    }
+                }, {
+                    key: 'updateExtension',
+                    value: function updateExtension(extension) {
+                        var _this5 = this;
+
+                        this.loading(true);
+
+                        app.request({
+                            url: app.forum.attribute('apiUrl') + '/bazaar/extensions/' + extension.id(),
+                            timeout: 0,
+                            method: 'PATCH'
+                        }).then(function (response) {
+                            _this5.updateExtensionInRepository(response);
+                        }).then(function () {
+                            location.reload();
                         });
                     }
                 }, {
                     key: 'toggleExtension',
                     value: function toggleExtension(extension) {
-                        var _this5 = this;
+                        var _this6 = this;
 
                         this.loading(true);
 
                         var enabled = extension.enabled();
 
                         app.request({
-                            url: app.forum.attribute('apiUrl') + '/bazaar/extensions/' + extension.id(),
+                            url: app.forum.attribute('apiUrl') + '/bazaar/extensions/' + extension.id() + '/toggle',
                             method: 'PATCH',
                             data: { enabled: !enabled }
                         }).then(function (response) {
-                            _this5.updateExtension(response);
+                            _this6.updateExtensionInRepository(response);
                         });
                     }
                 }, {
@@ -644,9 +677,8 @@ System.register('flagrow/bazaar/utils/ExtensionRepository', ['flarum/app'], func
                         });
                     }
                 }, {
-                    key: 'updateExtension',
-                    value: function updateExtension(response) {
-                        console.log(this, response);
+                    key: 'updateExtensionInRepository',
+                    value: function updateExtensionInRepository(response) {
                         this.loading(false);
 
                         var extension = app.store.createRecord('bazaar-extensions', response.data);

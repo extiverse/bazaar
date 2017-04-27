@@ -6,27 +6,44 @@
     }
     .ExtensionListItem {
         height: 180px;
-    }
 
-    .ExtensionListItem-badges {
-        right: -2px;
-        top: -2px;
-        position: absolute;
-        pointer-events: auto;
+        &.outdated {
+            .ExtensionListItem-version {
+                text-decoration: line-through;
+            }
+        }
 
-        .Badge {
-            margin-left: -5px;
-            position: relative;
+        .ExtensionListItem-vendor {
+            color: @muted-more-color;
+            font-size: 11px;
+            font-weight: normal;
+        }
+
+        .ExtensionListItem-badges {
+            right: -2px;
+            top: -2px;
+            position: absolute;
             pointer-events: auto;
 
-            &.Badge--enabled {
+            .Badge {
+                margin-left: -5px;
+                position: relative;
+                pointer-events: auto;
 
-            }
-            &.Badge--installed {
-
-            }
-            &.Badge--available {
-
+                &.Badge--enabled {
+                    background: @alert-success-bg;
+                    color: @alert-success-color;
+                }
+                &.Badge--installed {
+                }
+                &.Badge--outdated {
+                    background: @alert-error-bg;
+                    color: @alert-error-color;
+                }
+                &.Badge--favorited {
+                    background: @alert-error-bg;
+                    color: @alert-error-color;
+                }
             }
         }
     }

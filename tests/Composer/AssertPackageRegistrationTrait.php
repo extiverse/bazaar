@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Bazaar\Composer;
+namespace Flagrow\Bazaar\Tests\Composer;
 
 use Illuminate\Support\Arr;
 

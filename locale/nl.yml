@@ -18,6 +18,7 @@ flagrow-bazaar:
                 enable: Inschakelen
                 disable: Uitschakelen
                 connect: Verbinden
+                update: Updaten
                 connectDescription: "Verbind je Flarum installatie met je account op {host} om extra functionaliteiten vrij te schakelen."
                 connected: Dashboard
                 connectedDescription: "Je Flarum installatie is verbonden, bezoek het dashboard op {host}."
@@ -28,3 +29,4 @@ flagrow-bazaar:
                 enabled: Extensie is actief
                 vendor: Van {vendor}
                 favorited: Jouw favoriet
+                outdated: "Extensie is verouderd, update z.s.m. naar {new}"

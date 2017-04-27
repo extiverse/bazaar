@@ -7,7 +7,7 @@ use Flagrow\Bazaar\Composer\ComposerEnvironment;
 use Flagrow\Bazaar\Composer\ComposerOutput;
 use Psr\Log\LoggerInterface;
 
-class ExtensionPackageManager
+class PackageManager
 {
     /**
      * @var ComposerEnvironment
@@ -27,12 +27,22 @@ class ExtensionPackageManager
 
     public function getComposerCommand()
     {
+        @ini_set('memory_limit', '1G');
+        @set_time_limit(5 * 60);
+
         return new ComposerCommand($this->env);
     }
 
     public function updatePackages()
     {
         $output = $this->getComposerCommand()->update();
+
+        $this->logCommandResult($output, 'update');
+    }
+
+    public function updatePackage($package)
+    {
+        $output = $this->getComposerCommand()->update($package);
 
         $this->logCommandResult($output, 'update');
     }

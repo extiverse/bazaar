@@ -17,6 +17,7 @@ export default class Extension extends mixin(Model, {
     enabled: Model.attribute('enabled'),
     installed_version: Model.attribute('installed_version'),
     highest_version: Model.attribute('highest_version'),
+    outdated: Model.attribute('outdated'),
 
     flarum_id: Model.attribute('flarum_id'),
 

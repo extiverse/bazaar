@@ -36,7 +36,7 @@ class AddApiControllers
         $event->post(
             '/bazaar/extensions',
             'bazaar.extensions.install',
-            Controllers\CreateExtensionController::class
+            Controllers\InstallExtensionController::class
         );
 
         // Update an extension
@@ -44,6 +44,13 @@ class AddApiControllers
             '/bazaar/extensions/{id}',
             'bazaar.extensions.update',
             Controllers\UpdateExtensionController::class
+        );
+
+        // Toggles an extension
+        $event->patch(
+            '/bazaar/extensions/{id}/toggle',
+            'bazaar.extensions.toggle',
+            Controllers\ToggleExtensionController::class
         );
 
         // Favorite an extension

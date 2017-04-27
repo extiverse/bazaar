@@ -1,3 +1,14 @@
+- 0.1.1
+  - Huge refactoring. Extension manager logic moved into the repository.
+  - Extensions with available updates are now marked "outdated".
+  - Allowing updating of single extensions when outdated.
+  - Flush cache, including manifest (not yet fixed in core), during (de-)installation and updating of packages.
+  - Fixed tooltips overlapping for extension title and badges.
+  - Gave badges a color based on their state indication.
+  - Not showing "installable" badge when extension enabled.
+  - Refactored tests namespacing to adhere to psr standards.
+  - Removed console.log debugging from xhr calls results.
+  - Now showing latest version or current version on extension card.
 - 0.1.0
   - Moved our loader modal below the error popup.
   - Added a contributing document.
