@@ -1,32 +1,32 @@
 flagrow-bazaar:
     admin:
         loader:
-            is_loading: Processing..
+            is_loading: Wird geladen...
         popup:
             title: Flagrow Bazaar
             field:
-                apiToken: API token
-                apiTokenDescription: This api token is required to access the Flagrow extension api. If already set, you're good to go!
+                apiToken: API Token
+                apiTokenDescription: Dieser API Token wird für den Zugriff auf die Flagrow Erweiterung API benötigt. Wenn der API Token bereits gesetzt ist, bist du bereit anzufangen.
         nav:
             title: Bazaar
-            description: The extension marketplace.
+            description: Der Marktplatz für Erweiterungen.
         page:
             button:
-                more: More
-                install: Install
-                uninstall: Uninstall
-                enable: Enable
-                disable: Disable
-                connect: Connect
-                update: Update
-                connectDescription: "Connect your Flarum installation to your personal account on {host} to unlock new features."
+                more: Mehr
+                install: Installieren
+                uninstall: Deinstallieren
+                enable: Aktivieren
+                disable: Deaktivieren
+                connect: Verbinden
+                update: Aktualisieren
+                connectDescription: "Verbinde deine Flarum Installation zu deinem persönlichen Account auf {host} um neue Features freizuschalten."
                 connected: Dashboard
-                connectedDescription: "Your Flarum is connected, visit the dashboard on {host}."
-                favorite_button: "Favorite extension"
-                remove_favorite_button: "Remove extension from your favorites"
+                connectedDescription: "Dein Flarum ist verbunden, besuche das Dashboard auf {host}."
+                favorite_button: "Favorisiere Erweiterung"
+                remove_favorite_button: "Entferne die Erweiterung aus den Favoriten."
             extension:
-                installed: Extension is installed
-                enabled: Extension is enabled
-                vendor: By {vendor}
-                favorited: One of your favorites
-outdated: "Extension is outdated, please update to version {new}"
+                installed: Erweiterung ist installiert
+                enabled: Erweiterung ist aktiviert
+                vendor: Von {vendor}
+                favorited: Einer deiner Favoriten
+outdated: "Die Erweiterung ist veraltet, bitte aktualisiere auf Version {new}"
