@@ -3,9 +3,9 @@ import ExtensionRepository from "flagrow/bazaar/utils/ExtensionRepository";
 import ExtensionListItem from "flagrow/bazaar/components/ExtensionListItem";
 import BazaarLoader from "flagrow/bazaar/components/BazaarLoader";
 import Button from "flarum/components/Button";
-import FilePermissionsModal from 'flagrow/bazaar/components/FilePermissionsModal';
-import MemoryLimitModal from 'flagrow/bazaar/components/MemoryLimitModal';
-import BazaarConnectModal from 'flagrow/bazaar/components/BazaarConnectModal';
+import FilePermissionsModal from 'flagrow/bazaar/modals/FilePermissionsModal';
+import MemoryLimitModal from 'flagrow/bazaar/modals/MemoryLimitModal';
+import BazaarConnectModal from 'flagrow/bazaar/modals/BazaarConnectModal';
 
 export default class BazaarPage extends Component {
     init() {

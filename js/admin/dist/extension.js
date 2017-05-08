@@ -35,79 +35,6 @@ System.register('flagrow/bazaar/addBazaarPage', ['flarum/extend', 'flarum/app', 
         execute: function () {}
     };
 });;
-"use strict";
-
-System.register("flagrow/bazaar/components/BazaarConnectModal", ["flarum/components/Modal", "flarum/components/Button"], function (_export, _context) {
-    "use strict";
-
-    var Modal, Button, BazaarConnectModal;
-    return {
-        setters: [function (_flarumComponentsModal) {
-            Modal = _flarumComponentsModal.default;
-        }, function (_flarumComponentsButton) {
-            Button = _flarumComponentsButton.default;
-        }],
-        execute: function () {
-            BazaarConnectModal = function (_Modal) {
-                babelHelpers.inherits(BazaarConnectModal, _Modal);
-
-                function BazaarConnectModal() {
-                    babelHelpers.classCallCheck(this, BazaarConnectModal);
-                    return babelHelpers.possibleConstructorReturn(this, (BazaarConnectModal.__proto__ || Object.getPrototypeOf(BazaarConnectModal)).apply(this, arguments));
-                }
-
-                babelHelpers.createClass(BazaarConnectModal, [{
-                    key: "className",
-                    value: function className() {
-                        return 'FilePermissionsModal';
-                    }
-                }, {
-                    key: "title",
-                    value: function title() {
-                        return app.translator.trans('flagrow-bazaar.admin.modal.connect-bazaar.title');
-                    }
-                }, {
-                    key: "content",
-                    value: function content() {
-                        var flagrowHost = this.props.flagrowHost;
-
-                        return m('div', { className: 'Modal-body' }, [m('p', app.translator.trans('flagrow-bazaar.admin.modal.connect-bazaar.description', { host: flagrowHost })), m('div', { className: "App-primaryControl" }, [Button.component({
-                            type: 'submit',
-                            className: 'Button Button--primary Button--block',
-                            disabled: false,
-                            icon: 'check',
-                            children: app.translator.trans('flagrow-bazaar.admin.page.button.connect')
-                        })])]);
-                    }
-                }, {
-                    key: "connect",
-                    value: function connect() {
-                        var popup = window.open();
-
-                        app.request({
-                            method: 'GET',
-                            url: app.forum.attribute('apiUrl') + '/bazaar/connect'
-                        }).then(function (response) {
-                            if (response && response.redirect) {
-                                popup.location = response.redirect;
-                            } else {
-                                popup.close();
-                            }
-                        });
-                    }
-                }, {
-                    key: "onsubmit",
-                    value: function onsubmit() {
-                        this.connect();
-                    }
-                }]);
-                return BazaarConnectModal;
-            }(Modal);
-
-            _export("default", BazaarConnectModal);
-        }
-    };
-});;
 'use strict';
 
 System.register('flagrow/bazaar/components/BazaarLoader', ['flarum/Component', 'flarum/helpers/icon'], function (_export, _context) {
@@ -147,7 +74,7 @@ System.register('flagrow/bazaar/components/BazaarLoader', ['flarum/Component', '
 });;
 "use strict";
 
-System.register("flagrow/bazaar/components/BazaarPage", ["flarum/Component", "flagrow/bazaar/utils/ExtensionRepository", "flagrow/bazaar/components/ExtensionListItem", "flagrow/bazaar/components/BazaarLoader", "flarum/components/Button", "flagrow/bazaar/components/FilePermissionsModal", "flagrow/bazaar/components/MemoryLimitModal", "flagrow/bazaar/components/BazaarConnectModal"], function (_export, _context) {
+System.register("flagrow/bazaar/components/BazaarPage", ["flarum/Component", "flagrow/bazaar/utils/ExtensionRepository", "flagrow/bazaar/components/ExtensionListItem", "flagrow/bazaar/components/BazaarLoader", "flarum/components/Button", "flagrow/bazaar/modals/FilePermissionsModal", "flagrow/bazaar/modals/MemoryLimitModal", "flagrow/bazaar/modals/BazaarConnectModal"], function (_export, _context) {
     "use strict";
 
     var Component, ExtensionRepository, ExtensionListItem, BazaarLoader, Button, FilePermissionsModal, MemoryLimitModal, BazaarConnectModal, BazaarPage;
@@ -162,12 +89,12 @@ System.register("flagrow/bazaar/components/BazaarPage", ["flarum/Component", "fl
             BazaarLoader = _flagrowBazaarComponentsBazaarLoader.default;
         }, function (_flarumComponentsButton) {
             Button = _flarumComponentsButton.default;
-        }, function (_flagrowBazaarComponentsFilePermissionsModal) {
-            FilePermissionsModal = _flagrowBazaarComponentsFilePermissionsModal.default;
-        }, function (_flagrowBazaarComponentsMemoryLimitModal) {
-            MemoryLimitModal = _flagrowBazaarComponentsMemoryLimitModal.default;
-        }, function (_flagrowBazaarComponentsBazaarConnectModal) {
-            BazaarConnectModal = _flagrowBazaarComponentsBazaarConnectModal.default;
+        }, function (_flagrowBazaarModalsFilePermissionsModal) {
+            FilePermissionsModal = _flagrowBazaarModalsFilePermissionsModal.default;
+        }, function (_flagrowBazaarModalsMemoryLimitModal) {
+            MemoryLimitModal = _flagrowBazaarModalsMemoryLimitModal.default;
+        }, function (_flagrowBazaarModalsBazaarConnectModal) {
+            BazaarConnectModal = _flagrowBazaarModalsBazaarConnectModal.default;
         }],
         execute: function () {
             BazaarPage = function (_Component) {
@@ -274,49 +201,6 @@ System.register("flagrow/bazaar/components/BazaarPage", ["flarum/Component", "fl
             }(Component);
 
             _export("default", BazaarPage);
-        }
-    };
-});;
-'use strict';
-
-System.register('flagrow/bazaar/components/BazaarSettingsModal', ['flarum/app', 'flarum/components/SettingsModal'], function (_export, _context) {
-    "use strict";
-
-    var app, SettingsModal, BazaarSettingsModal;
-    return {
-        setters: [function (_flarumApp) {
-            app = _flarumApp.default;
-        }, function (_flarumComponentsSettingsModal) {
-            SettingsModal = _flarumComponentsSettingsModal.default;
-        }],
-        execute: function () {
-            BazaarSettingsModal = function (_SettingsModal) {
-                babelHelpers.inherits(BazaarSettingsModal, _SettingsModal);
-
-                function BazaarSettingsModal() {
-                    babelHelpers.classCallCheck(this, BazaarSettingsModal);
-                    return babelHelpers.possibleConstructorReturn(this, (BazaarSettingsModal.__proto__ || Object.getPrototypeOf(BazaarSettingsModal)).apply(this, arguments));
-                }
-
-                babelHelpers.createClass(BazaarSettingsModal, [{
-                    key: 'title',
-                    value: function title() {
-                        return app.translator.trans('flagrow-bazaar.admin.modal.settings.title');
-                    }
-                }, {
-                    key: 'form',
-                    value: function form() {
-                        return [m('div', { className: 'Form-group' }, [m('label', { for: 'bazaar-api-token' }, app.translator.trans('flagrow-bazaar.admin.modal.settings.field.apiToken')), m('input', {
-                            id: 'bazaar-api-token',
-                            className: 'FormControl',
-                            bidi: this.setting('flagrow.bazaar.api_token')
-                        }), m('span', app.translator.trans('flagrow-bazaar.admin.modal.settings.field.apiTokenDescription'))])];
-                    }
-                }]);
-                return BazaarSettingsModal;
-            }(SettingsModal);
-
-            _export('default', BazaarSettingsModal);
         }
     };
 });;
@@ -519,7 +403,154 @@ System.register("flagrow/bazaar/components/ExtensionListItem", ["flarum/Componen
 });;
 'use strict';
 
-System.register('flagrow/bazaar/components/FilePermissionsModal', ['flarum/components/Modal'], function (_export, _context) {
+System.register('flagrow/bazaar/main', ['flarum/extend', 'flarum/app', 'flagrow/bazaar/modals/BazaarSettingsModal', 'flagrow/bazaar/models/Extension', 'flagrow/bazaar/addBazaarPage'], function (_export, _context) {
+    "use strict";
+
+    var extend, app, BazaarSettingsModal, Extension, addBazaarPage;
+    return {
+        setters: [function (_flarumExtend) {
+            extend = _flarumExtend.extend;
+        }, function (_flarumApp) {
+            app = _flarumApp.default;
+        }, function (_flagrowBazaarModalsBazaarSettingsModal) {
+            BazaarSettingsModal = _flagrowBazaarModalsBazaarSettingsModal.default;
+        }, function (_flagrowBazaarModelsExtension) {
+            Extension = _flagrowBazaarModelsExtension.default;
+        }, function (_flagrowBazaarAddBazaarPage) {
+            addBazaarPage = _flagrowBazaarAddBazaarPage.default;
+        }],
+        execute: function () {
+
+            app.initializers.add('flagrow-bazaar', function (app) {
+                app.extensionSettings['flagrow-bazaar'] = function () {
+                    return app.modal.show(new BazaarSettingsModal());
+                };
+                app.store.models['bazaar-extensions'] = Extension;
+
+                addBazaarPage();
+            });
+        }
+    };
+});;
+"use strict";
+
+System.register("flagrow/bazaar/modals/BazaarConnectModal", ["flarum/components/Modal", "flarum/components/Button"], function (_export, _context) {
+    "use strict";
+
+    var Modal, Button, BazaarConnectModal;
+    return {
+        setters: [function (_flarumComponentsModal) {
+            Modal = _flarumComponentsModal.default;
+        }, function (_flarumComponentsButton) {
+            Button = _flarumComponentsButton.default;
+        }],
+        execute: function () {
+            BazaarConnectModal = function (_Modal) {
+                babelHelpers.inherits(BazaarConnectModal, _Modal);
+
+                function BazaarConnectModal() {
+                    babelHelpers.classCallCheck(this, BazaarConnectModal);
+                    return babelHelpers.possibleConstructorReturn(this, (BazaarConnectModal.__proto__ || Object.getPrototypeOf(BazaarConnectModal)).apply(this, arguments));
+                }
+
+                babelHelpers.createClass(BazaarConnectModal, [{
+                    key: "className",
+                    value: function className() {
+                        return 'FilePermissionsModal';
+                    }
+                }, {
+                    key: "title",
+                    value: function title() {
+                        return app.translator.trans('flagrow-bazaar.admin.modal.connect-bazaar.title');
+                    }
+                }, {
+                    key: "content",
+                    value: function content() {
+                        var flagrowHost = this.props.flagrowHost;
+
+                        return m('div', { className: 'Modal-body' }, [m('p', app.translator.trans('flagrow-bazaar.admin.modal.connect-bazaar.description', { host: flagrowHost })), m('div', { className: "App-primaryControl" }, [Button.component({
+                            type: 'submit',
+                            className: 'Button Button--primary Button--block',
+                            disabled: false,
+                            icon: 'check',
+                            children: app.translator.trans('flagrow-bazaar.admin.page.button.connect')
+                        })])]);
+                    }
+                }, {
+                    key: "connect",
+                    value: function connect() {
+                        var popup = window.open();
+
+                        app.request({
+                            method: 'GET',
+                            url: app.forum.attribute('apiUrl') + '/bazaar/connect'
+                        }).then(function (response) {
+                            if (response && response.redirect) {
+                                popup.location = response.redirect;
+                            } else {
+                                popup.close();
+                            }
+                        });
+                    }
+                }, {
+                    key: "onsubmit",
+                    value: function onsubmit() {
+                        this.connect();
+                    }
+                }]);
+                return BazaarConnectModal;
+            }(Modal);
+
+            _export("default", BazaarConnectModal);
+        }
+    };
+});;
+'use strict';
+
+System.register('flagrow/bazaar/modals/BazaarSettingsModal', ['flarum/app', 'flarum/components/SettingsModal'], function (_export, _context) {
+    "use strict";
+
+    var app, SettingsModal, BazaarSettingsModal;
+    return {
+        setters: [function (_flarumApp) {
+            app = _flarumApp.default;
+        }, function (_flarumComponentsSettingsModal) {
+            SettingsModal = _flarumComponentsSettingsModal.default;
+        }],
+        execute: function () {
+            BazaarSettingsModal = function (_SettingsModal) {
+                babelHelpers.inherits(BazaarSettingsModal, _SettingsModal);
+
+                function BazaarSettingsModal() {
+                    babelHelpers.classCallCheck(this, BazaarSettingsModal);
+                    return babelHelpers.possibleConstructorReturn(this, (BazaarSettingsModal.__proto__ || Object.getPrototypeOf(BazaarSettingsModal)).apply(this, arguments));
+                }
+
+                babelHelpers.createClass(BazaarSettingsModal, [{
+                    key: 'title',
+                    value: function title() {
+                        return app.translator.trans('flagrow-bazaar.admin.modal.settings.title');
+                    }
+                }, {
+                    key: 'form',
+                    value: function form() {
+                        return [m('div', { className: 'Form-group' }, [m('label', { for: 'bazaar-api-token' }, app.translator.trans('flagrow-bazaar.admin.modal.settings.field.apiToken')), m('input', {
+                            id: 'bazaar-api-token',
+                            className: 'FormControl',
+                            bidi: this.setting('flagrow.bazaar.api_token')
+                        }), m('span', app.translator.trans('flagrow-bazaar.admin.modal.settings.field.apiTokenDescription'))])];
+                    }
+                }]);
+                return BazaarSettingsModal;
+            }(SettingsModal);
+
+            _export('default', BazaarSettingsModal);
+        }
+    };
+});;
+'use strict';
+
+System.register('flagrow/bazaar/modals/FilePermissionsModal', ['flarum/components/Modal'], function (_export, _context) {
     "use strict";
 
     var Modal, FilePermissionsModal;
@@ -565,7 +596,7 @@ System.register('flagrow/bazaar/components/FilePermissionsModal', ['flarum/compo
 });;
 'use strict';
 
-System.register('flagrow/bazaar/components/MemoryLimitModal', ['flarum/components/Modal'], function (_export, _context) {
+System.register('flagrow/bazaar/modals/MemoryLimitModal', ['flarum/components/Modal'], function (_export, _context) {
     "use strict";
 
     var Modal, MemoryLimitModal;
@@ -609,37 +640,6 @@ System.register('flagrow/bazaar/components/MemoryLimitModal', ['flarum/component
             }(Modal);
 
             _export('default', MemoryLimitModal);
-        }
-    };
-});;
-'use strict';
-
-System.register('flagrow/bazaar/main', ['flarum/extend', 'flarum/app', 'flagrow/bazaar/components/BazaarSettingsModal', 'flagrow/bazaar/models/Extension', 'flagrow/bazaar/addBazaarPage'], function (_export, _context) {
-    "use strict";
-
-    var extend, app, BazaarSettingsModal, Extension, addBazaarPage;
-    return {
-        setters: [function (_flarumExtend) {
-            extend = _flarumExtend.extend;
-        }, function (_flarumApp) {
-            app = _flarumApp.default;
-        }, function (_flagrowBazaarComponentsBazaarSettingsModal) {
-            BazaarSettingsModal = _flagrowBazaarComponentsBazaarSettingsModal.default;
-        }, function (_flagrowBazaarModelsExtension) {
-            Extension = _flagrowBazaarModelsExtension.default;
-        }, function (_flagrowBazaarAddBazaarPage) {
-            addBazaarPage = _flagrowBazaarAddBazaarPage.default;
-        }],
-        execute: function () {
-
-            app.initializers.add('flagrow-bazaar', function (app) {
-                app.extensionSettings['flagrow-bazaar'] = function () {
-                    return app.modal.show(new BazaarSettingsModal());
-                };
-                app.store.models['bazaar-extensions'] = Extension;
-
-                addBazaarPage();
-            });
         }
     };
 });;
