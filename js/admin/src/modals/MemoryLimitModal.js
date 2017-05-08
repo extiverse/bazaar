@@ -12,7 +12,7 @@ export default class MemoryLimitModal extends Modal {
     content() {
         let memory_requested = this.props.memory_requested;
         let memory_limit = this.props.memory_limit;
-console.log(this.props);
+
         return m(
             'div',
             {className: 'Modal-body'},

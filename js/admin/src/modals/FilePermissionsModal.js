@@ -11,7 +11,6 @@ export default class FilePermissionsModal extends Modal {
 
     content() {
         var permissions = this.props.file_permissions;
-
         var paths = [];
 
         permissions.forEach(path => {

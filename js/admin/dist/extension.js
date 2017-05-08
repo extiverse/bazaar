@@ -581,7 +581,6 @@ System.register('flagrow/bazaar/modals/FilePermissionsModal', ['flarum/component
                     key: 'content',
                     value: function content() {
                         var permissions = this.props.file_permissions;
-
                         var paths = [];
 
                         permissions.forEach(function (path) {
@@ -632,7 +631,7 @@ System.register('flagrow/bazaar/modals/MemoryLimitModal', ['flarum/components/Mo
                     value: function content() {
                         var memory_requested = this.props.memory_requested;
                         var memory_limit = this.props.memory_limit;
-                        console.log(this.props);
+
                         return m('div', { className: 'Modal-body' }, app.translator.trans('flagrow-bazaar.admin.modal.requirements.php-memory_limit.description', {
                             required: memory_requested,
                             limit: memory_limit,
