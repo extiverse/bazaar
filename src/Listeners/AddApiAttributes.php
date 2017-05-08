@@ -38,7 +38,7 @@ class AddApiAttributes
 
         foreach (['composer.json', 'composer.lock', 'vendor/', null] as $path) {
             // @todo
-            if (true || ! is_writable(base_path($path))) {
+            if (! is_writable(base_path($path))) {
                 $paths[] = $path ? $path : '/';
             }
         }
@@ -48,9 +48,6 @@ class AddApiAttributes
 
     protected function memoryLimitMet()
     {
-        // @todo
-        return false;
-
         $limit = ini_get('memory_limit');
 
         if ($limit == -1) {

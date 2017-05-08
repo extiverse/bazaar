@@ -12,16 +12,18 @@ export default class FilePermissionsModal extends Modal {
     content() {
         var permissions = this.props.file_permissions;
 
+        var paths = [];
+
+        permissions.forEach(path => {
+            paths.push(m('li', m('span', {className: 'code'}, path)))
+        })
+
         return m('div', {className: 'Modal-body'}, [
                 m('p', app.translator.trans(
                     'flagrow-bazaar.admin.modal.requirements.file-permissions.description',
                     {a: <a href="https://github.com/flagrow/bazaar/wiki/File-permissions" target="_blank"/>}
                 )),
-                m('ul', permissions.forEach(path => {
-                    m('li', [
-                        m('span', {className: 'code'}, path)
-                    ])
-                }))
+                m('ul', paths)
             ]
         );
     }

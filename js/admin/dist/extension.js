@@ -582,9 +582,13 @@ System.register('flagrow/bazaar/modals/FilePermissionsModal', ['flarum/component
                     value: function content() {
                         var permissions = this.props.file_permissions;
 
-                        return m('div', { className: 'Modal-body' }, [m('p', app.translator.trans('flagrow-bazaar.admin.modal.requirements.file-permissions.description', { a: m('a', { href: 'https://github.com/flagrow/bazaar/wiki/File-permissions', target: '_blank' }) })), m('ul', permissions.forEach(function (path) {
-                            m('li', [m('span', { className: 'code' }, path)]);
-                        }))]);
+                        var paths = [];
+
+                        permissions.forEach(function (path) {
+                            paths.push(m('li', m('span', { className: 'code' }, path)));
+                        });
+
+                        return m('div', { className: 'Modal-body' }, [m('p', app.translator.trans('flagrow-bazaar.admin.modal.requirements.file-permissions.description', { a: m('a', { href: 'https://github.com/flagrow/bazaar/wiki/File-permissions', target: '_blank' }) })), m('ul', paths)]);
                     }
                 }]);
                 return FilePermissionsModal;
