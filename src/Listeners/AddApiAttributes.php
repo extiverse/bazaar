@@ -2,16 +2,17 @@
 
 namespace Flagrow\Bazaar\Listeners;
 
+use Flagrow\Bazaar\Composer\ComposerEnvironment;
 use Flagrow\Bazaar\Extensions\PackageManager;
 use Flagrow\Bazaar\Search\FlagrowApi;
 use Flagrow\Bazaar\Traits\FileSizeHelper;
 use Flarum\Event\PrepareUnserializedSettings;
 use Illuminate\Events\Dispatcher;
-use Illuminate\Support\Str;
 
 class AddApiAttributes
 {
     use FileSizeHelper;
+
     /**
      * @param Dispatcher $events
      */
@@ -28,33 +29,24 @@ class AddApiAttributes
         $event->settings['flagrow.bazaar.flagrow-host'] = FlagrowApi::getFlagrowHost();
         $event->settings['flagrow.bazaar.php.memory_limit-met'] = $this->memoryLimitMet();
         $event->settings['flagrow.bazaar.php.memory_limit'] = ini_get('memory_limit');
-        $event->settings['flagrow.bazaar.php.memory_requested'] = PackageManager::MEMORY_REQUIRED;
-        $event->settings['flagrow.bazaar.file-permissions'] = $this->filePermissions();
+        $event->settings['flagrow.bazaar.php.memory_requested'] = PackageManager::MEMORY_REQUESTED;
+        $event->settings['flagrow.bazaar.file-permissions'] = $this->retrieveFilePermissions();
     }
 
-    protected function filePermissions()
+    protected function retrieveFilePermissions()
     {
-        $paths = [];
-
-        foreach (['composer.json', 'composer.lock', 'vendor/', null] as $path) {
-            // @todo
-            if (! is_writable(base_path($path))) {
-                $paths[] = $path ? $path : '/';
-            }
-        }
-
-        return $paths;
+        return app(ComposerEnvironment::class)->retrieveFilePermissions();
     }
 
     protected function memoryLimitMet()
     {
         $limit = ini_get('memory_limit');
 
-        if ($limit == -1) {
+        if ($limit === -1) {
             return true;
         }
 
-        $required = $this->sizeToByte(PackageManager::MEMORY_REQUIRED);
+        $required = $this->sizeToByte(PackageManager::MEMORY_REQUESTED);
 
         return $this->sizeToByte($limit) >= $required;
     }
