@@ -1,3 +1,8 @@
+- 0.1.2
+  - Shows possible conflicts with your hosting environment, like:
+    - Memory needed, available.
+    - Permissions of directories.
+  - Moved some logic into modals to clean up the Bazaar page header. Allowing for more stuff in the long run.
 - 0.1.1
   - Huge refactoring. Extension manager logic moved into the repository.
   - Extensions with available updates are now marked "outdated".
