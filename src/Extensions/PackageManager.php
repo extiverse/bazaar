@@ -9,6 +9,8 @@ use Psr\Log\LoggerInterface;
 
 class PackageManager
 {
+    const MEMORY_REQUESTED = '1G';
+
     /**
      * @var ComposerEnvironment
      */
@@ -27,7 +29,7 @@ class PackageManager
 
     public function getComposerCommand()
     {
-        @ini_set('memory_limit', '1G');
+        @ini_set('memory_limit', static::MEMORY_REQUESTED);
         @set_time_limit(5 * 60);
 
         return new ComposerCommand($this->env);

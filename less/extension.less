@@ -1,6 +1,15 @@
-
-
 .ExtensionsPage.Bazaar {
+    .Button {
+        &.Requirement-MemoryLimit, &.Requirement-FilePermissions {
+            .Button--color(@control-danger-color, @control-danger-bg);
+        }
+        &.Connected {
+            .Button--color(@alert-success-color, @alert-success-bg);
+        }
+        &.Connect {
+            .Button--color(@primary-color, @alert-success-bg);
+        }
+    }
     .container {
         margin: 0 5em;
     }
