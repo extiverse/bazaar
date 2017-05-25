@@ -205,7 +205,7 @@ class ExtensionRepository
 
         $this->manager->migrateDown($extension->getInstalledExtension());
 
-        $this->packages->removePackage($package);
+        $this->packages->removePackage($extension->getPackage());
 
         $installedExtension = $extension->getInstalledExtension();
 
