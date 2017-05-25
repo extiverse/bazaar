@@ -6,6 +6,7 @@ export default class ExtensionRepository {
         this.nextPageUrl = null;
         this.loading = loading;
         this.resetNavigation();
+        this.searchTerm = m.prop('');
     }
 
     /**
@@ -18,9 +19,18 @@ export default class ExtensionRepository {
 
         this.loading(true);
 
+        let data = {};
+
+        if (this.searchTerm()) {
+            data.filter = {
+                search: this.searchTerm()
+            };
+        }
+
         app.request({
             method: 'GET',
-            url: this.nextPageUrl
+            url: this.nextPageUrl,
+            data: data
         }).then(result => {
             const newExtensions = result.data.map(data => app.store.createRecord('bazaar-extensions', data));
             // start/end computation is required for the admin UI to refresh after the new extensions have been loaded
@@ -186,5 +196,11 @@ export default class ExtensionRepository {
         let extension = app.store.createRecord('bazaar-extensions', response.data);
         this.extensions()[this.getExtensionIndex(extension)] = extension;
         m.redraw();
+    }
+
+    search(term) {
+        this.searchTerm(term);
+        this.resetNavigation();
+        this.loadNextPage();
     }
 }

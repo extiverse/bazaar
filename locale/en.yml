@@ -42,6 +42,7 @@ flagrow-bazaar:
                 connect: Connect
                 favorite_button: "Favorite extension"
                 remove_favorite_button: "Remove extension from your favorites"
+                search_extensions: Search extensions
             extension:
                 installed: Extension is installed
                 enabled: Extension is enabled

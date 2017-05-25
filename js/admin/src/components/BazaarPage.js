@@ -24,7 +24,18 @@ export default class BazaarPage extends Component {
                 m('div', {className: 'container'}, this.header())
             ]),
             m('div', {className: 'ExtensionsPage-list'}, [
-                m('div', {className: 'container'}, this.items())
+                m('div', {className: 'container'}, [
+                    m('fieldset.ExtensionSearch', [
+                        m('input[type=text].FormControl', {
+                            value: this.repository().searchTerm(),
+                            onchange: m.withAttr('value', term => {
+                                this.repository().search(term);
+                            }),
+                            placeholder: app.translator.trans('flagrow-bazaar.admin.page.button.search_extensions')
+                        })
+                    ]),
+                    this.items()
+                ])
             ]),
             BazaarLoader.component({loading: this.loading})
         ]);
