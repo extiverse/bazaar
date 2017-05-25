@@ -1,6 +1,6 @@
 <?php
 
-namespace Flagrow\Bazaar;
+namespace Flagrow\Bazaar\Models;
 
 use Carbon\Carbon;
 use Flarum\Database\AbstractModel;
@@ -11,6 +11,15 @@ class Task extends AbstractModel
      * {@inheritdoc}
      */
     protected $table = 'bazaar_tasks';
+
+    /**
+     * {@inheritdoc}
+     */
+    protected $casts = [
+        'created_at' => 'date',
+        'started_at' => 'date',
+        'finished_at' => 'date',
+    ];
 
     /**
      * Craft a task with basic values

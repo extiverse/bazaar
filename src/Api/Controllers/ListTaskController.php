@@ -3,7 +3,7 @@
 namespace Flagrow\Bazaar\Api\Controllers;
 
 use Flagrow\Bazaar\Api\Serializers\TaskSerializer;
-use Flagrow\Bazaar\Task;
+use Flagrow\Bazaar\Models\Task;
 use Flarum\Api\Controller\AbstractCollectionController;
 use Flarum\Core\Access\AssertPermissionTrait;
 use Psr\Http\Message\ServerRequestInterface;

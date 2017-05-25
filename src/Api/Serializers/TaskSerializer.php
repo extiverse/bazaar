@@ -21,9 +21,9 @@ class TaskSerializer extends AbstractSerializer
             'command'     => $task->command,
             'package'     => $task->package,
             'output'      => $task->output,
-            'created_at'  => $task->created_at,
-            'started_at'  => $task->started_at,
-            'finished_at' => $task->finished_at,
+            'created_at'  => $this->formatDate($task->created_at),
+            'started_at'  => $this->formatDate($task->started_at),
+            'finished_at' => $this->formatDate($task->finished_at),
         ];
     }
 }

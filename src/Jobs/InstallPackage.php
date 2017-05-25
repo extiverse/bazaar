@@ -3,7 +3,7 @@
 namespace Flagrow\Bazaar\Jobs;
 
 use Flagrow\Bazaar\Composer\ComposerCommand;
-use Flagrow\Bazaar\Task;
+use Flagrow\Bazaar\Models\Task;
 
 class InstallPackage extends BasePackageJob
 {

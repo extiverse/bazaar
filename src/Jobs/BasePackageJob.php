@@ -6,7 +6,7 @@ use Carbon\Carbon;
 use Flagrow\Bazaar\Composer\ComposerCommand;
 use Flagrow\Bazaar\Composer\ComposerEnvironment;
 use Flagrow\Bazaar\Composer\ComposerOutput;
-use Flagrow\Bazaar\Task;
+use Flagrow\Bazaar\Models\Task;
 use Psr\Log\LoggerInterface;
 
 abstract class BasePackageJob
