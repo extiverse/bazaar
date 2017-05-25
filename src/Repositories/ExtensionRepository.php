@@ -176,7 +176,7 @@ class ExtensionRepository
     {
         $extension = $this->getExtension($package);
 
-        $this->packages->requirePackage($extension->getPackage());
+        $this->packages->updatePackage($extension->getPackage());
 
         $this->manager->migrate($extension->getInstalledExtension());
 

@@ -66,4 +66,5 @@ flagrow-bazaar:
                     unknown: Unknown
                 command:
                     install: Install {extension}
+                    update: Update {extension}
                     uninstall: Uninstall {extension}

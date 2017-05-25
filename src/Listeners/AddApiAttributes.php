@@ -3,7 +3,7 @@
 namespace Flagrow\Bazaar\Listeners;
 
 use Flagrow\Bazaar\Composer\ComposerEnvironment;
-use Flagrow\Bazaar\Extensions\PackageManager;
+use Flagrow\Bazaar\Jobs\ComposerJob;
 use Flagrow\Bazaar\Search\FlagrowApi;
 use Flagrow\Bazaar\Traits\FileSizeHelper;
 use Flarum\Event\PrepareUnserializedSettings;
@@ -29,7 +29,7 @@ class AddApiAttributes
         $event->settings['flagrow.bazaar.flagrow-host'] = FlagrowApi::getFlagrowHost();
         $event->settings['flagrow.bazaar.php.memory_limit-met'] = $this->memoryLimitMet();
         $event->settings['flagrow.bazaar.php.memory_limit'] = ini_get('memory_limit');
-        $event->settings['flagrow.bazaar.php.memory_requested'] = PackageManager::MEMORY_REQUESTED;
+        $event->settings['flagrow.bazaar.php.memory_requested'] = ComposerJob::MEMORY_REQUESTED;
         $event->settings['flagrow.bazaar.file-permissions'] = $this->retrieveFilePermissions();
     }
 
@@ -46,7 +46,7 @@ class AddApiAttributes
             return true;
         }
 
-        $required = $this->sizeToByte(PackageManager::MEMORY_REQUESTED);
+        $required = $this->sizeToByte(ComposerJob::MEMORY_REQUESTED);
 
         return $this->sizeToByte($limit) >= $required;
     }

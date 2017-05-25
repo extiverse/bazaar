@@ -9,8 +9,13 @@ use Flagrow\Bazaar\Composer\ComposerOutput;
 use Flagrow\Bazaar\Models\Task;
 use Psr\Log\LoggerInterface;
 
-abstract class BasePackageJob
+abstract class ComposerJob
 {
+    /**
+     * Memory for Composer
+     */
+    const MEMORY_REQUESTED = '1G';
+
     /**
      * @var Task
      */
@@ -25,12 +30,26 @@ abstract class BasePackageJob
     }
 
     /**
+     * Create the composer command and configure memory/timeout for the script
+     * @param ComposerEnvironment $env
+     * @return ComposerCommand
+     */
+    public function getComposerCommand(ComposerEnvironment $env)
+    {
+        @ini_set('memory_limit', static::MEMORY_REQUESTED);
+        @set_time_limit(5 * 60);
+
+        return new ComposerCommand($env);
+    }
+
+    /**
+     * Run the job
      * @param ComposerEnvironment $env
      * @param LoggerInterface $log
      */
     public function handle(ComposerEnvironment $env, LoggerInterface $log)
     {
-        $command = new ComposerCommand($env);
+        $command = $this->getComposerCommand($env);
 
         $this->task->status = 'working';
         $this->task->started_at = Carbon::now();
@@ -52,6 +71,7 @@ abstract class BasePackageJob
     }
 
     /**
+     * Sub-job than needs to be overwritten by children jobs to run the right composer command
      * @param ComposerCommand $command
      * @param Task $task
      * @return ComposerOutput
