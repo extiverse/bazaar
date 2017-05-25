@@ -1,3 +1,32 @@
+- 0.1.2
+  - Shows possible conflicts with your hosting environment, like:
+    - Memory needed, available.
+    - Permissions of directories.
+  - Moved some logic into modals to clean up the Bazaar page header. Allowing for more stuff in the long run.
+- 0.1.1
+  - Huge refactoring. Extension manager logic moved into the repository.
+  - Extensions with available updates are now marked "outdated".
+  - Allowing updating of single extensions when outdated.
+  - Flush cache, including manifest (not yet fixed in core), during (de-)installation and updating of packages.
+  - Fixed tooltips overlapping for extension title and badges.
+  - Gave badges a color based on their state indication.
+  - Not showing "installable" badge when extension enabled.
+  - Refactored tests namespacing to adhere to psr standards.
+  - Removed console.log debugging from xhr calls results.
+  - Now showing latest version or current version on extension card.
+- 0.1.0
+  - Moved our loader modal below the error popup.
+  - Added a contributing document.
+- 0.1.0-beta.5
+  - Dutch, Portuguese (thanks @1337god) and Spanish (thanks @AngellitoX) language.
+  - Allow favoriting extensions, only if you've connected your Bazaar.
+  - Readme added.
+  - Implemented, but disabled, code to allow registering our own satis into the composer.json for private packages.ages.
+  - Complete rewrite of the frontend, it no longer refreshes the whole page when doing actions on extensions.
+- 0.1.0-beta.4
+  - Allows connecting Bazaar to Flagrow.io to provide a dashboard.
+  - Prevent extension list result caching when debug is on.
+  - IT locale added for beta.3 of this extension.
 - 0.1.0-beta.3
   - Removed timeout on install and uninstall xhr calls.
 - 0.1.0-beta.2

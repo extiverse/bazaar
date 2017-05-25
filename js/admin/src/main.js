@@ -1,6 +1,6 @@
 import { extend } from 'flarum/extend';
 import app from 'flarum/app';
-import BazaarSettingsModal from 'flagrow/bazaar/components/BazaarSettingsModal';
+import BazaarSettingsModal from 'flagrow/bazaar/modals/BazaarSettingsModal';
 import Extension from 'flagrow/bazaar/models/Extension';
 import Task from 'flagrow/bazaar/models/Task';
 import addBazaarPage from 'flagrow/bazaar/addBazaarPage';

@@ -33,7 +33,7 @@ class ComposerCommand
 
     /**
      * Runs `composer update`
-     * @param string $package
+     * @param string|null $package Package to update or empty for all.
      * @return ComposerOutput
      */
     public function update($package = null)

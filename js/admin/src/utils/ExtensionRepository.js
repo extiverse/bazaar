@@ -1,4 +1,4 @@
-import app from 'flarum/app';
+import app from "flarum/app";
 
 export default class ExtensionRepository {
     constructor(loading) {
@@ -54,12 +54,15 @@ export default class ExtensionRepository {
             data: {
                 id: extension.id()
             }
-        }).then(
-            this.updateExtension.bind(this, extension, 'installed', true),
-            this.installFailure.bind(this, extension)
-        );
+        }).then(response => {
+            this.updateExtensionInRepository(response)
+        });
     }
 
+    /**
+     * Handles an installation failure.
+     * @param extension
+     */
     installFailure(extension) {
         this.resetNavigation();
         this.loadNextPage();
@@ -76,19 +79,58 @@ export default class ExtensionRepository {
             method: 'DELETE',
             timeout: 0,
             url: app.forum.attribute('apiUrl') + '/bazaar/extensions/' + extension.id()
-        }).then(
-            this.updateExtension.bind(this, extension, 'installed', false),
-            this.uninstallFailure.bind(this, extension)
-        );
+        }).then(response => {
+            this.updateExtensionInRepository(response)
+        });
     }
 
+    /**
+     * Handles an uninstall failure.
+     * @param extension
+     */
     uninstallFailure(extension) {
         this.resetNavigation();
         this.loadNextPage();
     }
 
     /**
-     * Togges an extension (enable or disable).
+     * Processing (de-) favoriting extensions.
+     * @param extension
+     */
+    favoriteExtension(extension) {
+        this.loading(true);
+
+        app.request({
+            method: 'post',
+            url: app.forum.attribute('apiUrl') + '/bazaar/extensions/' + extension.id() + '/favorite',
+            data: {
+                favorite: extension.favorited() != true
+            }
+        }).then(response => {
+            this.updateExtensionInRepository(response)
+        })
+    }
+
+    /**
+     * Updates an extension.
+     * @param extension
+     */
+    updateExtension(extension) {
+        this.loading(true);
+
+        app.request({
+            url: app.forum.attribute('apiUrl') + '/bazaar/extensions/' + extension.id(),
+            timeout: 0,
+            method: 'PATCH'
+        }).then(response => {
+            this.updateExtensionInRepository(response)
+        }).then(() => {
+            location.reload();
+        });
+    }
+
+    /**
+     * Toggles an extension (enable or disable).
      * @param extension
      */
     toggleExtension(extension) {
@@ -97,11 +139,11 @@ export default class ExtensionRepository {
         const enabled = extension.enabled();
 
         app.request({
-            url: app.forum.attribute('apiUrl') + '/extensions/' + extension.flarum_id(),
+            url: app.forum.attribute('apiUrl') + '/bazaar/extensions/' + extension.id() + '/toggle',
             method: 'PATCH',
             data: {enabled: !enabled}
-        }).then(() => {
-            this.updateExtension(extension, 'enabled', !enabled);
+        }).then(response => {
+            this.updateExtensionInRepository(response)
         });
     }
 
@@ -136,9 +178,11 @@ export default class ExtensionRepository {
      * @param property
      * @param value
      */
-    updateExtension(extension, property, value) {
-        this.extensions()[this.getExtensionIndex(extension)][property](value);
-        this.resetNavigation();
-        this.loadNextPage();
+    updateExtensionInRepository(response) {
+        this.loading(false);
+
+        let extension = app.store.createRecord('bazaar-extensions', response.data);
+        this.extensions()[this.getExtensionIndex(extension)] = extension;
+        m.redraw();
     }
 }

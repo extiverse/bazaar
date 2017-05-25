@@ -1,0 +1,73 @@
+<?php
+
+namespace Flagrow\Bazaar\Extensions;
+
+use Flagrow\Bazaar\Composer\ComposerCommand;
+use Flagrow\Bazaar\Composer\ComposerEnvironment;
+use Flagrow\Bazaar\Composer\ComposerOutput;
+use Flagrow\Bazaar\Jobs\InstallPackage;
+use Flagrow\Bazaar\Jobs\RemovePackage;
+use Psr\Log\LoggerInterface;
+
+class PackageManager
+{
+    const MEMORY_REQUESTED = '1G';
+
+    /**
+     * @var ComposerEnvironment
+     */
+    protected $env;
+
+    /**
+     * @var LoggerInterface
+     */
+    protected $log;
+
+    public function __construct(ComposerEnvironment $env, LoggerInterface $log)
+    {
+        $this->env = $env;
+        $this->log = $log;
+    }
+
+    public function getComposerCommand()
+    {
+        @ini_set('memory_limit', static::MEMORY_REQUESTED);
+        @set_time_limit(5 * 60);
+
+        return new ComposerCommand($this->env);
+    }
+
+    public function updatePackages()
+    {
+        $output = $this->getComposerCommand()->update();
+
+        $this->logCommandResult($output, 'update');
+    }
+
+    public function updatePackage($package)
+    {
+        $output = $this->getComposerCommand()->update($package);
+
+        $this->logCommandResult($output, 'update');
+    }
+
+    public function requirePackage($package)
+    {
+        InstallPackage::launch($package);
+    }
+
+    public function removePackage($package)
+    {
+        RemovePackage::launch($package);
+    }
+
+    /**
+     * Write output & stats about the command in the log file
+     * @param ComposerOutput $output
+     * @param string $commandName
+     */
+    public function logCommandResult(ComposerOutput $output, $commandName)
+    {
+        $this->log->info('Bazaar: running composer command "'.$commandName.'" (Duration: '.$output->getDuration().'s, Memory: '.$output->getMemory().'MB)'.PHP_EOL.$output->getOutput());
+    }
+}

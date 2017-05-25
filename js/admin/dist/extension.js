@@ -96,10 +96,10 @@ System.register('flagrow/bazaar/components/BazaarLoader', ['flarum/Component', '
 });;
 'use strict';
 
-System.register('flagrow/bazaar/components/BazaarPage', ['flarum/Component', 'flagrow/bazaar/utils/ExtensionRepository', 'flagrow/bazaar/components/ExtensionListItem', 'flagrow/bazaar/components/BazaarLoader', 'flagrow/bazaar/components/BazaarPageHeader'], function (_export, _context) {
+System.register('flagrow/bazaar/components/BazaarPage', ['flarum/Component', 'flagrow/bazaar/utils/ExtensionRepository', 'flagrow/bazaar/components/ExtensionListItem', 'flagrow/bazaar/components/BazaarLoader', 'flagrow/bazaar/components/BazaarPageHeader', 'flarum/components/Button', 'flagrow/bazaar/modals/FilePermissionsModal', 'flagrow/bazaar/modals/MemoryLimitModal', 'flagrow/bazaar/modals/BazaarConnectModal'], function (_export, _context) {
     "use strict";
 
-    var Component, ExtensionRepository, ExtensionListItem, BazaarLoader, BazaarPageHeader, BazaarPage;
+    var Component, ExtensionRepository, ExtensionListItem, BazaarLoader, BazaarPageHeader, Button, FilePermissionsModal, MemoryLimitModal, BazaarConnectModal, BazaarPage;
     return {
         setters: [function (_flarumComponent) {
             Component = _flarumComponent.default;
@@ -111,6 +111,14 @@ System.register('flagrow/bazaar/components/BazaarPage', ['flarum/Component', 'fl
             BazaarLoader = _flagrowBazaarComponentsBazaarLoader.default;
         }, function (_flagrowBazaarComponentsBazaarPageHeader) {
             BazaarPageHeader = _flagrowBazaarComponentsBazaarPageHeader.default;
+        }, function (_flarumComponentsButton) {
+            Button = _flarumComponentsButton.default;
+        }, function (_flagrowBazaarModalsFilePermissionsModal) {
+            FilePermissionsModal = _flagrowBazaarModalsFilePermissionsModal.default;
+        }, function (_flagrowBazaarModalsMemoryLimitModal) {
+            MemoryLimitModal = _flagrowBazaarModalsMemoryLimitModal.default;
+        }, function (_flagrowBazaarModalsBazaarConnectModal) {
+            BazaarConnectModal = _flagrowBazaarModalsBazaarConnectModal.default;
         }],
         execute: function () {
             BazaarPage = function (_Component) {
@@ -124,29 +132,18 @@ System.register('flagrow/bazaar/components/BazaarPage', ['flarum/Component', 'fl
                 babelHelpers.createClass(BazaarPage, [{
                     key: 'init',
                     value: function init() {
+                        app.current = this;
+
                         this.loading = m.prop(false);
                         this.repository = m.prop(new ExtensionRepository(this.loading));
                         this.repository().loadNextPage();
-                        this.loader = BazaarLoader.component({ loading: this.loading });
+                        this.connected = app.data.settings['flagrow.bazaar.connected'] == 1 || false;
+                        this.flagrowHost = app.data.settings['flagrow.bazaar.flagrow-host'] || 'https://flagrow.io';
                     }
                 }, {
                     key: 'view',
                     value: function view() {
-                        return m(
-                            'div',
-                            { className: 'ExtensionsPage Bazaar' },
-                            BazaarPageHeader.component(),
-                            m(
-                                'div',
-                                { className: 'ExtensionsPage-list' },
-                                m(
-                                    'div',
-                                    { className: 'container' },
-                                    this.items()
-                                )
-                            ),
-                            this.loader
-                        );
+                        return m('div', { className: 'ExtensionsPage Bazaar' }, [BazaarPageHeader.component(), m('div', { className: 'ExtensionsPage-header' }, [m('div', { className: 'container' }, this.header())]), m('div', { className: 'ExtensionsPage-list' }, [m('div', { className: 'container' }, this.items())]), BazaarLoader.component({ loading: this.loading })]);
                     }
                 }, {
                     key: 'items',
@@ -154,8 +151,74 @@ System.register('flagrow/bazaar/components/BazaarPage', ['flarum/Component', 'fl
                         var _this2 = this;
 
                         return m('ul', { className: 'ExtensionList' }, [this.repository().extensions().map(function (extension) {
-                            return ExtensionListItem.component({ extension: extension, repository: _this2.repository });
+                            return ExtensionListItem.component({
+                                extension: extension,
+                                repository: _this2.repository,
+                                connected: _this2.connected
+                            });
                         })]);
+                    }
+                }, {
+                    key: 'header',
+                    value: function header() {
+                        var buttons = [].concat(this.requirementsButtons(), this.connectedButtons());
+
+                        return m('div', { className: 'ButtonGroup' }, buttons);
+                    }
+                }, {
+                    key: 'requirementsButtons',
+                    value: function requirementsButtons() {
+                        var memory_limit_met = app.data.settings['flagrow.bazaar.php.memory_limit-met'] || false;
+                        var memory_limit = app.data.settings['flagrow.bazaar.php.memory_limit'];
+                        var memory_requested = app.data.settings['flagrow.bazaar.php.memory_requested'];
+                        var file_permissions = app.data.settings['flagrow.bazaar.file-permissions'] || [];
+
+                        var components = [];
+
+                        if (!memory_limit_met) {
+                            components.push(Button.component({
+                                className: 'Button Button--icon Requirement-MemoryLimit',
+                                icon: 'signal',
+                                onclick: function onclick() {
+                                    return app.modal.show(new MemoryLimitModal({ memory_requested: memory_requested, memory_limit: memory_limit }));
+                                }
+                            }));
+                        }
+
+                        if (file_permissions.length > 0) {
+                            components.push(Button.component({
+                                className: 'Button Button--icon Requirement-FilePermissions',
+                                icon: 'hdd-o',
+                                onclick: function onclick() {
+                                    return app.modal.show(new FilePermissionsModal({ file_permissions: file_permissions }));
+                                }
+                            }));
+                        }
+
+                        return components;
+                    }
+                }, {
+                    key: 'connectedButtons',
+                    value: function connectedButtons() {
+                        var _this3 = this;
+
+                        if (this.connected) {
+                            return [Button.component({
+                                className: 'Button Button--icon Connected',
+                                icon: 'dashboard',
+                                onclick: function onclick() {
+                                    return window.open(_this3.flagrowHost + '/home');
+                                }
+                            })];
+                        }
+
+                        return [Button.component({
+                            className: 'Button Button--icon Connect',
+                            icon: 'plug',
+                            onclick: function onclick() {
+                                return app.modal.show(new BazaarConnectModal({ flagrowHost: _this3.flagrowHost }));
+                            }
+                        })];
                     }
                 }]);
                 return BazaarPage;
@@ -220,49 +283,6 @@ System.register('flagrow/bazaar/components/BazaarPageHeader', ['flarum/app', 'fl
         }
     };
 });;
-'use strict';
-
-System.register('flagrow/bazaar/components/BazaarSettingsModal', ['flarum/app', 'flarum/components/SettingsModal'], function (_export, _context) {
-    "use strict";
-
-    var app, SettingsModal, BazaarSettingsModal;
-    return {
-        setters: [function (_flarumApp) {
-            app = _flarumApp.default;
-        }, function (_flarumComponentsSettingsModal) {
-            SettingsModal = _flarumComponentsSettingsModal.default;
-        }],
-        execute: function () {
-            BazaarSettingsModal = function (_SettingsModal) {
-                babelHelpers.inherits(BazaarSettingsModal, _SettingsModal);
-
-                function BazaarSettingsModal() {
-                    babelHelpers.classCallCheck(this, BazaarSettingsModal);
-                    return babelHelpers.possibleConstructorReturn(this, (BazaarSettingsModal.__proto__ || Object.getPrototypeOf(BazaarSettingsModal)).apply(this, arguments));
-                }
-
-                babelHelpers.createClass(BazaarSettingsModal, [{
-                    key: 'title',
-                    value: function title() {
-                        return app.translator.trans('flagrow-bazaar.admin.popup.title');
-                    }
-                }, {
-                    key: 'form',
-                    value: function form() {
-                        return [m('div', { className: 'Form-group' }, [m('label', { for: 'bazaar-api-token' }, app.translator.trans('flagrow-bazaar.admin.popup.field.apiToken')), m('input', {
-                            id: 'bazaar-api-token',
-                            className: 'FormControl',
-                            bidi: this.setting('flagrow.bazaar.api_token')
-                        }), m('span', app.translator.trans('flagrow-bazaar.admin.popup.field.apiTokenDescription'))])];
-                    }
-                }]);
-                return BazaarSettingsModal;
-            }(SettingsModal);
-
-            _export('default', BazaarSettingsModal);
-        }
-    };
-});;
 "use strict";
 
 System.register("flagrow/bazaar/components/ExtensionListItem", ["flarum/Component", "flarum/helpers/icon", "flarum/utils/ItemList", "flarum/components/Button", "flarum/components/Dropdown", "flarum/components/Badge"], function (_export, _context) {
@@ -297,29 +317,31 @@ System.register("flagrow/bazaar/components/ExtensionListItem", ["flarum/Componen
                     value: function config(isInitialized) {
                         if (isInitialized) return;
 
-                        if (this.props.extension.description()) this.$().tooltip({ container: 'body' });
+                        if (this.props.extension.description()) this.$('.ExtensionIcon').tooltip({ container: 'body' });
                     }
                 }, {
                     key: "view",
                     value: function view() {
                         var extension = this.props.extension;
-                        var controls = this.controlItems(extension).toArray();
+                        var connected = this.props.connected || false;
+                        var controls = this.controlItems(extension, connected).toArray();
+                        var badges = this.badges(extension).toArray();
 
                         return m(
                             "li",
-                            { className: 'ExtensionListItem ' + (extension.enabled() ? 'enabled ' : 'disabled ') + (extension.installed() ? 'installed' : 'uninstalled') + (extension.enabled() && extension.highest_version() && extension.installed_version() != extension.highest_version() ? 'update' : ''), title: extension.description() },
+                            { className: 'ExtensionListItem ' + (extension.enabled() ? 'enabled ' : 'disabled ') + (extension.installed() ? 'installed ' : 'uninstalled ') + (extension.outdated() ? 'outdated ' : '') },
                             m(
                                 "div",
                                 { className: "ExtensionListItem-content" },
                                 m(
                                     "span",
-                                    { className: "ExtensionListItem-icon ExtensionIcon", style: extension.icon() || '' },
+                                    { className: "ExtensionListItem-icon ExtensionIcon", style: extension.icon() || '', title: extension.description() },
                                     extension.icon() ? icon(extension.icon().name) : ''
                                 ),
                                 m(
                                     "ul",
                                     { className: "ExtensionListItem-badges badges" },
-                                    this.badges(extension).toArray()
+                                    badges
                                 ),
                                 controls.length ? m(
                                     Dropdown,
@@ -337,7 +359,7 @@ System.register("flagrow/bazaar/components/ExtensionListItem", ["flarum/Componen
                                 ),
                                 m(
                                     "label",
-                                    { className: "ExtensionListItem-version" },
+                                    { className: "ExtensionListItem-vendor" },
                                     app.translator.trans('flagrow-bazaar.admin.page.extension.vendor', {
                                         vendor: extension.package().split('/')[0]
                                     })
@@ -345,16 +367,27 @@ System.register("flagrow/bazaar/components/ExtensionListItem", ["flarum/Componen
                                 m(
                                     "div",
                                     { className: "ExtensionListItem-version" },
-                                    extension.highest_version()
+                                    extension.installed_version() || extension.highest_version()
                                 )
                             )
                         );
                     }
                 }, {
                     key: "controlItems",
-                    value: function controlItems(extension) {
+                    value: function controlItems(extension, connected) {
                         var items = new ItemList();
                         var repository = this.props.repository;
+                        var favoriteTrans = extension.favorited() ? 'flagrow-bazaar.admin.page.button.remove_favorite_button' : 'flagrow-bazaar.admin.page.button.favorite_button';
+
+                        if (connected) {
+                            items.add('favorite', Button.component({
+                                icon: 'heart',
+                                children: app.translator.trans(favoriteTrans),
+                                onclick: function onclick() {
+                                    repository().favoriteExtension(extension);
+                                }
+                            }));
+                        }
 
                         if (extension.enabled() && app.extensionSettings[name]) {
                             items.add('settings', Button.component({
@@ -377,6 +410,16 @@ System.register("flagrow/bazaar/components/ExtensionListItem", ["flarum/Componen
                                 children: app.translator.trans('flagrow-bazaar.admin.page.button.enable'),
                                 onclick: function onclick() {
                                     repository().enableExtension(extension);
+                                }
+                            }));
+                        }
+
+                        if (extension.installed() && extension.outdated()) {
+                            items.add('update', Button.component({
+                                icon: 'toggle-up',
+                                children: app.translator.trans('flagrow-bazaar.admin.page.button.update'),
+                                onclick: function onclick() {
+                                    repository().updateExtension(extension);
                                 }
                             }));
                         }
@@ -408,14 +451,123 @@ System.register("flagrow/bazaar/components/ExtensionListItem", ["flarum/Componen
                     value: function badges(extension) {
                         var items = new ItemList();
 
-                        if (extension.installed()) {
-                            items.add('installed', m(Badge, { icon: "plus-square", type: "installed", label: app.translator.trans('flagrow-bazaar.admin.page.extension.installed') }));
+                        if (extension.installed() && extension.outdated()) {
+                            items.add('favorited', m(Badge, { icon: "warning", type: "outdated",
+                                label: app.translator.trans('flagrow-bazaar.admin.page.extension.outdated', { new: extension.highest_version() }) }));
+                        }
+
+                        if (extension.favorited()) {
+                            items.add('favorited', m(Badge, { icon: "heart", type: "favorited",
+                                label: app.translator.trans('flagrow-bazaar.admin.page.extension.favorited') }));
+                        }
+
+                        if (extension.installed() && !extension.enabled()) {
+                            items.add('installed', m(Badge, { icon: "plus-square", type: "installed",
+                                label: app.translator.trans('flagrow-bazaar.admin.page.extension.installed') }));
                         }
                         if (extension.enabled()) {
-                            items.add('enabled', m(Badge, { icon: "check-square", type: "enabled", label: app.translator.trans('flagrow-bazaar.admin.page.extension.enabled') }));
+                            items.add('enabled', m(Badge, { icon: "check-square", type: "enabled",
+                                label: app.translator.trans('flagrow-bazaar.admin.page.extension.enabled') }));
                         }
 
                         return items;
+                    }
+                }]);
+                return ExtensionListItem;
+            }(Component);
+
+            _export("default", ExtensionListItem);
+        }
+    };
+});;
+"use strict";
+
+System.register("flagrow/bazaar/components/TaskListItem", ["flarum/app", "flarum/Component", "flarum/helpers/icon", "flarum/components/Button"], function (_export, _context) {
+    "use strict";
+
+    var app, Component, icon, Button, ExtensionListItem;
+    return {
+        setters: [function (_flarumApp) {
+            app = _flarumApp.default;
+        }, function (_flarumComponent) {
+            Component = _flarumComponent.default;
+        }, function (_flarumHelpersIcon) {
+            icon = _flarumHelpersIcon.default;
+        }, function (_flarumComponentsButton) {
+            Button = _flarumComponentsButton.default;
+        }],
+        execute: function () {
+            ExtensionListItem = function (_Component) {
+                babelHelpers.inherits(ExtensionListItem, _Component);
+
+                function ExtensionListItem() {
+                    babelHelpers.classCallCheck(this, ExtensionListItem);
+                    return babelHelpers.possibleConstructorReturn(this, (ExtensionListItem.__proto__ || Object.getPrototypeOf(ExtensionListItem)).apply(this, arguments));
+                }
+
+                babelHelpers.createClass(ExtensionListItem, [{
+                    key: "init",
+                    value: function init() {
+                        this.extended = m.prop(false);
+                    }
+                }, {
+                    key: "view",
+                    value: function view() {
+                        var _this2 = this;
+
+                        var task = this.props.task;
+                        var iconName = function () {
+                            switch (task.status()) {
+                                case 'success':
+                                    return 'check';
+                                case 'exception':
+                                    return 'exclamation';
+                                case 'working':
+                                    return 'spinner';
+                            }
+                            return 'clock-o';
+                        }();
+
+                        return m(
+                            "tr",
+                            { className: 'TaskListItem status-' + task.status() },
+                            m(
+                                "td",
+                                { title: app.translator.trans('flagrow-bazaar.admin.page.task.status.' + (task.status() !== null ? task.status() : 'unknown')) },
+                                icon(iconName)
+                            ),
+                            m(
+                                "td",
+                                null,
+                                m(
+                                    "div",
+                                    { className: "command" },
+                                    app.translator.trans('flagrow-bazaar.admin.page.task.command.' + task.command(), { extension: task.package() }),
+                                    Button.component({
+                                        icon: 'plus',
+                                        className: 'Button',
+                                        onclick: function onclick() {
+                                            _this2.extended(!_this2.extended());
+                                        }
+                                    })
+                                ),
+                                this.extended() ? m(
+                                    "pre",
+                                    { className: "output" },
+                                    task.output()
+                                ) : ''
+                            ),
+                            m(
+                                "td",
+                                null,
+                                task.started_at()
+                            ),
+                            m(
+                                "td",
+                                null,
+                                task.finished_at()
+                            )
+                        );
                     }
                 }]);
                 return ExtensionListItem;
@@ -529,7 +681,7 @@ System.register('flagrow/bazaar/components/TasksPage', ['flarum/app', 'flarum/Co
 });;
 'use strict';
 
-System.register('flagrow/bazaar/main', ['flarum/extend', 'flarum/app', 'flagrow/bazaar/components/BazaarSettingsModal', 'flagrow/bazaar/models/Extension', 'flagrow/bazaar/models/Task', 'flagrow/bazaar/addBazaarPage', 'flagrow/bazaar/addTasksPage'], function (_export, _context) {
+System.register('flagrow/bazaar/main', ['flarum/extend', 'flarum/app', 'flagrow/bazaar/modals/BazaarSettingsModal', 'flagrow/bazaar/models/Extension', 'flagrow/bazaar/models/Task', 'flagrow/bazaar/addBazaarPage', 'flagrow/bazaar/addTasksPage'], function (_export, _context) {
     "use strict";
 
     var extend, app, BazaarSettingsModal, Extension, Task, addBazaarPage, addTasksPage;
@@ -538,8 +690,8 @@ System.register('flagrow/bazaar/main', ['flarum/extend', 'flarum/app', 'flagrow/
             extend = _flarumExtend.extend;
         }, function (_flarumApp) {
             app = _flarumApp.default;
-        }, function (_flagrowBazaarComponentsBazaarSettingsModal) {
-            BazaarSettingsModal = _flagrowBazaarComponentsBazaarSettingsModal.default;
+        }, function (_flagrowBazaarModalsBazaarSettingsModal) {
+            BazaarSettingsModal = _flagrowBazaarModalsBazaarSettingsModal.default;
         }, function (_flagrowBazaarModelsExtension) {
             Extension = _flagrowBazaarModelsExtension.default;
         }, function (_flagrowBazaarModelsTask) {
@@ -561,6 +713,220 @@ System.register('flagrow/bazaar/main', ['flarum/extend', 'flarum/app', 'flagrow/
                 addBazaarPage();
                 addTasksPage();
             });
+        }
+    };
+});;
+"use strict";
+
+System.register("flagrow/bazaar/modals/BazaarConnectModal", ["flarum/components/Modal", "flarum/components/Button"], function (_export, _context) {
+    "use strict";
+
+    var Modal, Button, BazaarConnectModal;
+    return {
+        setters: [function (_flarumComponentsModal) {
+            Modal = _flarumComponentsModal.default;
+        }, function (_flarumComponentsButton) {
+            Button = _flarumComponentsButton.default;
+        }],
+        execute: function () {
+            BazaarConnectModal = function (_Modal) {
+                babelHelpers.inherits(BazaarConnectModal, _Modal);
+
+                function BazaarConnectModal() {
+                    babelHelpers.classCallCheck(this, BazaarConnectModal);
+                    return babelHelpers.possibleConstructorReturn(this, (BazaarConnectModal.__proto__ || Object.getPrototypeOf(BazaarConnectModal)).apply(this, arguments));
+                }
+
+                babelHelpers.createClass(BazaarConnectModal, [{
+                    key: "className",
+                    value: function className() {
+                        return 'FilePermissionsModal';
+                    }
+                }, {
+                    key: "title",
+                    value: function title() {
+                        return app.translator.trans('flagrow-bazaar.admin.modal.connect-bazaar.title');
+                    }
+                }, {
+                    key: "content",
+                    value: function content() {
+                        var flagrowHost = this.props.flagrowHost;
+
+                        return m('div', { className: 'Modal-body' }, [m('p', app.translator.trans('flagrow-bazaar.admin.modal.connect-bazaar.description', { host: flagrowHost })), m('div', { className: "App-primaryControl" }, [Button.component({
+                            type: 'submit',
+                            className: 'Button Button--primary Button--block',
+                            disabled: false,
+                            icon: 'check',
+                            children: app.translator.trans('flagrow-bazaar.admin.page.button.connect')
+                        })])]);
+                    }
+                }, {
+                    key: "connect",
+                    value: function connect() {
+                        var popup = window.open();
+
+                        app.request({
+                            method: 'GET',
+                            url: app.forum.attribute('apiUrl') + '/bazaar/connect'
+                        }).then(function (response) {
+                            if (response && response.redirect) {
+                                popup.location = response.redirect;
+                            } else {
+                                popup.close();
+                            }
+                        });
+                    }
+                }, {
+                    key: "onsubmit",
+                    value: function onsubmit() {
+                        this.connect();
+                    }
+                }]);
+                return BazaarConnectModal;
+            }(Modal);
+
+            _export("default", BazaarConnectModal);
+        }
+    };
+});;
+'use strict';
+
+System.register('flagrow/bazaar/modals/BazaarSettingsModal', ['flarum/app', 'flarum/components/SettingsModal'], function (_export, _context) {
+    "use strict";
+
+    var app, SettingsModal, BazaarSettingsModal;
+    return {
+        setters: [function (_flarumApp) {
+            app = _flarumApp.default;
+        }, function (_flarumComponentsSettingsModal) {
+            SettingsModal = _flarumComponentsSettingsModal.default;
+        }],
+        execute: function () {
+            BazaarSettingsModal = function (_SettingsModal) {
+                babelHelpers.inherits(BazaarSettingsModal, _SettingsModal);
+
+                function BazaarSettingsModal() {
+                    babelHelpers.classCallCheck(this, BazaarSettingsModal);
+                    return babelHelpers.possibleConstructorReturn(this, (BazaarSettingsModal.__proto__ || Object.getPrototypeOf(BazaarSettingsModal)).apply(this, arguments));
+                }
+
+                babelHelpers.createClass(BazaarSettingsModal, [{
+                    key: 'title',
+                    value: function title() {
+                        return app.translator.trans('flagrow-bazaar.admin.modal.settings.title');
+                    }
+                }, {
+                    key: 'form',
+                    value: function form() {
+                        return [m('div', { className: 'Form-group' }, [m('label', { for: 'bazaar-api-token' }, app.translator.trans('flagrow-bazaar.admin.modal.settings.field.apiToken')), m('input', {
+                            id: 'bazaar-api-token',
+                            className: 'FormControl',
+                            bidi: this.setting('flagrow.bazaar.api_token')
+                        }), m('span', app.translator.trans('flagrow-bazaar.admin.modal.settings.field.apiTokenDescription'))])];
+                    }
+                }]);
+                return BazaarSettingsModal;
+            }(SettingsModal);
+
+            _export('default', BazaarSettingsModal);
+        }
+    };
+});;
+'use strict';
+
+System.register('flagrow/bazaar/modals/FilePermissionsModal', ['flarum/components/Modal'], function (_export, _context) {
+    "use strict";
+
+    var Modal, FilePermissionsModal;
+    return {
+        setters: [function (_flarumComponentsModal) {
+            Modal = _flarumComponentsModal.default;
+        }],
+        execute: function () {
+            FilePermissionsModal = function (_Modal) {
+                babelHelpers.inherits(FilePermissionsModal, _Modal);
+
+                function FilePermissionsModal() {
+                    babelHelpers.classCallCheck(this, FilePermissionsModal);
+                    return babelHelpers.possibleConstructorReturn(this, (FilePermissionsModal.__proto__ || Object.getPrototypeOf(FilePermissionsModal)).apply(this, arguments));
+                }
+
+                babelHelpers.createClass(FilePermissionsModal, [{
+                    key: 'className',
+                    value: function className() {
+                        return 'FilePermissionsModal';
+                    }
+                }, {
+                    key: 'title',
+                    value: function title() {
+                        return app.translator.trans('flagrow-bazaar.admin.modal.requirements.file-permissions.title');
+                    }
+                }, {
+                    key: 'content',
+                    value: function content() {
+                        var permissions = this.props.file_permissions;
+                        var paths = [];
+
+                        permissions.forEach(function (path) {
+                            paths.push(m('li', m('span', { className: 'code' }, path)));
+                        });
+
+                        return m('div', { className: 'Modal-body' }, [m('p', app.translator.trans('flagrow-bazaar.admin.modal.requirements.file-permissions.description', { a: m('a', { href: 'https://github.com/flagrow/bazaar/wiki/File-permissions', target: '_blank' }) })), m('ul', paths)]);
+                    }
+                }]);
+                return FilePermissionsModal;
+            }(Modal);
+
+            _export('default', FilePermissionsModal);
+        }
+    };
+});;
+'use strict';
+
+System.register('flagrow/bazaar/modals/MemoryLimitModal', ['flarum/components/Modal'], function (_export, _context) {
+    "use strict";
+
+    var Modal, MemoryLimitModal;
+    return {
+        setters: [function (_flarumComponentsModal) {
+            Modal = _flarumComponentsModal.default;
+        }],
+        execute: function () {
+            MemoryLimitModal = function (_Modal) {
+                babelHelpers.inherits(MemoryLimitModal, _Modal);
+
+                function MemoryLimitModal() {
+                    babelHelpers.classCallCheck(this, MemoryLimitModal);
+                    return babelHelpers.possibleConstructorReturn(this, (MemoryLimitModal.__proto__ || Object.getPrototypeOf(MemoryLimitModal)).apply(this, arguments));
+                }
+
+                babelHelpers.createClass(MemoryLimitModal, [{
+                    key: 'className',
+                    value: function className() {
+                        return 'MemoryLimitModal';
+                    }
+                }, {
+                    key: 'title',
+                    value: function title() {
+                        return app.translator.trans('flagrow-bazaar.admin.modal.requirements.php-memory_limit.title');
+                    }
+                }, {
+                    key: 'content',
+                    value: function content() {
+                        var memory_requested = this.props.memory_requested;
+                        var memory_limit = this.props.memory_limit;
+
+                        return m('div', { className: 'Modal-body' }, app.translator.trans('flagrow-bazaar.admin.modal.requirements.php-memory_limit.description', {
+                            required: memory_requested,
+                            limit: memory_limit,
+                            a: m('a', { href: 'https://github.com/flagrow/bazaar/wiki/PHP-memory-limit', target: '_blank' })
+                        }));
+                    }
+                }]);
+                return MemoryLimitModal;
+            }(Modal);
+
+            _export('default', MemoryLimitModal);
         }
     };
 });;
@@ -603,6 +969,7 @@ System.register('flagrow/bazaar/models/Extension', ['flarum/Model', 'flarum/util
                 enabled: Model.attribute('enabled'),
                 installed_version: Model.attribute('installed_version'),
                 highest_version: Model.attribute('highest_version'),
+                outdated: Model.attribute('outdated'),
 
                 flarum_id: Model.attribute('flarum_id'),
 
@@ -611,7 +978,9 @@ System.register('flagrow/bazaar/models/Extension', ['flarum/Model', 'flarum/util
                 }),
                 can_uninstall: computed('installed', 'enabled', function (installed, enabled) {
                     return installed && !enabled;
-                })
+                }),
+
+                favorited: Model.attribute('favorited')
             }));
 
             _export('default', Extension);
@@ -715,6 +1084,8 @@ System.register('flagrow/bazaar/utils/ExtensionRepository', ['flarum/app'], func
                 }, {
                     key: 'installExtension',
                     value: function installExtension(extension) {
+                        var _this2 = this;
+
                         this.loading(true);
 
                         app.request({
@@ -724,7 +1095,9 @@ System.register('flagrow/bazaar/utils/ExtensionRepository', ['flarum/app'], func
                             data: {
                                 id: extension.id()
                             }
-                        }).then(this.updateExtension.bind(this, extension, 'installed', true), this.installFailure.bind(this, extension));
+                        }).then(function (response) {
+                            _this2.updateExtensionInRepository(response);
+                        });
                     }
                 }, {
                     key: 'installFailure',
@@ -735,13 +1108,17 @@ System.register('flagrow/bazaar/utils/ExtensionRepository', ['flarum/app'], func
                 }, {
                     key: 'uninstallExtension',
                     value: function uninstallExtension(extension) {
+                        var _this3 = this;
+
                         this.loading(true);
 
                         app.request({
                             method: 'DELETE',
                             timeout: 0,
                             url: app.forum.attribute('apiUrl') + '/bazaar/extensions/' + extension.id()
-                        }).then(this.updateExtension.bind(this, extension, 'installed', false), this.uninstallFailure.bind(this, extension));
+                        }).then(function (response) {
+                            _this3.updateExtensionInRepository(response);
+                        });
                     }
                 }, {
                     key: 'uninstallFailure',
@@ -750,20 +1127,54 @@ System.register('flagrow/bazaar/utils/ExtensionRepository', ['flarum/app'], func
                         this.loadNextPage();
                     }
                 }, {
+                    key: 'favoriteExtension',
+                    value: function favoriteExtension(extension) {
+                        var _this4 = this;
+
+                        this.loading(true);
+
+                        app.request({
+                            method: 'post',
+                            url: app.forum.attribute('apiUrl') + '/bazaar/extensions/' + extension.id() + '/favorite',
+                            data: {
+                                favorite: extension.favorited() != true
+                            }
+                        }).then(function (response) {
+                            _this4.updateExtensionInRepository(response);
+                        });
+                    }
+                }, {
+                    key: 'updateExtension',
+                    value: function updateExtension(extension) {
+                        var _this5 = this;
+
+                        this.loading(true);
+
+                        app.request({
+                            url: app.forum.attribute('apiUrl') + '/bazaar/extensions/' + extension.id(),
+                            timeout: 0,
+                            method: 'PATCH'
+                        }).then(function (response) {
+                            _this5.updateExtensionInRepository(response);
+                        }).then(function () {
+                            location.reload();
+                        });
+                    }
+                }, {
                     key: 'toggleExtension',
                     value: function toggleExtension(extension) {
-                        var _this2 = this;
+                        var _this6 = this;
 
                         this.loading(true);
 
                         var enabled = extension.enabled();
 
                         app.request({
-                            url: app.forum.attribute('apiUrl') + '/extensions/' + extension.flarum_id(),
+                            url: app.forum.attribute('apiUrl') + '/bazaar/extensions/' + extension.id() + '/toggle',
                             method: 'PATCH',
                             data: { enabled: !enabled }
-                        }).then(function () {
-                            _this2.updateExtension(extension, 'enabled', !enabled);
+                        }).then(function (response) {
+                            _this6.updateExtensionInRepository(response);
                         });
                     }
                 }, {
@@ -784,11 +1195,13 @@ System.register('flagrow/bazaar/utils/ExtensionRepository', ['flarum/app'], func
                         });
                     }
                 }, {
-                    key: 'updateExtension',
-                    value: function updateExtension(extension, property, value) {
-                        this.extensions()[this.getExtensionIndex(extension)][property](value);
-                        this.resetNavigation();
-                        this.loadNextPage();
+                    key: 'updateExtensionInRepository',
+                    value: function updateExtensionInRepository(response) {
+                        this.loading(false);
+
+                        var extension = app.store.createRecord('bazaar-extensions', response.data);
+                        this.extensions()[this.getExtensionIndex(extension)] = extension;
+                        m.redraw();
                     }
                 }]);
                 return ExtensionRepository;
@@ -856,103 +1269,6 @@ System.register('flagrow/bazaar/utils/TaskRepository', ['flarum/app'], function 
             }();
 
             _export('default', ExtensionRepository);
-        }
-    };
-});;
-"use strict";
-
-System.register("flagrow/bazaar/components/TaskListItem", ["flarum/app", "flarum/Component", "flarum/helpers/icon", "flarum/components/Button"], function (_export, _context) {
-    "use strict";
-
-    var app, Component, icon, Button, ExtensionListItem;
-    return {
-        setters: [function (_flarumApp) {
-            app = _flarumApp.default;
-        }, function (_flarumComponent) {
-            Component = _flarumComponent.default;
-        }, function (_flarumHelpersIcon) {
-            icon = _flarumHelpersIcon.default;
-        }, function (_flarumComponentsButton) {
-            Button = _flarumComponentsButton.default;
-        }],
-        execute: function () {
-            ExtensionListItem = function (_Component) {
-                babelHelpers.inherits(ExtensionListItem, _Component);
-
-                function ExtensionListItem() {
-                    babelHelpers.classCallCheck(this, ExtensionListItem);
-                    return babelHelpers.possibleConstructorReturn(this, (ExtensionListItem.__proto__ || Object.getPrototypeOf(ExtensionListItem)).apply(this, arguments));
-                }
-
-                babelHelpers.createClass(ExtensionListItem, [{
-                    key: "init",
-                    value: function init() {
-                        this.extended = m.prop(false);
-                    }
-                }, {
-                    key: "view",
-                    value: function view() {
-                        var _this2 = this;
-
-                        var task = this.props.task;
-                        var iconName = function () {
-                            switch (task.status()) {
-                                case 'success':
-                                    return 'check';
-                                case 'exception':
-                                    return 'exclamation';
-                                case 'working':
-                                    return 'spinner';
-                            }
-                            return 'clock-o';
-                        }();
-
-                        return m(
-                            "tr",
-                            { className: 'TaskListItem status-' + task.status() },
-                            m(
-                                "td",
-                                { title: app.translator.trans('flagrow-bazaar.admin.page.task.status.' + (task.status() !== null ? task.status() : 'unknown')) },
-                                icon(iconName)
-                            ),
-                            m(
-                                "td",
-                                null,
-                                m(
-                                    "div",
-                                    { className: "command" },
-                                    app.translator.trans('flagrow-bazaar.admin.page.task.command.' + task.command(), { extension: task.package() }),
-                                    Button.component({
-                                        icon: 'plus',
-                                        className: 'Button',
-                                        onclick: function onclick() {
-                                            _this2.extended(!_this2.extended());
-                                        }
-                                    })
-                                ),
-                                this.extended() ? m(
-                                    "pre",
-                                    { className: "output" },
-                                    task.output()
-                                ) : ''
-                            ),
-                            m(
-                                "td",
-                                null,
-                                task.started_at()
-                            ),
-                            m(
-                                "td",
-                                null,
-                                task.finished_at()
-                            )
-                        );
-                    }
-                }]);
-                return ExtensionListItem;
-            }(Component);
-
-            _export("default", ExtensionListItem);
         }
     };
 });

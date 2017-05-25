@@ -2,17 +2,38 @@ flagrow-bazaar:
     admin:
         loader:
             is_loading: Processing..
-        popup:
-            title: Flagrow Bazaar
-            field:
-                apiToken: API token
-                apiTokenDescription: This api token is required to access the Flagrow extension api. If already set, you're good to go!
         nav:
             title: Bazaar
             description: The extension marketplace.
         header:
             extensions: Browse extensions
             tasks: Tasks history
+        modal:
+            settings:
+                title: Flagrow Bazaar
+                field:
+                    apiToken: API token
+                    apiTokenDescription: This api token is required to access the Flagrow extension api. If already set, you're good to go!
+            connect-bazaar:
+                title: Connect
+                description: >
+                    Connect your Flarum forum to your personal account on {host} to unlock advanced features; including
+                    a dashboard that gives you an health overview of all your connected Flarum installations. We will
+                    add more functionality like notifications when your forum contains outdated extensions or the ability
+                    to update all Flarum installations centrally.
+            requirements:
+                file-permissions:
+                    title: File permissions
+                    description: >
+                        It seems Bazaar has insufficient permissions to write files
+                        and/or directories, please review the list below. For further
+                        information, refer to <a>the wiki</a>.
+                php-memory_limit:
+                    title: Memory limit
+                    description: >
+                        We recommend allowing PHP to use at least {required} of memory, your php.ini currently allows {limit}.
+                        Although we try to increase the memory limit during runtime, success depends on your hosting environment.
+                        For further information, refer to <a>the wiki</a>.
         page:
             button:
                 more: More
@@ -20,10 +41,16 @@ flagrow-bazaar:
                 uninstall: Uninstall
                 enable: Enable
                 disable: Disable
+                update: Update
+                connect: Connect
+                favorite_button: "Favorite extension"
+                remove_favorite_button: "Remove extension from your favorites"
             extension:
                 installed: Extension is installed
                 enabled: Extension is enabled
                 vendor: By {vendor}
+                favorited: One of your favorites
+                outdated: "Extension is outdated, please update to version {new}"
             task:
                 header:
                     status: Status

@@ -4,11 +4,11 @@ namespace Flagrow\Bazaar\Composer\Utils;
 
 use Composer\DependencyResolver\Pool;
 use Composer\IO\IOInterface;
-use Composer\Json\JsonManipulator;
 use Composer\Repository\CompositeRepository;
 use Composer\Repository\PlatformRepository;
 use Composer\Repository\RepositoryFactory;
 use Flagrow\Bazaar\Exceptions\CannotWriteComposerFileException;
+use Illuminate\Support\Arr;
 
 class ComposerFileEditor
 {
@@ -47,12 +47,12 @@ class ComposerFileEditor
 
     /**
      * Write to file and handle errors
-     * @param string $content
+     * @param string $contents
      * @throws CannotWriteComposerFileException
      */
-    protected function writeFile($content)
+    protected function writeFile($contents)
     {
-        $status = file_put_contents($this->filename, $content);
+        $status = file_put_contents($this->filename, $contents);
 
         if ($status === false) {
             throw new CannotWriteComposerFileException();
@@ -120,7 +120,7 @@ class ComposerFileEditor
     {
         $json = json_decode($this->getContents(), true);
 
-        $pool = new Pool(array_key_exists('minimum-stability', $json) ? $json['minimum-stability'] : 'stable');
+        $pool = new Pool(Arr::get($json, 'minimum-stability', 'stable'));
         $pool->addRepository(new CompositeRepository(array_merge(
             [new PlatformRepository],
             RepositoryFactory::defaultRepos($io)

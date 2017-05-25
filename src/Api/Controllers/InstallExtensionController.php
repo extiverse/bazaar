@@ -3,14 +3,14 @@
 namespace Flagrow\Bazaar\Api\Controllers;
 
 use Flagrow\Bazaar\Api\Serializers\ExtensionSerializer;
-use Flagrow\Bazaar\Extensions\ExtensionManager;
 use Flagrow\Bazaar\Extensions\ExtensionUtils;
+use Flagrow\Bazaar\Repositories\ExtensionRepository;
 use Flarum\Api\Controller\AbstractCreateController;
 use Flarum\Core\Access\AssertPermissionTrait;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 
-class CreateExtensionController extends AbstractCreateController
+class InstallExtensionController extends AbstractCreateController
 {
     use AssertPermissionTrait;
 
@@ -20,14 +20,14 @@ class CreateExtensionController extends AbstractCreateController
     public $serializer = ExtensionSerializer::class;
 
     /**
-     * @var ExtensionManager
+     * @var ExtensionRepository
      */
     protected $extensions;
 
     /**
-     * @param ExtensionManager $extensions
+     * @param ExtensionRepository $extensions
      */
-    public function __construct(ExtensionManager $extensions)
+    public function __construct(ExtensionRepository $extensions)
     {
         $this->extensions = $extensions;
     }
@@ -44,11 +44,8 @@ class CreateExtensionController extends AbstractCreateController
         $this->assertAdmin($request->getAttribute('actor'));
 
         $extensionId = array_get($request->getParsedBody(), 'id');
+        $package = ExtensionUtils::idToPackage($extensionId);
 
-        $this->extensions->install($extensionId);
-
-        $name = ExtensionUtils::idToShortName($extensionId);
-
-        return $this->extensions->getExtension($name);
+        return $this->extensions->installExtension($package);
     }
 }

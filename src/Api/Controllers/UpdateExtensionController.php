@@ -6,24 +6,21 @@ use Flagrow\Bazaar\Api\Serializers\ExtensionSerializer;
 use Flagrow\Bazaar\Repositories\ExtensionRepository;
 use Flarum\Api\Controller\AbstractResourceController;
 use Flarum\Core\Access\AssertPermissionTrait;
+use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 
-class UninstallExtensionController extends AbstractResourceController
+class UpdateExtensionController extends AbstractResourceController
 {
     use AssertPermissionTrait;
 
     public $serializer = ExtensionSerializer::class;
-
     /**
      * @var ExtensionRepository
      */
     protected $extensions;
 
-    /**
-     * @param ExtensionRepository $extensions
-     */
-    public function __construct(ExtensionRepository $extensions)
+    function __construct(ExtensionRepository $extensions)
     {
         $this->extensions = $extensions;
     }
@@ -39,8 +36,8 @@ class UninstallExtensionController extends AbstractResourceController
     {
         $this->assertAdmin($request->getAttribute('actor'));
 
-        $extensionId = array_get($request->getQueryParams(), 'id');
+        $id = Arr::get($request->getQueryParams(), 'id');
 
-        return $this->extensions->removeExtension($extensionId);
+        return $this->extensions->updateExtension($id);
     }
 }

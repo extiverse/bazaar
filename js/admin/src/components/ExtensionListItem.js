@@ -11,53 +11,66 @@ export default class ExtensionListItem extends Component {
     config(isInitialized) {
         if (isInitialized) return;
 
-        if (this.props.extension.description()) this.$().tooltip({container: 'body'});
+        if (this.props.extension.description()) this.$('.ExtensionIcon').tooltip({container: 'body'});
     }
 
     view() {
         const extension = this.props.extension;
-        const controls = this.controlItems(extension).toArray();
+        const connected = this.props.connected || false;
+        const controls = this.controlItems(extension, connected).toArray();
+        const badges = this.badges(extension).toArray();
 
         return <li className={
             'ExtensionListItem ' +
             (extension.enabled() ? 'enabled ' : 'disabled ') +
-            (extension.installed() ? 'installed' : 'uninstalled') +
-            (extension.enabled() && extension.highest_version() && extension.installed_version() != extension.highest_version() ? 'update' : '')
-        } title={extension.description()}>
+            (extension.installed() ? 'installed ' : 'uninstalled ') +
+            (extension.outdated() ? 'outdated ' : '')
+        }>
             <div className="ExtensionListItem-content">
-                      <span className="ExtensionListItem-icon ExtensionIcon" style={extension.icon() || ''}>
+                      <span className="ExtensionListItem-icon ExtensionIcon" style={extension.icon() || ''} title={extension.description()}>
                         {extension.icon() ? icon(extension.icon().name) : ''}
                       </span>
 
 
                 <ul className="ExtensionListItem-badges badges">
-                    {this.badges(extension).toArray()}
+                    {badges}
                 </ul>
                 {controls.length ? (
-                        <Dropdown
-                            className="ExtensionListItem-controls"
-                            buttonClassName="Button Button--icon Button--flat"
-                            menuClassName="Dropdown-menu--right"
-                            icon="ellipsis-h">
-                            {controls}
-                        </Dropdown>
-                    ) : ''}
+                    <Dropdown
+                        className="ExtensionListItem-controls"
+                        buttonClassName="Button Button--icon Button--flat"
+                        menuClassName="Dropdown-menu--right"
+                        icon="ellipsis-h">
+                        {controls}
+                    </Dropdown>
+                ) : ''}
                 <label className="ExtensionListItem-title">
                     {extension.title() || extension.package()}
                 </label>
-                <label className="ExtensionListItem-version">
+                <label className="ExtensionListItem-vendor">
                     {app.translator.trans('flagrow-bazaar.admin.page.extension.vendor', {
                         vendor: extension.package().split('/')[0]
                     })}
                 </label>
-                <div className="ExtensionListItem-version">{extension.highest_version()}</div>
+                <div className="ExtensionListItem-version">{extension.installed_version() || extension.highest_version()}</div>
             </div>
         </li>;
     }
 
-    controlItems(extension) {
+    controlItems(extension, connected) {
         const items = new ItemList();
         const repository = this.props.repository;
+        const favoriteTrans = extension.favorited() ? 'flagrow-bazaar.admin.page.button.remove_favorite_button' : 'flagrow-bazaar.admin.page.button.favorite_button';
+
+        if (connected) {
+            items.add('favorite', Button.component({
+                icon: 'heart',
+                children: app.translator.trans(favoriteTrans),
+                onclick: () => {
+                    repository().favoriteExtension(extension);
+                }
+            }));
+        }
 
         if (extension.enabled() && app.extensionSettings[name]) {
             items.add('settings', Button.component({
@@ -80,6 +93,16 @@ export default class ExtensionListItem extends Component {
                 children: app.translator.trans('flagrow-bazaar.admin.page.button.enable'),
                 onclick: () => {
                     repository().enableExtension(extension);
+                }
+            }));
+        }
+
+        if (extension.installed() && extension.outdated()) {
+            items.add('update', Button.component({
+                icon: 'toggle-up',
+                children: app.translator.trans('flagrow-bazaar.admin.page.button.update'),
+                onclick: () => {
+                    repository().updateExtension(extension);
                 }
             }));
         }
@@ -116,11 +139,23 @@ export default class ExtensionListItem extends Component {
     badges(extension) {
         const items = new ItemList();
 
-        if (extension.installed()) {
-            items.add('installed', <Badge icon="plus-square" type="installed" label={app.translator.trans('flagrow-bazaar.admin.page.extension.installed')}/>)
+        if (extension.installed() && extension.outdated()) {
+            items.add('favorited', <Badge icon="warning" type="outdated"
+                                          label={app.translator.trans('flagrow-bazaar.admin.page.extension.outdated', {new: extension.highest_version()})}/>)
+        }
+
+        if (extension.favorited()) {
+            items.add('favorited', <Badge icon="heart" type="favorited"
+                                          label={app.translator.trans('flagrow-bazaar.admin.page.extension.favorited')}/>)
+        }
+
+        if (extension.installed() && !extension.enabled()) {
+            items.add('installed', <Badge icon="plus-square" type="installed"
+                                          label={app.translator.trans('flagrow-bazaar.admin.page.extension.installed')}/>)
         }
         if (extension.enabled()) {
-            items.add('enabled', <Badge icon="check-square" type="enabled" label={app.translator.trans('flagrow-bazaar.admin.page.extension.enabled')}/>)
+            items.add('enabled', <Badge icon="check-square" type="enabled"
+                                        label={app.translator.trans('flagrow-bazaar.admin.page.extension.enabled')}/>)
         }
 
         return items;

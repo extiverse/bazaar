@@ -107,6 +107,8 @@ abstract class BaseCommand
             }
             $installer->setWhitelistDependencies(true);
             $installer->setOptimizeAutoloader(true);
+            // Prevent prestissimo issues (dropping repositories header configuration)
+            $installer->disablePlugins();
 
             $exitCode = $installer->run();
 
