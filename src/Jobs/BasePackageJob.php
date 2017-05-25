@@ -7,16 +7,10 @@ use Flagrow\Bazaar\Composer\ComposerCommand;
 use Flagrow\Bazaar\Composer\ComposerEnvironment;
 use Flagrow\Bazaar\Composer\ComposerOutput;
 use Flagrow\Bazaar\Task;
-//use Illuminate\Bus\Queueable;
-//use Illuminate\Queue\SerializesModels;
-//use Illuminate\Queue\InteractsWithQueue;
-//use Illuminate\Contracts\Queue\ShouldQueue;
 use Psr\Log\LoggerInterface;
 
-abstract class BasePackageJob /*implements ShouldQueue*/
+abstract class BasePackageJob
 {
-    //use InteractsWithQueue, Queueable, SerializesModels;
-
     /**
      * @var Task
      */
