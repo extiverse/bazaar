@@ -96,10 +96,10 @@ System.register('flagrow/bazaar/components/BazaarLoader', ['flarum/Component', '
 });;
 'use strict';
 
-System.register('flagrow/bazaar/components/BazaarPage', ['flarum/Component', 'flagrow/bazaar/utils/ExtensionRepository', 'flagrow/bazaar/components/ExtensionListItem', 'flagrow/bazaar/components/BazaarLoader', 'flagrow/bazaar/components/BazaarPageHeader', 'flarum/components/Button', 'flagrow/bazaar/modals/FilePermissionsModal', 'flagrow/bazaar/modals/MemoryLimitModal', 'flagrow/bazaar/modals/BazaarConnectModal'], function (_export, _context) {
+System.register('flagrow/bazaar/components/BazaarPage', ['flarum/Component', 'flagrow/bazaar/utils/ExtensionRepository', 'flagrow/bazaar/components/ExtensionListItem', 'flagrow/bazaar/components/BazaarLoader', 'flagrow/bazaar/components/BazaarPageHeader', 'flarum/components/Button', 'flarum/components/LinkButton', 'flagrow/bazaar/modals/FilePermissionsModal', 'flagrow/bazaar/modals/MemoryLimitModal', 'flagrow/bazaar/modals/BazaarConnectModal'], function (_export, _context) {
     "use strict";
 
-    var Component, ExtensionRepository, ExtensionListItem, BazaarLoader, BazaarPageHeader, Button, FilePermissionsModal, MemoryLimitModal, BazaarConnectModal, BazaarPage;
+    var Component, ExtensionRepository, ExtensionListItem, BazaarLoader, BazaarPageHeader, Button, LinkButton, FilePermissionsModal, MemoryLimitModal, BazaarConnectModal, BazaarPage;
     return {
         setters: [function (_flarumComponent) {
             Component = _flarumComponent.default;
@@ -113,6 +113,8 @@ System.register('flagrow/bazaar/components/BazaarPage', ['flarum/Component', 'fl
             BazaarPageHeader = _flagrowBazaarComponentsBazaarPageHeader.default;
         }, function (_flarumComponentsButton) {
             Button = _flarumComponentsButton.default;
+        }, function (_flarumComponentsLinkButton) {
+            LinkButton = _flarumComponentsLinkButton.default;
         }, function (_flagrowBazaarModalsFilePermissionsModal) {
             FilePermissionsModal = _flagrowBazaarModalsFilePermissionsModal.default;
         }, function (_flagrowBazaarModalsMemoryLimitModal) {
@@ -161,7 +163,7 @@ System.register('flagrow/bazaar/components/BazaarPage', ['flarum/Component', 'fl
                 }, {
                     key: 'header',
                     value: function header() {
-                        var buttons = [].concat(this.requirementsButtons(), this.connectedButtons());
+                        var buttons = [].concat(this.requirementsButtons(), this.connectedButtons(), this.taskHistoryButtons());
 
                         return m('div', { className: 'ButtonGroup' }, buttons);
                     }
@@ -219,6 +221,15 @@ System.register('flagrow/bazaar/components/BazaarPage', ['flarum/Component', 'fl
                                 return app.modal.show(new BazaarConnectModal({ flagrowHost: _this3.flagrowHost }));
                             }
                         })];
+                    }
+                }, {
+                    key: 'taskHistoryButtons',
+                    value: function taskHistoryButtons() {
+                        return LinkButton.component({
+                            className: 'Button Button--icon',
+                            icon: 'history',
+                            href: app.route('flagrow-bazaar-tasks')
+                        });
                     }
                 }]);
                 return BazaarPage;
@@ -482,10 +493,10 @@ System.register("flagrow/bazaar/components/ExtensionListItem", ["flarum/Componen
 });;
 "use strict";
 
-System.register("flagrow/bazaar/components/TaskListItem", ["flarum/app", "flarum/Component", "flarum/helpers/icon", "flarum/components/Button"], function (_export, _context) {
+System.register("flagrow/bazaar/components/TaskListItem", ["flarum/app", "flarum/Component", "flarum/helpers/icon", "flarum/components/Button", "flarum/helpers/humanTime", "flarum/helpers/fullTime"], function (_export, _context) {
     "use strict";
 
-    var app, Component, icon, Button, ExtensionListItem;
+    var app, Component, icon, Button, humanTime, fullTime, ExtensionListItem;
     return {
         setters: [function (_flarumApp) {
             app = _flarumApp.default;
@@ -495,6 +506,10 @@ System.register("flagrow/bazaar/components/TaskListItem", ["flarum/app", "flarum
             icon = _flarumHelpersIcon.default;
         }, function (_flarumComponentsButton) {
             Button = _flarumComponentsButton.default;
+        }, function (_flarumHelpersHumanTime) {
+            humanTime = _flarumHelpersHumanTime.default;
+        }, function (_flarumHelpersFullTime) {
+            fullTime = _flarumHelpersFullTime.default;
         }],
         execute: function () {
             ExtensionListItem = function (_Component) {
@@ -528,21 +543,41 @@ System.register("flagrow/bazaar/components/TaskListItem", ["flarum/app", "flarum
                             return 'clock-o';
                         }();
 
+                        // We need to wrap items in a tbody because Mithril 0.2 and therefore flarum/Component does not allow a list of vnodes to be returned from a view
+                        // And we can't wrap <tr> in anything else without breaking the table
+                        // Having multiple <tbody> does not seem to be too much an issue https://stackoverflow.com/a/3076790/3133038
                         return m(
-                            "tr",
+                            "tbody",
                             { className: 'TaskListItem status-' + task.status() },
                             m(
-                                "td",
-                                { title: app.translator.trans('flagrow-bazaar.admin.page.task.status.' + (task.status() !== null ? task.status() : 'unknown')) },
-                                icon(iconName)
-                            ),
-                            m(
-                                "td",
+                                "tr",
                                 null,
                                 m(
-                                    "div",
-                                    { className: "command" },
-                                    app.translator.trans('flagrow-bazaar.admin.page.task.command.' + task.command(), { extension: task.package() }),
+                                    "td",
+                                    { className: "time-column" },
+                                    humanTime(task.created_at())
+                                ),
+                                m(
+                                    "td",
+                                    { className: "status-column", title: app.translator.trans('flagrow-bazaar.admin.page.task.status.' + (task.status() !== null ? task.status() : 'unknown')) },
+                                    m(
+                                        "div",
+                                        { className: "status" },
+                                        icon(iconName)
+                                    )
+                                ),
+                                m(
+                                    "td",
+                                    { className: "command-column" },
+                                    app.translator.trans('flagrow-bazaar.admin.page.task.command.' + task.command(), { extension: m(
+                                            "strong",
+                                            null,
+                                            task.package()
+                                        ) })
+                                ),
+                                m(
+                                    "td",
+                                    { className: "details-column" },
                                     Button.component({
                                         icon: 'plus',
                                         className: 'Button',
@@ -550,23 +585,68 @@ System.register("flagrow/bazaar/components/TaskListItem", ["flarum/app", "flarum
                                             _this2.extended(!_this2.extended());
                                         }
                                     })
-                                ),
-                                this.extended() ? m(
-                                    "pre",
-                                    { className: "output" },
-                                    task.output()
-                                ) : ''
+                                )
                             ),
-                            m(
-                                "td",
+                            this.extended() ? m(
+                                "tr",
                                 null,
-                                task.started_at()
-                            ),
-                            m(
-                                "td",
-                                null,
-                                task.finished_at()
-                            )
+                                m(
+                                    "td",
+                                    { className: "output-column", colspan: "4" },
+                                    m(
+                                        "dl",
+                                        null,
+                                        m(
+                                            "dt",
+                                            null,
+                                            app.translator.trans('flagrow-bazaar.admin.page.task.attribute.created_at')
+                                        ),
+                                        m(
+                                            "dd",
+                                            null,
+                                            fullTime(task.created_at())
+                                        )
+                                    ),
+                                    m(
+                                        "dl",
+                                        null,
+                                        m(
+                                            "dt",
+                                            null,
+                                            app.translator.trans('flagrow-bazaar.admin.page.task.attribute.started_at')
+                                        ),
+                                        m(
+                                            "dd",
+                                            null,
+                                            fullTime(task.started_at())
+                                        )
+                                    ),
+                                    m(
+                                        "dl",
+                                        null,
+                                        m(
+                                            "dt",
+                                            null,
+                                            app.translator.trans('flagrow-bazaar.admin.page.task.attribute.finished_at')
+                                        ),
+                                        m(
+                                            "dd",
+                                            null,
+                                            fullTime(task.finished_at())
+                                        )
+                                    ),
+                                    m(
+                                        "p",
+                                        null,
+                                        app.translator.trans('flagrow-bazaar.admin.page.task.header.output')
+                                    ),
+                                    m(
+                                        "pre",
+                                        { className: "output" },
+                                        task.output()
+                                    )
+                                )
+                            ) : null
                         );
                     }
                 }]);
@@ -619,7 +699,7 @@ System.register('flagrow/bazaar/components/TasksPage', ['flarum/app', 'flarum/Co
                     value: function view() {
                         return m(
                             'div',
-                            { className: 'ExtensionsPage Bazaar' },
+                            { className: 'ExtensionsPage Bazaar TaskPage' },
                             BazaarPageHeader.component(),
                             m(
                                 'div',
@@ -627,49 +707,101 @@ System.register('flagrow/bazaar/components/TasksPage', ['flarum/app', 'flarum/Co
                                 m(
                                     'div',
                                     { className: 'container' },
-                                    m(
-                                        'table',
-                                        { className: 'TaskPage-table' },
-                                        m(
-                                            'thead',
+                                    this.taskGroups().map(function (group) {
+                                        return group.tasks.length ? m(
+                                            'div',
                                             null,
                                             m(
-                                                'tr',
+                                                'h2',
                                                 null,
+                                                group.title
+                                            ),
+                                            m(
+                                                'table',
+                                                { className: 'TaskPage-table' },
                                                 m(
-                                                    'th',
+                                                    'thead',
                                                     null,
-                                                    app.translator.trans('flagrow-bazaar.admin.page.task.header.status')
+                                                    m(
+                                                        'tr',
+                                                        null,
+                                                        m(
+                                                            'th',
+                                                            { className: 'time-column' },
+                                                            app.translator.trans('flagrow-bazaar.admin.page.task.header.time')
+                                                        ),
+                                                        m(
+                                                            'th',
+                                                            { className: 'status-column' },
+                                                            app.translator.trans('flagrow-bazaar.admin.page.task.header.status')
+                                                        ),
+                                                        m(
+                                                            'th',
+                                                            null,
+                                                            app.translator.trans('flagrow-bazaar.admin.page.task.header.command')
+                                                        ),
+                                                        m(
+                                                            'th',
+                                                            { className: 'details-column' },
+                                                            app.translator.trans('flagrow-bazaar.admin.page.task.header.details')
+                                                        )
+                                                    )
                                                 ),
-                                                m(
-                                                    'th',
-                                                    null,
-                                                    app.translator.trans('flagrow-bazaar.admin.page.task.header.command')
-                                                ),
-                                                m(
-                                                    'th',
-                                                    null,
-                                                    app.translator.trans('flagrow-bazaar.admin.page.task.header.started_at')
-                                                ),
-                                                m(
-                                                    'th',
-                                                    null,
-                                                    app.translator.trans('flagrow-bazaar.admin.page.task.header.finished_at')
-                                                )
+                                                group.tasks.map(function (task) {
+                                                    return m(TaskListItem, { task: task });
+                                                })
                                             )
-                                        ),
-                                        m(
-                                            'tbody',
-                                            null,
-                                            this.repository.tasks().map(function (task) {
-                                                return TaskListItem.component({ task: task });
-                                            })
-                                        )
-                                    )
+                                        ) : null;
+                                    })
                                 )
                             ),
                             this.loader
                         );
+                    }
+                }, {
+                    key: 'taskGroups',
+                    value: function taskGroups() {
+                        var taskGroups = [{
+                            title: app.translator.trans('flagrow-bazaar.admin.page.task.group.today'),
+                            tasks: []
+                        }, {
+                            title: app.translator.trans('flagrow-bazaar.admin.page.task.group.lastmonth'),
+                            tasks: []
+                        }, {
+                            title: app.translator.trans('flagrow-bazaar.admin.page.task.group.older'),
+                            tasks: []
+                        }];
+                        var currentGroup = 0;
+
+                        // Milliseconds from 1 January 1970 00:00:00 UTC
+                        var today = new Date().setHours(0, 0, 0, 0);
+
+                        this.repository.tasks().forEach(function (task) {
+                            // Milliseconds from 1 January 1970 00:00:00 UTC
+                            var taskDate = new Date(task.created_at()).setHours(0, 0, 0, 0);
+
+                            switch (currentGroup) {
+                                case 0:
+                                    if (taskDate === today) {
+                                        taskGroups[currentGroup].tasks.push(task);
+                                    } else {
+                                        currentGroup++;
+                                    }
+                                    break;
+                                case 1:
+                                    // Check if the date is within the last 30 days
+                                    if ((today - taskDate) / (1000 * 3600 * 24) <= 30) {
+                                        taskGroups[currentGroup].tasks.push(task);
+                                    } else {
+                                        currentGroup++;
+                                    }
+                                    break;
+                                default:
+                                    taskGroups[currentGroup].tasks.push(task);
+                            }
+                        });
+
+                        return taskGroups;
                     }
                 }]);
                 return TasksPage;

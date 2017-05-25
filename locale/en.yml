@@ -56,6 +56,9 @@ flagrow-bazaar:
                     status: Status
                     command: Command
                     output: Output
+                    time: Time
+                    details: Details
+                attribute:
                     created_at: Created at
                     started_at: Started at
                     finished_at: Finished at
@@ -68,3 +71,7 @@ flagrow-bazaar:
                     install: Install {extension}
                     update: Update {extension}
                     uninstall: Uninstall {extension}
+                group:
+                    today: Today
+                    lastmonth: Last month
+                    older: Older
