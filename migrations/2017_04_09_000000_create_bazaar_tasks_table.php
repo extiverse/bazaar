@@ -17,6 +17,6 @@ return [
         });
     },
     'down' => function (Builder $schema) {
-        $schema->drop('tags');
+        $schema->drop('bazaar_tasks');
     }
 ];
