@@ -96,10 +96,10 @@ System.register('flagrow/bazaar/components/BazaarLoader', ['flarum/Component', '
 });;
 'use strict';
 
-System.register('flagrow/bazaar/components/BazaarPage', ['flarum/Component', 'flagrow/bazaar/utils/ExtensionRepository', 'flagrow/bazaar/components/ExtensionListItem', 'flagrow/bazaar/components/BazaarLoader', 'flagrow/bazaar/components/BazaarPageHeader', 'flarum/components/Button', 'flarum/components/LinkButton', 'flagrow/bazaar/modals/FilePermissionsModal', 'flagrow/bazaar/modals/MemoryLimitModal', 'flagrow/bazaar/modals/BazaarConnectModal'], function (_export, _context) {
+System.register('flagrow/bazaar/components/BazaarPage', ['flarum/Component', 'flagrow/bazaar/utils/ExtensionRepository', 'flagrow/bazaar/components/ExtensionListItem', 'flagrow/bazaar/components/BazaarLoader', 'flagrow/bazaar/components/BazaarPageHeader'], function (_export, _context) {
     "use strict";
 
-    var Component, ExtensionRepository, ExtensionListItem, BazaarLoader, BazaarPageHeader, Button, LinkButton, FilePermissionsModal, MemoryLimitModal, BazaarConnectModal, BazaarPage;
+    var Component, ExtensionRepository, ExtensionListItem, BazaarLoader, BazaarPageHeader, BazaarPage;
     return {
         setters: [function (_flarumComponent) {
             Component = _flarumComponent.default;
@@ -111,16 +111,6 @@ System.register('flagrow/bazaar/components/BazaarPage', ['flarum/Component', 'fl
             BazaarLoader = _flagrowBazaarComponentsBazaarLoader.default;
         }, function (_flagrowBazaarComponentsBazaarPageHeader) {
             BazaarPageHeader = _flagrowBazaarComponentsBazaarPageHeader.default;
-        }, function (_flarumComponentsButton) {
-            Button = _flarumComponentsButton.default;
-        }, function (_flarumComponentsLinkButton) {
-            LinkButton = _flarumComponentsLinkButton.default;
-        }, function (_flagrowBazaarModalsFilePermissionsModal) {
-            FilePermissionsModal = _flagrowBazaarModalsFilePermissionsModal.default;
-        }, function (_flagrowBazaarModalsMemoryLimitModal) {
-            MemoryLimitModal = _flagrowBazaarModalsMemoryLimitModal.default;
-        }, function (_flagrowBazaarModalsBazaarConnectModal) {
-            BazaarConnectModal = _flagrowBazaarModalsBazaarConnectModal.default;
         }],
         execute: function () {
             BazaarPage = function (_Component) {
@@ -145,7 +135,7 @@ System.register('flagrow/bazaar/components/BazaarPage', ['flarum/Component', 'fl
                 }, {
                     key: 'view',
                     value: function view() {
-                        return m('div', { className: 'ExtensionsPage Bazaar' }, [BazaarPageHeader.component(), m('div', { className: 'ExtensionsPage-header' }, [m('div', { className: 'container' }, this.header())]), m('div', { className: 'ExtensionsPage-list' }, [m('div', { className: 'container' }, this.items())]), BazaarLoader.component({ loading: this.loading })]);
+                        return m('div', { className: 'ExtensionsPage Bazaar' }, [BazaarPageHeader.component(), m('div', { className: 'ExtensionsPage-list' }, [m('div', { className: 'container' }, this.items())]), BazaarLoader.component({ loading: this.loading })]);
                     }
                 }, {
                     key: 'items',
@@ -160,10 +150,62 @@ System.register('flagrow/bazaar/components/BazaarPage', ['flarum/Component', 'fl
                             });
                         })]);
                     }
+                }]);
+                return BazaarPage;
+            }(Component);
+
+            _export('default', BazaarPage);
+        }
+    };
+});;
+'use strict';
+
+System.register('flagrow/bazaar/components/BazaarPageHeader', ['flarum/app', 'flarum/Component', 'flarum/components/LinkButton', 'flarum/components/Button', 'flagrow/bazaar/modals/FilePermissionsModal', 'flagrow/bazaar/modals/MemoryLimitModal', 'flagrow/bazaar/modals/BazaarConnectModal'], function (_export, _context) {
+    "use strict";
+
+    var app, Component, LinkButton, Button, FilePermissionsModal, MemoryLimitModal, BazaarConnectModal, BazaarPageHeader;
+    return {
+        setters: [function (_flarumApp) {
+            app = _flarumApp.default;
+        }, function (_flarumComponent) {
+            Component = _flarumComponent.default;
+        }, function (_flarumComponentsLinkButton) {
+            LinkButton = _flarumComponentsLinkButton.default;
+        }, function (_flarumComponentsButton) {
+            Button = _flarumComponentsButton.default;
+        }, function (_flagrowBazaarModalsFilePermissionsModal) {
+            FilePermissionsModal = _flagrowBazaarModalsFilePermissionsModal.default;
+        }, function (_flagrowBazaarModalsMemoryLimitModal) {
+            MemoryLimitModal = _flagrowBazaarModalsMemoryLimitModal.default;
+        }, function (_flagrowBazaarModalsBazaarConnectModal) {
+            BazaarConnectModal = _flagrowBazaarModalsBazaarConnectModal.default;
+        }],
+        execute: function () {
+            BazaarPageHeader = function (_Component) {
+                babelHelpers.inherits(BazaarPageHeader, _Component);
+
+                function BazaarPageHeader() {
+                    babelHelpers.classCallCheck(this, BazaarPageHeader);
+                    return babelHelpers.possibleConstructorReturn(this, (BazaarPageHeader.__proto__ || Object.getPrototypeOf(BazaarPageHeader)).apply(this, arguments));
+                }
+
+                babelHelpers.createClass(BazaarPageHeader, [{
+                    key: 'view',
+                    value: function view() {
+                        return m(
+                            'div',
+                            { className: 'ExtensionsPage-header' },
+                            m(
+                                'div',
+                                { className: 'container' },
+                                this.header()
+                            )
+                        );
+                    }
                 }, {
                     key: 'header',
                     value: function header() {
-                        var buttons = [].concat(this.requirementsButtons(), this.connectedButtons(), this.taskHistoryButtons());
+                        var buttons = [].concat(this.requirementsButtons(), this.connectedButtons(), this.pagesButtons());
 
                         return m('div', { className: 'ButtonGroup' }, buttons);
                     }
@@ -202,14 +244,14 @@ System.register('flagrow/bazaar/components/BazaarPage', ['flarum/Component', 'fl
                 }, {
                     key: 'connectedButtons',
                     value: function connectedButtons() {
-                        var _this3 = this;
+                        var _this2 = this;
 
                         if (this.connected) {
                             return [Button.component({
                                 className: 'Button Button--icon Connected',
                                 icon: 'dashboard',
                                 onclick: function onclick() {
-                                    return window.open(_this3.flagrowHost + '/home');
+                                    return window.open(_this2.flagrowHost + '/home');
                                 }
                             })];
                         }
@@ -218,73 +260,40 @@ System.register('flagrow/bazaar/components/BazaarPage', ['flarum/Component', 'fl
                             className: 'Button Button--icon Connect',
                             icon: 'plug',
                             onclick: function onclick() {
-                                return app.modal.show(new BazaarConnectModal({ flagrowHost: _this3.flagrowHost }));
+                                return app.modal.show(new BazaarConnectModal({ flagrowHost: _this2.flagrowHost }));
                             }
                         })];
                     }
                 }, {
-                    key: 'taskHistoryButtons',
-                    value: function taskHistoryButtons() {
-                        return LinkButton.component({
-                            className: 'Button Button--icon',
-                            icon: 'history',
-                            href: app.route('flagrow-bazaar-tasks')
-                        });
-                    }
-                }]);
-                return BazaarPage;
-            }(Component);
+                    key: 'pagesButtons',
+                    value: function pagesButtons() {
+                        // Sometimes no route has been set as the current one
+                        if (typeof app.current === 'undefined') {
+                            return null;
+                        }
 
-            _export('default', BazaarPage);
-        }
-    };
-});;
-'use strict';
+                        var routeName = app.current.props.routeName;
+                        var links = [];
 
-System.register('flagrow/bazaar/components/BazaarPageHeader', ['flarum/app', 'flarum/Component', 'flarum/components/LinkButton'], function (_export, _context) {
-    "use strict";
+                        if (routeName !== 'flagrow-bazaar') {
+                            links.push(LinkButton.component({
+                                className: 'Button Button--icon',
+                                icon: 'shopping-bag',
+                                href: app.route('flagrow-bazaar'),
+                                title: app.translator.trans('flagrow-bazaar.admin.header.extensions')
+                            }));
+                        }
 
-    var app, Component, LinkButton, BazaarPageHeader;
-    return {
-        setters: [function (_flarumApp) {
-            app = _flarumApp.default;
-        }, function (_flarumComponent) {
-            Component = _flarumComponent.default;
-        }, function (_flarumComponentsLinkButton) {
-            LinkButton = _flarumComponentsLinkButton.default;
-        }],
-        execute: function () {
-            BazaarPageHeader = function (_Component) {
-                babelHelpers.inherits(BazaarPageHeader, _Component);
+                        if (routeName !== 'flagrow-bazaar-tasks') {
+                            links.push(LinkButton.component({
+                                className: 'Button Button--icon',
+                                icon: 'history',
+                                href: app.route('flagrow-bazaar-tasks'),
+                                title: app.translator.trans('flagrow-bazaar.admin.header.tasks')
+                            }));
+                        }
 
-                function BazaarPageHeader() {
-                    babelHelpers.classCallCheck(this, BazaarPageHeader);
-                    return babelHelpers.possibleConstructorReturn(this, (BazaarPageHeader.__proto__ || Object.getPrototypeOf(BazaarPageHeader)).apply(this, arguments));
-                }
-
-                babelHelpers.createClass(BazaarPageHeader, [{
-                    key: 'view',
-                    value: function view() {
-                        return m(
-                            'div',
-                            { className: 'ExtensionsPage-header' },
-                            m(
-                                'div',
-                                { className: 'container' },
-                                LinkButton.component({
-                                    children: app.translator.trans('flagrow-bazaar.admin.header.extensions'),
-                                    icon: 'plus',
-                                    className: 'Button Button--primary',
-                                    href: app.route('flagrow-bazaar')
-                                }),
-                                LinkButton.component({
-                                    children: app.translator.trans('flagrow-bazaar.admin.header.tasks'),
-                                    icon: 'plus',
-                                    className: 'Button Button--primary',
-                                    href: app.route('flagrow-bazaar-tasks')
-                                })
-                            )
-                        );
+                        return links;
                     }
                 }]);
                 return BazaarPageHeader;
@@ -689,6 +698,9 @@ System.register('flagrow/bazaar/components/TasksPage', ['flarum/app', 'flarum/Co
                 babelHelpers.createClass(TasksPage, [{
                     key: 'init',
                     value: function init() {
+                        // Used in the header
+                        app.current = this;
+
                         this.loading = m.prop(false);
                         this.repository = new TaskRepository(this.loading);
                         this.repository.loadNextPage();

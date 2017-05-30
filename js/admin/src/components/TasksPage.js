@@ -7,6 +7,9 @@ import BazaarLoader from 'flagrow/bazaar/components/BazaarLoader';
 
 export default class TasksPage extends Component {
     init() {
+        // Used in the header
+        app.current = this;
+
         this.loading = m.prop(false);
         this.repository = new TaskRepository(this.loading);
         this.repository.loadNextPage();
