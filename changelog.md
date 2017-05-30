@@ -1,8 +1,14 @@
-- 0.1.2
+- 0.2.0
+  - Added Tasks history page.
+    - Shows what extension was installed and when.
+    - Gives easy access to Composer logs and memory usage.
   - Shows possible conflicts with your hosting environment, like:
     - Memory needed, available.
     - Permissions of directories.
   - Moved some logic into modals to clean up the Bazaar page header. Allowing for more stuff in the long run.
+  - Improve Bazaar header to navigate between pages.
+  - Added privacy statement.
+  - German language (thanks @DennaGherlyn).
 - 0.1.1
   - Huge refactoring. Extension manager logic moved into the repository.
   - Extensions with available updates are now marked "outdated".
