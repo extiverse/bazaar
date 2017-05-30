@@ -57,12 +57,15 @@ export default class BazaarPageHeader extends Component {
     }
 
     connectedButtons() {
-        if (this.connected) {
+        let connected = this.props.connected;
+        let flagrowHost = app.data.settings['flagrow.bazaar.flagrow-host'] || 'https://flagrow.io';
+
+        if (connected) {
             return [
                 Button.component({
                     className: 'Button Button--icon Connected',
                     icon: 'dashboard',
-                    onclick: () => window.open(this.flagrowHost + '/home')
+                    onclick: () => window.open(flagrowHost + '/home')
                 }),
             ]
         }
@@ -71,7 +74,7 @@ export default class BazaarPageHeader extends Component {
             Button.component({
                 className: 'Button Button--icon Connect',
                 icon: 'plug',
-                onclick: () => app.modal.show(new BazaarConnectModal({flagrowHost: this.flagrowHost}))
+                onclick: () => app.modal.show(new BazaarConnectModal({flagrowHost: flagrowHost}))
             }),
         ]
     }

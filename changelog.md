@@ -1,3 +1,5 @@
+- 0.2.1
+  - Fixed an issue where the connect and dashboard buttons would no longer work.
 - 0.2.0
   - Added Tasks history page.
     - Shows what extension was installed and when.

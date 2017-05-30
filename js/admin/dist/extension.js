@@ -130,12 +130,13 @@ System.register('flagrow/bazaar/components/BazaarPage', ['flarum/Component', 'fl
                         this.repository = m.prop(new ExtensionRepository(this.loading));
                         this.repository().loadNextPage();
                         this.connected = app.data.settings['flagrow.bazaar.connected'] == 1 || false;
-                        this.flagrowHost = app.data.settings['flagrow.bazaar.flagrow-host'] || 'https://flagrow.io';
                     }
                 }, {
                     key: 'view',
                     value: function view() {
-                        return m('div', { className: 'ExtensionsPage Bazaar' }, [BazaarPageHeader.component(), m('div', { className: 'ExtensionsPage-list' }, [m('div', { className: 'container' }, this.items())]), BazaarLoader.component({ loading: this.loading })]);
+                        return m('div', { className: 'ExtensionsPage Bazaar' }, [BazaarPageHeader.component({
+                            connected: this.connected
+                        }), m('div', { className: 'ExtensionsPage-list' }, [m('div', { className: 'container' }, this.items())]), BazaarLoader.component({ loading: this.loading })]);
                     }
                 }, {
                     key: 'items',
@@ -244,14 +245,15 @@ System.register('flagrow/bazaar/components/BazaarPageHeader', ['flarum/app', 'fl
                 }, {
                     key: 'connectedButtons',
                     value: function connectedButtons() {
-                        var _this2 = this;
+                        var connected = this.props.connected;
+                        var flagrowHost = app.data.settings['flagrow.bazaar.flagrow-host'] || 'https://flagrow.io';
 
-                        if (this.connected) {
+                        if (connected) {
                             return [Button.component({
                                 className: 'Button Button--icon Connected',
                                 icon: 'dashboard',
                                 onclick: function onclick() {
-                                    return window.open(_this2.flagrowHost + '/home');
+                                    return window.open(flagrowHost + '/home');
                                 }
                             })];
                         }
@@ -260,7 +262,7 @@ System.register('flagrow/bazaar/components/BazaarPageHeader', ['flarum/app', 'fl
                             className: 'Button Button--icon Connect',
                             icon: 'plug',
                             onclick: function onclick() {
-                                return app.modal.show(new BazaarConnectModal({ flagrowHost: _this2.flagrowHost }));
+                                return app.modal.show(new BazaarConnectModal({ flagrowHost: flagrowHost }));
                             }
                         })];
                     }

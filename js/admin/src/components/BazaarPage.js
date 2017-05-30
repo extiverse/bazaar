@@ -12,12 +12,13 @@ export default class BazaarPage extends Component {
         this.repository = m.prop(new ExtensionRepository(this.loading));
         this.repository().loadNextPage();
         this.connected = app.data.settings['flagrow.bazaar.connected'] == 1 || false;
-        this.flagrowHost = app.data.settings['flagrow.bazaar.flagrow-host'] || 'https://flagrow.io';
     }
 
     view() {
         return m('div', {className: 'ExtensionsPage Bazaar'}, [
-            BazaarPageHeader.component(),
+            BazaarPageHeader.component({
+                connected: this.connected
+            }),
             m('div', {className: 'ExtensionsPage-list'}, [
                 m('div', {className: 'container'}, this.items())
             ]),
