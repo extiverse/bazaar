@@ -46,6 +46,7 @@ abstract class ComposerJob
      * Run the job
      * @param ComposerEnvironment $env
      * @param LoggerInterface $log
+     * @throws \Exception
      */
     public function handle(ComposerEnvironment $env, LoggerInterface $log)
     {
@@ -55,12 +56,16 @@ abstract class ComposerJob
         $this->task->started_at = Carbon::now();
         $this->task->save();
 
+        $jobException = null;
+
         try {
             $output = $this->handleComposer($command, $this->task);
 
             $this->task->status = 'success';
             $this->task->output = $output->getOutput() . "\n--------\nBazaar stats\nDuration: {$output->getDuration()}s\nMemory: {$output->getMemory()}MB";
         } catch (\Exception $e) {
+            $jobException = $e;
+
             $this->task->status = 'exception';
             $this->task->output = $e->getMessage();
             $log->error($e->getMessage());
@@ -68,6 +73,11 @@ abstract class ComposerJob
 
         $this->task->finished_at = Carbon::now();
         $this->task->save();
+
+        // As long as the task is run as sync, we need to throw exceptions to get accurate request responses
+        if ($jobException instanceof \Exception) {
+            throw $jobException;
+        }
     }
 
     /**
