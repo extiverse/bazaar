@@ -13,7 +13,7 @@ class ComposerEnvironmentProvider extends AbstractServiceProvider
         $this->app->singleton(ComposerEnvironment::class, function($app) {
             return new ComposerEnvironment(
                 $app->basePath(),
-                $app->storagePath('/composer-home'),
+                storage_path('composer-home'),
                 $app->make(Filesystem::class));
         });
     }
