@@ -137,6 +137,9 @@ class ExtensionRepository
         return $extension;
     }
 
+    /**
+     * @param Extension $extension
+     */
     protected function refreshInstalledExtension(Extension &$extension)
     {
         $installedExtension = $this->manager->getExtension($extension->getShortName());
@@ -149,7 +152,7 @@ class ExtensionRepository
     /**
      * Install an extension.
      *
-     * @param string $package Valid
+     * @param string $package
      * @return Extension|null
      */
     public function installExtension($package)
