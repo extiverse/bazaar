@@ -29,6 +29,7 @@ For a complete overview of our changes, please visit the [changelog](https://git
 
 ```bash
 composer require flagrow/bazaar
+chmod 0777 composer.json
 ```
 
 Make sure that the following directories and files are writable by the web/php user:
