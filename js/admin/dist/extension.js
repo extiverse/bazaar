@@ -510,7 +510,7 @@ System.register("flagrow/bazaar/components/ExtensionListItem", ["flarum/Componen
                             }));
                         }
 
-                        if (extension.installed() && !extension.enabled()) {
+                        if (extension.can_uninstall()) {
                             items.add('uninstall', Button.component({
                                 icon: 'minus-square-o',
                                 children: app.translator.trans('flagrow-bazaar.admin.page.button.uninstall'),
@@ -518,6 +518,9 @@ System.register("flagrow/bazaar/components/ExtensionListItem", ["flarum/Componen
                                     repository().uninstallExtension(extension);
                                 }
                             }));
+                        }
+
+                        if (extension.can_enable()) {
                             items.add('enable', Button.component({
                                 icon: 'check-square-o',
                                 children: app.translator.trans('flagrow-bazaar.admin.page.button.enable'),
@@ -537,7 +540,7 @@ System.register("flagrow/bazaar/components/ExtensionListItem", ["flarum/Componen
                             }));
                         }
 
-                        if (extension.installed() && extension.enabled()) {
+                        if (extension.can_disable()) {
                             items.add('disable', Button.component({
                                 icon: 'square-o',
                                 children: app.translator.trans('flagrow-bazaar.admin.page.button.disable'),
@@ -547,12 +550,32 @@ System.register("flagrow/bazaar/components/ExtensionListItem", ["flarum/Componen
                             }));
                         }
 
-                        if (!extension.installed()) {
+                        if (extension.can_install()) {
                             items.add('install', Button.component({
                                 icon: 'plus-square-o',
                                 children: app.translator.trans('flagrow-bazaar.admin.page.button.install'),
                                 onclick: function onclick() {
                                     repository().installExtension(extension);
+                                }
+                            }));
+                        }
+
+                        if (extension.can_buy()) {
+                            items.add('buy', Button.component({
+                                icon: 'shopping-cart',
+                                children: app.translator.trans('flagrow-bazaar.admin.page.button.buy'),
+                                onclick: function onclick() {
+                                    repository().buyPremiumExtension(extension);
+                                }
+                            }));
+                        }
+
+                        if (extension.can_cancel_buy()) {
+                            items.add('buy-cancel', Button.component({
+                                icon: 'ban',
+                                children: app.translator.trans('flagrow-bazaar.admin.page.button.cancel_buy'),
+                                onclick: function onclick() {
+                                    repository().cancelBuyPremiumExtension(extension);
                                 }
                             }));
                         }
@@ -563,6 +586,11 @@ System.register("flagrow/bazaar/components/ExtensionListItem", ["flarum/Componen
                     key: "badges",
                     value: function badges(extension) {
                         var items = new ItemList();
+
+                        if (extension.premium()) {
+                            items.add('premium', m(Badge, { icon: "shopping-cart", type: "premium",
+                                label: app.translator.trans('flagrow-bazaar.admin.page.extension.premium') }));
+                        }
 
                         if (extension.installed() && extension.outdated()) {
                             items.add('favorited', m(Badge, { icon: "warning", type: "outdated",
@@ -1210,11 +1238,32 @@ System.register('flagrow/bazaar/models/Extension', ['flarum/Model', 'flarum/util
 
                 flarum_id: Model.attribute('flarum_id'),
 
-                can_install: computed('installed', function (installed) {
-                    return !installed;
+                premium: Model.attribute('premium'),
+                owned: Model.attribute('owned'),
+
+                // Install/uninstall
+                // Extension is available if it's either non-premium or premium & owned
+                can_install: computed('installed', 'premium', 'owned', function (installed, premium, owned) {
+                    return !installed && (!premium || owned);
                 }),
                 can_uninstall: computed('installed', 'enabled', function (installed, enabled) {
                     return installed && !enabled;
+                }),
+
+                // Enable/disable
+                can_enable: computed('installed', 'enabled', function (installed, enabled) {
+                    return installed && !enabled;
+                }),
+                can_disable: computed('installed', 'enabled', function (installed, enabled) {
+                    return installed && enabled;
+                }),
+
+                // Marketplace actions
+                can_buy: computed('premium', 'owned', function (premium, owned) {
+                    return premium && !owned;
+                }),
+                can_cancel_buy: computed('owned', 'installed', function (owned, installed) {
+                    return owned && !installed;
                 }),
 
                 favorited: Model.attribute('favorited')
@@ -1396,9 +1445,32 @@ System.register('flagrow/bazaar/utils/ExtensionRepository', ['flarum/app'], func
                         });
                     }
                 }, {
+                    key: 'buyPremiumExtension',
+                    value: function buyPremiumExtension(extension) {
+                        var _this5 = this;
+
+                        var buy = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+
+                        this.loading(true);
+
+                        console.log(buy ? 'post' : 'delete');
+
+                        app.request({
+                            method: buy ? 'post' : 'delete',
+                            url: app.forum.attribute('apiUrl') + '/bazaar/extensions/' + extension.id() + '/buy'
+                        }).then(function (response) {
+                            _this5.updateExtensionInRepository(response);
+                        });
+                    }
+                }, {
+                    key: 'cancelBuyPremiumExtension',
+                    value: function cancelBuyPremiumExtension(extension) {
+                        this.buyPremiumExtension(extension, false);
+                    }
+                }, {
                     key: 'updateExtension',
                     value: function updateExtension(extension) {
-                        var _this5 = this;
+                        var _this6 = this;
 
                         this.loading(true);
 
@@ -1407,7 +1479,7 @@ System.register('flagrow/bazaar/utils/ExtensionRepository', ['flarum/app'], func
                             timeout: 0,
                             method: 'PATCH'
                         }).then(function (response) {
-                            _this5.updateExtensionInRepository(response);
+                            _this6.updateExtensionInRepository(response);
                         }).then(function () {
                             location.reload();
                         });
@@ -1415,7 +1487,7 @@ System.register('flagrow/bazaar/utils/ExtensionRepository', ['flarum/app'], func
                 }, {
                     key: 'toggleExtension',
                     value: function toggleExtension(extension) {
-                        var _this6 = this;
+                        var _this7 = this;
 
                         this.loading(true);
 
@@ -1426,7 +1498,7 @@ System.register('flagrow/bazaar/utils/ExtensionRepository', ['flarum/app'], func
                             method: 'PATCH',
                             data: { enabled: !enabled }
                         }).then(function (response) {
-                            _this6.updateExtensionInRepository(response);
+                            _this7.updateExtensionInRepository(response);
                         });
                     }
                 }, {

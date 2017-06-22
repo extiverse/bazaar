@@ -80,7 +80,7 @@ export default class ExtensionListItem extends Component {
             }));
         }
 
-        if (extension.installed() && !extension.enabled()) {
+        if (extension.can_uninstall()) {
             items.add('uninstall', Button.component({
                 icon: 'minus-square-o',
                 children: app.translator.trans('flagrow-bazaar.admin.page.button.uninstall'),
@@ -88,6 +88,9 @@ export default class ExtensionListItem extends Component {
                     repository().uninstallExtension(extension);
                 }
             }));
+        }
+
+        if (extension.can_enable()) {
             items.add('enable', Button.component({
                 icon: 'check-square-o',
                 children: app.translator.trans('flagrow-bazaar.admin.page.button.enable'),
@@ -107,7 +110,7 @@ export default class ExtensionListItem extends Component {
             }));
         }
 
-        if (extension.installed() && extension.enabled()) {
+        if (extension.can_disable()) {
             items.add('disable', Button.component({
                 icon: 'square-o',
                 children: app.translator.trans('flagrow-bazaar.admin.page.button.disable'),
@@ -117,12 +120,32 @@ export default class ExtensionListItem extends Component {
             }));
         }
 
-        if (!extension.installed()) {
+        if (extension.can_install()) {
             items.add('install', Button.component({
                 icon: 'plus-square-o',
                 children: app.translator.trans('flagrow-bazaar.admin.page.button.install'),
                 onclick: () => {
                     repository().installExtension(extension);
+                }
+            }));
+        }
+
+        if (extension.can_buy()) {
+            items.add('buy', Button.component({
+                icon: 'shopping-cart',
+                children: app.translator.trans('flagrow-bazaar.admin.page.button.buy'),
+                onclick: () => {
+                    repository().buyPremiumExtension(extension);
+                }
+            }));
+        }
+
+        if (extension.can_cancel_buy()) {
+            items.add('buy-cancel', Button.component({
+                icon: 'ban',
+                children: app.translator.trans('flagrow-bazaar.admin.page.button.cancel_buy'),
+                onclick: () => {
+                    repository().cancelBuyPremiumExtension(extension);
                 }
             }));
         }
@@ -138,6 +161,12 @@ export default class ExtensionListItem extends Component {
      */
     badges(extension) {
         const items = new ItemList();
+
+        if (extension.premium()) {
+            items.add('premium', <Badge icon="shopping-cart" type="premium"
+                                          label={app.translator.trans('flagrow-bazaar.admin.page.extension.premium')}/>)
+
+        }
 
         if (extension.installed() && extension.outdated()) {
             items.add('favorited', <Badge icon="warning" type="outdated"

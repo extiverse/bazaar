@@ -60,6 +60,20 @@ class AddApiControllers
             Controllers\FavoriteExtensionController::class
         );
 
+        // Buy an extension
+        $event->post(
+            '/bazaar/extensions/{id}/buy',
+            'bazaar.extensions.buy',
+            Controllers\BuyExtensionController::class
+        );
+
+        // Cancel buy an extension
+        $event->delete(
+            '/bazaar/extensions/{id}/buy',
+            'bazaar.extensions.buy-cancel',
+            Controllers\CancelBuyExtensionController::class
+        );
+
         // Uninstall an extension
         $event->delete(
             '/bazaar/extensions/{id}',

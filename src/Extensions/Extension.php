@@ -195,7 +195,9 @@ class Extension implements Arrayable
             'highest_version' => $this->getAvailableVersion(),
             'outdated' => $this->isOutdated(),
             'flarum_id' => $this->installedExtension ? $this->installedExtension->getId() : null,
-            'favorited' => $this->getAttributeIfPresent('favorited')
+            'favorited' => $this->getAttributeIfPresent('favorited'),
+            'premium' => $this->getAttributeIfPresent('premium'),
+            'owned' => $this->getAttributeIfPresent('owned'),
         ];
     }
 }

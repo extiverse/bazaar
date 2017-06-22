@@ -45,12 +45,15 @@ flagrow-bazaar:
                 connect: Connect
                 favorite_button: "Favorite extension"
                 remove_favorite_button: "Remove extension from your favorites"
+                buy: Buy
+                cancel_buy: Cancel buy
             extension:
                 installed: Extension is installed
                 enabled: Extension is enabled
                 vendor: By {vendor}
                 favorited: One of your favorites
                 outdated: "Extension is outdated, please update to version {new}"
+                premium: Premium
             task:
                 header:
                     status: Status

@@ -126,6 +126,23 @@ export default class ExtensionRepository {
         })
     }
 
+    buyPremiumExtension(extension, buy = true) {
+        this.loading(true);
+
+        console.log(buy ? 'post' : 'delete');
+
+        app.request({
+            method: buy ? 'post' : 'delete',
+            url: app.forum.attribute('apiUrl') + '/bazaar/extensions/' + extension.id() + '/buy'
+        }).then(response => {
+            this.updateExtensionInRepository(response)
+        })
+    }
+
+    cancelBuyPremiumExtension(extension) {
+        this.buyPremiumExtension(extension, false);
+    }
+
     /**
      * Updates an extension.
      * @param extension

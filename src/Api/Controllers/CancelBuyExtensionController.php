@@ -6,7 +6,7 @@ use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 
-class FavoriteExtensionController extends ConnectedExtensionResourceController
+class CancelBuyExtensionController extends ConnectedExtensionResourceController
 {
     /**
      * Get the data to be serialized and assigned to the response document.
@@ -20,15 +20,15 @@ class FavoriteExtensionController extends ConnectedExtensionResourceController
     {
         $this->checkConnected();
 
-        $response = $this->extensions->favorite(
+        $response = $this->extensions->buy(
             Arr::get($request->getQueryParams(), 'id'),
-            Arr::get($request->getParsedBody(), 'favorite')
+            false
         );
 
         if ($response) {
             return $response;
         }
 
-        throw new \Exception('Could not favorite, connection to service failed.');
+        throw new \Exception('Could not cancel buy, connection to service failed.');
     }
 }

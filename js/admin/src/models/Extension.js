@@ -21,8 +21,21 @@ export default class Extension extends mixin(Model, {
 
     flarum_id: Model.attribute('flarum_id'),
 
-    can_install: computed('installed', installed => !installed),
+    premium: Model.attribute('premium'),
+    owned: Model.attribute('owned'),
+
+    // Install/uninstall
+    // Extension is available if it's either non-premium or premium & owned
+    can_install: computed('installed', 'premium', 'owned', (installed, premium, owned) => !installed && (!premium || owned)),
     can_uninstall: computed('installed', 'enabled', (installed, enabled) => installed && !enabled),
+
+    // Enable/disable
+    can_enable: computed('installed', 'enabled', (installed, enabled) => installed && !enabled),
+    can_disable: computed('installed', 'enabled', (installed, enabled) => installed && enabled),
+
+    // Marketplace actions
+    can_buy: computed('premium', 'owned', (premium, owned) => premium && !owned),
+    can_cancel_buy: computed('owned', 'installed', (owned, installed) => owned && !installed),
 
     favorited: Model.attribute('favorited')
 }) {}

@@ -252,4 +252,21 @@ class ExtensionRepository
 
         return null;
     }
+
+    /**
+     * @param string $package
+     * @param bool $buy
+     * @return Extension|null
+     */
+    public function buy($package, $buy = true)
+    {
+        $response = $this->client->request($buy ? 'post' : 'delete', 'packages/' . $package . '/buy');
+
+        if (in_array($response->getStatusCode(), [200, 201])) {
+            $json = json_decode($response->getBody()->getContents(), true);
+            return $this->createExtension(Arr::get($json, 'data', []));
+        }
+
+        return null;
+    }
 }
