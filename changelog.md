@@ -1,3 +1,5 @@
+- 0.2.2
+  - Allow filtering of installed, outdated and favorited extensions.
 - 0.2.1
   - Fixed an issue where the connect and dashboard buttons would no longer work.
 - 0.2.0
