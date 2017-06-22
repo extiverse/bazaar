@@ -128,15 +128,13 @@ System.register("flagrow/bazaar/components/BazaarPage", ["flarum/Component", "fl
                     value: function search() {
                         var _this2 = this;
 
-                        return m('fieldset.ExtensionSearch', [
-                        // m('input[type=text].FormControl', {
-                        //     value: this.repository().searchTerm(),
-                        //     onchange: m.withAttr('value', term => {
-                        //         this.repository().search(term);
-                        //     }),
-                        //     placeholder: app.translator.trans('flagrow-bazaar.admin.search.placeholder')
-                        // }),
-                        CustomCheckbox.component({
+                        return m('fieldset.ExtensionSearch', [m('input[type=text].FormControl', {
+                            value: this.repository().searchTerm(),
+                            onchange: m.withAttr('value', function (term) {
+                                _this2.repository().search(term);
+                            }),
+                            placeholder: app.translator.trans('flagrow-bazaar.admin.search.placeholder')
+                        }), CustomCheckbox.component({
                             iconChecked: 'toggle-up',
                             state: this.repository().filterUpdateRequired(),
                             onchange: function onchange(checked) {
