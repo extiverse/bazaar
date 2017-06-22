@@ -7,6 +7,9 @@ export default class ExtensionRepository {
         this.loading = loading;
         this.resetNavigation();
         this.searchTerm = m.prop('');
+        this.filterInstalled = m.prop(false);
+        this.filterUpdateRequired = m.prop(false);
+        this.filterFavorited = m.prop(false);
     }
 
     /**
@@ -19,7 +22,9 @@ export default class ExtensionRepository {
 
         this.loading(true);
 
-        let data = {};
+        let data = {
+            filter: {}
+        };
 
         if (this.searchTerm()) {
             data.filter = {

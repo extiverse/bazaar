@@ -42,10 +42,14 @@ flagrow-bazaar:
                 connect: Connect
                 favorite_button: "Favorite extension"
                 remove_favorite_button: "Remove extension from your favorites"
-                search_extensions: Search extensions
             extension:
                 installed: Extension is installed
                 enabled: Extension is enabled
                 vendor: By {vendor}
                 favorited: One of your favorites
                 outdated: "Extension is outdated, please update to version {new}"
+        search:
+            placeholder: Search extensions
+            filter_installed: Show only installed extensions
+            filter_update_required: Show only extension with an update available
+            filter_favorited: Show only favorited extensions
