@@ -6,6 +6,10 @@ export default class ExtensionRepository {
         this.nextPageUrl = null;
         this.loading = loading;
         this.resetNavigation();
+        this.searchTerm = m.prop('');
+        this.filterInstalled = m.prop(false);
+        this.filterUpdateRequired = m.prop(false);
+        this.filterFavorited = m.prop(false);
     }
 
     /**
@@ -18,9 +22,20 @@ export default class ExtensionRepository {
 
         this.loading(true);
 
+        let data = {
+            filter: {}
+        };
+
+        if (this.searchTerm()) {
+            data.filter = {
+                search: this.searchTerm()
+            };
+        }
+
         app.request({
             method: 'GET',
-            url: this.nextPageUrl
+            url: this.nextPageUrl,
+            data: data
         }).then(result => {
             const newExtensions = result.data.map(data => app.store.createRecord('bazaar-extensions', data));
             this.extensions(newExtensions);
@@ -184,5 +199,11 @@ export default class ExtensionRepository {
         let extension = app.store.createRecord('bazaar-extensions', response.data);
         this.extensions()[this.getExtensionIndex(extension)] = extension;
         m.redraw();
+    }
+
+    search(term) {
+        this.searchTerm(term);
+        this.resetNavigation();
+        this.loadNextPage();
     }
 }
