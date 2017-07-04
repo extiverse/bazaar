@@ -13,6 +13,19 @@ export default class ExtensionRepository {
     }
 
     /**
+     * Handles a request error
+     */
+    requestError() {
+        // If an error occured, we can clear the loading overlay
+        // The error means it's not processing anymore
+        this.loading('error');
+
+        // Depending on how fast the "Oops! Something went wrong" popup appears,
+        // the loading change is not taken into account. Use redraw to force remove the overlay
+        m.redraw();
+    }
+
+    /**
      * Loads next page or resets based on nextPageUrl.
      */
     loadNextPage() {
@@ -43,7 +56,7 @@ export default class ExtensionRepository {
             this.loading(false);
 
             m.redraw();
-        });
+        }).catch(() => this.requestError());
     }
 
     /**
@@ -71,7 +84,7 @@ export default class ExtensionRepository {
             }
         }).then(response => {
             this.updateExtensionInRepository(response)
-        });
+        }).catch(() => this.requestError());
     }
 
     /**
@@ -96,7 +109,7 @@ export default class ExtensionRepository {
             url: app.forum.attribute('apiUrl') + '/bazaar/extensions/' + extension.id()
         }).then(response => {
             this.updateExtensionInRepository(response)
-        });
+        }).catch(() => this.requestError());
     }
 
     /**
@@ -123,7 +136,7 @@ export default class ExtensionRepository {
             }
         }).then(response => {
             this.updateExtensionInRepository(response)
-        })
+        }).catch(() => this.requestError());
     }
 
     /**
@@ -141,7 +154,7 @@ export default class ExtensionRepository {
             this.updateExtensionInRepository(response)
         }).then(() => {
             location.reload();
-        });
+        }).catch(() => this.requestError());
     }
 
     /**
@@ -159,7 +172,7 @@ export default class ExtensionRepository {
             data: {enabled: !enabled}
         }).then(response => {
             this.updateExtensionInRepository(response)
-        });
+        }).catch(() => this.requestError());
     }
 
     /**
