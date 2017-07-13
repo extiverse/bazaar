@@ -10,6 +10,8 @@ export default class ExtensionRepository {
         this.filterInstalled = m.prop(false);
         this.filterUpdateRequired = m.prop(false);
         this.filterFavorited = m.prop(false);
+        this.filterOwned = m.prop(false);
+        this.filterPremium = m.prop(false);
     }
 
     /**
@@ -129,10 +131,8 @@ export default class ExtensionRepository {
     buyPremiumExtension(extension, buy = true) {
         this.loading(true);
 
-        console.log(buy ? 'post' : 'delete');
-
         app.request({
-            method: buy ? 'post' : 'delete',
+            method: buy ? 'POST' : 'DELETE',
             url: app.forum.attribute('apiUrl') + '/bazaar/extensions/' + extension.id() + '/buy'
         }).then(response => {
             this.updateExtensionInRepository(response)

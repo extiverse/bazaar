@@ -162,10 +162,12 @@ export default class ExtensionListItem extends Component {
     badges(extension) {
         const items = new ItemList();
 
-        if (extension.premium()) {
-            items.add('premium', <Badge icon="shopping-cart" type="premium"
-                                          label={app.translator.trans('flagrow-bazaar.admin.page.extension.premium')}/>)
-
+        if (extension.owned()) {
+            items.add('owned', <Badge icon="shopping-cart" type="owned"
+                                        label={app.translator.trans('flagrow-bazaar.admin.page.extension.owned')}/>);
+        } else if (extension.premium()) {
+            items.add('premium', <Badge icon="certificate" type="premium"
+                                        label={app.translator.trans('flagrow-bazaar.admin.page.extension.premium')}/>);
         }
 
         if (extension.installed() && extension.outdated()) {

@@ -51,12 +51,26 @@ export default class BazaarPage extends Component {
                 onchange: (checked) => this.repository().filterInstalled(checked),
                 children: app.translator.trans('flagrow-bazaar.admin.search.filter_installed')
             }),
-            this.connected ? CustomCheckbox.component({
-                iconChecked: 'heart',
-                state: this.repository().filterFavorited(),
-                onchange: (checked) => this.repository().filterFavorited(checked),
-                children: app.translator.trans('flagrow-bazaar.admin.search.filter_favorites')
-            }) : ''
+            this.connected ? [
+                CustomCheckbox.component({
+                    iconChecked: 'heart',
+                    state: this.repository().filterFavorited(),
+                    onchange: (checked) => this.repository().filterFavorited(checked),
+                    children: app.translator.trans('flagrow-bazaar.admin.search.filter_favorited')
+                }),
+                CustomCheckbox.component({
+                    iconChecked: 'shopping-cart',
+                    state: this.repository().filterOwned(),
+                    onchange: (checked) => this.repository().filterOwned(checked),
+                    children: app.translator.trans('flagrow-bazaar.admin.search.filter_owned')
+                }),
+            ] : '',
+            CustomCheckbox.component({
+                iconChecked: 'certificate',
+                state: this.repository().filterPremium(),
+                onchange: (checked) => this.repository().filterPremium(checked),
+                children: app.translator.trans('flagrow-bazaar.admin.search.filter_premium')
+            }),
         ])
     }
 
@@ -72,6 +86,14 @@ export default class BazaarPage extends Component {
                 }
 
                 if (this.repository().filterFavorited() && ! extension.favorited()) {
+                    return false;
+                }
+
+                if (this.repository().filterOwned() && ! extension.owned()) {
+                    return false;
+                }
+
+                if (this.repository().filterPremium() && ! extension.premium()) {
                     return false;
                 }
 

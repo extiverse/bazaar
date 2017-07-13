@@ -43,7 +43,8 @@
                 position: relative;
                 pointer-events: auto;
 
-                &.Badge--enabled {
+                &.Badge--enabled,
+                &.Badge--owned {
                     background: @alert-success-bg;
                     color: @alert-success-color;
                 }
@@ -56,6 +57,9 @@
                 &.Badge--favorited {
                     background: @alert-error-bg;
                     color: @alert-error-color;
+                }
+                &.Badge--premium {
+                    background: #5f4bb6;
                 }
             }
         }
