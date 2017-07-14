@@ -2,11 +2,10 @@
 
 namespace Flagrow\Bazaar\Composer\Utils;
 
+use Composer\Composer;
 use Composer\DependencyResolver\Pool;
-use Composer\IO\IOInterface;
 use Composer\Repository\CompositeRepository;
 use Composer\Repository\PlatformRepository;
-use Composer\Repository\RepositoryFactory;
 use Flagrow\Bazaar\Exceptions\CannotWriteComposerFileException;
 use Illuminate\Support\Arr;
 
@@ -106,24 +105,24 @@ class ComposerFileEditor
         return $this->manipulator->addRepository($name, [
             'type' => $type,
             'url' => $url,
-            'options' => $options
+            'options' => $options,
         ]);
     }
 
     /**
      * Get a dependency pool
      * Based on the protected InitCommand::getPool() method of Composer
-     * @param IOInterface $io
+     * @param Composer $composer
      * @return Pool
      */
-    public function getPool(IOInterface $io)
+    public function getPool(Composer $composer)
     {
         $json = json_decode($this->getContents(), true);
 
         $pool = new Pool(Arr::get($json, 'minimum-stability', 'stable'));
         $pool->addRepository(new CompositeRepository(array_merge(
             [new PlatformRepository],
-            RepositoryFactory::defaultRepos($io)
+            $composer->getRepositoryManager()->getRepositories()
         )));
 
         return $pool;

@@ -28,7 +28,12 @@ abstract class BaseCommand
     protected $fileEditor;
 
     /**
-     * @var ComposerInstaller
+     * @var \Composer\Composer
+     */
+    protected $composer;
+
+    /**
+     * @var Installer
      */
     protected $installer;
 
@@ -65,22 +70,43 @@ abstract class BaseCommand
     }
 
     /**
-     * @return Installer
+     * @return \Composer\Composer
      */
-    protected function getInstaller()
+    protected function getComposer()
     {
-        if (!$this->installer) {
+        if (!$this->composer) {
             $factory = new ComposerFactory();
-            $composer = $factory->createComposer(
+
+            $this->composer = $factory->createComposer(
                 $this->getIO(),
                 $this->env->getComposerJsonPath(),
                 false,
                 $this->env->getComposerInstallRoot()
             );
-            $this->installer = Installer::create($this->getIO(), $composer);
+        }
+
+        return $this->composer;
+    }
+
+    /**
+     * @return Installer
+     */
+    protected function getInstaller()
+    {
+        if (!$this->installer) {
+            $this->installer = Installer::create($this->getIO(), $this->getComposer());
         }
 
         return $this->installer;
+    }
+
+    /**
+     * If composer.json changed, we need a way to force-refresh the composer and/or the installer
+     */
+    protected function refreshComposer()
+    {
+        $this->composer = null;
+        $this->installer = null;
     }
 
     /**

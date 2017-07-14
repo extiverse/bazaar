@@ -1,0 +1,15 @@
+{
+    "packages": {
+        "flagrow/test-repo": {
+            "0.1.0": {
+                "name": "flagrow/test-repo",
+                "version": "0.1.0",
+                "dist": {
+                    "type": "tar",
+                    "url": "%SATIS-ARCHIVE-URL%",
+                    "shasum": "%SATIS-ARCHIVE-SHA%"
+                }
+            }
+        }
+    }
+}

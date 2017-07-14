@@ -4,9 +4,16 @@ namespace Flagrow\Bazaar\Composer\Utils;
 
 use Composer\IO\BufferIO;
 use Flagrow\Bazaar\Exceptions\ComposerException;
+use Symfony\Component\Console\Output\StreamOutput;
 
 class ComposerIO extends BufferIO
 {
+    public function __construct()
+    {
+        // Using StreamOutput::VERBOSITY_DEBUG allows us to get debug messages from the Composer Factory for example
+        parent::__construct('', StreamOutput::VERBOSITY_DEBUG, null);
+    }
+
     /**
      * @inheritdoc
      */
