@@ -86,10 +86,10 @@ System.register('flagrow/bazaar/components/BazaarLoader', ['flarum/Component', '
                         var error = this.props.loading() === 'error';
 
                         return m('div', {
-                            className: 'Bazaar--Loader',
+                            className: 'Bazaar--Loader ' + (error ? 'Error' : null),
                             hidden: this.props.loading() === false
-                        }, [m('.Loader-modal', [m('.Loader-icon', icon(error ? 'exclamation-triangle' : 'shopping-cart')), m('div', [app.translator.trans(error ? 'flagrow-bazaar.admin.loader.error' : 'flagrow-bazaar.admin.loader.is_loading'), error ? Button.component({
-                            className: 'Button',
+                        }, [m('.Loader-modal', [m('.Loader-icon', icon(error ? 'exclamation-triangle' : 'shopping-cart')), m('div', [m('p', app.translator.trans(error ? 'flagrow-bazaar.admin.loader.error' : 'flagrow-bazaar.admin.loader.is_loading')), error ? Button.component({
+                            className: 'Button Button--block',
                             icon: 'refresh',
                             onclick: function onclick() {
                                 return location.reload();

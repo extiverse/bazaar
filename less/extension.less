@@ -83,6 +83,10 @@
         background: fade(@overlay-bg, 60%);
         position: absolute;
 
+        &.Error .Loader-modal {
+            width: 300px;
+        }
+
         .Loader-modal {
             width: 150px;
             min-height: 150px;
@@ -101,6 +105,10 @@
             .Loader-icon i {
                 font-size: 110px;
                 margin: 0 5px;
+            }
+
+            .Button {
+                margin-top: 2em;
             }
         }
     }
