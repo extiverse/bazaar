@@ -59,15 +59,19 @@ System.register('flagrow/bazaar/addTasksPage', ['flarum/extend', 'flarum/app', '
 });;
 'use strict';
 
-System.register('flagrow/bazaar/components/BazaarLoader', ['flarum/Component', 'flarum/helpers/icon'], function (_export, _context) {
+System.register('flagrow/bazaar/components/BazaarLoader', ['flarum/Component', 'flarum/helpers/icon', 'flarum/components/Button', 'flarum/components/LinkButton'], function (_export, _context) {
     "use strict";
 
-    var Component, icon, BazaarLoader;
+    var Component, icon, Button, LinkButton, BazaarLoader;
     return {
         setters: [function (_flarumComponent) {
             Component = _flarumComponent.default;
         }, function (_flarumHelpersIcon) {
             icon = _flarumHelpersIcon.default;
+        }, function (_flarumComponentsButton) {
+            Button = _flarumComponentsButton.default;
+        }, function (_flarumComponentsLinkButton) {
+            LinkButton = _flarumComponentsLinkButton.default;
         }],
         execute: function () {
             BazaarLoader = function (_Component) {
@@ -81,10 +85,26 @@ System.register('flagrow/bazaar/components/BazaarLoader', ['flarum/Component', '
                 babelHelpers.createClass(BazaarLoader, [{
                     key: 'view',
                     value: function view() {
+                        var error = this.props.loading() === 'error';
+
                         return m('div', {
-                            className: 'Bazaar--Loader',
-                            hidden: !this.props.loading()
-                        }, [m('div', [icon('shopping-cart'), m('span', [app.translator.trans('flagrow-bazaar.admin.loader.is_loading')])])]);
+                            className: 'Bazaar--Loader ' + (error ? 'Error' : null),
+                            hidden: this.props.loading() === false
+                        }, [m('.Loader-modal', [m('.Loader-icon', icon(error ? 'exclamation-triangle' : 'shopping-cart')), m('div', [m('p', app.translator.trans(error ? 'flagrow-bazaar.admin.loader.error' : 'flagrow-bazaar.admin.loader.is_loading')), error ? [Button.component({
+                            className: 'Button Button--block',
+                            icon: 'refresh',
+                            onclick: function onclick() {
+                                return location.reload();
+                            },
+                            children: app.translator.trans('flagrow-bazaar.admin.loader.refresh')
+                        }), LinkButton.component({
+                            className: 'Button Button--block',
+                            icon: 'bug',
+                            href: 'https://github.com/flagrow/bazaar/issues',
+                            target: '_blank',
+                            config: {}, // Disable internal Mithril routing
+                            children: app.translator.trans('flagrow-bazaar.admin.loader.report_issue')
+                        })] : null])])]);
                     }
                 }]);
                 return BazaarLoader;
@@ -1286,11 +1306,22 @@ System.register('flagrow/bazaar/utils/ExtensionRepository', ['flarum/app'], func
                 }
 
                 /**
-                 * Loads next page or resets based on nextPageUrl.
+                 * Handles a request error
                  */
 
 
                 babelHelpers.createClass(ExtensionRepository, [{
+                    key: 'requestError',
+                    value: function requestError() {
+                        // If an error occured, we can clear the loading overlay
+                        // The error means it's not processing anymore
+                        this.loading('error');
+
+                        // Depending on how fast the "Oops! Something went wrong" popup appears,
+                        // the loading change is not taken into account. Use redraw to force remove the overlay
+                        m.redraw();
+                    }
+                }, {
                     key: 'loadNextPage',
                     value: function loadNextPage() {
                         var _this = this;
@@ -1324,6 +1355,8 @@ System.register('flagrow/bazaar/utils/ExtensionRepository', ['flarum/app'], func
                             _this.loading(false);
 
                             m.redraw();
+                        }).catch(function () {
+                            return _this.requestError();
                         });
                     }
                 }, {
@@ -1349,6 +1382,8 @@ System.register('flagrow/bazaar/utils/ExtensionRepository', ['flarum/app'], func
                             }
                         }).then(function (response) {
                             _this2.updateExtensionInRepository(response);
+                        }).catch(function () {
+                            return _this2.requestError();
                         });
                     }
                 }, {
@@ -1370,6 +1405,8 @@ System.register('flagrow/bazaar/utils/ExtensionRepository', ['flarum/app'], func
                             url: app.forum.attribute('apiUrl') + '/bazaar/extensions/' + extension.id()
                         }).then(function (response) {
                             _this3.updateExtensionInRepository(response);
+                        }).catch(function () {
+                            return _this3.requestError();
                         });
                     }
                 }, {
@@ -1393,6 +1430,8 @@ System.register('flagrow/bazaar/utils/ExtensionRepository', ['flarum/app'], func
                             }
                         }).then(function (response) {
                             _this4.updateExtensionInRepository(response);
+                        }).catch(function () {
+                            return _this4.requestError();
                         });
                     }
                 }, {
@@ -1410,6 +1449,8 @@ System.register('flagrow/bazaar/utils/ExtensionRepository', ['flarum/app'], func
                             _this5.updateExtensionInRepository(response);
                         }).then(function () {
                             location.reload();
+                        }).catch(function () {
+                            return _this5.requestError();
                         });
                     }
                 }, {
@@ -1427,6 +1468,8 @@ System.register('flagrow/bazaar/utils/ExtensionRepository', ['flarum/app'], func
                             data: { enabled: !enabled }
                         }).then(function (response) {
                             _this6.updateExtensionInRepository(response);
+                        }).catch(function () {
+                            return _this6.requestError();
                         });
                     }
                 }, {
