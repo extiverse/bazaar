@@ -59,10 +59,10 @@ System.register('flagrow/bazaar/addTasksPage', ['flarum/extend', 'flarum/app', '
 });;
 'use strict';
 
-System.register('flagrow/bazaar/components/BazaarLoader', ['flarum/Component', 'flarum/helpers/icon', 'flarum/components/Button'], function (_export, _context) {
+System.register('flagrow/bazaar/components/BazaarLoader', ['flarum/Component', 'flarum/helpers/icon', 'flarum/components/Button', 'flarum/components/LinkButton'], function (_export, _context) {
     "use strict";
 
-    var Component, icon, Button, BazaarLoader;
+    var Component, icon, Button, LinkButton, BazaarLoader;
     return {
         setters: [function (_flarumComponent) {
             Component = _flarumComponent.default;
@@ -70,6 +70,8 @@ System.register('flagrow/bazaar/components/BazaarLoader', ['flarum/Component', '
             icon = _flarumHelpersIcon.default;
         }, function (_flarumComponentsButton) {
             Button = _flarumComponentsButton.default;
+        }, function (_flarumComponentsLinkButton) {
+            LinkButton = _flarumComponentsLinkButton.default;
         }],
         execute: function () {
             BazaarLoader = function (_Component) {
@@ -88,14 +90,21 @@ System.register('flagrow/bazaar/components/BazaarLoader', ['flarum/Component', '
                         return m('div', {
                             className: 'Bazaar--Loader ' + (error ? 'Error' : null),
                             hidden: this.props.loading() === false
-                        }, [m('.Loader-modal', [m('.Loader-icon', icon(error ? 'exclamation-triangle' : 'shopping-cart')), m('div', [m('p', app.translator.trans(error ? 'flagrow-bazaar.admin.loader.error' : 'flagrow-bazaar.admin.loader.is_loading')), error ? Button.component({
+                        }, [m('.Loader-modal', [m('.Loader-icon', icon(error ? 'exclamation-triangle' : 'shopping-cart')), m('div', [m('p', app.translator.trans(error ? 'flagrow-bazaar.admin.loader.error' : 'flagrow-bazaar.admin.loader.is_loading')), error ? [Button.component({
                             className: 'Button Button--block',
                             icon: 'refresh',
                             onclick: function onclick() {
                                 return location.reload();
                             },
                             children: app.translator.trans('flagrow-bazaar.admin.loader.refresh')
-                        }) : null])])]);
+                        }), LinkButton.component({
+                            className: 'Button Button--block',
+                            icon: 'bug',
+                            href: 'https://github.com/flagrow/bazaar/issues',
+                            target: '_blank',
+                            config: {}, // Disable internal Mithril routing
+                            children: app.translator.trans('flagrow-bazaar.admin.loader.report_issue')
+                        })] : null])])]);
                     }
                 }]);
                 return BazaarLoader;

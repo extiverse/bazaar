@@ -4,6 +4,7 @@ flagrow-bazaar:
             is_loading: Processing..
             error: An error occured. Check the History tab and your Flarum log for details. Don't be afraid to report it to us.
             refresh: Refresh page
+            report_issue: Report an issue
         nav:
             title: Bazaar
             description: The extension marketplace.
