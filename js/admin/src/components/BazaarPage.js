@@ -32,13 +32,13 @@ export default class BazaarPage extends Component {
 
     search() {
         return m('fieldset.ExtensionSearch', [
-            // m('input[type=text].FormControl', {
-            //     value: this.repository().searchTerm(),
-            //     onchange: m.withAttr('value', term => {
-            //         this.repository().search(term);
-            //     }),
-            //     placeholder: app.translator.trans('flagrow-bazaar.admin.search.placeholder')
-            // }),
+            m('input[type=text].FormControl', {
+                value: this.repository().filteredBy('search'),
+                oninput: m.withAttr('value', term => {
+                    this.repository().filterBy('search', term);
+                }),
+                placeholder: app.translator.trans('flagrow-bazaar.admin.search.placeholder'),
+            }),
             CustomCheckbox.component({
                 iconChecked: 'toggle-up',
                 state: this.repository().filterUpdateRequired(),
