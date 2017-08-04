@@ -1,4 +1,5 @@
 import app from "flarum/app";
+import debounce from 'flagrow/bazaar/utils/debounce'
 
 export default class ExtensionRepository {
     constructor(loading) {
@@ -6,10 +7,52 @@ export default class ExtensionRepository {
         this.nextPageUrl = null;
         this.loading = loading;
         this.resetNavigation();
-        this.searchTerm = m.prop('');
         this.filterInstalled = m.prop(false);
         this.filterUpdateRequired = m.prop(false);
         this.filterFavorited = m.prop(false);
+        this.filters = {
+            search: '',
+        };
+
+        // Code to run once after a serie of filterBy() calls
+        // Must be done in constructor to save a single reference to the output of debounce
+        this.filterByDebounce = debounce(() => {
+            this.resetNavigation();
+            this.loadNextPage();
+        }, 500);
+    }
+
+    /**
+     * Change the value of a filter
+     * @param {string} filter
+     * @param {string} filterBy
+     */
+    filterBy(filter, filterBy) {
+        this.filters[filter] = filterBy;
+
+        this.filterByDebounce();
+    }
+
+    /**
+     * Get the value of a filter
+     * @param {string} filter
+     * @returns {string}
+     */
+    filteredBy(filter) {
+        return this.filters[filter];
+    }
+
+    /**
+     * Handles a request error
+     */
+    requestError() {
+        // If an error occured, we can clear the loading overlay
+        // The error means it's not processing anymore
+        this.loading('error');
+
+        // Depending on how fast the "Oops! Something went wrong" popup appears,
+        // the loading change is not taken into account. Use redraw to force remove the overlay
+        m.redraw();
     }
 
     /**
@@ -22,20 +65,12 @@ export default class ExtensionRepository {
 
         this.loading(true);
 
-        let data = {
-            filter: {}
-        };
-
-        if (this.searchTerm()) {
-            data.filter = {
-                search: this.searchTerm()
-            };
-        }
-
         app.request({
             method: 'GET',
             url: this.nextPageUrl,
-            data: data
+            data: {
+                filter: this.filters,
+            },
         }).then(result => {
             const newExtensions = result.data.map(data => app.store.createRecord('bazaar-extensions', data));
             this.extensions(newExtensions);
@@ -43,7 +78,7 @@ export default class ExtensionRepository {
             this.loading(false);
 
             m.redraw();
-        });
+        }).catch(() => this.requestError());
     }
 
     /**
@@ -71,7 +106,7 @@ export default class ExtensionRepository {
             }
         }).then(response => {
             this.updateExtensionInRepository(response)
-        });
+        }).catch(() => this.requestError());
     }
 
     /**
@@ -96,7 +131,7 @@ export default class ExtensionRepository {
             url: app.forum.attribute('apiUrl') + '/bazaar/extensions/' + extension.id()
         }).then(response => {
             this.updateExtensionInRepository(response)
-        });
+        }).catch(() => this.requestError());
     }
 
     /**
@@ -123,7 +158,7 @@ export default class ExtensionRepository {
             }
         }).then(response => {
             this.updateExtensionInRepository(response)
-        })
+        }).catch(() => this.requestError());
     }
 
     /**
@@ -141,7 +176,7 @@ export default class ExtensionRepository {
             this.updateExtensionInRepository(response)
         }).then(() => {
             location.reload();
-        });
+        }).catch(() => this.requestError());
     }
 
     /**
@@ -159,7 +194,7 @@ export default class ExtensionRepository {
             data: {enabled: !enabled}
         }).then(response => {
             this.updateExtensionInRepository(response)
-        });
+        }).catch(() => this.requestError());
     }
 
     /**
@@ -199,11 +234,5 @@ export default class ExtensionRepository {
         let extension = app.store.createRecord('bazaar-extensions', response.data);
         this.extensions()[this.getExtensionIndex(extension)] = extension;
         m.redraw();
-    }
-
-    search(term) {
-        this.searchTerm(term);
-        this.resetNavigation();
-        this.loadNextPage();
     }
 }
