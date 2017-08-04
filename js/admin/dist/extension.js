@@ -1278,43 +1278,6 @@ System.register('flagrow/bazaar/models/Task', ['flarum/Model', 'flarum/utils/mix
         }
     };
 });;
-"use strict";
-
-System.register("flagrow/bazaar/utils/debounce", [], function (_export, _context) {
-    "use strict";
-
-    _export("default", function (func, wait, immediate) {
-        var timeout = void 0;
-        return function () {
-            var context = this,
-                args = arguments;
-            var later = function later() {
-                timeout = null;
-                if (!immediate) func.apply(context, args);
-            };
-            var callNow = immediate && !timeout;
-            clearTimeout(timeout);
-            timeout = setTimeout(later, wait);
-            if (callNow) func.apply(context, args);
-        };
-    });
-
-    return {
-        setters: [],
-        execute: function () {
-            ; /**
-               * Based on _.debounce from underscore.js
-               * Copyright (c) 2009-2017 Jeremy Ashkenas, DocumentCloud and Investigative
-               * @see https://davidwalsh.name/javascript-debounce-function
-               *
-               * Returns a function, that, as long as it continues to be invoked, will not
-               * be triggered. The function will be called after it stops being called for
-               * N milliseconds. If `immediate` is passed, trigger the function on the
-               * leading edge, instead of the trailing.
-               */
-        }
-    };
-});;
 'use strict';
 
 System.register('flagrow/bazaar/utils/ExtensionRepository', ['flarum/app', 'flagrow/bazaar/utils/debounce'], function (_export, _context) {
@@ -1618,6 +1581,43 @@ System.register('flagrow/bazaar/utils/TaskRepository', ['flarum/app'], function 
             }();
 
             _export('default', ExtensionRepository);
+        }
+    };
+});;
+"use strict";
+
+System.register("flagrow/bazaar/utils/debounce", [], function (_export, _context) {
+    "use strict";
+
+    _export("default", function (func, wait, immediate) {
+        var timeout = void 0;
+        return function () {
+            var context = this,
+                args = arguments;
+            var later = function later() {
+                timeout = null;
+                if (!immediate) func.apply(context, args);
+            };
+            var callNow = immediate && !timeout;
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+            if (callNow) func.apply(context, args);
+        };
+    });
+
+    return {
+        setters: [],
+        execute: function () {
+            ; /**
+               * Based on _.debounce from underscore.js
+               * Copyright (c) 2009-2017 Jeremy Ashkenas, DocumentCloud and Investigative
+               * @see https://davidwalsh.name/javascript-debounce-function
+               *
+               * Returns a function, that, as long as it continues to be invoked, will not
+               * be triggered. The function will be called after it stops being called for
+               * N milliseconds. If `immediate` is passed, trigger the function on the
+               * leading edge, instead of the trailing.
+               */
         }
     };
 });
