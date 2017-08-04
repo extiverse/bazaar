@@ -191,7 +191,7 @@ System.register("flagrow/bazaar/components/BazaarPage", ["flarum/Component", "fl
                             onchange: function onchange(checked) {
                                 return _this2.repository().filterFavorited(checked);
                             },
-                            children: app.translator.trans('flagrow-bazaar.admin.search.filter_favorites')
+                            children: app.translator.trans('flagrow-bazaar.admin.search.filter_favorited')
                         }) : '']);
                     }
                 }, {

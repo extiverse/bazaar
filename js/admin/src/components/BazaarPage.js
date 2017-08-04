@@ -55,7 +55,7 @@ export default class BazaarPage extends Component {
                 iconChecked: 'heart',
                 state: this.repository().filterFavorited(),
                 onchange: (checked) => this.repository().filterFavorited(checked),
-                children: app.translator.trans('flagrow-bazaar.admin.search.filter_favorites')
+                children: app.translator.trans('flagrow-bazaar.admin.search.filter_favorited')
             }) : ''
         ])
     }
