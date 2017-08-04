@@ -1,3 +1,5 @@
+- 0.2.4
+  - Fixed the translation key for the favorited filter
 - 0.2.3
   - Added package search #53
   - Improved the error message when Bazaar fails to load the list of packages #67
