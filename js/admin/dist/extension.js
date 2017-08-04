@@ -213,10 +213,10 @@ System.register("flagrow/bazaar/components/BazaarPage", ["flarum/Component", "fl
 });;
 'use strict';
 
-System.register('flagrow/bazaar/components/BazaarPageHeader', ['flarum/app', 'flarum/Component', 'flarum/components/LinkButton', 'flarum/components/Button', 'flagrow/bazaar/modals/FilePermissionsModal', 'flagrow/bazaar/modals/MemoryLimitModal', 'flagrow/bazaar/modals/BazaarConnectModal'], function (_export, _context) {
+System.register('flagrow/bazaar/components/BazaarPageHeader', ['flarum/app', 'flarum/Component', 'flarum/components/LinkButton', 'flarum/components/Button', 'flagrow/bazaar/modals/FilePermissionsModal', 'flagrow/bazaar/modals/MemoryLimitModal', 'flagrow/bazaar/modals/BazaarConnectModal', 'flagrow/bazaar/modals/DashboardModal'], function (_export, _context) {
     "use strict";
 
-    var app, Component, LinkButton, Button, FilePermissionsModal, MemoryLimitModal, BazaarConnectModal, BazaarPageHeader;
+    var app, Component, LinkButton, Button, FilePermissionsModal, MemoryLimitModal, BazaarConnectModal, DashboardModal, BazaarPageHeader;
     return {
         setters: [function (_flarumApp) {
             app = _flarumApp.default;
@@ -232,6 +232,8 @@ System.register('flagrow/bazaar/components/BazaarPageHeader', ['flarum/app', 'fl
             MemoryLimitModal = _flagrowBazaarModalsMemoryLimitModal.default;
         }, function (_flagrowBazaarModalsBazaarConnectModal) {
             BazaarConnectModal = _flagrowBazaarModalsBazaarConnectModal.default;
+        }, function (_flagrowBazaarModalsDashboardModal) {
+            DashboardModal = _flagrowBazaarModalsDashboardModal.default;
         }],
         execute: function () {
             BazaarPageHeader = function (_Component) {
@@ -299,13 +301,17 @@ System.register('flagrow/bazaar/components/BazaarPageHeader', ['flarum/app', 'fl
                     value: function connectedButtons() {
                         var connected = this.props.connected;
                         var flagrowHost = app.data.settings['flagrow.bazaar.flagrow-host'] || 'https://flagrow.io';
+                        var syncInterval = app.data.settings['flagrow.bazaar.sync-interval'] || 'off';
 
                         if (connected) {
                             return [Button.component({
                                 className: 'Button Button--icon Connected',
                                 icon: 'dashboard',
                                 onclick: function onclick() {
-                                    return window.open(flagrowHost + '/home');
+                                    return app.modal.show(new DashboardModal({
+                                        flagrowHost: flagrowHost,
+                                        syncInterval: syncInterval
+                                    }));
                                 }
                             })];
                         }
@@ -1066,6 +1072,107 @@ System.register('flagrow/bazaar/modals/BazaarSettingsModal', ['flarum/app', 'fla
             }(SettingsModal);
 
             _export('default', BazaarSettingsModal);
+        }
+    };
+});;
+"use strict";
+
+System.register("flagrow/bazaar/modals/DashboardModal", ["flarum/components/Modal", "flarum/components/Button", "flarum/components/Select"], function (_export, _context) {
+    "use strict";
+
+    var Modal, Button, Select, DashboardModal;
+    return {
+        setters: [function (_flarumComponentsModal) {
+            Modal = _flarumComponentsModal.default;
+        }, function (_flarumComponentsButton) {
+            Button = _flarumComponentsButton.default;
+        }, function (_flarumComponentsSelect) {
+            Select = _flarumComponentsSelect.default;
+        }],
+        execute: function () {
+            DashboardModal = function (_Modal) {
+                babelHelpers.inherits(DashboardModal, _Modal);
+
+                function DashboardModal() {
+                    babelHelpers.classCallCheck(this, DashboardModal);
+                    return babelHelpers.possibleConstructorReturn(this, (DashboardModal.__proto__ || Object.getPrototypeOf(DashboardModal)).apply(this, arguments));
+                }
+
+                babelHelpers.createClass(DashboardModal, [{
+                    key: "className",
+                    value: function className() {
+                        return 'DashboardModal';
+                    }
+                }, {
+                    key: "title",
+                    value: function title() {
+                        return app.translator.trans('flagrow-bazaar.admin.modal.dashboard.title');
+                    }
+                }, {
+                    key: "content",
+                    value: function content() {
+                        var flagrowHost = this.props.flagrowHost;
+                        var syncInterval = this.props.syncInterval;
+
+                        var intervals = {};
+
+                        var _iteratorNormalCompletion = true;
+                        var _didIteratorError = false;
+                        var _iteratorError = undefined;
+
+                        try {
+                            for (var _iterator = this.syncIntervalList()[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                                var i = _step.value;
+
+                                intervals[i] = app.translator.trans('flagrow-bazaar.admin.modal.dashboard.sync-interval.' + i);
+                            }
+                        } catch (err) {
+                            _didIteratorError = true;
+                            _iteratorError = err;
+                        } finally {
+                            try {
+                                if (!_iteratorNormalCompletion && _iterator.return) {
+                                    _iterator.return();
+                                }
+                            } finally {
+                                if (_didIteratorError) {
+                                    throw _iteratorError;
+                                }
+                            }
+                        }
+
+                        return m('div', { className: 'Modal-body' }, [m('p', app.translator.trans('flagrow-bazaar.admin.modal.dashboard.sync-interval.description', { host: flagrowHost })), Select.component({
+                            options: intervals,
+                            value: syncInterval
+                        }), m('div', { className: "App-primaryControl" }, [Button.component({
+                            type: 'submit',
+                            className: 'Button Button--block',
+                            disabled: false,
+                            icon: 'check',
+                            children: app.translator.trans('core.admin.basics.submit_button')
+                        }), Button.component({
+                            className: 'Button Connected Button--block',
+                            icon: 'dashboard',
+                            children: app.translator.trans('flagrow-bazaar.admin.modal.dashboard.visit-remote-dashboard'),
+                            onclick: function onclick() {
+                                return window.open(flagrowHost + '/home');
+                            }
+                        })])]);
+                    }
+                }, {
+                    key: "onsubmit",
+                    value: function onsubmit() {}
+                }, {
+                    key: "syncIntervalList",
+                    value: function syncIntervalList() {
+                        // app.translator.trans('flagrow-bazaar.admin.sync-interval.off')
+                        return ['off', 'daily', 'weekly', 'monthly'];
+                    }
+                }]);
+                return DashboardModal;
+            }(Modal);
+
+            _export("default", DashboardModal);
         }
     };
 });;

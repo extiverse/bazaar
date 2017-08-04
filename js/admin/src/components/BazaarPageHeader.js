@@ -5,6 +5,7 @@ import Button from 'flarum/components/Button';
 import FilePermissionsModal from 'flagrow/bazaar/modals/FilePermissionsModal';
 import MemoryLimitModal from 'flagrow/bazaar/modals/MemoryLimitModal';
 import BazaarConnectModal from 'flagrow/bazaar/modals/BazaarConnectModal';
+import DashboardModal from 'flagrow/bazaar/modals/DashboardModal';
 
 export default class BazaarPageHeader extends Component {
     view() {
@@ -18,7 +19,11 @@ export default class BazaarPageHeader extends Component {
     }
 
     header() {
-        let buttons = [].concat(this.requirementsButtons(), this.connectedButtons(), this.pagesButtons());
+        let buttons = [].concat(
+            this.requirementsButtons(),
+            this.connectedButtons(),
+            this.pagesButtons(),
+        );
 
         return m('div', {className: 'ButtonGroup'}, buttons);
     }
@@ -59,13 +64,17 @@ export default class BazaarPageHeader extends Component {
     connectedButtons() {
         let connected = this.props.connected;
         let flagrowHost = app.data.settings['flagrow.bazaar.flagrow-host'] || 'https://flagrow.io';
+        let syncInterval = app.data.settings['flagrow.bazaar.sync-interval'] || 'off';
 
         if (connected) {
             return [
                 Button.component({
                     className: 'Button Button--icon Connected',
                     icon: 'dashboard',
-                    onclick: () => window.open(flagrowHost + '/home')
+                    onclick: () => app.modal.show(new DashboardModal({
+                        flagrowHost,
+                        syncInterval
+                    }))
                 }),
             ]
         }

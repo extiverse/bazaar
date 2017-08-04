@@ -80,5 +80,12 @@ class AddApiControllers
             'bazaar.tasks.index',
             Controllers\ListTaskController::class
         );
+
+        // Requests composer lock
+        $event->get(
+            '/bazaar/composer-lock',
+            'bazaar.composer-lock',
+            Controllers\RetrieveComposerLockController::class
+        );
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Flagrow\Bazaar\Listeners;
 
+use Carbon\Carbon;
 use Flagrow\Bazaar\Events\TokenSet;
 use Flagrow\Bazaar\Search\FlagrowApi;
 use Flarum\Event\ConfigureWebApp;
@@ -44,7 +45,33 @@ class BazaarEnabled
      */
     public function subscribe(Dispatcher $events)
     {
-        $events->listen(ConfigureWebApp::class, [$this, 'authenticate']);
+        $events->listen(ConfigureWebApp::class, [$this, 'authenticate'], -10);
+        $events->listen(ConfigureWebApp::class, [$this, 'syncLock'], 100);
+    }
+
+    public function syncLock(ConfigureWebApp $event)
+    {
+        $lockPath = base_path('composer.lock');
+
+        if (!$event->isAdmin() || !file_exists($lockPath) || !$this->settings->get('flagrow.bazaar.api_token')) {
+            return;
+        }
+
+        $lastSync = ($lastSync = $this->settings->get('flagrow.bazaar.last_lock_sync')) ? new Carbon($lastSync) : false;
+
+        if (!$lastSync || $lastSync->diffInDays(null, true) > 7) {
+            $this->client->postAsync('bazaar/sync-lock', [
+                'multipart' => [
+                    [
+                        'name' => 'lock',
+                        'contents' => fopen($lockPath, 'r')
+                    ]
+                ]
+            ])->then(function($payload) {
+                app('flarum.log')->info($payload);
+                $this->settings->set('flagrow.bazaar.last_lock.sync',(string) (new Carbon));
+            });
+        }
     }
 
     /**

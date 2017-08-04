@@ -9,6 +9,17 @@ flagrow-bazaar:
             extensions: Browse extensions
             tasks: Tasks history
         modal:
+            dashboard:
+                title: Dashboard
+                visit-remote-dashboard: Visit dashboard
+                sync-interval:
+                    description: >
+                        Set the interval you would like to receive notifications about outdated extensions. In order to do so
+                        safely {host} will connect to this Bazaar-enabled Flarum installation at a specific interval you configure.
+                    off: Off
+                    daily: Daily
+                    weekly: Weekly
+                    monthly: Monthly
             settings:
                 title: Flagrow Bazaar
                 field:
