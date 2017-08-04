@@ -217,7 +217,8 @@ System.register("flagrow/bazaar/components/BazaarPage", ["flarum/Component", "fl
                             return ExtensionListItem.component({
                                 extension: extension,
                                 repository: _this3.repository,
-                                connected: _this3.connected
+                                connected: _this3.connected,
+                                key: extension.package()
                             });
                         })]);
                     }
@@ -448,6 +449,7 @@ System.register("flagrow/bazaar/components/ExtensionListItem", ["flarum/Componen
                     value: function config(isInitialized) {
                         if (isInitialized) return;
 
+                        // Be careful to always use a `key` with this component or this mis-align the tooltips if items are added or removed
                         if (this.props.extension.description()) this.$('.ExtensionIcon').tooltip({ container: 'body' });
                     }
                 }, {

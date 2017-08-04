@@ -80,7 +80,8 @@ export default class BazaarPage extends Component {
                 extension => ExtensionListItem.component({
                     extension: extension,
                     repository: this.repository,
-                    connected: this.connected
+                    connected: this.connected,
+                    key: extension.package(),
                 })
             )
         ]);
