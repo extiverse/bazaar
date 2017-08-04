@@ -2,7 +2,7 @@
   - Added package search #53
   - Improved the error message when Bazaar fails to load the list of packages #67
   - Fixed an issue when php memory limit was set to infinite #71
-  - Fixed an issue causing tooltips to me misaligned #74
+  - Fixed an issue causing tooltips to be misaligned #74
 - 0.2.2
   - Allow filtering of installed, outdated and favorited extensions.
 - 0.2.1
