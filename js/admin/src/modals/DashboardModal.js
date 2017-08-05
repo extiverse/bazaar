@@ -1,20 +1,16 @@
 import Modal from "flarum/components/Modal";
 import Button from "flarum/components/Button";
 import Select from "flarum/components/Select";
+import SettingsModal from 'flarum/components/SettingsModal';
 
-export default class DashboardModal extends Modal {
-    className() {
-        return 'DashboardModal';
-    }
-
+export default class DashboardModal extends SettingsModal {
     title() {
         return app.translator.trans('flagrow-bazaar.admin.modal.dashboard.title');
     }
 
-    content() {
+    form() {
         let flagrowHost = this.props.flagrowHost;
-        let syncInterval = this.props.syncInterval;
-
+        let interval = this.setting('flagrow.bazaar.sync_interval', 'off');
         let intervals = {};
 
         for (const i of this.syncIntervalList()) {
@@ -25,34 +21,27 @@ export default class DashboardModal extends Modal {
                 m('p', app.translator.trans('flagrow-bazaar.admin.modal.dashboard.sync-interval.description', {host: flagrowHost})),
                 Select.component({
                     options: intervals,
-                    value: syncInterval
+                    value: interval(),
+                    onchange: this.updateInterval.bind(this)
                 }),
-                m('div', {className: "App-primaryControl"}, [
-                    Button.component({
-                        type: 'submit',
-                        className: 'Button Button--block',
-                        disabled: false,
-                        icon: 'check',
-                        children: app.translator.trans('core.admin.basics.submit_button')
-                    }),
-                    Button.component({
-                        className: 'Button Connected Button--block',
-                        icon: 'dashboard',
-                        children: app.translator.trans('flagrow-bazaar.admin.modal.dashboard.visit-remote-dashboard'),
-                        onclick: () => window.open(flagrowHost + '/home')
-                    }),
-                ])
             ]
         );
     }
 
-    /**
-     * Handle the modal form's submit event.
-     *
-     * @param {Event} e
-     */
-    onsubmit() {
+    updateInterval(value) {
+        this.settings['flagrow.bazaar.sync_interval'](value);
+    }
 
+    submitButton() {
+        return m('div', {className: 'ButtonGroup'}, [
+            Button.component({
+                className: 'Button Connected',
+                icon: 'dashboard',
+                children: app.translator.trans('flagrow-bazaar.admin.modal.dashboard.visit-remote-dashboard'),
+                onclick: () => window.open(flagrowHost + '/home')
+            }),
+            super.submitButton(),
+        ]);
     }
 
     syncIntervalList() {

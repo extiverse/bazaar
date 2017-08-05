@@ -320,7 +320,6 @@ System.register('flagrow/bazaar/components/BazaarPageHeader', ['flarum/app', 'fl
                     value: function connectedButtons() {
                         var connected = this.props.connected;
                         var flagrowHost = app.data.settings['flagrow.bazaar.flagrow-host'] || 'https://flagrow.io';
-                        var syncInterval = app.data.settings['flagrow.bazaar.sync-interval'] || 'off';
 
                         if (connected) {
                             return [Button.component({
@@ -328,8 +327,7 @@ System.register('flagrow/bazaar/components/BazaarPageHeader', ['flarum/app', 'fl
                                 icon: 'dashboard',
                                 onclick: function onclick() {
                                     return app.modal.show(new DashboardModal({
-                                        flagrowHost: flagrowHost,
-                                        syncInterval: syncInterval
+                                        flagrowHost: flagrowHost
                                     }));
                                 }
                             })];
@@ -1097,10 +1095,10 @@ System.register('flagrow/bazaar/modals/BazaarSettingsModal', ['flarum/app', 'fla
 });;
 "use strict";
 
-System.register("flagrow/bazaar/modals/DashboardModal", ["flarum/components/Modal", "flarum/components/Button", "flarum/components/Select"], function (_export, _context) {
+System.register("flagrow/bazaar/modals/DashboardModal", ["flarum/components/Modal", "flarum/components/Button", "flarum/components/Select", "flarum/components/SettingsModal"], function (_export, _context) {
     "use strict";
 
-    var Modal, Button, Select, DashboardModal;
+    var Modal, Button, Select, SettingsModal, DashboardModal;
     return {
         setters: [function (_flarumComponentsModal) {
             Modal = _flarumComponentsModal.default;
@@ -1108,10 +1106,12 @@ System.register("flagrow/bazaar/modals/DashboardModal", ["flarum/components/Moda
             Button = _flarumComponentsButton.default;
         }, function (_flarumComponentsSelect) {
             Select = _flarumComponentsSelect.default;
+        }, function (_flarumComponentsSettingsModal) {
+            SettingsModal = _flarumComponentsSettingsModal.default;
         }],
         execute: function () {
-            DashboardModal = function (_Modal) {
-                babelHelpers.inherits(DashboardModal, _Modal);
+            DashboardModal = function (_SettingsModal) {
+                babelHelpers.inherits(DashboardModal, _SettingsModal);
 
                 function DashboardModal() {
                     babelHelpers.classCallCheck(this, DashboardModal);
@@ -1119,21 +1119,15 @@ System.register("flagrow/bazaar/modals/DashboardModal", ["flarum/components/Moda
                 }
 
                 babelHelpers.createClass(DashboardModal, [{
-                    key: "className",
-                    value: function className() {
-                        return 'DashboardModal';
-                    }
-                }, {
                     key: "title",
                     value: function title() {
                         return app.translator.trans('flagrow-bazaar.admin.modal.dashboard.title');
                     }
                 }, {
-                    key: "content",
-                    value: function content() {
+                    key: "form",
+                    value: function form() {
                         var flagrowHost = this.props.flagrowHost;
-                        var syncInterval = this.props.syncInterval;
-
+                        var interval = this.setting('flagrow.bazaar.sync_interval', 'off');
                         var intervals = {};
 
                         var _iteratorNormalCompletion = true;
@@ -1163,25 +1157,27 @@ System.register("flagrow/bazaar/modals/DashboardModal", ["flarum/components/Moda
 
                         return m('div', { className: 'Modal-body' }, [m('p', app.translator.trans('flagrow-bazaar.admin.modal.dashboard.sync-interval.description', { host: flagrowHost })), Select.component({
                             options: intervals,
-                            value: syncInterval
-                        }), m('div', { className: "App-primaryControl" }, [Button.component({
-                            type: 'submit',
-                            className: 'Button Button--block',
-                            disabled: false,
-                            icon: 'check',
-                            children: app.translator.trans('core.admin.basics.submit_button')
-                        }), Button.component({
-                            className: 'Button Connected Button--block',
+                            value: interval(),
+                            onchange: this.updateInterval.bind(this)
+                        })]);
+                    }
+                }, {
+                    key: "updateInterval",
+                    value: function updateInterval(value) {
+                        this.settings['flagrow.bazaar.sync_interval'](value);
+                    }
+                }, {
+                    key: "submitButton",
+                    value: function submitButton() {
+                        return m('div', { className: 'ButtonGroup' }, [Button.component({
+                            className: 'Button Connected',
                             icon: 'dashboard',
                             children: app.translator.trans('flagrow-bazaar.admin.modal.dashboard.visit-remote-dashboard'),
                             onclick: function onclick() {
                                 return window.open(flagrowHost + '/home');
                             }
-                        })])]);
+                        }), babelHelpers.get(DashboardModal.prototype.__proto__ || Object.getPrototypeOf(DashboardModal.prototype), "submitButton", this).call(this)]);
                     }
-                }, {
-                    key: "onsubmit",
-                    value: function onsubmit() {}
                 }, {
                     key: "syncIntervalList",
                     value: function syncIntervalList() {
@@ -1190,7 +1186,7 @@ System.register("flagrow/bazaar/modals/DashboardModal", ["flarum/components/Moda
                     }
                 }]);
                 return DashboardModal;
-            }(Modal);
+            }(SettingsModal);
 
             _export("default", DashboardModal);
         }

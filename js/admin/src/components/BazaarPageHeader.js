@@ -64,7 +64,6 @@ export default class BazaarPageHeader extends Component {
     connectedButtons() {
         let connected = this.props.connected;
         let flagrowHost = app.data.settings['flagrow.bazaar.flagrow-host'] || 'https://flagrow.io';
-        let syncInterval = app.data.settings['flagrow.bazaar.sync-interval'] || 'off';
 
         if (connected) {
             return [
@@ -72,8 +71,7 @@ export default class BazaarPageHeader extends Component {
                     className: 'Button Button--icon Connected',
                     icon: 'dashboard',
                     onclick: () => app.modal.show(new DashboardModal({
-                        flagrowHost,
-                        syncInterval
+                        flagrowHost
                     }))
                 }),
             ]

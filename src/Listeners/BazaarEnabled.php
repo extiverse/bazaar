@@ -32,8 +32,12 @@ class BazaarEnabled
      */
     protected $events;
 
-    public function __construct(ExtensionManager $extensions, SettingsRepositoryInterface $settings, FlagrowApi $client, Dispatcher $events)
-    {
+    public function __construct(
+        ExtensionManager $extensions,
+        SettingsRepositoryInterface $settings,
+        FlagrowApi $client,
+        Dispatcher $events
+    ) {
         $this->extensions = $extensions;
         $this->settings = $settings;
         $this->client = $client;
@@ -52,14 +56,31 @@ class BazaarEnabled
     public function syncLock(ConfigureWebApp $event)
     {
         $lockPath = base_path('composer.lock');
+        $interval = $this->settings->get('flagrow.bazaar.sync_interval', 'off');
 
-        if (!$event->isAdmin() || !file_exists($lockPath) || !$this->settings->get('flagrow.bazaar.api_token')) {
+        if (!$event->isAdmin() ||
+            !file_exists($lockPath) ||
+            $interval === 'off' ||
+            !$this->settings->get('flagrow.bazaar.api_token')) {
             return;
         }
 
         $lastSync = ($lastSync = $this->settings->get('flagrow.bazaar.last_lock_sync')) ? new Carbon($lastSync) : false;
+        $needs = false;
 
-        if (!$lastSync || $lastSync->diffInDays(null, true) > 7) {
+        switch ($interval) {
+            case 'daily':
+                $needs = $lastSync->diffInHours(null, true) > 24;
+                break;
+            case 'weekly';
+                $needs = $lastSync->diffInDays(null, true) > 7;
+                break;
+            case 'monthly':
+                $needs = $lastSync->diffInMonths(null, true) > 1;
+                break;
+        }
+
+        if (!$lastSync || $needs) {
             $this->client->postAsync('bazaar/sync-lock', [
                 'multipart' => [
                     [
@@ -67,9 +88,9 @@ class BazaarEnabled
                         'contents' => fopen($lockPath, 'r')
                     ]
                 ]
-            ])->then(function($payload) {
+            ])->then(function ($payload) {
                 app('flarum.log')->info($payload);
-                $this->settings->set('flagrow.bazaar.last_lock.sync',(string) (new Carbon));
+                $this->settings->set('flagrow.bazaar.last_lock.sync', (string)(new Carbon));
             });
         }
     }
