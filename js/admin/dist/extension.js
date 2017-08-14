@@ -1169,6 +1169,7 @@ System.register("flagrow/bazaar/modals/DashboardModal", ["flarum/components/Moda
                 }, {
                     key: "submitButton",
                     value: function submitButton() {
+                        var flagrowHost = this.props.flagrowHost;
                         return m('div', { className: 'ButtonGroup' }, [Button.component({
                             className: 'Button Connected',
                             icon: 'dashboard',

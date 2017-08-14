@@ -51,7 +51,7 @@ class BazaarEnabled
     {
         $events->listen(ConfigureWebApp::class, [$this, 'authenticate'], -10);
     }
-    
+
     /**
      * @param ConfigureWebApp $event
      */

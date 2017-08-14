@@ -9,8 +9,8 @@ export default class DashboardModal extends SettingsModal {
     }
 
     form() {
-        let flagrowHost = this.props.flagrowHost;
-        let interval = this.setting('flagrow.bazaar.sync_interval', 'off');
+        const flagrowHost = this.props.flagrowHost;
+        const interval = this.setting('flagrow.bazaar.sync_interval', 'off');
         let intervals = {};
 
         for (const i of this.syncIntervalList()) {
@@ -33,6 +33,7 @@ export default class DashboardModal extends SettingsModal {
     }
 
     submitButton() {
+        const flagrowHost = this.props.flagrowHost;
         return m('div', {className: 'ButtonGroup'}, [
             Button.component({
                 className: 'Button Connected',
