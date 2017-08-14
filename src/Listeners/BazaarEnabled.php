@@ -50,52 +50,8 @@ class BazaarEnabled
     public function subscribe(Dispatcher $events)
     {
         $events->listen(ConfigureWebApp::class, [$this, 'authenticate'], -10);
-        $events->listen(ConfigureWebApp::class, [$this, 'syncLock'], 100);
     }
-
-    public function syncLock(ConfigureWebApp $event)
-    {
-        $lockPath = base_path('composer.lock');
-        $interval = $this->settings->get('flagrow.bazaar.sync_interval', 'off');
-
-        if (!$event->isAdmin() ||
-            !file_exists($lockPath) ||
-            $interval === 'off' ||
-            !$this->settings->get('flagrow.bazaar.api_token')) {
-            return;
-        }
-
-        $lastSync = ($lastSync = $this->settings->get('flagrow.bazaar.last_lock_sync', '2000-01-01 00:00:00'));
-        $lastSync = new Carbon($lastSync);
-        $needs = false;
-
-        switch ($interval) {
-            case 'daily':
-                $needs = $lastSync->diffInHours(null, true) > 24;
-                break;
-            case 'weekly';
-                $needs = $lastSync->diffInDays(null, true) > 7;
-                break;
-            case 'monthly':
-                $needs = $lastSync->diffInMonths(null, true) > 1;
-                break;
-        }
-
-        if (!$lastSync || $needs) {
-            $this->client->postAsync('bazaar/sync-lock', [
-                'multipart' => [
-                    [
-                        'name' => 'lock',
-                        'contents' => fopen($lockPath, 'r')
-                    ]
-                ]
-            ])->then(function ($payload) {
-                app('flarum.log')->info($payload);
-                $this->settings->set('flagrow.bazaar.last_lock_sync', (string)(new Carbon));
-            });
-        }
-    }
-
+    
     /**
      * @param ConfigureWebApp $event
      */
