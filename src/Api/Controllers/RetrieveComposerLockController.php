@@ -3,12 +3,14 @@
 namespace Flagrow\Bazaar\Api\Controllers;
 
 use Carbon\Carbon;
+use Flagrow\Bazaar\Jobs\SyncLock;
 use Flarum\Core\Exception\PermissionDeniedException;
 use Flarum\Http\Controller\ControllerInterface;
 use Flarum\Settings\SettingsRepositoryInterface;
+use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Contracts\Hashing\Hasher;
 use Psr\Http\Message\ServerRequestInterface;
-use Zend\Diactoros\Response\JsonResponse;
+use Zend\Diactoros\Response\EmptyResponse;
 
 class RetrieveComposerLockController implements ControllerInterface
 {
@@ -24,12 +26,17 @@ class RetrieveComposerLockController implements ControllerInterface
      * @var SettingsRepositoryInterface
      */
     private $settings;
+    /**
+     * @var Dispatcher
+     */
+    private $bus;
 
-    public function __construct(Hasher $hasher, SettingsRepositoryInterface $settings)
+    public function __construct(Hasher $hasher, SettingsRepositoryInterface $settings, Dispatcher $bus)
     {
         $this->hasher = $hasher;
         $this->hash = $settings->get('flagrow.bazaar.sync.hash');
         $this->settings = $settings;
+        $this->bus = $bus;
     }
 
     /**
@@ -40,6 +47,7 @@ class RetrieveComposerLockController implements ControllerInterface
     public function handle(ServerRequestInterface $request)
     {
         $authorization = $request->getHeader('authorization') ?: [];
+
         if (!$this->hash || !$this->hasher->check(
                 array_shift($authorization),
                 $this->hash
@@ -50,10 +58,10 @@ class RetrieveComposerLockController implements ControllerInterface
 
         $this->settings->set('flagrow.bazaar.last_lock_sync', (string)(new Carbon));
 
-        $lock = file_get_contents(
-            base_path('composer.lock')
+        $this->bus->dispatch(
+            new SyncLock
         );
 
-        return new JsonResponse(json_decode($lock, true));
+        return new EmptyResponse();
     }
 }
