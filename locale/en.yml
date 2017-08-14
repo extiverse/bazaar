@@ -82,6 +82,7 @@ flagrow-bazaar:
                     working: Work in progress
                     unknown: Unknown
                 command:
+                    sync-lock: Sync composer.lock file
                     install: Install {extension}
                     update: Update {extension}
                     uninstall: Uninstall {extension}

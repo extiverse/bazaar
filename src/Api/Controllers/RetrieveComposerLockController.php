@@ -56,8 +56,6 @@ class RetrieveComposerLockController implements ControllerInterface
             throw new PermissionDeniedException('Incorrect authorisation');
         }
 
-        $this->settings->set('flagrow.bazaar.last_lock_sync', (string)(new Carbon));
-
         $this->bus->dispatch(
             new SyncLock
         );

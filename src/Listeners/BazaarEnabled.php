@@ -65,7 +65,8 @@ class BazaarEnabled
             return;
         }
 
-        $lastSync = ($lastSync = $this->settings->get('flagrow.bazaar.last_lock_sync')) ? new Carbon($lastSync) : false;
+        $lastSync = ($lastSync = $this->settings->get('flagrow.bazaar.last_lock_sync', '2000-01-01 00:00:00'));
+        $lastSync = new Carbon($lastSync);
         $needs = false;
 
         switch ($interval) {
@@ -90,7 +91,7 @@ class BazaarEnabled
                 ]
             ])->then(function ($payload) {
                 app('flarum.log')->info($payload);
-                $this->settings->set('flagrow.bazaar.last_lock.sync', (string)(new Carbon));
+                $this->settings->set('flagrow.bazaar.last_lock_sync', (string)(new Carbon));
             });
         }
     }

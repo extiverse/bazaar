@@ -10,24 +10,13 @@ use Illuminate\Contracts\Bus\SelfHandling;
 
 class SyncLock implements SelfHandling
 {
-    /**
-     * @var FlagrowApi
-     */
-    private $api;
-    /**
-     * @var SettingsRepositoryInterface
-     */
-    private $settings;
-
-    public function __construct()
-    {
-    }
 
     public function handle(FlagrowApi $api, SettingsRepositoryInterface $settings)
     {
         $lockPath = base_path('composer.lock');
 
-        $task = Task::build(__CLASS_);
+        $task = Task::build('sync-lock');
+        $task->status = 'working';
         $task->started_at = Carbon::now();
         $task->save();
 
@@ -40,11 +29,15 @@ class SyncLock implements SelfHandling
             ]
         ])->then(function ($payload) use ($task, $settings) {
 
-            $task->output = $payload;
             $task->finished_at = Carbon::now();
+            $task->status = 'success';
             $task->save();
 
-            $this->settings->set('flagrow.bazaar.last_lock.sync', (string)(new Carbon));
+            $settings->set('flagrow.bazaar.last_lock.sync', (string)(new Carbon));
+        }, function ($payload) use ($task) {
+            $task->finished_at = Carbon::now();
+            $task->status = 'exception';
+            $task->save();
         });
     }
 }
