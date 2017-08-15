@@ -15,14 +15,12 @@ flagrow-bazaar:
             dashboard:
                 title: Dashboard
                 visit-remote-dashboard: Visit dashboard
-                sync-interval:
+                sync:
+                    switch: Sync
                     description: >
-                        Set the interval you would like to receive notifications about outdated extensions. In order to do so
-                        safely {host} will connect to this Bazaar-enabled Flarum installation at a specific interval you configure.
-                    off: Off
-                    daily: Daily
-                    weekly: Weekly
-                    monthly: Monthly
+                        Sync your extension information with {host} to receive timely notifications about new versions
+                        of extensions you installed. In addition we will send you a regular notification about outdated
+                        extensions on all your synced Bazaar enabled Flarum installations.
             settings:
                 title: Flagrow Bazaar
                 field:

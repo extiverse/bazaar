@@ -10,7 +10,7 @@ return function (Dispatcher $events, Application $app) {
     $events->subscribe(Listeners\AddClientAssets::class);
     $events->subscribe(Listeners\BazaarEnabled::class);
     $events->subscribe(Listeners\AddApiAttributes::class);
-    $events->subscribe(Listeners\SyncIntervalWasSet::class);
+    $events->subscribe(Listeners\SyncWasSet::class);
 
     $app->register(Providers\ComposerEnvironmentProvider::class);
     $app->register(Providers\ExtensionProvider::class);

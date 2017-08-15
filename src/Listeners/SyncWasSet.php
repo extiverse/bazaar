@@ -3,13 +3,12 @@
 namespace Flagrow\Bazaar\Listeners;
 
 use Flagrow\Bazaar\Search\FlagrowApi;
-use Flarum\Core\User;
 use Flarum\Event\SettingWasSet;
 use Flarum\Settings\SettingsRepositoryInterface;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Contracts\Hashing\Hasher;
 
-class SyncIntervalWasSet
+class SyncWasSet
 {
     /**
      * @var FlagrowApi
@@ -38,17 +37,25 @@ class SyncIntervalWasSet
 
     public function notifyRemote(SettingWasSet $event)
     {
-        if ($event->key === 'flagrow.bazaar.sync_interval') {
-            $response = $this->api->post('bazaar/sync-interval', [
+        if ($event->key === 'flagrow.bazaar.sync') {
+            $response = $this->api->post('bazaar/sync-configured', [
                 'json' => [
-                    'interval' => $event->value
+                    'sync' => $event->value
                 ]
             ]);
 
-            if ($response->getStatusCode() === 200) {
+            $code = $response->getStatusCode();
+
+            if ($code === 200) {
                 $this->settings->set(
                     'flagrow.bazaar.sync.hash',
                     $this->hasher->make((string) $response->getBody())
+                );
+            }
+
+            if ($code === 204) {
+                $this->settings->delete(
+                    'flagrow.bazaar.sync.hash'
                 );
             }
         }

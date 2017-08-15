@@ -1,57 +1,52 @@
-import Modal from "flarum/components/Modal";
-import Button from "flarum/components/Button";
-import Select from "flarum/components/Select";
+import Switch from 'flarum/components/Switch';
 import SettingsModal from 'flarum/components/SettingsModal';
+import saveSettings from 'flarum/utils/saveSettings';
+import Button from 'flarum/components/Button';
 
 export default class DashboardModal extends SettingsModal {
-    title() {
-        return app.translator.trans('flagrow-bazaar.admin.modal.dashboard.title');
-    }
+  title() {
+    return app.translator.trans('flagrow-bazaar.admin.modal.dashboard.title');
+  }
 
-    form() {
-        const flagrowHost = this.props.flagrowHost;
-        const interval = this.setting('flagrow.bazaar.sync_interval', 'off');
-        let intervals = {};
+  form() {
+    const flagrowHost = this.props.flagrowHost;
+    const syncing = this.setting('flagrow.bazaar.sync', false);
+    console.log(syncing())
 
-        for (const i of this.syncIntervalList()) {
-            intervals[i] = app.translator.trans('flagrow-bazaar.admin.modal.dashboard.sync-interval.' + i);
-        }
+    return m('div', { className: 'Modal-body' }, [
+        m('p', app.translator.trans('flagrow-bazaar.admin.modal.dashboard.sync.description', { host: flagrowHost })),
+        Switch.component({
+          state: (syncing() === true || syncing() == 1),
+          onchange: this.updateSetting.bind(this, syncing, 'flagrow.bazaar.sync'),
+          children: app.translator.trans('flagrow-bazaar.admin.modal.dashboard.sync.switch', { host: flagrowHost })
+        }),
+      ]
+    );
+  }
 
-        return m('div', {className: 'Modal-body'}, [
-                m('p', app.translator.trans('flagrow-bazaar.admin.modal.dashboard.sync-interval.description', {host: flagrowHost})),
-                Select.component({
-                    options: intervals,
-                    value: interval(),
-                    onchange: this.updateInterval.bind(this)
-                }),
-            ]
-        );
-    }
+  submitButton() {
+    const flagrowHost = this.props.flagrowHost;
+    return m('div', {className: 'ButtonGroup'}, [
+      Button.component({
+        className: 'Button Connected',
+        icon: 'dashboard',
+        children: app.translator.trans('flagrow-bazaar.admin.modal.dashboard.visit-remote-dashboard'),
+        onclick: () => window.open(flagrowHost + '/home')
+      })
+    ]);
+  }
 
-    updateInterval(value) {
-        this.settings['flagrow.bazaar.sync_interval'](value);
-    }
+  /**
+   * Updates setting in database.
+   * @param prop
+   * @param setting
+   * @param value
+   */
+  updateSetting(prop, setting, value) {
+    saveSettings({
+      [setting]: value
+    });
 
-    submitButton() {
-        const flagrowHost = this.props.flagrowHost;
-        return m('div', {className: 'ButtonGroup'}, [
-            Button.component({
-                className: 'Button Connected',
-                icon: 'dashboard',
-                children: app.translator.trans('flagrow-bazaar.admin.modal.dashboard.visit-remote-dashboard'),
-                onclick: () => window.open(flagrowHost + '/home')
-            }),
-            super.submitButton(),
-        ]);
-    }
-
-    syncIntervalList() {
-        // app.translator.trans('flagrow-bazaar.admin.sync-interval.off')
-        return [
-            'off',
-            'daily',
-            'weekly',
-            'monthly'
-        ]
-    }
+    prop(value);
+  }
 }

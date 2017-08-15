@@ -1093,105 +1093,76 @@ System.register('flagrow/bazaar/modals/BazaarSettingsModal', ['flarum/app', 'fla
         }
     };
 });;
-"use strict";
+'use strict';
 
-System.register("flagrow/bazaar/modals/DashboardModal", ["flarum/components/Modal", "flarum/components/Button", "flarum/components/Select", "flarum/components/SettingsModal"], function (_export, _context) {
-    "use strict";
+System.register('flagrow/bazaar/modals/DashboardModal', ['flarum/components/Switch', 'flarum/components/SettingsModal', 'flarum/utils/saveSettings', 'flarum/components/Button'], function (_export, _context) {
+  "use strict";
 
-    var Modal, Button, Select, SettingsModal, DashboardModal;
-    return {
-        setters: [function (_flarumComponentsModal) {
-            Modal = _flarumComponentsModal.default;
-        }, function (_flarumComponentsButton) {
-            Button = _flarumComponentsButton.default;
-        }, function (_flarumComponentsSelect) {
-            Select = _flarumComponentsSelect.default;
-        }, function (_flarumComponentsSettingsModal) {
-            SettingsModal = _flarumComponentsSettingsModal.default;
-        }],
-        execute: function () {
-            DashboardModal = function (_SettingsModal) {
-                babelHelpers.inherits(DashboardModal, _SettingsModal);
+  var Switch, SettingsModal, saveSettings, Button, DashboardModal;
+  return {
+    setters: [function (_flarumComponentsSwitch) {
+      Switch = _flarumComponentsSwitch.default;
+    }, function (_flarumComponentsSettingsModal) {
+      SettingsModal = _flarumComponentsSettingsModal.default;
+    }, function (_flarumUtilsSaveSettings) {
+      saveSettings = _flarumUtilsSaveSettings.default;
+    }, function (_flarumComponentsButton) {
+      Button = _flarumComponentsButton.default;
+    }],
+    execute: function () {
+      DashboardModal = function (_SettingsModal) {
+        babelHelpers.inherits(DashboardModal, _SettingsModal);
 
-                function DashboardModal() {
-                    babelHelpers.classCallCheck(this, DashboardModal);
-                    return babelHelpers.possibleConstructorReturn(this, (DashboardModal.__proto__ || Object.getPrototypeOf(DashboardModal)).apply(this, arguments));
-                }
-
-                babelHelpers.createClass(DashboardModal, [{
-                    key: "title",
-                    value: function title() {
-                        return app.translator.trans('flagrow-bazaar.admin.modal.dashboard.title');
-                    }
-                }, {
-                    key: "form",
-                    value: function form() {
-                        var flagrowHost = this.props.flagrowHost;
-                        var interval = this.setting('flagrow.bazaar.sync_interval', 'off');
-                        var intervals = {};
-
-                        var _iteratorNormalCompletion = true;
-                        var _didIteratorError = false;
-                        var _iteratorError = undefined;
-
-                        try {
-                            for (var _iterator = this.syncIntervalList()[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-                                var i = _step.value;
-
-                                intervals[i] = app.translator.trans('flagrow-bazaar.admin.modal.dashboard.sync-interval.' + i);
-                            }
-                        } catch (err) {
-                            _didIteratorError = true;
-                            _iteratorError = err;
-                        } finally {
-                            try {
-                                if (!_iteratorNormalCompletion && _iterator.return) {
-                                    _iterator.return();
-                                }
-                            } finally {
-                                if (_didIteratorError) {
-                                    throw _iteratorError;
-                                }
-                            }
-                        }
-
-                        return m('div', { className: 'Modal-body' }, [m('p', app.translator.trans('flagrow-bazaar.admin.modal.dashboard.sync-interval.description', { host: flagrowHost })), Select.component({
-                            options: intervals,
-                            value: interval(),
-                            onchange: this.updateInterval.bind(this)
-                        })]);
-                    }
-                }, {
-                    key: "updateInterval",
-                    value: function updateInterval(value) {
-                        this.settings['flagrow.bazaar.sync_interval'](value);
-                    }
-                }, {
-                    key: "submitButton",
-                    value: function submitButton() {
-                        var flagrowHost = this.props.flagrowHost;
-                        return m('div', { className: 'ButtonGroup' }, [Button.component({
-                            className: 'Button Connected',
-                            icon: 'dashboard',
-                            children: app.translator.trans('flagrow-bazaar.admin.modal.dashboard.visit-remote-dashboard'),
-                            onclick: function onclick() {
-                                return window.open(flagrowHost + '/home');
-                            }
-                        }), babelHelpers.get(DashboardModal.prototype.__proto__ || Object.getPrototypeOf(DashboardModal.prototype), "submitButton", this).call(this)]);
-                    }
-                }, {
-                    key: "syncIntervalList",
-                    value: function syncIntervalList() {
-                        // app.translator.trans('flagrow-bazaar.admin.sync-interval.off')
-                        return ['off', 'daily', 'weekly', 'monthly'];
-                    }
-                }]);
-                return DashboardModal;
-            }(SettingsModal);
-
-            _export("default", DashboardModal);
+        function DashboardModal() {
+          babelHelpers.classCallCheck(this, DashboardModal);
+          return babelHelpers.possibleConstructorReturn(this, (DashboardModal.__proto__ || Object.getPrototypeOf(DashboardModal)).apply(this, arguments));
         }
-    };
+
+        babelHelpers.createClass(DashboardModal, [{
+          key: 'title',
+          value: function title() {
+            return app.translator.trans('flagrow-bazaar.admin.modal.dashboard.title');
+          }
+        }, {
+          key: 'form',
+          value: function form() {
+            var flagrowHost = this.props.flagrowHost;
+            var syncing = this.setting('flagrow.bazaar.sync', false);
+            console.log(syncing());
+
+            return m('div', { className: 'Modal-body' }, [m('p', app.translator.trans('flagrow-bazaar.admin.modal.dashboard.sync.description', { host: flagrowHost })), Switch.component({
+              state: syncing() === true || syncing() == 1,
+              onchange: this.updateSetting.bind(this, syncing, 'flagrow.bazaar.sync'),
+              children: app.translator.trans('flagrow-bazaar.admin.modal.dashboard.sync.switch', { host: flagrowHost })
+            })]);
+          }
+        }, {
+          key: 'submitButton',
+          value: function submitButton() {
+            var flagrowHost = this.props.flagrowHost;
+            return m('div', { className: 'ButtonGroup' }, [Button.component({
+              className: 'Button Connected',
+              icon: 'dashboard',
+              children: app.translator.trans('flagrow-bazaar.admin.modal.dashboard.visit-remote-dashboard'),
+              onclick: function onclick() {
+                return window.open(flagrowHost + '/home');
+              }
+            })]);
+          }
+        }, {
+          key: 'updateSetting',
+          value: function updateSetting(prop, setting, value) {
+            saveSettings(babelHelpers.defineProperty({}, setting, value));
+
+            prop(value);
+          }
+        }]);
+        return DashboardModal;
+      }(SettingsModal);
+
+      _export('default', DashboardModal);
+    }
+  };
 });;
 'use strict';
 
