@@ -11,6 +11,7 @@ export default class ExtensionListItem extends Component {
     config(isInitialized) {
         if (isInitialized) return;
 
+        // Be careful to always use a `key` with this component or this mis-align the tooltips if items are added or removed
         if (this.props.extension.description()) this.$('.ExtensionIcon').tooltip({container: 'body'});
     }
 
