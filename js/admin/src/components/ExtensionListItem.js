@@ -130,22 +130,22 @@ export default class ExtensionListItem extends Component {
             }));
         }
 
-        if (extension.can_buy()) {
-            items.add('buy', Button.component({
+        if (extension.can_subscribe()) {
+            items.add('subscribe', Button.component({
                 icon: 'shopping-cart',
-                children: app.translator.trans('flagrow-bazaar.admin.page.button.buy'),
+                children: app.translator.trans('flagrow-bazaar.admin.page.button.subscribe'),
                 onclick: () => {
-                    repository().buyPremiumExtension(extension);
+                    repository().premiumExtensionSubscribe(extension);
                 }
             }));
         }
 
-        if (extension.can_cancel_buy()) {
-            items.add('buy-cancel', Button.component({
+        if (extension.can_unsubscribe()) {
+            items.add('unsubscribe', Button.component({
                 icon: 'ban',
-                children: app.translator.trans('flagrow-bazaar.admin.page.button.cancel_buy'),
+                children: app.translator.trans('flagrow-bazaar.admin.page.button.unsubscribe'),
                 onclick: () => {
-                    repository().cancelBuyPremiumExtension(extension);
+                    repository().premiumExtensionUnsubscribe(extension);
                 }
             }));
         }

@@ -1,4 +1,5 @@
 import app from "flarum/app";
+import popupPromise from 'flagrow/bazaar/utils/popupPromise';
 
 export default class ExtensionRepository {
     constructor(loading) {
@@ -128,19 +129,23 @@ export default class ExtensionRepository {
         })
     }
 
-    buyPremiumExtension(extension, buy = true) {
-        this.loading(true);
+    premiumExtensionSubscribe(extension, buy = true) {
+        //this.loading(true);
 
-        app.request({
-            method: buy ? 'POST' : 'DELETE',
-            url: app.forum.attribute('apiUrl') + '/bazaar/extensions/' + extension.id() + '/buy'
-        }).then(response => {
-            this.updateExtensionInRepository(response)
-        })
+        const popup = popupPromise({
+            url: app.forum.attribute('apiUrl') + '/bazaar/redirect/' + (buy ? '' : 'un') + 'subscribe/' + extension.id(),
+            waitForUrl: app.forum.attribute('apiUrl') + '/bazaar/callback/subscription',
+        });
+
+        popup.then(() => {
+            window.location.reload();
+        }).catch(() => {
+            alert(app.translator.trans('flagrow-bazaar.admin.page.extension.subscribe_check_failed'));
+        });
     }
 
-    cancelBuyPremiumExtension(extension) {
-        this.buyPremiumExtension(extension, false);
+    premiumExtensionUnsubscribe(extension) {
+        this.premiumExtensionSubscribe(extension, false);
     }
 
     /**

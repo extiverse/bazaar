@@ -60,18 +60,21 @@ class AddApiControllers
             Controllers\FavoriteExtensionController::class
         );
 
-        // Buy an extension
-        $event->post(
-            '/bazaar/extensions/{id}/buy',
-            'bazaar.extensions.buy',
-            Controllers\BuyExtensionController::class
+        // Premium package subscription redirects and callbacks for the popup
+        $event->get(
+            '/bazaar/redirect/subscribe/{id}',
+            'bazaar.redirect.subscribe',
+            Controllers\SubscriptionRedirectSubscribeController::class
         );
-
-        // Cancel buy an extension
-        $event->delete(
-            '/bazaar/extensions/{id}/buy',
-            'bazaar.extensions.buy-cancel',
-            Controllers\CancelBuyExtensionController::class
+        $event->get(
+            '/bazaar/redirect/unsubscribe/{id}',
+            'bazaar.redirect.unsubscribe',
+            Controllers\SubscriptionRedirectUnsubscribeController::class
+        );
+        $event->get(
+            '/bazaar/callback/subscription',
+            'bazaar.callback.subscription',
+            Controllers\SubscriptionRedirectCallbackController::class
         );
 
         // Uninstall an extension

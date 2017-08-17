@@ -582,22 +582,22 @@ System.register("flagrow/bazaar/components/ExtensionListItem", ["flarum/Componen
                             }));
                         }
 
-                        if (extension.can_buy()) {
-                            items.add('buy', Button.component({
+                        if (extension.can_subscribe()) {
+                            items.add('subscribe', Button.component({
                                 icon: 'shopping-cart',
-                                children: app.translator.trans('flagrow-bazaar.admin.page.button.buy'),
+                                children: app.translator.trans('flagrow-bazaar.admin.page.button.subscribe'),
                                 onclick: function onclick() {
-                                    repository().buyPremiumExtension(extension);
+                                    repository().premiumExtensionSubscribe(extension);
                                 }
                             }));
                         }
 
-                        if (extension.can_cancel_buy()) {
-                            items.add('buy-cancel', Button.component({
+                        if (extension.can_unsubscribe()) {
+                            items.add('unsubscribe', Button.component({
                                 icon: 'ban',
-                                children: app.translator.trans('flagrow-bazaar.admin.page.button.cancel_buy'),
+                                children: app.translator.trans('flagrow-bazaar.admin.page.button.unsubscribe'),
                                 onclick: function onclick() {
-                                    repository().cancelBuyPremiumExtension(extension);
+                                    repository().premiumExtensionUnsubscribe(extension);
                                 }
                             }));
                         }
@@ -1284,10 +1284,10 @@ System.register('flagrow/bazaar/models/Extension', ['flarum/Model', 'flarum/util
                 }),
 
                 // Marketplace actions
-                can_buy: computed('premium', 'owned', function (premium, owned) {
+                can_subscribe: computed('premium', 'owned', function (premium, owned) {
                     return premium && !owned;
                 }),
-                can_cancel_buy: computed('owned', 'installed', function (owned, installed) {
+                can_unsubscribe: computed('owned', 'installed', function (owned, installed) {
                     return owned && !installed;
                 }),
 
@@ -1336,13 +1336,15 @@ System.register('flagrow/bazaar/models/Task', ['flarum/Model', 'flarum/utils/mix
 });;
 'use strict';
 
-System.register('flagrow/bazaar/utils/ExtensionRepository', ['flarum/app'], function (_export, _context) {
+System.register('flagrow/bazaar/utils/ExtensionRepository', ['flarum/app', 'flagrow/bazaar/utils/popupPromise'], function (_export, _context) {
     "use strict";
 
-    var app, ExtensionRepository;
+    var app, popupPromise, ExtensionRepository;
     return {
         setters: [function (_flarumApp) {
             app = _flarumApp.default;
+        }, function (_flagrowBazaarUtilsPopupPromise) {
+            popupPromise = _flagrowBazaarUtilsPopupPromise.default;
         }],
         execute: function () {
             ExtensionRepository = function () {
@@ -1472,30 +1474,32 @@ System.register('flagrow/bazaar/utils/ExtensionRepository', ['flarum/app'], func
                         });
                     }
                 }, {
-                    key: 'buyPremiumExtension',
-                    value: function buyPremiumExtension(extension) {
-                        var _this5 = this;
-
+                    key: 'premiumExtensionSubscribe',
+                    value: function premiumExtensionSubscribe(extension) {
                         var buy = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
 
-                        this.loading(true);
+                        //this.loading(true);
 
-                        app.request({
-                            method: buy ? 'POST' : 'DELETE',
-                            url: app.forum.attribute('apiUrl') + '/bazaar/extensions/' + extension.id() + '/buy'
-                        }).then(function (response) {
-                            _this5.updateExtensionInRepository(response);
+                        var popup = popupPromise({
+                            url: app.forum.attribute('apiUrl') + '/bazaar/redirect/' + (buy ? '' : 'un') + 'subscribe/' + extension.id(),
+                            waitForUrl: app.forum.attribute('apiUrl') + '/bazaar/callback/subscription'
+                        });
+
+                        popup.then(function () {
+                            window.location.reload();
+                        }).catch(function () {
+                            alert(app.translator.trans('flagrow-bazaar.admin.page.extension.subscribe_check_failed'));
                         });
                     }
                 }, {
-                    key: 'cancelBuyPremiumExtension',
-                    value: function cancelBuyPremiumExtension(extension) {
-                        this.buyPremiumExtension(extension, false);
+                    key: 'premiumExtensionUnsubscribe',
+                    value: function premiumExtensionUnsubscribe(extension) {
+                        this.premiumExtensionSubscribe(extension, false);
                     }
                 }, {
                     key: 'updateExtension',
                     value: function updateExtension(extension) {
-                        var _this6 = this;
+                        var _this5 = this;
 
                         this.loading(true);
 
@@ -1504,7 +1508,7 @@ System.register('flagrow/bazaar/utils/ExtensionRepository', ['flarum/app'], func
                             timeout: 0,
                             method: 'PATCH'
                         }).then(function (response) {
-                            _this6.updateExtensionInRepository(response);
+                            _this5.updateExtensionInRepository(response);
                         }).then(function () {
                             location.reload();
                         });
@@ -1512,7 +1516,7 @@ System.register('flagrow/bazaar/utils/ExtensionRepository', ['flarum/app'], func
                 }, {
                     key: 'toggleExtension',
                     value: function toggleExtension(extension) {
-                        var _this7 = this;
+                        var _this6 = this;
 
                         this.loading(true);
 
@@ -1523,7 +1527,7 @@ System.register('flagrow/bazaar/utils/ExtensionRepository', ['flarum/app'], func
                             method: 'PATCH',
                             data: { enabled: !enabled }
                         }).then(function (response) {
-                            _this7.updateExtensionInRepository(response);
+                            _this6.updateExtensionInRepository(response);
                         });
                     }
                 }, {
@@ -1626,5 +1630,47 @@ System.register('flagrow/bazaar/utils/TaskRepository', ['flarum/app'], function 
 
             _export('default', ExtensionRepository);
         }
+    };
+});;
+'use strict';
+
+System.register('flagrow/bazaar/utils/popupPromise', [], function (_export, _context) {
+    "use strict";
+
+    _export('default', function () {
+        var settings = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+        var url = settings.url || '/';
+        var waitForUrl = settings.waitForUrl || null;
+        var width = settings.width || 600;
+        var height = settings.height || 400;
+        var $window = $(window);
+
+        // The new Promise polyfill of Mithril v1 is a lot better
+        var deferred = m.deferred();
+
+        var popup = window.open(url, 'bazaarPopup', 'width=' + width + ',' + ('height=' + height + ',') + ('top=' + ($window.height() / 2 - height / 2) + ',') + ('left=' + ($window.width() / 2 - width / 2) + ',') + 'status=no,scrollbars=no,resizable=no');
+
+        var interval = window.setInterval(function () {
+            try {
+                if (popup.closed) {
+                    window.clearInterval(interval);
+                    deferred.reject();
+                } else if (popup.document.URL === waitForUrl) {
+                    window.clearInterval(interval);
+                    popup.close();
+                    deferred.resolve();
+                }
+            } catch (e) {
+                // Ignore errors, these will be cross-origin exceptions
+            }
+        }, 500);
+
+        return deferred.promise;
+    });
+
+    return {
+        setters: [],
+        execute: function () {}
     };
 });

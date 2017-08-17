@@ -45,8 +45,8 @@ flagrow-bazaar:
                 connect: Connect
                 favorite_button: "Favorite extension"
                 remove_favorite_button: "Remove extension from your favorites"
-                buy: Buy
-                cancel_buy: Cancel buy
+                subscribe: Buy subscription
+                unsubscribe: Cancel subscription
             extension:
                 installed: Extension is installed
                 enabled: Extension is enabled
@@ -55,6 +55,7 @@ flagrow-bazaar:
                 outdated: "Extension is outdated, please update to version {new}"
                 premium: Premium
                 owned: Owned
+                subscribe_check_failed: It looks like you cancelled the checkout process.
             task:
                 header:
                     status: Status

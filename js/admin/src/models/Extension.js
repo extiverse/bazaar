@@ -34,8 +34,8 @@ export default class Extension extends mixin(Model, {
     can_disable: computed('installed', 'enabled', (installed, enabled) => installed && enabled),
 
     // Marketplace actions
-    can_buy: computed('premium', 'owned', (premium, owned) => premium && !owned),
-    can_cancel_buy: computed('owned', 'installed', (owned, installed) => owned && !installed),
+    can_subscribe: computed('premium', 'owned', (premium, owned) => premium && !owned),
+    can_unsubscribe: computed('owned', 'installed', (owned, installed) => owned && !installed),
 
     favorited: Model.attribute('favorited')
 }) {}
