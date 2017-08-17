@@ -11,6 +11,8 @@ export default class ExtensionRepository {
         this.filterInstalled = m.prop(false);
         this.filterUpdateRequired = m.prop(false);
         this.filterFavorited = m.prop(false);
+        this.filterOwned = m.prop(false);
+        this.filterPremium = m.prop(false);
         this.filters = {
             search: '',
         };
