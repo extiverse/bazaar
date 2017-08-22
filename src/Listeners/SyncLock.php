@@ -44,6 +44,7 @@ class SyncLock
      */
     public function sync($event)
     {
+        dd($this->settings->get('flagrow-bazaar.flagrow.bazaar.sync'));
         if ($this->settings->get('flagrow-bazaar.flagrow.bazaar.sync') == 1) {
             $this->bus->dispatch(new Job);
         }
