@@ -6,7 +6,6 @@ use Carbon\Carbon;
 use Flagrow\Bazaar\Extensions\Extension;
 use Flagrow\Bazaar\Models\Task;
 use Flagrow\Bazaar\Search\FlagrowApi;
-use Flarum\Settings\SettingsRepositoryInterface;
 use Illuminate\Contracts\Bus\SelfHandling;
 
 class SyncVersion implements SelfHandling
@@ -26,7 +25,7 @@ class SyncVersion implements SelfHandling
         $this->version = $version;
     }
 
-    public function handle(FlagrowApi $api, SettingsRepositoryInterface $settings)
+    public function handle(FlagrowApi $api)
     {
         $task = $this->createTask();
 
@@ -37,7 +36,7 @@ class SyncVersion implements SelfHandling
                     'version' => $this->version
                 ]
             ]
-        ])->then(function () use ($task, $settings) {
+        ])->then(function () use ($task) {
             $task->finished_at = Carbon::now();
             $task->status = 'success';
             $task->save();
