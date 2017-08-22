@@ -3,33 +3,44 @@
 namespace Flagrow\Bazaar\Jobs;
 
 use Carbon\Carbon;
+use Flagrow\Bazaar\Extensions\Extension;
 use Flagrow\Bazaar\Models\Task;
 use Flagrow\Bazaar\Search\FlagrowApi;
 use Flarum\Settings\SettingsRepositoryInterface;
 use Illuminate\Contracts\Bus\SelfHandling;
 
-class SyncLock implements SelfHandling
+class SyncVersion implements SelfHandling
 {
+    /**
+     * @var Extension
+     */
+    private $extension;
+    /**
+     * @var string
+     */
+    private $version;
+
+    public function __construct(Extension $extension, string $version = null)
+    {
+        $this->extension = $extension;
+        $this->version = $version;
+    }
 
     public function handle(FlagrowApi $api, SettingsRepositoryInterface $settings)
     {
-        $lockPath = base_path('composer.lock');
-
         $task = $this->createTask();
 
-        $api->postAsync('bazaar/sync-lock', [
-            'multipart' => [
+        $api->postAsync('bazaar/sync-version', [
+            'json' => [
                 [
-                    'name' => 'lock',
-                    'contents' => fopen($lockPath, 'r')
+                    'name' => $this->extension->id,
+                    'version' => $this->version
                 ]
             ]
         ])->then(function () use ($task, $settings) {
             $task->finished_at = Carbon::now();
             $task->status = 'success';
             $task->save();
-
-            $settings->set('flagrow.bazaar.last_lock.sync', (string)(new Carbon));
         }, function () use ($task) {
             $task->finished_at = Carbon::now();
             $task->status = 'exception';
@@ -42,9 +53,10 @@ class SyncLock implements SelfHandling
      */
     protected function createTask()
     {
-        $task = Task::build('sync-lock');
+        $task = Task::build('sync-version');
         $task->status = 'working';
         $task->started_at = Carbon::now();
+        $task->package = $this->extension->name;
         $task->save();
         return $task;
     }

@@ -4,13 +4,14 @@ namespace Flagrow\Bazaar\Listeners;
 
 use Flagrow\Bazaar\Events\ExtensionWasInstalled;
 use Flagrow\Bazaar\Events\ExtensionWasUpdated;
+use Flagrow\Bazaar\Extensions\ExtensionUtils;
+use Flagrow\Bazaar\Jobs\SyncVersion as Job;
 use Flarum\Event\ExtensionWasUninstalled;
 use Flarum\Settings\SettingsRepositoryInterface;
 use Illuminate\Contracts\Bus\Dispatcher as Bus;
 use Illuminate\Contracts\Events\Dispatcher;
-use Flagrow\Bazaar\Jobs\SyncLock as Job;
 
-class SyncLock
+class SyncVersion
 {
     /**
      * @var Bus
@@ -44,9 +45,11 @@ class SyncLock
      */
     public function sync($event)
     {
-        dd($this->settings->get('flagrow-bazaar.flagrow.bazaar.sync'));
-        if ($this->settings->get('flagrow-bazaar.flagrow.bazaar.sync') == 1) {
-            $this->bus->dispatch(new Job);
+        if ($this->settings->get('flagrow.bazaar.sync') === '1') {
+            $name = ExtensionUtils::packageToId($event->extension->name);
+            $version = $event->extension->getVersion();
+
+            $this->bus->dispatch(new Job($name, $version));
         }
     }
 }
