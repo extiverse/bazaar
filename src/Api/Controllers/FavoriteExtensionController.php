@@ -27,7 +27,7 @@ class FavoriteExtensionController extends AbstractResourceController
 
     function __construct(FlagrowApi $api, SettingsRepositoryInterface $settings, ExtensionRepository $extensions)
     {
-        $this->connected = $settings->get('flagrow.bazaar.connected') === '1';
+        $this->connected = $settings->get('flagrow.bazaar.connected') !== '0';
         $this->extensions = $extensions;
     }
 

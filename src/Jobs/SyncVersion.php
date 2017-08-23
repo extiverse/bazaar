@@ -3,7 +3,8 @@
 namespace Flagrow\Bazaar\Jobs;
 
 use Carbon\Carbon;
-use Flagrow\Bazaar\Extensions\Extension;
+use Flagrow\Bazaar\Extensions\ExtensionUtils;
+use Flarum\Extension\Extension;
 use Flagrow\Bazaar\Models\Task;
 use Flagrow\Bazaar\Search\FlagrowApi;
 use Illuminate\Contracts\Bus\SelfHandling;
@@ -32,7 +33,7 @@ class SyncVersion implements SelfHandling
         $api->postAsync('bazaar/sync-version', [
             'json' => [
                 [
-                    'name' => $this->extension->id,
+                    'name' => ExtensionUtils::packageToId($this->extension->name),
                     'version' => $this->version
                 ]
             ]

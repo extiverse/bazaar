@@ -14,12 +14,13 @@ export default class TasksPage extends Component {
         this.repository = new TaskRepository(this.loading);
         this.repository.loadNextPage();
         this.loader = BazaarLoader.component({loading: this.loading});
+        this.connected = app.data.settings['flagrow.bazaar.connected'] && app.data.settings['flagrow.bazaar.connected'] !== '0';
     }
 
     view() {
         return (
             <div className="ExtensionsPage Bazaar TaskPage">
-                { BazaarPageHeader.component() }
+                {BazaarPageHeader.component({connected: this.connected})}
 
                 <div className="ExtensionsPage-list">
                     <div className="container">

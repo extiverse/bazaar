@@ -12,7 +12,7 @@ export default class BazaarPage extends Component {
         this.loading = m.prop(false);
         this.repository = m.prop(new ExtensionRepository(this.loading));
         this.repository().loadNextPage();
-        this.connected = app.data.settings['flagrow.bazaar.connected'] == 1 || false;
+        this.connected = app.data.settings['flagrow.bazaar.connected'] && app.data.settings['flagrow.bazaar.connected'] !== '0';
     }
 
     view() {

@@ -81,7 +81,7 @@ flagrow-bazaar:
                     unknown: Unknown
                 command:
                     sync-lock: Sync composer.lock file
-                    sync-version: Sync extension version
+                    sync-version: Sync {extension} version
                     install: Install {extension}
                     update: Update {extension}
                     uninstall: Uninstall {extension}

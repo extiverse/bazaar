@@ -4,7 +4,6 @@ namespace Flagrow\Bazaar\Listeners;
 
 use Flagrow\Bazaar\Events\ExtensionWasInstalled;
 use Flagrow\Bazaar\Events\ExtensionWasUpdated;
-use Flagrow\Bazaar\Extensions\ExtensionUtils;
 use Flagrow\Bazaar\Jobs\SyncVersion as Job;
 use Flarum\Event\ExtensionWasUninstalled;
 use Flarum\Settings\SettingsRepositoryInterface;
@@ -45,11 +44,10 @@ class SyncVersion
      */
     public function sync($event)
     {
-        if ($this->settings->get('flagrow.bazaar.sync') === '1') {
-            $name = ExtensionUtils::packageToId($event->extension->name);
+        if ($this->settings->get('flagrow.bazaar.sync') !== '0') {
             $version = $event->extension->getVersion();
 
-            $this->bus->dispatch(new Job($name, $version));
+            $this->bus->dispatch(new Job($event->extension, $version));
         }
     }
 }

@@ -151,7 +151,7 @@ System.register("flagrow/bazaar/components/BazaarPage", ["flarum/Component", "fl
                         this.loading = m.prop(false);
                         this.repository = m.prop(new ExtensionRepository(this.loading));
                         this.repository().loadNextPage();
-                        this.connected = app.data.settings['flagrow.bazaar.connected'] == 1 || false;
+                        this.connected = app.data.settings['flagrow.bazaar.connected'] && app.data.settings['flagrow.bazaar.connected'] !== '0';
                     }
                 }, {
                     key: "view",
@@ -822,6 +822,7 @@ System.register('flagrow/bazaar/components/TasksPage', ['flarum/app', 'flarum/Co
                         this.repository = new TaskRepository(this.loading);
                         this.repository.loadNextPage();
                         this.loader = BazaarLoader.component({ loading: this.loading });
+                        this.connected = app.data.settings['flagrow.bazaar.connected'] && app.data.settings['flagrow.bazaar.connected'] !== '0';
                     }
                 }, {
                     key: 'view',
@@ -829,7 +830,7 @@ System.register('flagrow/bazaar/components/TasksPage', ['flarum/app', 'flarum/Co
                         return m(
                             'div',
                             { className: 'ExtensionsPage Bazaar TaskPage' },
-                            BazaarPageHeader.component(),
+                            BazaarPageHeader.component({ connected: this.connected }),
                             m(
                                 'div',
                                 { className: 'ExtensionsPage-list' },
@@ -1128,7 +1129,6 @@ System.register('flagrow/bazaar/modals/DashboardModal', ['flarum/components/Swit
           value: function form() {
             var flagrowHost = this.props.flagrowHost;
             var syncing = this.setting('flagrow.bazaar.sync', false);
-            console.log(syncing());
 
             return m('div', { className: 'Modal-body' }, [m('p', app.translator.trans('flagrow-bazaar.admin.modal.dashboard.sync.description', { host: flagrowHost })), Switch.component({
               state: syncing() === true || syncing() == 1,

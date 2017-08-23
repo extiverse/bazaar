@@ -11,7 +11,6 @@ export default class DashboardModal extends SettingsModal {
   form() {
     const flagrowHost = this.props.flagrowHost;
     const syncing = this.setting('flagrow.bazaar.sync', false);
-    console.log(syncing())
 
     return m('div', { className: 'Modal-body' }, [
         m('p', app.translator.trans('flagrow-bazaar.admin.modal.dashboard.sync.description', { host: flagrowHost })),
