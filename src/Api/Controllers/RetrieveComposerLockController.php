@@ -55,7 +55,6 @@ class RetrieveComposerLockController implements ControllerInterface
 
             throw new PermissionDeniedException('Incorrect authorisation');
         }
-
         $this->bus->dispatch(
             new SyncLock
         );

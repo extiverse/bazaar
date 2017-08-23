@@ -30,14 +30,13 @@ class SyncVersion implements SelfHandling
     {
         $task = $this->createTask();
 
-        $api->postAsync('bazaar/sync-version', [
-            'json' => [
-                [
-                    'name' => ExtensionUtils::packageToId($this->extension->name),
-                    'version' => $this->version
-                ]
-            ]
-        ])->then(function () use ($task) {
+        $url = sprintf(
+            'bazaar/sync-version/%s/%s',
+            ExtensionUtils::packageToId($this->extension->name),
+            $this->version
+        );
+
+        $api->postAsync($url)->then(function () use ($task) {
             $task->finished_at = Carbon::now();
             $task->status = 'success';
             $task->save();

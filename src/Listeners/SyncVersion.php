@@ -47,6 +47,10 @@ class SyncVersion
         if ($this->settings->get('flagrow.bazaar.sync') !== '0') {
             $version = $event->extension->getVersion();
 
+            if ($event instanceof ExtensionWasUninstalled) {
+                $version = null;
+            }
+
             $this->bus->dispatch(new Job($event->extension, $version));
         }
     }
