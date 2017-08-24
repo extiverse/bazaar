@@ -81,11 +81,18 @@ class AddApiControllers
             Controllers\ListTaskController::class
         );
 
-        // Requests composer lock
+        // Requests composer lock.
         $event->get(
-            '/bazaar/composer-lock',
+            '/bazaar/sync/composer-lock',
             'bazaar.composer-lock',
             Controllers\RetrieveComposerLockController::class
+        );
+
+        // Requests an update about a specific extension.
+        $event->get(
+            '/bazaar/sync/extensions/{id}/version',
+            'bazaar.extensions.version',
+            Controllers\RetrieveExtensionVersionController::class
         );
     }
 }

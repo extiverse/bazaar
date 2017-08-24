@@ -226,13 +226,11 @@ final class ExtensionRepository
 
         $this->flush->fire();
 
-        $extension = $this->getExtension($package);
+        $this->refreshInstalledExtension($extension);
 
         $this->events->fire(
             new ExtensionWasUpdated($extension->getInstalledExtension())
         );
-
-        $this->refreshInstalledExtension($extension);
 
         return $extension;
     }

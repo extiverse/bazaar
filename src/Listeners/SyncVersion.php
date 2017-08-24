@@ -51,6 +51,10 @@ class SyncVersion
                 $version = null;
             }
 
+            if ($event instanceof ExtensionWasUpdated) {
+                $version = '-unknown-';
+            }
+
             $this->bus->dispatch(new Job($event->extension, $version));
         }
     }
