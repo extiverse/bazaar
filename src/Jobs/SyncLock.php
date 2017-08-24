@@ -29,7 +29,7 @@ class SyncLock implements SelfHandling
             $task->status = 'success';
             $task->save();
 
-            $settings->set('flagrow.bazaar.last_lock.sync', (string)(new Carbon));
+            $settings->set('flagrow.bazaar.sync.lock.at', (string)(new Carbon));
         }, function () use ($task) {
             $task->finished_at = Carbon::now();
             $task->status = 'exception';
