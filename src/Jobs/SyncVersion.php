@@ -52,10 +52,9 @@ class SyncVersion implements SelfHandling
      */
     protected function createTask()
     {
-        $task = Task::build('sync-version');
+        $task = Task::build('sync-version', $this->extension->name);
         $task->status = 'working';
         $task->started_at = Carbon::now();
-        $task->package = $this->extension->name;
         $task->save();
         return $task;
     }
