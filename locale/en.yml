@@ -57,7 +57,7 @@ flagrow-bazaar:
                 favorited: One of your favorites
                 outdated: "Extension is outdated, please update to version {new}"
                 premium: Premium
-                owned: Owned
+                subscribed: Subscribed
                 subscribe_check_failed: It looks like you cancelled the checkout process.
             task:
                 header:
@@ -88,5 +88,5 @@ flagrow-bazaar:
             filter_installed: Show only installed extensions
             filter_update_required: Show only extension with an update available
             filter_favorited: Show only favorited extensions
-            filter_owned: Show only owned extensions
+            filter_subscribed: Show only subscribed extensions
             filter_premium: Show only premium extensions

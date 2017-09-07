@@ -197,7 +197,7 @@ class Extension implements Arrayable
             'flarum_id' => $this->installedExtension ? $this->installedExtension->getId() : null,
             'favorited' => $this->getAttributeIfPresent('favorited'),
             'premium' => $this->getAttributeIfPresent('premium'),
-            'owned' => $this->getAttributeIfPresent('owned'),
+            'subscribed' => $this->getAttributeIfPresent('subscribed'),
         ];
     }
 }

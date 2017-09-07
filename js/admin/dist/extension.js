@@ -194,11 +194,11 @@ System.register("flagrow/bazaar/components/BazaarPage", ["flarum/Component", "fl
                             children: app.translator.trans('flagrow-bazaar.admin.search.filter_favorited')
                         }), CustomCheckbox.component({
                             iconChecked: 'shopping-cart',
-                            state: this.repository().filterOwned(),
+                            state: this.repository().filterSubscribed(),
                             onchange: function onchange(checked) {
-                                return _this2.repository().filterOwned(checked);
+                                return _this2.repository().filterSubscribed(checked);
                             },
-                            children: app.translator.trans('flagrow-bazaar.admin.search.filter_owned')
+                            children: app.translator.trans('flagrow-bazaar.admin.search.filter_subscribed')
                         })] : '', CustomCheckbox.component({
                             iconChecked: 'certificate',
                             state: this.repository().filterPremium(),
@@ -226,7 +226,7 @@ System.register("flagrow/bazaar/components/BazaarPage", ["flarum/Component", "fl
                                 return false;
                             }
 
-                            if (_this3.repository().filterOwned() && !extension.owned()) {
+                            if (_this3.repository().filterSubscribed() && !extension.subscribed()) {
                                 return false;
                             }
 
@@ -629,9 +629,9 @@ System.register("flagrow/bazaar/components/ExtensionListItem", ["flarum/Componen
                     value: function badges(extension) {
                         var items = new ItemList();
 
-                        if (extension.owned()) {
-                            items.add('owned', m(Badge, { icon: "shopping-cart", type: "owned",
-                                label: app.translator.trans('flagrow-bazaar.admin.page.extension.owned') }));
+                        if (extension.subscribed()) {
+                            items.add('subscribed', m(Badge, { icon: "shopping-cart", type: "subscribed",
+                                label: app.translator.trans('flagrow-bazaar.admin.page.extension.subscribed') }));
                         } else if (extension.premium()) {
                             items.add('premium', m(Badge, { icon: "certificate", type: "premium",
                                 label: app.translator.trans('flagrow-bazaar.admin.page.extension.premium') }));
@@ -1284,12 +1284,12 @@ System.register('flagrow/bazaar/models/Extension', ['flarum/Model', 'flarum/util
                 flarum_id: Model.attribute('flarum_id'),
 
                 premium: Model.attribute('premium'),
-                owned: Model.attribute('owned'),
+                subscribed: Model.attribute('subscribed'),
 
                 // Install/uninstall
-                // Extension is available if it's either non-premium or premium & owned
-                can_install: computed('installed', 'premium', 'owned', function (installed, premium, owned) {
-                    return !installed && (!premium || owned);
+                // Extension is available if it's either non-premium or premium & subscribed
+                can_install: computed('installed', 'premium', 'subscribed', function (installed, premium, subscribed) {
+                    return !installed && (!premium || subscribed);
                 }),
                 can_uninstall: computed('installed', 'enabled', function (installed, enabled) {
                     return installed && !enabled;
@@ -1304,11 +1304,11 @@ System.register('flagrow/bazaar/models/Extension', ['flarum/Model', 'flarum/util
                 }),
 
                 // Marketplace actions
-                can_subscribe: computed('premium', 'owned', function (premium, owned) {
-                    return premium && !owned;
+                can_subscribe: computed('premium', 'subscribed', function (premium, subscribed) {
+                    return premium && !subscribed;
                 }),
-                can_unsubscribe: computed('owned', 'installed', function (owned, installed) {
-                    return owned && !installed;
+                can_unsubscribe: computed('subscribed', 'installed', function (subscribed, installed) {
+                    return subscribed && !installed;
                 }),
 
                 favorited: Model.attribute('favorited')
@@ -1419,7 +1419,7 @@ System.register('flagrow/bazaar/utils/ExtensionRepository', ['flarum/app', 'flag
                     this.filterInstalled = m.prop(false);
                     this.filterUpdateRequired = m.prop(false);
                     this.filterFavorited = m.prop(false);
-                    this.filterOwned = m.prop(false);
+                    this.filterSubscribed = m.prop(false);
                     this.filterPremium = m.prop(false);
                     this.filters = {
                         search: ''

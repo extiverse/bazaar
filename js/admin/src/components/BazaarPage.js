@@ -60,9 +60,9 @@ export default class BazaarPage extends Component {
                 }),
                 CustomCheckbox.component({
                     iconChecked: 'shopping-cart',
-                    state: this.repository().filterOwned(),
-                    onchange: (checked) => this.repository().filterOwned(checked),
-                    children: app.translator.trans('flagrow-bazaar.admin.search.filter_owned')
+                    state: this.repository().filterSubscribed(),
+                    onchange: (checked) => this.repository().filterSubscribed(checked),
+                    children: app.translator.trans('flagrow-bazaar.admin.search.filter_subscribed')
                 }),
             ] : '',
             CustomCheckbox.component({
@@ -89,7 +89,7 @@ export default class BazaarPage extends Component {
                     return false;
                 }
 
-                if (this.repository().filterOwned() && ! extension.owned()) {
+                if (this.repository().filterSubscribed() && ! extension.subscribed()) {
                     return false;
                 }
 
