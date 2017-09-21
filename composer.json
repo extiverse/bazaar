@@ -40,6 +40,9 @@
                 "backgroundColor": "#f4f4f4",
                 "color": "#5f4bb6"
             }
+        },
+        "flagrow": {
+            "discuss": "https://discuss.flarum.org/d/5151-flagrow-bazaar-the-extension-marketplace"
         }
     },
     "autoload": {
