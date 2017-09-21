@@ -49,6 +49,23 @@ php flarum cache:clear
 
 Enable the extension under the extensions tab in the admin area. A settings modal will popup asking you for a token, which most likely will already be there. You're good to go, open the Bazaar tab on the left and enjoy!
 
+## Extension developers
+
+Bazaar connects to [flagrow.io](https://flagrow.io/) to provide up-to-date extension list and metadata.
+This data is refreshed periodically via the Packagist API.
+
+This means you don't have anything particular to do to get your extension inside Bazaar.
+
+However here are a few additional steps you can take to improve the way your extension looks (check these keys in your `composer.json` file):
+
+- Fill the `license` key so we everybody know what they can do with your code
+- Add every author to the `authors` key so we can list them
+- Choose a sensible name for `extra.flarum-extension.title`. This value is used with the tags to provide search
+- Don't forget to set an `extra.flarum-extension.icon` setting to your extension, it looks a lot better with an icon
+- Add an `extra.flagrow.discuss` key to link your extension with its discussion on Flarum Discuss. Must be a valid url starting with `https://discuss.flarum.org/d/`
+
+**Note:** not all this data is currently shown in Bazaar/[flagrow.io](https://flagrow.io/), but it's coming soon ! 
+
 ## Support our work
 
 We prefer to keep our work available to everyone.
