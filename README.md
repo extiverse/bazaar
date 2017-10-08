@@ -14,7 +14,7 @@ The marketplace extension that allows you to add and remove extensions without c
 - Bazaar cannot remove assets right now of extensions that are uninstalled.
 - Bazaar attempts to increase its allowance of memory to 1GB, this might not work on your hosting environment.
 - Bazaar reads the API on flagrow.io for compatible extensions. By installing and enabling this extension you agree to share some data so that the extension can do its work (Flarum version and URL).
-- Bazaar is available under the [CC-BY-NC-ND 4.0 license](https://github.com/flagrow/bazaar/blob/master/license.md). In case you're interested in adapting the extension or using its code take the time to read and understand this license.
+- Bazaar is available under the [CC-BY-NC-ND 4.0 license](https://github.com/flagrow/bazaar/blob/master/LICENSE.md). In case you're interested in adapting the extension or using its code take the time to read and understand this license.
 
 ## Goals
 
@@ -23,7 +23,7 @@ The marketplace extension that allows you to add and remove extensions without c
 - Allow admins to connect to their Flagrow.io account and gain access to a dashboard showing the status of all forums.
 - Support paid extensions for Flagrow and other extension developers.
 
-For a complete overview of our changes, please visit the [changelog](https://github.com/flagrow/bazaar/blob/master/changelog.md) on Github.
+For a complete overview of our changes, please visit the [changelog](https://github.com/flagrow/bazaar/blob/master/CHANGELOG.md) on Github.
 
 ## Installation
 
@@ -58,13 +58,13 @@ This means you don't have anything particular to do to get your extension inside
 
 However here are a few additional steps you can take to improve the way your extension looks (check these keys in your `composer.json` file):
 
-- Fill the `license` key so we everybody know what they can do with your code
+- Fill the `license` key so everybody know what they can do with your code
 - Add every author to the `authors` key so we can list them
 - Choose a sensible name for `extra.flarum-extension.title`. This value is used with the tags to provide search
 - Don't forget to set an `extra.flarum-extension.icon` setting to your extension, it looks a lot better with an icon
 - Add an `extra.flagrow.discuss` key to link your extension with its discussion on Flarum Discuss. Must be a valid url starting with `https://discuss.flarum.org/d/`
 
-**Note:** not all this data is currently shown in Bazaar/[flagrow.io](https://flagrow.io/), but it's coming soon ! 
+**Note:** not all this data is currently shown in Bazaar or [flagrow.io](https://flagrow.io/), but it's coming soon ! 
 
 ## Support our work
 
