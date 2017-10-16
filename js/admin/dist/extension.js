@@ -1048,46 +1048,52 @@ System.register("flagrow/bazaar/modals/BazaarConnectModal", ["flarum/components/
 });;
 'use strict';
 
-System.register('flagrow/bazaar/modals/BazaarSettingsModal', ['flarum/app', 'flarum/components/SettingsModal'], function (_export, _context) {
-    "use strict";
+System.register('flagrow/bazaar/modals/BazaarSettingsModal', ['flarum/app', 'flarum/components/SettingsModal', 'flarum/components/Switch'], function (_export, _context) {
+  "use strict";
 
-    var app, SettingsModal, BazaarSettingsModal;
-    return {
-        setters: [function (_flarumApp) {
-            app = _flarumApp.default;
-        }, function (_flarumComponentsSettingsModal) {
-            SettingsModal = _flarumComponentsSettingsModal.default;
-        }],
-        execute: function () {
-            BazaarSettingsModal = function (_SettingsModal) {
-                babelHelpers.inherits(BazaarSettingsModal, _SettingsModal);
+  var app, SettingsModal, Switch, BazaarSettingsModal;
+  return {
+    setters: [function (_flarumApp) {
+      app = _flarumApp.default;
+    }, function (_flarumComponentsSettingsModal) {
+      SettingsModal = _flarumComponentsSettingsModal.default;
+    }, function (_flarumComponentsSwitch) {
+      Switch = _flarumComponentsSwitch.default;
+    }],
+    execute: function () {
+      BazaarSettingsModal = function (_SettingsModal) {
+        babelHelpers.inherits(BazaarSettingsModal, _SettingsModal);
 
-                function BazaarSettingsModal() {
-                    babelHelpers.classCallCheck(this, BazaarSettingsModal);
-                    return babelHelpers.possibleConstructorReturn(this, (BazaarSettingsModal.__proto__ || Object.getPrototypeOf(BazaarSettingsModal)).apply(this, arguments));
-                }
-
-                babelHelpers.createClass(BazaarSettingsModal, [{
-                    key: 'title',
-                    value: function title() {
-                        return app.translator.trans('flagrow-bazaar.admin.modal.settings.title');
-                    }
-                }, {
-                    key: 'form',
-                    value: function form() {
-                        return [m('div', { className: 'Form-group' }, [m('label', { for: 'bazaar-api-token' }, app.translator.trans('flagrow-bazaar.admin.modal.settings.field.apiToken')), m('input', {
-                            id: 'bazaar-api-token',
-                            className: 'FormControl',
-                            bidi: this.setting('flagrow.bazaar.api_token')
-                        }), m('span', app.translator.trans('flagrow-bazaar.admin.modal.settings.field.apiTokenDescription'))])];
-                    }
-                }]);
-                return BazaarSettingsModal;
-            }(SettingsModal);
-
-            _export('default', BazaarSettingsModal);
+        function BazaarSettingsModal() {
+          babelHelpers.classCallCheck(this, BazaarSettingsModal);
+          return babelHelpers.possibleConstructorReturn(this, (BazaarSettingsModal.__proto__ || Object.getPrototypeOf(BazaarSettingsModal)).apply(this, arguments));
         }
-    };
+
+        babelHelpers.createClass(BazaarSettingsModal, [{
+          key: 'title',
+          value: function title() {
+            return app.translator.trans('flagrow-bazaar.admin.modal.settings.title');
+          }
+        }, {
+          key: 'form',
+          value: function form() {
+            return [m('div', { className: 'Form-group' }, [m('label', { for: 'use-cron' }, app.translator.trans('flagrow-bazaar.admin.modal.settings.field.useCron')), Switch.component({
+              state: this.setting('flagrow.bazaar.use_cron')(),
+              onchange: this.setting('flagrow.bazaar.use_cron'),
+              children: app.translator.trans('flagrow-bazaar.admin.modal.settings.field.useCronToggle')
+            }), m('span', app.translator.trans('flagrow-bazaar.admin.modal.settings.field.useCronDescription'))]), m('div', { className: 'Form-group' }, [m('label', { for: 'bazaar-api-token' }, app.translator.trans('flagrow-bazaar.admin.modal.settings.field.apiToken')), m('input', {
+              id: 'bazaar-api-token',
+              className: 'FormControl',
+              bidi: this.setting('flagrow.bazaar.api_token')
+            }), m('span', app.translator.trans('flagrow-bazaar.admin.modal.settings.field.apiTokenDescription'))])];
+          }
+        }]);
+        return BazaarSettingsModal;
+      }(SettingsModal);
+
+      _export('default', BazaarSettingsModal);
+    }
+  };
 });;
 'use strict';
 

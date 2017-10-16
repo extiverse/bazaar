@@ -2,29 +2,21 @@
 
 namespace Flagrow\Bazaar\Extensions;
 
-use Carbon\Carbon;
 use Flagrow\Bazaar\Jobs\RemovePackage;
 use Flagrow\Bazaar\Jobs\RequirePackage;
 use Flagrow\Bazaar\Models\Task;
+use Flarum\Settings\SettingsRepositoryInterface;
 
 class PackageManager
 {
     /**
-     * Create and save a task model to use for a Composer job
-     * @param string $command Task type
-     * @param string $package Composer package name
-     * @return Task
+     * @var bool
      */
-    public function buildTask($command, $package)
+    protected $useCron;
+
+    public function __construct(SettingsRepositoryInterface $settings)
     {
-        $task = new Task();
-
-        $task->command = $command;
-        $task->package = $package;
-        $task->created_at = Carbon::now();
-        $task->save();
-
-        return $task;
+        $this->useCron = $settings->get('flagrow.bazaar.use_cron', false);
     }
 
     /**
@@ -35,9 +27,11 @@ class PackageManager
      */
     public function updatePackage($package)
     {
-        $task = $this->buildTask('update', $package);
+        $task = Task::build('update', $package, RequirePackage::class);
 
-        RequirePackage::launchJob($task);
+        if (!$this->useCron) {
+            RequirePackage::launchJob($task);
+        }
     }
 
     /**
@@ -46,9 +40,11 @@ class PackageManager
      */
     public function requirePackage($package)
     {
-        $task = $this->buildTask('install', $package);
+        $task = Task::build('install', $package, RequirePackage::class);
 
-        RequirePackage::launchJob($task);
+        if (!$this->useCron) {
+            RequirePackage::launchJob($task);
+        }
     }
 
     /**
@@ -57,8 +53,10 @@ class PackageManager
      */
     public function removePackage($package)
     {
-        $task = $this->buildTask('uninstall', $package);
+        $task = Task::build('uninstall', $package, RemovePackage::class);
 
-        RemovePackage::launchJob($task);
+        if (!$this->useCron) {
+            RemovePackage::launchJob($task);
+        }
     }
 }
