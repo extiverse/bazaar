@@ -10,8 +10,14 @@ use Illuminate\Contracts\Events\Dispatcher;
 
 class AddTaskCommand
 {
+    /**
+     * @var bool
+     */
     protected $chronos;
 
+    /**
+     * @param ExtensionManager $manager
+     */
     public function __construct(ExtensionManager $manager)
     {
         $this->chronos = $manager->getExtension('flagrow-chronos') !== null;
