@@ -20,6 +20,21 @@ class PackageManager
     }
 
     /**
+     * @param $command
+     * @param $package
+     * @param $class
+     * @return Task
+     */
+    protected function build($command, $package, $class)
+    {
+        $task = Task::build($command, $package, $class);
+
+        $task->save();
+
+        return $task;
+    }
+
+    /**
      * Create and run an update job
      * RequirePackage is used behind the scene as we do not want to update any other dependency
      * But we need a separate method from requirePackage to correctly log the "update" in the task list
@@ -27,7 +42,7 @@ class PackageManager
      */
     public function updatePackage($package)
     {
-        $task = Task::build('update', $package, RequirePackage::class);
+        $task = $this->build('update', $package, RequirePackage::class);
 
         if (!$this->useCron) {
             RequirePackage::launchJob($task);
@@ -40,7 +55,7 @@ class PackageManager
      */
     public function requirePackage($package)
     {
-        $task = Task::build('install', $package, RequirePackage::class);
+        $task = $this->build('install', $package, RequirePackage::class);
 
         if (!$this->useCron) {
             RequirePackage::launchJob($task);
@@ -53,7 +68,7 @@ class PackageManager
      */
     public function removePackage($package)
     {
-        $task = Task::build('uninstall', $package, RemovePackage::class);
+        $task = $this->build('uninstall', $package, RemovePackage::class);
 
         if (!$this->useCron) {
             RemovePackage::launchJob($task);

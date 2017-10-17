@@ -40,7 +40,7 @@ class ConsoleProvider extends AbstractServiceProvider
         /** @var Schedule $schedule */
         $schedule = $this->app->make(Schedule::class);
 
-        $schedule->command(TaskCommand::class)
+        $schedule->command('bazaar:task')
             ->everyMinute()
             ->withoutOverlapping();
     }
