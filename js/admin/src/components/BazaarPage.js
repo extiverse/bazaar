@@ -46,6 +46,12 @@ export default class BazaarPage extends Component {
                 children: app.translator.trans('flagrow-bazaar.admin.search.filter_update_required')
             }),
             CustomCheckbox.component({
+                iconChecked: 'circle-o-notch',
+                state: this.repository().filterPending(),
+                onchange: (checked) => this.repository().filterPending(checked),
+                children: app.translator.trans('flagrow-bazaar.admin.search.filter_pending')
+            }),
+            CustomCheckbox.component({
                 iconChecked: 'plus-square',
                 state: this.repository().filterInstalled(),
                 onchange: (checked) => this.repository().filterInstalled(checked),
@@ -63,6 +69,10 @@ export default class BazaarPage extends Component {
     items() {
         return m('ul', {className: 'ExtensionList'}, [
             this.repository().extensions().filter(extension => {
+                if (this.repository().filterPending() && ! extension.pending()) {
+                    return false;
+                }
+                
                 if (this.repository().filterInstalled() && ! extension.installed()) {
                     return false;
                 }

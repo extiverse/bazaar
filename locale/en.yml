@@ -61,6 +61,7 @@ flagrow-bazaar:
                 enabled: Extension is enabled
                 vendor: By {vendor}
                 favorited: One of your favorites
+                pending: Extension waits on a background task to complete
                 outdated: "Extension is outdated, please update to version {new}"
             task:
                 header:
@@ -91,3 +92,4 @@ flagrow-bazaar:
             filter_installed: Show only installed extensions
             filter_update_required: Show only extension with an update available
             filter_favorited: Show only favorited extensions
+            filter_pending: Show only extensions that have background tasks pending

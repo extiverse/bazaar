@@ -15,6 +15,7 @@ export default class Extension extends mixin(Model, {
 
     installed: Model.attribute('installed'),
     enabled: Model.attribute('enabled'),
+    pending: Model.attribute('pending'),
     installed_version: Model.attribute('installed_version'),
     highest_version: Model.attribute('highest_version'),
     outdated: Model.attribute('outdated'),

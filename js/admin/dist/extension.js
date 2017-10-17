@@ -179,6 +179,13 @@ System.register("flagrow/bazaar/components/BazaarPage", ["flarum/Component", "fl
                             },
                             children: app.translator.trans('flagrow-bazaar.admin.search.filter_update_required')
                         }), CustomCheckbox.component({
+                            iconChecked: 'circle-o-notch',
+                            state: this.repository().filterPending(),
+                            onchange: function onchange(checked) {
+                                return _this2.repository().filterPending(checked);
+                            },
+                            children: app.translator.trans('flagrow-bazaar.admin.search.filter_pending')
+                        }), CustomCheckbox.component({
                             iconChecked: 'plus-square',
                             state: this.repository().filterInstalled(),
                             onchange: function onchange(checked) {
@@ -200,6 +207,10 @@ System.register("flagrow/bazaar/components/BazaarPage", ["flarum/Component", "fl
                         var _this3 = this;
 
                         return m('ul', { className: 'ExtensionList' }, [this.repository().extensions().filter(function (extension) {
+                            if (_this3.repository().filterPending() && !extension.pending()) {
+                                return false;
+                            }
+
                             if (_this3.repository().filterInstalled() && !extension.installed()) {
                                 return false;
                             }
@@ -475,7 +486,7 @@ System.register("flagrow/bazaar/components/ExtensionListItem", ["flarum/Componen
 
                         return m(
                             "li",
-                            { className: 'ExtensionListItem ' + (extension.enabled() ? 'enabled ' : 'disabled ') + (extension.installed() ? 'installed ' : 'uninstalled ') + (extension.outdated() ? 'outdated ' : '') },
+                            { className: 'ExtensionListItem ' + (extension.enabled() ? 'enabled ' : 'disabled ') + (extension.installed() ? 'installed ' : 'uninstalled ') + (extension.outdated() ? 'outdated ' : '') + (extension.pending() ? 'pending ' : '') },
                             m(
                                 "div",
                                 { className: "ExtensionListItem-content" },
@@ -535,59 +546,61 @@ System.register("flagrow/bazaar/components/ExtensionListItem", ["flarum/Componen
                             }));
                         }
 
-                        if (extension.enabled() && app.extensionSettings[name]) {
-                            items.add('settings', Button.component({
-                                icon: 'cog',
-                                children: app.translator.trans('core.admin.extensions.settings_button'),
-                                onclick: app.extensionSettings[name]
-                            }));
-                        }
+                        if (!extension.pending()) {
+                            if (extension.enabled() && app.extensionSettings[name]) {
+                                items.add('settings', Button.component({
+                                    icon: 'cog',
+                                    children: app.translator.trans('core.admin.extensions.settings_button'),
+                                    onclick: app.extensionSettings[name]
+                                }));
+                            }
 
-                        if (extension.installed() && !extension.enabled()) {
-                            items.add('uninstall', Button.component({
-                                icon: 'minus-square-o',
-                                children: app.translator.trans('flagrow-bazaar.admin.page.button.uninstall'),
-                                onclick: function onclick() {
-                                    repository().uninstallExtension(extension);
-                                }
-                            }));
-                            items.add('enable', Button.component({
-                                icon: 'check-square-o',
-                                children: app.translator.trans('flagrow-bazaar.admin.page.button.enable'),
-                                onclick: function onclick() {
-                                    repository().enableExtension(extension);
-                                }
-                            }));
-                        }
+                            if (extension.installed() && !extension.enabled()) {
+                                items.add('uninstall', Button.component({
+                                    icon: 'minus-square-o',
+                                    children: app.translator.trans('flagrow-bazaar.admin.page.button.uninstall'),
+                                    onclick: function onclick() {
+                                        repository().uninstallExtension(extension);
+                                    }
+                                }));
+                                items.add('enable', Button.component({
+                                    icon: 'check-square-o',
+                                    children: app.translator.trans('flagrow-bazaar.admin.page.button.enable'),
+                                    onclick: function onclick() {
+                                        repository().enableExtension(extension);
+                                    }
+                                }));
+                            }
 
-                        if (extension.installed() && extension.outdated()) {
-                            items.add('update', Button.component({
-                                icon: 'toggle-up',
-                                children: app.translator.trans('flagrow-bazaar.admin.page.button.update'),
-                                onclick: function onclick() {
-                                    repository().updateExtension(extension);
-                                }
-                            }));
-                        }
+                            if (extension.installed() && extension.outdated()) {
+                                items.add('update', Button.component({
+                                    icon: 'toggle-up',
+                                    children: app.translator.trans('flagrow-bazaar.admin.page.button.update'),
+                                    onclick: function onclick() {
+                                        repository().updateExtension(extension);
+                                    }
+                                }));
+                            }
 
-                        if (extension.installed() && extension.enabled()) {
-                            items.add('disable', Button.component({
-                                icon: 'square-o',
-                                children: app.translator.trans('flagrow-bazaar.admin.page.button.disable'),
-                                onclick: function onclick() {
-                                    repository().disableExtension(extension);
-                                }
-                            }));
-                        }
+                            if (extension.installed() && extension.enabled()) {
+                                items.add('disable', Button.component({
+                                    icon: 'square-o',
+                                    children: app.translator.trans('flagrow-bazaar.admin.page.button.disable'),
+                                    onclick: function onclick() {
+                                        repository().disableExtension(extension);
+                                    }
+                                }));
+                            }
 
-                        if (!extension.installed()) {
-                            items.add('install', Button.component({
-                                icon: 'plus-square-o',
-                                children: app.translator.trans('flagrow-bazaar.admin.page.button.install'),
-                                onclick: function onclick() {
-                                    repository().installExtension(extension);
-                                }
-                            }));
+                            if (!extension.installed()) {
+                                items.add('install', Button.component({
+                                    icon: 'plus-square-o',
+                                    children: app.translator.trans('flagrow-bazaar.admin.page.button.install'),
+                                    onclick: function onclick() {
+                                        repository().installExtension(extension);
+                                    }
+                                }));
+                            }
                         }
 
                         return items;
@@ -596,6 +609,11 @@ System.register("flagrow/bazaar/components/ExtensionListItem", ["flarum/Componen
                     key: "badges",
                     value: function badges(extension) {
                         var items = new ItemList();
+
+                        if (extension.pending()) {
+                            items.add('pending', m(Badge, { icon: "circle-o-notch fa-spin", type: "pending",
+                                label: app.translator.trans('flagrow-bazaar.admin.page.extension.pending') }));
+                        }
 
                         if (extension.installed() && extension.outdated()) {
                             items.add('favorited', m(Badge, { icon: "warning", type: "outdated",
@@ -1245,6 +1263,7 @@ System.register('flagrow/bazaar/models/Extension', ['flarum/Model', 'flarum/util
 
                 installed: Model.attribute('installed'),
                 enabled: Model.attribute('enabled'),
+                pending: Model.attribute('pending'),
                 installed_version: Model.attribute('installed_version'),
                 highest_version: Model.attribute('highest_version'),
                 outdated: Model.attribute('outdated'),
@@ -1303,15 +1322,15 @@ System.register('flagrow/bazaar/models/Task', ['flarum/Model', 'flarum/utils/mix
 });;
 'use strict';
 
-System.register('flagrow/bazaar/utils/ExtensionRepository', ['flarum/app', 'flagrow/bazaar/utils/debounce'], function (_export, _context) {
+System.register('flagrow/bazaar/utils/ExtensionRepository', ['flarum/app', './debounce'], function (_export, _context) {
     "use strict";
 
     var app, debounce, ExtensionRepository;
     return {
         setters: [function (_flarumApp) {
             app = _flarumApp.default;
-        }, function (_flagrowBazaarUtilsDebounce) {
-            debounce = _flagrowBazaarUtilsDebounce.default;
+        }, function (_debounce) {
+            debounce = _debounce.default;
         }],
         execute: function () {
             ExtensionRepository = function () {
@@ -1325,6 +1344,7 @@ System.register('flagrow/bazaar/utils/ExtensionRepository', ['flarum/app', 'flag
                     this.loading = loading;
                     this.resetNavigation();
                     this.filterInstalled = m.prop(false);
+                    this.filterPending = m.prop(false);
                     this.filterUpdateRequired = m.prop(false);
                     this.filterFavorited = m.prop(false);
                     this.filters = {

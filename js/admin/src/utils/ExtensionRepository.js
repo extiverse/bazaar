@@ -1,5 +1,5 @@
 import app from "flarum/app";
-import debounce from 'flagrow/bazaar/utils/debounce'
+import debounce from './debounce'
 
 export default class ExtensionRepository {
     constructor(loading) {
@@ -8,6 +8,7 @@ export default class ExtensionRepository {
         this.loading = loading;
         this.resetNavigation();
         this.filterInstalled = m.prop(false);
+        this.filterPending = m.prop(false);
         this.filterUpdateRequired = m.prop(false);
         this.filterFavorited = m.prop(false);
         this.filters = {

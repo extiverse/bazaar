@@ -3,6 +3,7 @@
 namespace Flagrow\Bazaar\Extensions;
 
 use Composer\Semver\Comparator;
+use Flagrow\Bazaar\Models\Task;
 use Flarum\Extension\Extension as InstalledExtension;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Arr;
@@ -169,6 +170,18 @@ class Extension implements Arrayable
         );
     }
 
+    /**
+     * @return bool
+     */
+    public function isPending()
+    {
+        return Task::query()
+            ->where('package', $this->getPackage())
+            ->whereNull('started_at')
+            ->whereNull('finished_at')
+            ->count() > 0;
+    }
+
     public function getAvailableVersion()
     {
         return $this->getAttributeIfPresent('highest_version');
@@ -190,6 +203,7 @@ class Extension implements Arrayable
             'forks' => $this->getAttributeIfPresent('forks'),
             'downloads' => $this->getAttributeIfPresent('downloads'),
             'installed' => $this->isInstalled(),
+            'pending' => $this->isPending(),
             'enabled' => $this->isEnabled(),
             'installed_version' => $this->getInstalledVersion(),
             'highest_version' => $this->getAvailableVersion(),
