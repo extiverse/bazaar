@@ -232,10 +232,10 @@ System.register("flagrow/bazaar/components/BazaarPage", ["flarum/Component", "fl
 });;
 'use strict';
 
-System.register('flagrow/bazaar/components/BazaarPageHeader', ['flarum/app', 'flarum/Component', 'flarum/components/LinkButton', 'flarum/components/Button', 'flagrow/bazaar/modals/FilePermissionsModal', 'flagrow/bazaar/modals/MemoryLimitModal', 'flagrow/bazaar/modals/BazaarConnectModal'], function (_export, _context) {
+System.register('flagrow/bazaar/components/BazaarPageHeader', ['flarum/app', 'flarum/Component', 'flarum/components/LinkButton', 'flarum/components/Button', './../modals/FilePermissionsModal', './../modals/MemoryLimitModal', './../modals/BazaarConnectModal', './../modals/BazaarSettingsModal'], function (_export, _context) {
     "use strict";
 
-    var app, Component, LinkButton, Button, FilePermissionsModal, MemoryLimitModal, BazaarConnectModal, BazaarPageHeader;
+    var app, Component, LinkButton, Button, FilePermissionsModal, MemoryLimitModal, BazaarConnectModal, BazaarSettingsModal, BazaarPageHeader;
     return {
         setters: [function (_flarumApp) {
             app = _flarumApp.default;
@@ -245,12 +245,14 @@ System.register('flagrow/bazaar/components/BazaarPageHeader', ['flarum/app', 'fl
             LinkButton = _flarumComponentsLinkButton.default;
         }, function (_flarumComponentsButton) {
             Button = _flarumComponentsButton.default;
-        }, function (_flagrowBazaarModalsFilePermissionsModal) {
-            FilePermissionsModal = _flagrowBazaarModalsFilePermissionsModal.default;
-        }, function (_flagrowBazaarModalsMemoryLimitModal) {
-            MemoryLimitModal = _flagrowBazaarModalsMemoryLimitModal.default;
-        }, function (_flagrowBazaarModalsBazaarConnectModal) {
-            BazaarConnectModal = _flagrowBazaarModalsBazaarConnectModal.default;
+        }, function (_modalsFilePermissionsModal) {
+            FilePermissionsModal = _modalsFilePermissionsModal.default;
+        }, function (_modalsMemoryLimitModal) {
+            MemoryLimitModal = _modalsMemoryLimitModal.default;
+        }, function (_modalsBazaarConnectModal) {
+            BazaarConnectModal = _modalsBazaarConnectModal.default;
+        }, function (_modalsBazaarSettingsModal) {
+            BazaarSettingsModal = _modalsBazaarSettingsModal.default;
         }],
         execute: function () {
             BazaarPageHeader = function (_Component) {
@@ -277,9 +279,20 @@ System.register('flagrow/bazaar/components/BazaarPageHeader', ['flarum/app', 'fl
                 }, {
                     key: 'header',
                     value: function header() {
-                        var buttons = [].concat(this.requirementsButtons(), this.connectedButtons(), this.pagesButtons());
+                        var buttons = [].concat(this.settingsButton(), this.requirementsButtons(), this.connectedButtons(), this.pagesButtons());
 
                         return m('div', { className: 'ButtonGroup' }, buttons);
+                    }
+                }, {
+                    key: 'settingsButton',
+                    value: function settingsButton() {
+                        return [Button.component({
+                            className: 'Button Button--icon',
+                            icon: 'cog',
+                            onclick: function onclick() {
+                                return app.modal.show(new BazaarSettingsModal());
+                            }
+                        })];
                     }
                 }, {
                     key: 'requirementsButtons',
@@ -1077,15 +1090,17 @@ System.register('flagrow/bazaar/modals/BazaarSettingsModal', ['flarum/app', 'fla
         }, {
           key: 'form',
           value: function form() {
-            return [m('div', { className: 'Form-group' }, [m('label', { for: 'use-cron' }, app.translator.trans('flagrow-bazaar.admin.modal.settings.field.useCron')), Switch.component({
-              state: this.setting('flagrow.bazaar.use_cron')(),
-              onchange: this.setting('flagrow.bazaar.use_cron'),
-              children: app.translator.trans('flagrow-bazaar.admin.modal.settings.field.useCronToggle')
-            }), m('span', app.translator.trans('flagrow-bazaar.admin.modal.settings.field.useCronDescription'))]), m('div', { className: 'Form-group' }, [m('label', { for: 'bazaar-api-token' }, app.translator.trans('flagrow-bazaar.admin.modal.settings.field.apiToken')), m('input', {
+            return [m('div', { className: 'Form-group' }, [m('label', { for: 'use-cron' }, app.translator.trans('flagrow-bazaar.admin.modal.settings.field.use_cron_for_tasks.label')), Switch.component({
+              state: this.setting('flagrow.bazaar.use_cron_for_tasks')(),
+              onchange: this.setting('flagrow.bazaar.use_cron_for_tasks'),
+              children: app.translator.trans('flagrow-bazaar.admin.modal.settings.field.use_cron_for_tasks.toggle')
+            }), m('span', app.translator.trans('flagrow-bazaar.admin.modal.settings.field.use_cron_for_tasks.description', {
+              a: m('a', { href: 'https://github.com/flagrow/bazaar/wiki/Cron-task-processing', target: '_blank' })
+            }))]), m('div', { className: 'Form-group' }, [m('label', { for: 'bazaar-api-token' }, app.translator.trans('flagrow-bazaar.admin.modal.settings.field.token.label')), m('input', {
               id: 'bazaar-api-token',
               className: 'FormControl',
               bidi: this.setting('flagrow.bazaar.api_token')
-            }), m('span', app.translator.trans('flagrow-bazaar.admin.modal.settings.field.apiTokenDescription'))])];
+            }), m('span', app.translator.trans('flagrow-bazaar.admin.modal.settings.field.token.description'))])];
           }
         }]);
         return BazaarSettingsModal;

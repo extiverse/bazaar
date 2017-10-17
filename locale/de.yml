@@ -5,8 +5,9 @@ flagrow-bazaar:
         popup:
             title: Flagrow Bazaar
             field:
-                apiToken: API Token
-                apiTokenDescription: Dieser API Token wird für den Zugriff auf die Flagrow Erweiterung API benötigt. Wenn der API Token bereits gesetzt ist, bist du bereit anzufangen.
+                token:
+                  label: API Token
+                  description: Dieser API Token wird für den Zugriff auf die Flagrow Erweiterung API benötigt. Wenn der API Token bereits gesetzt ist, bist du bereit anzufangen.
         nav:
             title: Bazaar
             description: Der Marktplatz für Erweiterungen.

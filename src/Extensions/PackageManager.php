@@ -16,7 +16,7 @@ class PackageManager
 
     public function __construct(SettingsRepositoryInterface $settings)
     {
-        $this->useCron = $settings->get('flagrow.bazaar.use_cron', false);
+        $this->useCron = $settings->get('flagrow.bazaar.use_cron_for_tasks', false);
     }
 
     /**
