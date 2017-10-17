@@ -72,7 +72,7 @@ export default class BazaarPage extends Component {
                 if (this.repository().filterPending() && ! extension.pending()) {
                     return false;
                 }
-                
+
                 if (this.repository().filterInstalled() && ! extension.installed()) {
                     return false;
                 }
