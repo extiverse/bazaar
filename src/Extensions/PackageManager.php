@@ -27,6 +27,10 @@ class PackageManager
      */
     protected function build($command, $package, $class)
     {
+        if (! $this->useCron) {
+            $class = null;
+        }
+
         $task = Task::build($command, $package, $class);
 
         $task->save();
