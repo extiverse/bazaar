@@ -11,6 +11,7 @@ export default class ExtensionRepository {
         this.filterPending = m.prop(false);
         this.filterUpdateRequired = m.prop(false);
         this.filterFavorited = m.prop(false);
+        this.filterLanguages = m.prop(false);
         this.filters = {
             search: '',
         };

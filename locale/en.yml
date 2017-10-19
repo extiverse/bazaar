@@ -89,7 +89,8 @@ flagrow-bazaar:
                     older: Older
         search:
             placeholder: Search extensions
-            filter_installed: Show only installed extensions
-            filter_update_required: Show only extension with an update available
-            filter_favorited: Show only favorited extensions
-            filter_pending: Show only extensions that have background tasks pending
+            filter_installed: Installed
+            filter_update_required: Outdated
+            filter_favorited: Favorited
+            filter_pending: Pending
+            filter_languages: Languages

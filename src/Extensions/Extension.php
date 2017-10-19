@@ -182,6 +182,11 @@ class Extension implements Arrayable
             ->count() > 0;
     }
 
+    public function locale()
+    {
+        return $this->getAttributeIfPresent('locale');
+    }
+
     public function getAvailableVersion()
     {
         return $this->getAttributeIfPresent('highest_version');
@@ -202,6 +207,7 @@ class Extension implements Arrayable
             'stars' => $this->getAttributeIfPresent('stars'),
             'forks' => $this->getAttributeIfPresent('forks'),
             'downloads' => $this->getAttributeIfPresent('downloads'),
+            'locale' => $this->locale(),
             'installed' => $this->isInstalled(),
             'pending' => $this->isPending(),
             'enabled' => $this->isEnabled(),
