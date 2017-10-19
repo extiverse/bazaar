@@ -27,7 +27,7 @@ class PackageManager
      */
     protected function build($command, $package, $class)
     {
-        if (! $this->useCron) {
+        if (!$this->useCron) {
             $class = null;
         }
 
