@@ -16,7 +16,7 @@ references:
             - run:
                 name: Wait for other docker instances to be up
                 command: sleep 10
-            - run: ./vendor/bin/phpunit
+            - run: ./vendor/bin/phpunit -d memory_limit=1G
 
     mysql_environment: &mysql_environment
         - MYSQL_DATABASE: flarum
