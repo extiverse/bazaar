@@ -2,9 +2,9 @@
 
 namespace Flagrow\Bazaar\Tests;
 
-use PHPUnit_Framework_TestCase;
+use Flagrow\Steamroller\TestCase as Test;
 
-class TestCase extends PHPUnit_Framework_TestCase
+class TestCase extends Test
 {
     //
 }
