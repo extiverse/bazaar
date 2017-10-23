@@ -205,9 +205,11 @@ class ExtensionRepository
 
         $this->flush->fire();
 
-        $this->events->fire(
-            new ExtensionWasInstalled($extension->getInstalledExtension())
-        );
+        if ($extension->getInstalledExtension() !== null) {
+            $this->events->fire(
+                new ExtensionWasInstalled($extension->getInstalledExtension())
+            );
+        }
 
         return $extension;
     }

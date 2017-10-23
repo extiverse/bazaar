@@ -5,8 +5,16 @@ flagrow-bazaar:
         popup:
             title: Flagrow Bazaar
             field:
-                apiToken: API token
-                apiTokenDescription: Deze token is benodigd voor toegang tot de Flagrow extensies api. Indien reeds ingevuld, hoef je verder niets te doen!
+                token:
+                  label: API token
+                  description: Deze token is benodigd voor toegang tot de Flagrow extensies api. Indien reeds ingevuld, hoef je verder niets te doen!
+                use_cron_for_tasks:
+                  label: Cronjobs
+                  description: >
+                     Door cronjobs te gebruiken, kunnen we voorkomen dat de taken vroegtijdig
+                     worden afgesloten vanwege een timeout. Let op dat hiervoor de cronjob
+                     wel geconfigureerd dient te worden, lees de <a>wiki</a>.
+                  toggle: Gebruik crons voor taak verwerking
         nav:
             title: Bazaar
             description: De extensie marktplaats.

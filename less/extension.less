@@ -1,6 +1,8 @@
+@flagrow-color: #5f4bb6;
+
 .ExtensionsPage.Bazaar {
     .ExtensionsPage-header {
-        background: #5f4bb6;
+        background: @flagrow-color;
         .box-shadow(0 1px 5px @shadow-color);
     }
     .Button {
@@ -62,14 +64,20 @@
     }
 
     .ExtensionSearch {
-        margin-bottom: 30px;
-
+        margin-bottom: 1px;
         .FormControl {
             width: 60em;
             max-width: 100%;
         }
+    }
 
-        .Checkbox-display {
+    .ExtensionFilters {
+        margin-bottom: 30px;
+
+        .Button {
+            &.active {
+                color: @flagrow-color;
+            }
             display: inline-block;
         }
     }

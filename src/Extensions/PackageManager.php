@@ -2,26 +2,37 @@
 
 namespace Flagrow\Bazaar\Extensions;
 
-use Carbon\Carbon;
 use Flagrow\Bazaar\Jobs\RemovePackage;
 use Flagrow\Bazaar\Jobs\RequirePackage;
 use Flagrow\Bazaar\Models\Task;
+use Flarum\Settings\SettingsRepositoryInterface;
 
 class PackageManager
 {
     /**
-     * Create and save a task model to use for a Composer job
-     * @param string $command Task type
-     * @param string $package Composer package name
+     * @var bool
+     */
+    protected $useCron;
+
+    public function __construct(SettingsRepositoryInterface $settings)
+    {
+        $this->useCron = $settings->get('flagrow.bazaar.use_cron_for_tasks', false);
+    }
+
+    /**
+     * @param $command
+     * @param $package
+     * @param $class
      * @return Task
      */
-    public function buildTask($command, $package)
+    protected function build($command, $package, $class)
     {
-        $task = new Task();
+        if (!$this->useCron) {
+            $class = null;
+        }
 
-        $task->command = $command;
-        $task->package = $package;
-        $task->created_at = Carbon::now();
+        $task = Task::build($command, $package, $class);
+
         $task->save();
 
         return $task;
@@ -35,9 +46,11 @@ class PackageManager
      */
     public function updatePackage($package)
     {
-        $task = $this->buildTask('update', $package);
+        $task = $this->build('update', $package, RequirePackage::class);
 
-        RequirePackage::launchJob($task);
+        if (!$this->useCron) {
+            RequirePackage::launchJob($task);
+        }
     }
 
     /**
@@ -46,9 +59,11 @@ class PackageManager
      */
     public function requirePackage($package)
     {
-        $task = $this->buildTask('install', $package);
+        $task = $this->build('install', $package, RequirePackage::class);
 
-        RequirePackage::launchJob($task);
+        if (!$this->useCron) {
+            RequirePackage::launchJob($task);
+        }
     }
 
     /**
@@ -57,8 +72,10 @@ class PackageManager
      */
     public function removePackage($package)
     {
-        $task = $this->buildTask('uninstall', $package);
+        $task = $this->build('uninstall', $package, RemovePackage::class);
 
-        RemovePackage::launchJob($task);
+        if (!$this->useCron) {
+            RemovePackage::launchJob($task);
+        }
     }
 }

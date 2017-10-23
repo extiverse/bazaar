@@ -9,6 +9,7 @@ use Flarum\Database\AbstractModel;
  * @property int $id
  * @property string $status
  * @property string $command
+ * @property string $command_class
  * @property string $package
  * @property string $output
  * @property Carbon $created_at
@@ -35,11 +36,16 @@ class Task extends AbstractModel
      * Craft a task with basic values
      * @param string $command
      * @param string|null $package
+     * @param string|null $class
      * @return static
      */
-    public static function build($command, $package = null)
+    public static function build($command, $package = null, $class = null)
     {
         $task = new static;
+
+        if (class_exists($class)) {
+            $task->command_class = $class;
+        }
 
         $task->command = $command;
         $task->package = $package;

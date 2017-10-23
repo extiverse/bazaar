@@ -8,6 +8,7 @@ export default class Extension extends mixin(Model, {
     description: Model.attribute('description'),
     license: Model.attribute('license'),
     icon: Model.attribute('icon'),
+    locale: Model.attribute('locale'),
 
     stars: Model.attribute('stars'),
     forks: Model.attribute('forks'),
@@ -15,6 +16,7 @@ export default class Extension extends mixin(Model, {
 
     installed: Model.attribute('installed'),
     enabled: Model.attribute('enabled'),
+    pending: Model.attribute('pending'),
     installed_version: Model.attribute('installed_version'),
     highest_version: Model.attribute('highest_version'),
     outdated: Model.attribute('outdated'),

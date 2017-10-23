@@ -15,8 +15,16 @@ flagrow-bazaar:
             settings:
                 title: Flagrow Bazaar
                 field:
-                    apiToken: API token
-                    apiTokenDescription: This api token is required to access the Flagrow extension api. If already set, you're good to go!
+                    token:
+                        label: API token
+                        description: This api token is required to access the Flagrow extension api. If already set, you're good to go!
+                    use_cron_for_tasks:
+                        label: Cronjobs
+                        description: >
+                           By allowing cronjobs to process Bazaar tasks, these processes
+                           are less likely to timeout. Please note you need to be able to
+                           configure the cronjob, refer to <a>the wiki</a>.
+                        toggle: Use crons for task processing
             connect-bazaar:
                 title: Connect
                 description: >
@@ -53,6 +61,7 @@ flagrow-bazaar:
                 enabled: Extension is enabled
                 vendor: By {vendor}
                 favorited: One of your favorites
+                pending: Extension waits on a background task to complete
                 outdated: "Extension is outdated, please update to version {new}"
             task:
                 header:
@@ -80,6 +89,8 @@ flagrow-bazaar:
                     older: Older
         search:
             placeholder: Search extensions
-            filter_installed: Show only installed extensions
-            filter_update_required: Show only extension with an update available
-            filter_favorited: Show only favorited extensions
+            filter_installed: Installed
+            filter_update_required: Outdated
+            filter_favorited: Favorited
+            filter_pending: Pending
+            filter_languages: Languages
