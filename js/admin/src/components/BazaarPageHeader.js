@@ -28,7 +28,7 @@ export default class BazaarPageHeader extends Component {
 
         return m('div', {className: 'ButtonGroup'}, buttons);
     }
-    
+
     settingsButton() {
       return [
         Button.component({
@@ -80,7 +80,9 @@ export default class BazaarPageHeader extends Component {
                 Button.component({
                     className: 'Button Button--icon Connected',
                     icon: 'dashboard',
-                    onclick: () => window.open(flagrowHost + '/home')
+                    onclick: () => app.modal.show(new DashboardModal({
+                        flagrowHost
+                    }))
                 }),
             ]
         }

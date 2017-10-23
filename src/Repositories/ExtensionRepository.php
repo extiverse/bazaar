@@ -17,7 +17,7 @@ use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Arr;
 
-class ExtensionRepository
+final class ExtensionRepository
 {
     use Cachable;
     /**
@@ -216,10 +216,9 @@ class ExtensionRepository
 
     /**
      * @param $package
-     * @param null|string $version
      * @return Extension|null
      */
-    public function updateExtension($package, $version = null)
+    public function updateExtension($package)
     {
         $extension = $this->getExtension($package);
 
@@ -229,11 +228,11 @@ class ExtensionRepository
 
         $this->flush->fire();
 
+        $this->refreshInstalledExtension($extension);
+
         $this->events->fire(
             new ExtensionWasUpdated($extension->getInstalledExtension())
         );
-
-        $this->refreshInstalledExtension($extension);
 
         return $extension;
     }

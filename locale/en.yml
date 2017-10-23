@@ -12,6 +12,15 @@ flagrow-bazaar:
             extensions: Browse extensions
             tasks: Tasks history
         modal:
+            dashboard:
+                title: Dashboard
+                visit-remote-dashboard: Visit dashboard
+                sync:
+                    switch: Sync
+                    description: >
+                        Sync your extension information with {host} to receive timely notifications about new versions
+                        of extensions you installed. In addition we will send you a regular notification about outdated
+                        extensions on all your synced Bazaar enabled Flarum installations.
             settings:
                 title: Flagrow Bazaar
                 field:
@@ -80,6 +89,8 @@ flagrow-bazaar:
                     working: Work in progress
                     unknown: Unknown
                 command:
+                    sync-lock: Sync composer.lock file
+                    sync-version: Sync {extension} version
                     install: Install {extension}
                     update: Update {extension}
                     uninstall: Uninstall {extension}

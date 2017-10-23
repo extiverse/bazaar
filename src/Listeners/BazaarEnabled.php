@@ -2,6 +2,7 @@
 
 namespace Flagrow\Bazaar\Listeners;
 
+use Carbon\Carbon;
 use Flagrow\Bazaar\Events\TokenSet;
 use Flagrow\Bazaar\Search\FlagrowApi;
 use Flarum\Event\ConfigureWebApp;
@@ -31,8 +32,12 @@ class BazaarEnabled
      */
     protected $events;
 
-    public function __construct(ExtensionManager $extensions, SettingsRepositoryInterface $settings, FlagrowApi $client, Dispatcher $events)
-    {
+    public function __construct(
+        ExtensionManager $extensions,
+        SettingsRepositoryInterface $settings,
+        FlagrowApi $client,
+        Dispatcher $events
+    ) {
         $this->extensions = $extensions;
         $this->settings = $settings;
         $this->client = $client;
@@ -44,7 +49,7 @@ class BazaarEnabled
      */
     public function subscribe(Dispatcher $events)
     {
-        $events->listen(ConfigureWebApp::class, [$this, 'authenticate']);
+        $events->listen(ConfigureWebApp::class, [$this, 'authenticate'], -10);
     }
 
     /**

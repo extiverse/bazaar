@@ -151,7 +151,7 @@ System.register("flagrow/bazaar/components/BazaarPage", ["flarum/Component", "./
                         this.loading = m.prop(false);
                         this.repository = m.prop(new ExtensionRepository(this.loading));
                         this.repository().loadNextPage();
-                        this.connected = app.data.settings['flagrow.bazaar.connected'] == 1 || false;
+                        this.connected = app.data.settings['flagrow.bazaar.connected'] && app.data.settings['flagrow.bazaar.connected'] !== '0';
                     }
                 }, {
                     key: "view",
@@ -365,7 +365,9 @@ System.register('flagrow/bazaar/components/BazaarPageHeader', ['flarum/app', 'fl
                                 className: 'Button Button--icon Connected',
                                 icon: 'dashboard',
                                 onclick: function onclick() {
-                                    return window.open(flagrowHost + '/home');
+                                    return app.modal.show(new DashboardModal({
+                                        flagrowHost: flagrowHost
+                                    }));
                                 }
                             })];
                         }
@@ -900,6 +902,7 @@ System.register('flagrow/bazaar/components/TasksPage', ['flarum/app', 'flarum/Co
                         this.repository = new TaskRepository(this.loading);
                         this.repository.loadNextPage();
                         this.loader = BazaarLoader.component({ loading: this.loading });
+                        this.connected = app.data.settings['flagrow.bazaar.connected'] && app.data.settings['flagrow.bazaar.connected'] !== '0';
                     }
                 }, {
                     key: 'view',
@@ -907,7 +910,7 @@ System.register('flagrow/bazaar/components/TasksPage', ['flarum/app', 'flarum/Co
                         return m(
                             'div',
                             { className: 'ExtensionsPage Bazaar TaskPage' },
-                            BazaarPageHeader.component(),
+                            BazaarPageHeader.component({ connected: this.connected }),
                             m(
                                 'div',
                                 { className: 'ExtensionsPage-list' },
@@ -1176,6 +1179,76 @@ System.register('flagrow/bazaar/modals/BazaarSettingsModal', ['flarum/app', 'fla
       }(SettingsModal);
 
       _export('default', BazaarSettingsModal);
+    }
+  };
+});;
+'use strict';
+
+System.register('flagrow/bazaar/modals/DashboardModal', ['flarum/components/Switch', 'flarum/components/SettingsModal', 'flarum/utils/saveSettings', 'flarum/components/Button'], function (_export, _context) {
+  "use strict";
+
+  var Switch, SettingsModal, saveSettings, Button, DashboardModal;
+  return {
+    setters: [function (_flarumComponentsSwitch) {
+      Switch = _flarumComponentsSwitch.default;
+    }, function (_flarumComponentsSettingsModal) {
+      SettingsModal = _flarumComponentsSettingsModal.default;
+    }, function (_flarumUtilsSaveSettings) {
+      saveSettings = _flarumUtilsSaveSettings.default;
+    }, function (_flarumComponentsButton) {
+      Button = _flarumComponentsButton.default;
+    }],
+    execute: function () {
+      DashboardModal = function (_SettingsModal) {
+        babelHelpers.inherits(DashboardModal, _SettingsModal);
+
+        function DashboardModal() {
+          babelHelpers.classCallCheck(this, DashboardModal);
+          return babelHelpers.possibleConstructorReturn(this, (DashboardModal.__proto__ || Object.getPrototypeOf(DashboardModal)).apply(this, arguments));
+        }
+
+        babelHelpers.createClass(DashboardModal, [{
+          key: 'title',
+          value: function title() {
+            return app.translator.trans('flagrow-bazaar.admin.modal.dashboard.title');
+          }
+        }, {
+          key: 'form',
+          value: function form() {
+            var flagrowHost = this.props.flagrowHost;
+            var syncing = this.setting('flagrow.bazaar.sync', false);
+
+            return m('div', { className: 'Modal-body' }, [m('p', app.translator.trans('flagrow-bazaar.admin.modal.dashboard.sync.description', { host: flagrowHost })), Switch.component({
+              state: syncing() === true || syncing() == 1,
+              onchange: this.updateSetting.bind(this, syncing, 'flagrow.bazaar.sync'),
+              children: app.translator.trans('flagrow-bazaar.admin.modal.dashboard.sync.switch', { host: flagrowHost })
+            })]);
+          }
+        }, {
+          key: 'submitButton',
+          value: function submitButton() {
+            var flagrowHost = this.props.flagrowHost;
+            return m('div', { className: 'ButtonGroup' }, [Button.component({
+              className: 'Button Connected',
+              icon: 'dashboard',
+              children: app.translator.trans('flagrow-bazaar.admin.modal.dashboard.visit-remote-dashboard'),
+              onclick: function onclick() {
+                return window.open(flagrowHost + '/home');
+              }
+            })]);
+          }
+        }, {
+          key: 'updateSetting',
+          value: function updateSetting(prop, setting, value) {
+            saveSettings(babelHelpers.defineProperty({}, setting, value));
+
+            prop(value);
+          }
+        }]);
+        return DashboardModal;
+      }(SettingsModal);
+
+      _export('default', DashboardModal);
     }
   };
 });;
