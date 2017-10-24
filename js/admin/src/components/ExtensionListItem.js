@@ -154,7 +154,7 @@ export default class ExtensionListItem extends Component {
         }
 
         if (extension.installed() && extension.outdated()) {
-            items.add('favorited', <Badge icon="warning" type="outdated"
+            items.add('outdated', <Badge icon="warning" type="outdated"
                                           label={app.translator.trans('flagrow-bazaar.admin.page.extension.outdated', {new: extension.highest_version()})}/>)
         }
 
