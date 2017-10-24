@@ -260,10 +260,10 @@ System.register("flagrow/bazaar/components/BazaarPage", ["flarum/Component", "./
 });;
 'use strict';
 
-System.register('flagrow/bazaar/components/BazaarPageHeader', ['flarum/app', 'flarum/Component', 'flarum/components/LinkButton', 'flarum/components/Button', './../modals/FilePermissionsModal', './../modals/MemoryLimitModal', './../modals/BazaarConnectModal', './../modals/BazaarSettingsModal'], function (_export, _context) {
+System.register('flagrow/bazaar/components/BazaarPageHeader', ['flarum/app', 'flarum/Component', 'flarum/components/LinkButton', 'flarum/components/Button', './../modals/FilePermissionsModal', './../modals/MemoryLimitModal', './../modals/BazaarConnectModal', './../modals/BazaarSettingsModal', './../modals/DashboardModal'], function (_export, _context) {
     "use strict";
 
-    var app, Component, LinkButton, Button, FilePermissionsModal, MemoryLimitModal, BazaarConnectModal, BazaarSettingsModal, BazaarPageHeader;
+    var app, Component, LinkButton, Button, FilePermissionsModal, MemoryLimitModal, BazaarConnectModal, BazaarSettingsModal, DashboardModal, BazaarPageHeader;
     return {
         setters: [function (_flarumApp) {
             app = _flarumApp.default;
@@ -281,6 +281,8 @@ System.register('flagrow/bazaar/components/BazaarPageHeader', ['flarum/app', 'fl
             BazaarConnectModal = _modalsBazaarConnectModal.default;
         }, function (_modalsBazaarSettingsModal) {
             BazaarSettingsModal = _modalsBazaarSettingsModal.default;
+        }, function (_modalsDashboardModal) {
+            DashboardModal = _modalsDashboardModal.default;
         }],
         execute: function () {
             BazaarPageHeader = function (_Component) {
