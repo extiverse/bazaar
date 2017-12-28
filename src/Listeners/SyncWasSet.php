@@ -3,7 +3,7 @@
 namespace Flagrow\Bazaar\Listeners;
 
 use Flagrow\Bazaar\Search\FlagrowApi;
-use Flarum\Event\SettingWasSet;
+use Flarum\Settings\Event\Saved;
 use Flarum\Settings\SettingsRepositoryInterface;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Contracts\Hashing\Hasher;
@@ -32,10 +32,10 @@ class SyncWasSet
 
     public function subscribe(Dispatcher $events)
     {
-        $events->listen(SettingWasSet::class, [$this, 'notifyRemote']);
+        $events->listen(Saved::class, [$this, 'notifyRemote']);
     }
 
-    public function notifyRemote(SettingWasSet $event)
+    public function notifyRemote(Saved $event)
     {
         if ($event->key === 'flagrow.bazaar.sync') {
             $response = $this->api->post('bazaar/sync-configured', [

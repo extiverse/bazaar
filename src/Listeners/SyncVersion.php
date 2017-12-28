@@ -5,7 +5,7 @@ namespace Flagrow\Bazaar\Listeners;
 use Flagrow\Bazaar\Events\ExtensionWasInstalled;
 use Flagrow\Bazaar\Events\ExtensionWasUpdated;
 use Flagrow\Bazaar\Jobs\SyncVersion as Job;
-use Flarum\Event\ExtensionWasUninstalled;
+use Flarum\Extension\Event\Uninstalled;
 use Flarum\Settings\SettingsRepositoryInterface;
 use Illuminate\Contracts\Bus\Dispatcher as Bus;
 use Illuminate\Contracts\Events\Dispatcher;
@@ -34,8 +34,8 @@ class SyncVersion
     {
         $events->listen([
             ExtensionWasInstalled::class,
-            ExtensionWasUninstalled::class,
-            ExtensionWasUpdated::class
+            ExtensionWasUpdated::class,
+            Uninstalled::class,
         ], [$this, 'sync']);
     }
 
@@ -47,7 +47,7 @@ class SyncVersion
         if ($this->settings->get('flagrow.bazaar.sync') !== '0') {
             $version = $event->extension->getVersion();
 
-            if ($event instanceof ExtensionWasUninstalled) {
+            if ($event instanceof Uninstalled) {
                 $version = null;
             }
 

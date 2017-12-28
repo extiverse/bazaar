@@ -7,9 +7,8 @@ use Flagrow\Bazaar\Extensions\ExtensionUtils;
 use Flarum\Extension\Extension;
 use Flagrow\Bazaar\Models\Task;
 use Flagrow\Bazaar\Search\FlagrowApi;
-use Illuminate\Contracts\Bus\SelfHandling;
 
-class SyncVersion implements SelfHandling
+class SyncVersion
 {
     /**
      * @var Extension

@@ -5,13 +5,13 @@ namespace Flagrow\Bazaar\Api\Controllers;
 use Flagrow\Bazaar\Api\Serializers\ExtensionSerializer;
 use Flagrow\Bazaar\Repositories\ExtensionRepository;
 use Flagrow\Bazaar\Search\AbstractExtensionSearcher;
-use Flarum\Api\Controller\AbstractCollectionController;
-use Flarum\Api\UrlGenerator;
-use Flarum\Core\Access\AssertPermissionTrait;
+use Flarum\Api\Controller\AbstractListController;
+use Flarum\Http\UrlGenerator;
+use Flarum\User\AssertPermissionTrait;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 
-class ListExtensionController extends AbstractCollectionController
+class ListExtensionController extends AbstractListController
 {
     use AssertPermissionTrait;
 
@@ -47,7 +47,7 @@ class ListExtensionController extends AbstractCollectionController
         $results = $this->extensions->index($request->getQueryParams());
 
         $document->addPaginationLinks(
-            $this->url->toRoute('bazaar.extensions.index'),
+            $this->url->to('admin')->getPath('bazaar.extensions.index'),
             $request->getQueryParams(),
             $offset,
             1, // Add one to the offset to get next page number
