@@ -47,7 +47,7 @@ class ListExtensionController extends AbstractListController
         $results = $this->extensions->index($request->getQueryParams());
 
         $document->addPaginationLinks(
-            $this->url->to('admin')->getPath('bazaar.extensions.index'),
+            $this->url->to('api')->route('bazaar.extensions.index'),
             $request->getQueryParams(),
             $offset,
             1, // Add one to the offset to get next page number

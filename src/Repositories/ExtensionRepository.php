@@ -87,9 +87,11 @@ final class ExtensionRepository
             return Arr::get($json, 'data', []);
         });
 
-        return Collection::make($data)->map(function ($package) {
+        $collection = Collection::make($data)->map(function ($package) {
             return $this->createExtension($package);
         })->keyBy('id');
+
+        return Collection::make($collection);
     }
 
     /**
