@@ -7,7 +7,7 @@ use Flagrow\Bazaar\Repositories\ExtensionRepository;
 use Flagrow\Bazaar\Search\AbstractExtensionSearcher;
 use Flarum\Api\Controller\AbstractCollectionController;
 use Flarum\Api\UrlGenerator;
-use Flarum\Core\Access\AssertPermissionTrait;
+use Flarum\User\AssertPermissionTrait;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 

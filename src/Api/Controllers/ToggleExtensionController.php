@@ -6,7 +6,7 @@ use Flagrow\Bazaar\Api\Serializers\ExtensionSerializer;
 use Flagrow\Bazaar\Extensions\ExtensionUtils;
 use Flagrow\Bazaar\Repositories\ExtensionRepository;
 use Flarum\Api\Controller\AbstractResourceController;
-use Flarum\Core\Access\AssertPermissionTrait;
+use Flarum\User\AssertPermissionTrait;
 use Flarum\Extension\ExtensionManager;
 use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;

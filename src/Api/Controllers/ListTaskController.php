@@ -5,7 +5,7 @@ namespace Flagrow\Bazaar\Api\Controllers;
 use Flagrow\Bazaar\Api\Serializers\TaskSerializer;
 use Flagrow\Bazaar\Models\Task;
 use Flarum\Api\Controller\AbstractCollectionController;
-use Flarum\Core\Access\AssertPermissionTrait;
+use Flarum\User\AssertPermissionTrait;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 
