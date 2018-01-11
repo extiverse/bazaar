@@ -2,9 +2,9 @@
 
 namespace Flagrow\Bazaar\Api\Controllers;
 
-use Flarum\Core\Exception\PermissionDeniedException;
 use Flarum\Http\Controller\ControllerInterface;
 use Flarum\Settings\SettingsRepositoryInterface;
+use Flarum\User\Exception\PermissionDeniedException;
 use Illuminate\Contracts\Hashing\Hasher;
 use Psr\Http\Message\ServerRequestInterface;
 

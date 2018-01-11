@@ -6,9 +6,8 @@ use Carbon\Carbon;
 use Flagrow\Bazaar\Models\Task;
 use Flagrow\Bazaar\Search\FlagrowApi;
 use Flarum\Settings\SettingsRepositoryInterface;
-use Illuminate\Contracts\Bus\SelfHandling;
 
-class SyncLock implements SelfHandling
+class SyncLock
 {
 
     public function handle(FlagrowApi $api, SettingsRepositoryInterface $settings)

@@ -15,7 +15,7 @@ class AddApiControllers
      */
     public function subscribe(Dispatcher $events)
     {
-        $events->listen(ConfigureApiRoutes::class, [$this, 'configureApiRoutes']);
+        $events->listen(ConfigureApiRoutes::class, [$this, 'routes']);
     }
 
     /**
@@ -23,7 +23,7 @@ class AddApiControllers
      *
      * @param ConfigureApiRoutes $event
      */
-    public function configureApiRoutes(ConfigureApiRoutes $event)
+    public function routes(ConfigureApiRoutes $event)
     {
         // Browse extensions
         $event->get(

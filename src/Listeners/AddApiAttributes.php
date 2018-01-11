@@ -6,7 +6,7 @@ use Flagrow\Bazaar\Composer\ComposerEnvironment;
 use Flagrow\Bazaar\Jobs\ComposerJob;
 use Flagrow\Bazaar\Search\FlagrowApi;
 use Flagrow\Bazaar\Traits\FileSizeHelper;
-use Flarum\Event\PrepareUnserializedSettings;
+use Flarum\Settings\Event\Deserializing;
 use Illuminate\Events\Dispatcher;
 
 class AddApiAttributes
@@ -18,13 +18,13 @@ class AddApiAttributes
      */
     public function subscribe(Dispatcher $events)
     {
-        $events->listen(PrepareUnserializedSettings::class, [$this, 'addAdminAttributes']);
+        $events->listen(Deserializing::class, [$this, 'addAdminAttributes']);
     }
 
     /**
-     * @param PrepareUnserializedSettings $event
+     * @param Deserializing $event
      */
-    public function addAdminAttributes(PrepareUnserializedSettings $event)
+    public function addAdminAttributes(Deserializing $event)
     {
         $event->settings['flagrow.bazaar.flagrow-host'] = FlagrowApi::getFlagrowHost();
         $event->settings['flagrow.bazaar.php.memory_limit-met'] = $this->memoryLimitMet();

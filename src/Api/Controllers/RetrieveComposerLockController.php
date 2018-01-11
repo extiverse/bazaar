@@ -3,7 +3,7 @@
 namespace Flagrow\Bazaar\Api\Controllers;
 
 use Flagrow\Bazaar\Jobs\SyncLock;
-use Flarum\Core\Exception\PermissionDeniedException;
+use Flarum\User\Exception\PermissionDeniedException;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Psr\Http\Message\ServerRequestInterface;
 use Zend\Diactoros\Response\EmptyResponse;

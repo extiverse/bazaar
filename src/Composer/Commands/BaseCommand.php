@@ -28,7 +28,7 @@ abstract class BaseCommand
     protected $fileEditor;
 
     /**
-     * @var ComposerInstaller
+     * @var Installer
      */
     protected $installer;
 

@@ -10,9 +10,9 @@ use Flagrow\Bazaar\Extensions\PackageManager;
 use Flagrow\Bazaar\Jobs\CacheClearJob;
 use Flagrow\Bazaar\Search\FlagrowApi as Api;
 use Flagrow\Bazaar\Traits\Cachable;
-use Flarum\Core\Search\SearchResults;
-use Flarum\Event\ExtensionWasUninstalled;
+use Flarum\Extension\Event\Uninstalled as ExtensionWasUninstalled;
 use Flarum\Extension\ExtensionManager;
+use Flarum\Search\SearchResults;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Arr;
@@ -87,9 +87,11 @@ final class ExtensionRepository
             return Arr::get($json, 'data', []);
         });
 
-        return Collection::make($data)->map(function ($package) {
+        $collection = Collection::make($data)->map(function ($package) {
             return $this->createExtension($package);
         })->keyBy('id');
+
+        return Collection::make($collection);
     }
 
     /**

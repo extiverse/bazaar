@@ -2,6 +2,8 @@
 
 namespace Flagrow\Bazaar\Composer\Commands;
 
+use Flagrow\Bazaar\Exceptions\ComposerException;
+
 class RemoveCommand extends BaseCommand
 {
     /**
