@@ -95,11 +95,10 @@ class FlagrowApi extends Client
                 return $response;
             }
 
-            if ($response->hasHeader('Bazaar-Connected')) {
-                app()->make(SettingsRepositoryInterface::class)->set('flagrow.bazaar.connected', 1);
-            } else {
-                app()->make(SettingsRepositoryInterface::class)->set('flagrow.bazaar.connected', 0);
-            }
+            // Bazaar-Connected will contain the date of connection as a Iso8601 date or "0" if not connected
+            $connectedHeaders = $response->getHeader('Bazaar-Connected');
+            $connected = count($connectedHeaders) > 0 && $connectedHeaders[0] !== '0';
+            app()->make(SettingsRepositoryInterface::class)->set('flagrow.bazaar.connected', $connected ? 1 : 0);
 
             return $response;
         }));
