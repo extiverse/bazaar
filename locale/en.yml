@@ -50,6 +50,7 @@ flagrow-bazaar:
                 remove_favorite_button: "Remove extension from your favorites"
                 subscribe: Buy subscription
                 unsubscribe: Cancel subscription
+                connect_to_subscribe: Connect your Bazaar to subcribe to extensions
             extension:
                 installed: Extension is installed
                 enabled: Extension is enabled

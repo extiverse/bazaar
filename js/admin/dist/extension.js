@@ -602,7 +602,15 @@ System.register("flagrow/bazaar/components/ExtensionListItem", ["flarum/Componen
                             }));
                         }
 
-                        if (extension.can_subscribe()) {
+                        if (extension.premium() && !connected) {
+                            items.add('subscribe', Button.component({
+                                disabled: true,
+                                icon: 'shopping-cart',
+                                children: app.translator.trans('flagrow-bazaar.admin.page.button.connect_to_subscribe')
+                            }));
+                        }
+
+                        if (extension.canCheckout()) {
                             items.add('subscribe', Button.component({
                                 icon: 'shopping-cart',
                                 children: app.translator.trans('flagrow-bazaar.admin.page.button.subscribe'),
@@ -612,7 +620,7 @@ System.register("flagrow/bazaar/components/ExtensionListItem", ["flarum/Componen
                             }));
                         }
 
-                        if (extension.can_unsubscribe()) {
+                        if (extension.canSafelyUnsubscribe()) {
                             items.add('unsubscribe', Button.component({
                                 icon: 'ban',
                                 children: app.translator.trans('flagrow-bazaar.admin.page.button.unsubscribe'),
@@ -1303,12 +1311,10 @@ System.register('flagrow/bazaar/models/Extension', ['flarum/Model', 'flarum/util
                     return installed && enabled;
                 }),
 
-                // Marketplace actions
-                can_subscribe: computed('premium', 'subscribed', function (premium, subscribed) {
-                    return premium && !subscribed;
-                }),
-                can_unsubscribe: computed('subscribed', 'installed', function (subscribed, installed) {
-                    return subscribed && !installed;
+                canCheckout: Model.attribute('canCheckout'),
+                canUnsubscribe: Model.attribute('canUnsubscribe'),
+                canSafelyUnsubscribe: computed('canUnsubscribe', 'installed', function (canUnsubscribe, installed) {
+                    return canUnsubscribe && !installed;
                 }),
 
                 favorited: Model.attribute('favorited')

@@ -69,11 +69,12 @@ class Extension implements Arrayable
     /**
      * Short function to map attributes that can only be found in the $attributes array
      * @param string $attribute
+     * @param null $default
      * @return mixed|null
      */
-    protected function getAttributeIfPresent($attribute)
+    protected function getAttributeIfPresent($attribute, $default = null)
     {
-        return Arr::get($this->attributes, $attribute);
+        return Arr::get($this->attributes, $attribute, $default);
     }
 
     public function getPackage()
@@ -195,9 +196,11 @@ class Extension implements Arrayable
             'highest_version' => $this->getAvailableVersion(),
             'outdated' => $this->isOutdated(),
             'flarum_id' => $this->installedExtension ? $this->installedExtension->getId() : null,
-            'favorited' => $this->getAttributeIfPresent('favorited'),
-            'premium' => $this->getAttributeIfPresent('premium'),
-            'subscribed' => $this->getAttributeIfPresent('subscribed'),
+            'favorited' => $this->getAttributeIfPresent('favorited', false),
+            'premium' => $this->getAttributeIfPresent('premiumEnabled', false),
+            'subscribed' => $this->getAttributeIfPresent('subscribed', false),
+            'canCheckout' => $this->getAttributeIfPresent('canCheckout', false),
+            'canUnsubscribe' => $this->getAttributeIfPresent('canUnsubscribe', false),
         ];
     }
 }
