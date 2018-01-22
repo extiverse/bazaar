@@ -4,8 +4,8 @@ namespace Flagrow\Bazaar\Listeners;
 
 use Flagrow\Bazaar\Events\TokenSet;
 use Flagrow\Bazaar\Search\FlagrowApi;
-use Flarum\Event\ConfigureWebApp;
 use Flarum\Extension\ExtensionManager;
+use Flarum\Frontend\Event\Rendering;
 use Flarum\Settings\SettingsRepositoryInterface;
 use Illuminate\Contracts\Events\Dispatcher;
 use Psr\Http\Message\ResponseInterface;
@@ -31,8 +31,12 @@ class BazaarEnabled
      */
     protected $events;
 
-    public function __construct(ExtensionManager $extensions, SettingsRepositoryInterface $settings, FlagrowApi $client, Dispatcher $events)
-    {
+    public function __construct(
+        ExtensionManager $extensions,
+        SettingsRepositoryInterface $settings,
+        FlagrowApi $client,
+        Dispatcher $events
+    ) {
         $this->extensions = $extensions;
         $this->settings = $settings;
         $this->client = $client;
@@ -44,13 +48,13 @@ class BazaarEnabled
      */
     public function subscribe(Dispatcher $events)
     {
-        $events->listen(ConfigureWebApp::class, [$this, 'authenticate']);
+        $events->listen(Rendering::class, [$this, 'authenticate'], -10);
     }
 
     /**
-     * @param ConfigureWebApp $event
+     * @param Rendering $event
      */
-    public function authenticate(ConfigureWebApp $event)
+    public function authenticate(Rendering $event)
     {
         if (!$event->isAdmin()) {
             return;

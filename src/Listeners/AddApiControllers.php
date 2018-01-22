@@ -15,7 +15,7 @@ class AddApiControllers
      */
     public function subscribe(Dispatcher $events)
     {
-        $events->listen(ConfigureApiRoutes::class, [$this, 'configureApiRoutes']);
+        $events->listen(ConfigureApiRoutes::class, [$this, 'routes']);
     }
 
     /**
@@ -23,7 +23,7 @@ class AddApiControllers
      *
      * @param ConfigureApiRoutes $event
      */
-    public function configureApiRoutes(ConfigureApiRoutes $event)
+    public function routes(ConfigureApiRoutes $event)
     {
         // Browse extensions
         $event->get(
@@ -96,6 +96,20 @@ class AddApiControllers
             '/bazaar/tasks',
             'bazaar.tasks.index',
             Controllers\ListTaskController::class
+        );
+
+        // Requests composer lock.
+        $event->get(
+            '/bazaar/sync/composer-lock',
+            'bazaar.composer-lock',
+            Controllers\RetrieveComposerLockController::class
+        );
+
+        // Requests an update about a specific extension.
+        $event->get(
+            '/bazaar/sync/extensions/{id}/version',
+            'bazaar.extensions.version',
+            Controllers\RetrieveExtensionVersionController::class
         );
     }
 }

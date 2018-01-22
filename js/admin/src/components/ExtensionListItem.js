@@ -25,7 +25,8 @@ export default class ExtensionListItem extends Component {
             'ExtensionListItem ' +
             (extension.enabled() ? 'enabled ' : 'disabled ') +
             (extension.installed() ? 'installed ' : 'uninstalled ') +
-            (extension.outdated() ? 'outdated ' : '')
+            (extension.outdated() ? 'outdated ' : '') +
+            (extension.pending() ? 'pending ' : '')
         }>
             <div className="ExtensionListItem-content">
                       <span className="ExtensionListItem-icon ExtensionIcon" style={extension.icon() || ''} title={extension.description()}>
@@ -73,62 +74,69 @@ export default class ExtensionListItem extends Component {
             }));
         }
 
-        if (extension.enabled() && app.extensionSettings[name]) {
-            items.add('settings', Button.component({
-                icon: 'cog',
-                children: app.translator.trans('core.admin.extensions.settings_button'),
-                onclick: app.extensionSettings[name]
-            }));
-        }
+        if (! extension.pending()) {
+            if (extension.enabled() && app.extensionSettings[name]) {
+                items.add('settings', Button.component({
+                    icon: 'cog',
+                    children: app.translator.trans('core.admin.extensions.settings_button'),
+                    onclick: app.extensionSettings[name]
+                }));
+            }
 
-        if (extension.can_uninstall()) {
-            items.add('uninstall', Button.component({
-                icon: 'minus-square-o',
-                children: app.translator.trans('flagrow-bazaar.admin.page.button.uninstall'),
-                onclick: () => {
-                    repository().uninstallExtension(extension);
-                }
-            }));
-        }
+            if (extension.can_uninstall()) {
+                items.add('uninstall', Button.component({
+                    icon: 'minus-square-o',
+                    children: app.translator.trans('flagrow-bazaar.admin.page.button.uninstall'),
+                    onclick: () => {
+                        repository()
+                            .uninstallExtension(extension);
+                    }
+                }));
+            }
 
-        if (extension.can_enable()) {
-            items.add('enable', Button.component({
-                icon: 'check-square-o',
-                children: app.translator.trans('flagrow-bazaar.admin.page.button.enable'),
-                onclick: () => {
-                    repository().enableExtension(extension);
-                }
-            }));
-        }
+            if (extension.can_enable()) {
+                items.add('enable', Button.component({
+                    icon: 'check-square-o',
+                    children: app.translator.trans('flagrow-bazaar.admin.page.button.enable'),
+                    onclick: () => {
+                        repository()
+                            .enableExtension(extension);
+                    }
+                }));
+            }
 
-        if (extension.installed() && extension.outdated()) {
-            items.add('update', Button.component({
-                icon: 'toggle-up',
-                children: app.translator.trans('flagrow-bazaar.admin.page.button.update'),
-                onclick: () => {
-                    repository().updateExtension(extension);
-                }
-            }));
-        }
+            if (extension.installed() && extension.outdated()) {
+                items.add('update', Button.component({
+                    icon: 'toggle-up',
+                    children: app.translator.trans('flagrow-bazaar.admin.page.button.update'),
+                    onclick: () => {
+                        repository()
+                            .updateExtension(extension);
+                    }
+                }));
+            }
 
-        if (extension.can_disable()) {
-            items.add('disable', Button.component({
-                icon: 'square-o',
-                children: app.translator.trans('flagrow-bazaar.admin.page.button.disable'),
-                onclick: () => {
-                    repository().disableExtension(extension);
-                }
-            }));
-        }
+            if (extension.can_disable()) {
+                items.add('disable', Button.component({
+                    icon: 'square-o',
+                    children: app.translator.trans('flagrow-bazaar.admin.page.button.disable'),
+                    onclick: () => {
+                        repository()
+                            .disableExtension(extension);
+                    }
+                }));
+            }
 
-        if (extension.can_install()) {
-            items.add('install', Button.component({
-                icon: 'plus-square-o',
-                children: app.translator.trans('flagrow-bazaar.admin.page.button.install'),
-                onclick: () => {
-                    repository().installExtension(extension);
-                }
-            }));
+            if (extension.can_install()) {
+                items.add('install', Button.component({
+                    icon: 'plus-square-o',
+                    children: app.translator.trans('flagrow-bazaar.admin.page.button.install'),
+                    onclick: () => {
+                        repository()
+                            .installExtension(extension);
+                    }
+                }));
+            }
         }
 
         if (extension.premium() && !connected) {
@@ -172,30 +180,43 @@ export default class ExtensionListItem extends Component {
         const items = new ItemList();
 
         if (extension.subscribed()) {
-            items.add('subscribed', <Badge icon="shopping-cart" type="subscribed"
-                                        label={app.translator.trans('flagrow-bazaar.admin.page.extension.subscribed')}/>);
+            items.add('subscribed', <Badge icon="shopping-cart"
+                type="subscribed"
+                label={app.translator.trans('flagrow-bazaar.admin.page.extension.subscribed')} />);
         } else if (extension.premium()) {
-            items.add('premium', <Badge icon="certificate" type="premium"
-                                        label={app.translator.trans('flagrow-bazaar.admin.page.extension.premium')}/>);
+            items.add('premium', <Badge icon="certificate"
+                type="premium"
+                label={app.translator.trans('flagrow-bazaar.admin.page.extension.premium')} />);
+        }
+        if (extension.pending()) {
+            items.add('pending', <Badge icon="circle-o-notch fa-spin"
+                type="pending"
+                label={app.translator.trans('flagrow-bazaar.admin.page.extension.pending')} />);
         }
 
         if (extension.installed() && extension.outdated()) {
-            items.add('favorited', <Badge icon="warning" type="outdated"
-                                          label={app.translator.trans('flagrow-bazaar.admin.page.extension.outdated', {new: extension.highest_version()})}/>)
+            items.add('outdated', <Badge icon="warning"
+                type="outdated"
+                label={app.translator.trans('flagrow-bazaar.admin.page.extension.outdated',
+                    { new: extension.highest_version() })} />)
         }
 
         if (extension.favorited()) {
-            items.add('favorited', <Badge icon="heart" type="favorited"
-                                          label={app.translator.trans('flagrow-bazaar.admin.page.extension.favorited')}/>)
+            items.add('favorited', <Badge icon="heart"
+                type="favorited"
+                label={app.translator.trans('flagrow-bazaar.admin.page.extension.favorited')} />)
         }
 
         if (extension.installed() && !extension.enabled()) {
-            items.add('installed', <Badge icon="plus-square" type="installed"
-                                          label={app.translator.trans('flagrow-bazaar.admin.page.extension.installed')}/>)
+            items.add('installed', <Badge icon="plus-square"
+                type="installed"
+                label={app.translator.trans('flagrow-bazaar.admin.page.extension.installed')} />)
         }
+
         if (extension.enabled()) {
-            items.add('enabled', <Badge icon="check-square" type="enabled"
-                                        label={app.translator.trans('flagrow-bazaar.admin.page.extension.enabled')}/>)
+            items.add('enabled', <Badge icon="check-square"
+                type="enabled"
+                label={app.translator.trans('flagrow-bazaar.admin.page.extension.enabled')} />)
         }
 
         return items;

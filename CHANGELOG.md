@@ -1,3 +1,7 @@
+- 0.3.0
+  - Adds ability to process extension specific tasks in the background using cronjobs.
+  - Now allows syncing installed extension information with flagrow.io to give notifications about outdated flarum installations.
+  - Improved filter buttons.
 - 0.2.4
   - Fixed the translation key for the favorited filter
 - 0.2.3

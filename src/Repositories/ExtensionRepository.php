@@ -10,14 +10,14 @@ use Flagrow\Bazaar\Extensions\PackageManager;
 use Flagrow\Bazaar\Jobs\CacheClearJob;
 use Flagrow\Bazaar\Search\FlagrowApi as Api;
 use Flagrow\Bazaar\Traits\Cachable;
-use Flarum\Core\Search\SearchResults;
-use Flarum\Event\ExtensionWasUninstalled;
+use Flarum\Extension\Event\Uninstalled as ExtensionWasUninstalled;
 use Flarum\Extension\ExtensionManager;
+use Flarum\Search\SearchResults;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Arr;
 
-class ExtensionRepository
+final class ExtensionRepository
 {
     use Cachable;
     /**
@@ -87,9 +87,11 @@ class ExtensionRepository
             return Arr::get($json, 'data', []);
         });
 
-        return Collection::make($data)->map(function ($package) {
+        $collection = Collection::make($data)->map(function ($package) {
             return $this->createExtension($package);
         })->keyBy('id');
+
+        return Collection::make($collection);
     }
 
     /**
@@ -205,19 +207,20 @@ class ExtensionRepository
 
         $this->flush->fire();
 
-        $this->events->fire(
-            new ExtensionWasInstalled($extension->getInstalledExtension())
-        );
+        if ($extension->getInstalledExtension() !== null) {
+            $this->events->fire(
+                new ExtensionWasInstalled($extension->getInstalledExtension())
+            );
+        }
 
         return $extension;
     }
 
     /**
      * @param $package
-     * @param null|string $version
      * @return Extension|null
      */
-    public function updateExtension($package, $version = null)
+    public function updateExtension($package)
     {
         $extension = $this->getExtension($package);
 
@@ -227,11 +230,11 @@ class ExtensionRepository
 
         $this->flush->fire();
 
+        $this->refreshInstalledExtension($extension);
+
         $this->events->fire(
             new ExtensionWasUpdated($extension->getInstalledExtension())
         );
-
-        $this->refreshInstalledExtension($extension);
 
         return $extension;
     }

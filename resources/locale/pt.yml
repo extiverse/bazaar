@@ -5,8 +5,9 @@ flagrow-bazaar:
         popup:
             title: Bazar da Flagrow
             field:
-                apiToken: Chave da API
-                apiTokenDescription: É necessária a chave para acessar a API de extensão da Flagrow. Se a chave já se encontra definida, está pronto para ir ao bazar!
+                token:
+                  label: Chave da API
+                  description: É necessária a chave para acessar a API de extensão da Flagrow. Se a chave já se encontra definida, está pronto para ir ao bazar!
         nav:
             title: Bazar
             description: A loja das Extenções .

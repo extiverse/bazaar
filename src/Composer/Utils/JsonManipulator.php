@@ -3,6 +3,7 @@
 namespace Flagrow\Bazaar\Composer\Utils;
 
 use Composer\Json\JsonFile;
+use Composer\Repository\PlatformRepository;
 use Illuminate\Support\Arr;
 
 class JsonManipulator

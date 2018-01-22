@@ -12,11 +12,28 @@ flagrow-bazaar:
             extensions: Browse extensions
             tasks: Tasks history
         modal:
+            dashboard:
+                title: Dashboard
+                visit-remote-dashboard: Visit dashboard
+                sync:
+                    switch: Sync
+                    description: >
+                        Sync your extension information with {host} to receive timely notifications about new versions
+                        of extensions you installed. In addition we will send you a regular notification about outdated
+                        extensions on all your synced Bazaar enabled Flarum installations.
             settings:
                 title: Flagrow Bazaar
                 field:
-                    apiToken: API token
-                    apiTokenDescription: This api token is required to access the Flagrow extension api. If already set, you're good to go!
+                    token:
+                        label: API token
+                        description: This api token is required to access the Flagrow extension api. If already set, you're good to go!
+                    use_cron_for_tasks:
+                        label: Cronjobs
+                        description: >
+                           By allowing cronjobs to process Bazaar tasks, these processes
+                           are less likely to timeout. Please note you need to be able to
+                           configure the cronjob, refer to <a>the wiki</a>.
+                        toggle: Use crons for task processing
             connect-bazaar:
                 title: Connect
                 description: >
@@ -56,6 +73,7 @@ flagrow-bazaar:
                 enabled: Extension is enabled
                 vendor: By {vendor}
                 favorited: One of your favorites
+                pending: Extension waits on a background task to complete
                 outdated: "Extension is outdated, please update to version {new}"
                 premium: Premium
                 subscribed: Subscribed
@@ -77,6 +95,8 @@ flagrow-bazaar:
                     working: Work in progress
                     unknown: Unknown
                 command:
+                    sync-lock: Sync composer.lock file
+                    sync-version: Sync {extension} version
                     install: Install {extension}
                     update: Update {extension}
                     uninstall: Uninstall {extension}
@@ -86,8 +106,10 @@ flagrow-bazaar:
                     older: Older
         search:
             placeholder: Search extensions
-            filter_installed: Show only installed extensions
-            filter_update_required: Show only extension with an update available
-            filter_favorited: Show only favorited extensions
-            filter_subscribed: Show only subscribed extensions
-            filter_premium: Show only premium extensions
+            filter_installed: Installed
+            filter_update_required: Has update
+            filter_favorited: Favorited
+            filter_subscribed: Subscribed
+            filter_premium: Premium
+            filter_pending: Pending
+            filter_languages: Languages

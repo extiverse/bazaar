@@ -2,27 +2,43 @@ import app from 'flarum/app';
 import Component from 'flarum/Component';
 import LinkButton from 'flarum/components/LinkButton';
 import Button from 'flarum/components/Button';
-import FilePermissionsModal from 'flagrow/bazaar/modals/FilePermissionsModal';
-import MemoryLimitModal from 'flagrow/bazaar/modals/MemoryLimitModal';
-import BazaarConnectModal from 'flagrow/bazaar/modals/BazaarConnectModal';
+import FilePermissionsModal from './../modals/FilePermissionsModal';
+import MemoryLimitModal from './../modals/MemoryLimitModal';
+import BazaarConnectModal from './../modals/BazaarConnectModal';
+import BazaarSettingsModal from './../modals/BazaarSettingsModal';
+import DashboardModal from './../modals/DashboardModal';
 
 export default class BazaarPageHeader extends Component {
     view() {
         return (
             <div className="ExtensionsPage-header">
                 <div className="container">
-                    { this.header() }
+                    {this.header()}
                 </div>
             </div>
         );
     }
 
     header() {
-        let buttons = [].concat(this.requirementsButtons(), this.connectedButtons(), this.pagesButtons());
+        let buttons = [].concat(
+          this.settingsButton(),
+          this.requirementsButtons(),
+          this.connectedButtons(),
+          this.pagesButtons()
+        );
 
         return m('div', {className: 'ButtonGroup'}, buttons);
     }
 
+    settingsButton() {
+      return [
+        Button.component({
+          className: 'Button Button--icon',
+          icon: 'cog',
+          onclick: () => app.modal.show(new BazaarSettingsModal)
+        })
+      ];
+    }
     /**
      * Loads a list of buttons that give insight in the state of this installation.
      * @returns {Array}
@@ -65,7 +81,9 @@ export default class BazaarPageHeader extends Component {
                 Button.component({
                     className: 'Button Button--icon Connected',
                     icon: 'dashboard',
-                    onclick: () => window.open(flagrowHost + '/home')
+                    onclick: () => app.modal.show(new DashboardModal({
+                        flagrowHost
+                    }))
                 }),
             ]
         }

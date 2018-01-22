@@ -4,11 +4,11 @@ namespace Flagrow\Bazaar\Api\Controllers;
 
 use Flagrow\Bazaar\Api\Serializers\ExtensionSerializer;
 use Flagrow\Bazaar\Repositories\ExtensionRepository;
-use Flarum\Api\Controller\AbstractResourceController;
-use Flarum\Core\Exception\PermissionDeniedException;
+use Flarum\Api\Controller\AbstractShowController;
 use Flarum\Settings\SettingsRepositoryInterface;
+use Flarum\User\Exception\PermissionDeniedException;
 
-abstract class ConnectedExtensionResourceController extends AbstractResourceController
+abstract class ConnectedExtensionResourceController extends AbstractShowController
 {
     /**
      * @var ExtensionSerializer

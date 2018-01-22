@@ -11,13 +11,7 @@ use GuzzleHttp\Middleware;
 use Illuminate\Support\Arr;
 use Psr\Http\Message\ResponseInterface;
 
-/**
- * Class FlagrowApi
- * @package Flagrow\Bazaar\Search
- *
- * @info Contextually binding the Guzzle client wasn't working. Something was very off, this works though.
- */
-class FlagrowApi extends Client
+final class FlagrowApi extends Client
 {
     /**
      * @var array
@@ -91,7 +85,8 @@ class FlagrowApi extends Client
     protected function readBazaarConnectedState(HandlerStack &$stack)
     {
         $stack->push(Middleware::mapResponse(function (ResponseInterface $response) {
-            if ($response->getStatusCode() > 200) {
+
+            if ($response->getStatusCode() > 201) {
                 return $response;
             }
 

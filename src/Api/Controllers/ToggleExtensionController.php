@@ -5,14 +5,14 @@ namespace Flagrow\Bazaar\Api\Controllers;
 use Flagrow\Bazaar\Api\Serializers\ExtensionSerializer;
 use Flagrow\Bazaar\Extensions\ExtensionUtils;
 use Flagrow\Bazaar\Repositories\ExtensionRepository;
-use Flarum\Api\Controller\AbstractResourceController;
-use Flarum\Core\Access\AssertPermissionTrait;
+use Flarum\Api\Controller\AbstractShowController;
 use Flarum\Extension\ExtensionManager;
+use Flarum\User\AssertPermissionTrait;
 use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 
-class ToggleExtensionController extends AbstractResourceController
+class ToggleExtensionController extends AbstractShowController
 {
     use AssertPermissionTrait;
 

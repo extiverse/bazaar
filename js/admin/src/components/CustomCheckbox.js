@@ -1,21 +1,50 @@
-import Checkbox from "flarum/components/Checkbox";
-import LoadingIndicator from 'flarum/components/LoadingIndicator';
+import Button from "flarum/components/Button";
 import icon from 'flarum/helpers/icon';
+import extract from 'flarum/utils/extract';
+import extractText from 'flarum/utils/extractText';
 
-export default class CustomCheckbox extends Checkbox
-{
+export default class CustomCheckbox extends Button {
+    view() {
+        const attrs = Object.assign({}, this.props);
+
+        delete attrs.state;
+        delete attrs.children;
+
+        attrs.className = attrs.className || '';
+        attrs.type = attrs.type || 'button';
+
+        if (this.props.state) attrs.className += ' active';
+
+        // If nothing else is provided, we use the textual button content as tooltip
+        if (!attrs.title && this.props.children) {
+            attrs.title = extractText(this.props.children);
+        }
+
+        const iconName = extract(attrs, 'icon');
+        if (iconName) attrs.className += ' hasIcon';
+
+        const loading = extract(attrs, 'loading');
+        if (attrs.disabled || loading) {
+            attrs.className += ' disabled' + (loading ? ' loading' : '');
+            delete attrs.onclick;
+        }
+
+        return (
+            <button {...attrs}
+                onclick={this.onchange.bind(this)}
+                >
+                {this.getButtonContent()}
+            </button>
+        );
+    }
+
     /**
-     * Get the template for the checkbox's display (tick/cross icon).
+     * Run a callback when the state of the checkbox is changed.
      *
-     * @return {*}
+     * @param {Boolean} checked
      * @protected
      */
-    getDisplay() {
-        const iconChecked = this.props.iconChecked || 'check';
-        const iconUnchecked = this.props.iconUnchecked || 'times';
-
-        return this.loading
-            ? LoadingIndicator.component({size: 'tiny'})
-            : icon(this.props.state ? iconChecked : iconUnchecked);
+    onchange() {
+        if (this.props.onchange) this.props.onchange(! this.props.state, this);
     }
 }
