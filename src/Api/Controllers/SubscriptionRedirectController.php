@@ -3,8 +3,8 @@
 namespace Flagrow\Bazaar\Api\Controllers;
 
 use Flagrow\Bazaar\Search\FlagrowApi;
-use Flarum\Api\UrlGenerator;
 use Flarum\Http\Controller\ControllerInterface;
+use Flarum\Http\UrlGenerator;
 use Zend\Diactoros\Response\RedirectResponse;
 
 abstract class SubscriptionRedirectController implements ControllerInterface
@@ -19,7 +19,7 @@ abstract class SubscriptionRedirectController implements ControllerInterface
             FlagrowApi::getFlagrowHost(),
             $package,
             ($subscribe ? '' : 'un') . 'subscribe',
-            urlencode($flarumApi->toRoute('bazaar.callback.subscription'))
+            urlencode($flarumApi->to('api')->route('bazaar.callback.subscription'))
         );
 
         return new RedirectResponse($url);
