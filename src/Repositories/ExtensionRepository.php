@@ -146,11 +146,15 @@ final class ExtensionRepository
     {
         $params = $request->getQueryParams();
 
-        if (!Arr::has($params, 'sort')) {
-            Arr::set($params, 'sort', 'name');
+        $params = collect($params)->filter(function ($filter) {
+            return empty($filter);
+        });
+
+        if (!$params->has('sort')) {
+            $params->put('sort', 'name');
         }
 
-        $response = $this->client->get('packages', $params);
+        $response = $this->client->get('packages', ['query' => $params->toArray()]);
 
         $json = json_decode($response->getBody()->getContents(), true);
 
