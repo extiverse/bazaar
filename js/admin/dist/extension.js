@@ -174,57 +174,57 @@ System.register("flagrow/bazaar/components/BazaarPage", ["flarum/Component", "./
                         })), m('div', { className: 'ExtensionFilters ButtonGroup' }, [CustomCheckbox.component({
                             icon: 'toggle-up',
                             className: 'Button hasIcon',
-                            state: this.repository().filterUpdateRequired(),
+                            state: this.repository().filteredBy('update_required'),
                             onchange: function onchange(checked) {
-                                return _this2.repository().filterUpdateRequired(checked);
+                                return _this2.repository().filterBy('update_required', checked);
                             },
                             children: app.translator.trans('flagrow-bazaar.admin.search.filter_update_required')
                         }), CustomCheckbox.component({
                             icon: 'circle-o-notch',
                             className: 'Button hasIcon',
-                            state: this.repository().filterPending(),
+                            state: this.repository().filteredBy('pending'),
                             onchange: function onchange(checked) {
-                                return _this2.repository().filterPending(checked);
+                                return _this2.repository().filterBy('pending', checked);
                             },
                             children: app.translator.trans('flagrow-bazaar.admin.search.filter_pending')
                         }), CustomCheckbox.component({
                             icon: 'plus-square',
                             className: 'Button hasIcon',
-                            state: this.repository().filterInstalled(),
+                            state: this.repository().filteredBy('installed'),
                             onchange: function onchange(checked) {
-                                return _this2.repository().filterInstalled(checked);
+                                return _this2.repository().filterBy('installed', checked);
                             },
                             children: app.translator.trans('flagrow-bazaar.admin.search.filter_installed')
                         }), CustomCheckbox.component({
                             icon: 'inr',
                             className: 'Button hasIcon',
-                            state: this.repository().filterLanguages(),
+                            state: this.repository().filteredBy('languages'),
                             onchange: function onchange(checked) {
-                                return _this2.repository().filterLanguages(checked);
+                                return _this2.repository().filterBy('languages', checked);
                             },
                             children: app.translator.trans('flagrow-bazaar.admin.search.filter_languages')
                         }), this.connected ? [CustomCheckbox.component({
                             icon: 'heart',
                             className: 'Button hasIcon',
-                            state: this.repository().filterFavorited(),
+                            state: this.repository().filteredBy('favorited'),
                             onchange: function onchange(checked) {
-                                return _this2.repository().filterFavorited(checked);
+                                return _this2.repository().filterBy('favorited', checked);
                             },
                             children: app.translator.trans('flagrow-bazaar.admin.search.filter_favorited')
                         }), CustomCheckbox.component({
                             icon: 'shopping-cart',
                             className: 'Button hasIcon',
-                            state: this.repository().filterSubscribed(),
+                            state: this.repository().filteredBy('subscribed'),
                             onchange: function onchange(checked) {
-                                return _this2.repository().filterSubscribed(checked);
+                                return _this2.repository().filterBy('subscribed', checked);
                             },
                             children: app.translator.trans('flagrow-bazaar.admin.search.filter_subscribed')
                         })] : '', CustomCheckbox.component({
                             icon: 'certificate',
                             className: 'Button hasIcon',
-                            state: this.repository().filterPremium(),
+                            state: this.repository().filteredBy('is_premium'),
                             onchange: function onchange(checked) {
-                                return _this2.repository().filterPremium(checked);
+                                return _this2.repository().filterBy('is_premium', checked);
                             },
                             children: app.translator.trans('flagrow-bazaar.admin.search.filter_premium')
                         })])]);
@@ -234,38 +234,7 @@ System.register("flagrow/bazaar/components/BazaarPage", ["flarum/Component", "./
                     value: function items() {
                         var _this3 = this;
 
-                        return m('ul', { className: 'ExtensionList' }, [this.repository().extensions().filter(function (extension) {
-
-                            if (_this3.repository().filterLanguages() && !extension.locale()) {
-                                return false;
-                            }
-
-                            if (_this3.repository().filterPending() && !extension.pending()) {
-                                return false;
-                            }
-
-                            if (_this3.repository().filterInstalled() && !extension.installed()) {
-                                return false;
-                            }
-
-                            if (_this3.repository().filterUpdateRequired() && !extension.outdated()) {
-                                return false;
-                            }
-
-                            if (_this3.repository().filterFavorited() && !extension.favorited()) {
-                                return false;
-                            }
-
-                            if (_this3.repository().filterSubscribed() && !extension.subscribed()) {
-                                return false;
-                            }
-
-                            if (_this3.repository().filterPremium() && !extension.premium()) {
-                                return false;
-                            }
-
-                            return true;
-                        }).map(function (extension) {
+                        return m('ul', { className: 'ExtensionList' }, [this.repository().extensions().map(function (extension) {
                             return ExtensionListItem.component({
                                 extension: extension,
                                 repository: _this3.repository,
@@ -1598,14 +1567,15 @@ System.register('flagrow/bazaar/utils/ExtensionRepository', ['flarum/app', 'flag
                     this.nextPageUrl = null;
                     this.loading = loading;
                     this.resetNavigation();
-                    this.filterInstalled = m.prop(false);
-                    this.filterPending = m.prop(false);
-                    this.filterUpdateRequired = m.prop(false);
-                    this.filterFavorited = m.prop(false);
-                    this.filterSubscribed = m.prop(false);
-                    this.filterPremium = m.prop(false);
-                    this.filterLanguages = m.prop(false);
+
                     this.filters = {
+                        installed: null,
+                        pending: null,
+                        update_required: null,
+                        favorited: null,
+                        is_premium: null,
+                        subscribed: null,
+                        languages: null,
                         search: ''
                     };
 

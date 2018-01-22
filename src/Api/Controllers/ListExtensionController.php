@@ -10,6 +10,7 @@ use Flarum\Http\UrlGenerator;
 use Flarum\User\AssertPermissionTrait;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
+use Tobscure\JsonApi\Parameters;
 
 class ListExtensionController extends AbstractListController
 {
@@ -44,13 +45,13 @@ class ListExtensionController extends AbstractListController
 
         $offset = $this->extractOffset($request);
 
-        $results = $this->extensions->index($request->getQueryParams());
+        $results = $this->extensions->index($request);
 
         $document->addPaginationLinks(
             $this->url->to('api')->route('bazaar.extensions.index'),
             $request->getQueryParams(),
             $offset,
-            1, // Add one to the offset to get next page number
+            1,
             $results->areMoreResults() ? null : 0
         );
 

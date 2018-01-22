@@ -45,52 +45,52 @@ export default class BazaarPage extends Component {
                 CustomCheckbox.component({
                     icon: 'toggle-up',
                     className: 'Button hasIcon',
-                    state: this.repository().filterUpdateRequired(),
-                    onchange: (checked) => this.repository().filterUpdateRequired(checked),
+                    state: this.repository().filteredBy('update_required'),
+                    onchange: (checked) => this.repository().filterBy('update_required', checked),
                     children: app.translator.trans('flagrow-bazaar.admin.search.filter_update_required')
                 }),
                 CustomCheckbox.component({
                     icon: 'circle-o-notch',
                     className: 'Button hasIcon',
-                    state: this.repository().filterPending(),
-                    onchange: (checked) => this.repository().filterPending(checked),
+                    state: this.repository().filteredBy('pending'),
+                    onchange: (checked) => this.repository().filterBy('pending', checked),
                     children: app.translator.trans('flagrow-bazaar.admin.search.filter_pending')
                 }),
                 CustomCheckbox.component({
                     icon: 'plus-square',
                     className: 'Button hasIcon',
-                    state: this.repository().filterInstalled(),
-                    onchange: (checked) => this.repository().filterInstalled(checked),
+                    state: this.repository().filteredBy('installed'),
+                    onchange: (checked) => this.repository().filterBy('installed', checked),
                     children: app.translator.trans('flagrow-bazaar.admin.search.filter_installed')
                 }),
                 CustomCheckbox.component({
                     icon: 'inr',
                     className: 'Button hasIcon',
-                    state: this.repository().filterLanguages(),
-                    onchange: (checked) => this.repository().filterLanguages(checked),
+                    state: this.repository().filteredBy('languages'),
+                    onchange: (checked) => this.repository().filterBy('languages', checked),
                     children: app.translator.trans('flagrow-bazaar.admin.search.filter_languages')
                 }),
                 this.connected ? [
                     CustomCheckbox.component({
                         icon: 'heart',
                         className: 'Button hasIcon',
-                        state: this.repository().filterFavorited(),
-                        onchange: (checked) => this.repository().filterFavorited(checked),
+                        state: this.repository().filteredBy('favorited'),
+                        onchange: (checked) => this.repository().filterBy('favorited', checked),
                         children: app.translator.trans('flagrow-bazaar.admin.search.filter_favorited')
                     }),
                     CustomCheckbox.component({
                         icon: 'shopping-cart',
                         className: 'Button hasIcon',
-                        state: this.repository().filterSubscribed(),
-                        onchange: (checked) => this.repository().filterSubscribed(checked),
+                        state: this.repository().filteredBy('subscribed'),
+                        onchange: (checked) => this.repository().filterBy('subscribed', checked),
                         children: app.translator.trans('flagrow-bazaar.admin.search.filter_subscribed')
                     }),
                 ] : '',
                 CustomCheckbox.component({
                     icon: 'certificate',
                     className: 'Button hasIcon',
-                    state: this.repository().filterPremium(),
-                    onchange: (checked) => this.repository().filterPremium(checked),
+                    state: this.repository().filteredBy('is_premium'),
+                    onchange: (checked) => this.repository().filterBy('is_premium', checked),
                     children: app.translator.trans('flagrow-bazaar.admin.search.filter_premium')
                 }),
             ])
@@ -99,38 +99,7 @@ export default class BazaarPage extends Component {
 
     items() {
         return m('ul', {className: 'ExtensionList'}, [
-            this.repository().extensions().filter(extension => {
-
-                if (this.repository().filterLanguages() && ! extension.locale()) {
-                    return false;
-                }
-
-                if (this.repository().filterPending() && ! extension.pending()) {
-                    return false;
-                }
-
-                if (this.repository().filterInstalled() && ! extension.installed()) {
-                    return false;
-                }
-
-                if (this.repository().filterUpdateRequired() && ! extension.outdated()) {
-                    return false;
-                }
-
-                if (this.repository().filterFavorited() && ! extension.favorited()) {
-                    return false;
-                }
-
-                if (this.repository().filterSubscribed() && ! extension.subscribed()) {
-                    return false;
-                }
-
-                if (this.repository().filterPremium() && ! extension.premium()) {
-                    return false;
-                }
-
-                return true;
-            }).map(
+            this.repository().extensions().map(
                 extension => ExtensionListItem.component({
                     extension: extension,
                     repository: this.repository,

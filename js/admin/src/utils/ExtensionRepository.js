@@ -8,14 +8,15 @@ export default class ExtensionRepository {
         this.nextPageUrl = null;
         this.loading = loading;
         this.resetNavigation();
-        this.filterInstalled = m.prop(false);
-        this.filterPending = m.prop(false);
-        this.filterUpdateRequired = m.prop(false);
-        this.filterFavorited = m.prop(false);
-        this.filterSubscribed = m.prop(false);
-        this.filterPremium = m.prop(false);
-        this.filterLanguages = m.prop(false);
+
         this.filters = {
+            installed: null,
+            pending: null,
+            update_required: null,
+            favorited: null,
+            is_premium: null,
+            subscribed: null,
+            languages: null,
             search: '',
         };
 

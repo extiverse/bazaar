@@ -16,6 +16,8 @@ use Flarum\Search\SearchResults;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Arr;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 final class ExtensionRepository
 {
@@ -69,6 +71,7 @@ final class ExtensionRepository
     }
 
     /**
+     * @deprecated
      * @return Collection all extensions from the remote client
      */
     public function allExtensionsFromClient()
@@ -86,6 +89,16 @@ final class ExtensionRepository
 
             return Arr::get($json, 'data', []);
         });
+
+        $collection = Collection::make($data)->map(function ($package) {
+            return $this->createExtension($package);
+        })->keyBy('id');
+
+        return Collection::make($collection);
+    }
+
+    protected function payloadToExtensions(array $data): Collection
+    {
 
         $collection = Collection::make($data)->map(function ($package) {
             return $this->createExtension($package);
@@ -125,25 +138,26 @@ final class ExtensionRepository
     }
 
     /**
-     * @param array $params Request parameters
+     * @param ServerRequestInterface $request
      * @return SearchResults
      * @throws \Exception
      */
-    public function index(array $params = [])
+    public function index(ServerRequestInterface $request)
     {
-        $extensions = $this->allExtensionsFromClient();
+        $params = $request->getQueryParams();
 
-        foreach (Arr::get($params, 'filter', []) as $filter => $value) {
-            switch ($filter) {
-                case 'search':
-                    $extensions = $this->filterSearch($extensions, $value);
-                    break;
-                default:
-                    throw new \Exception('Invalid extension filter ' . $filter);
-            }
+        if (!Arr::has($params, 'sort')) {
+            Arr::set($params, 'sort', 'name');
         }
 
-        return new SearchResults($extensions, true);
+        $response = $this->client->get('packages', $params);
+
+        $json = json_decode($response->getBody()->getContents(), true);
+
+        $data = Arr::get($json, 'data', []);
+        $hasMore = Arr::get($json, 'meta.pages_total', 1) > Arr::get($json, 'meta.pages_current', 1);
+
+        return new SearchResults($this->payloadToExtensions($data), $hasMore);
     }
 
     /**
