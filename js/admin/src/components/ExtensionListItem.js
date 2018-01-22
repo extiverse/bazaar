@@ -139,7 +139,7 @@ export default class ExtensionListItem extends Component {
             }));
         }
 
-        if (extension.canCheckout()) {
+        if (extension.canCheckout() && connected) {
             items.add('subscribe', Button.component({
                 icon: 'shopping-cart',
                 children: app.translator.trans('flagrow-bazaar.admin.page.button.subscribe'),
@@ -149,7 +149,7 @@ export default class ExtensionListItem extends Component {
             }));
         }
 
-        if (extension.canSafelyUnsubscribe()) {
+        if (extension.canSafelyUnsubscribe() && connected) {
             items.add('unsubscribe', Button.component({
                 icon: 'ban',
                 children: app.translator.trans('flagrow-bazaar.admin.page.button.unsubscribe'),
