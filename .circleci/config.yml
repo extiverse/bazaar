@@ -31,12 +31,6 @@ references:
         - DB_PASSWORD: ""
 
 jobs:
-    "php-5.6":
-        docker:
-            - image: php:5.6
-              environment: *environment
-            - *mysql
-        <<: *steps
     "php-7.0":
         docker:
             - image: php:7.0
@@ -49,11 +43,17 @@ jobs:
               environment: *environment
             - *mysql
         <<: *steps
+    "php-7.2":
+        docker:
+            - image: php:7.2
+              environment: *environment
+            - *mysql
+        <<: *steps
 
 workflows:
     version: 2
     test:
         jobs:
-            - "php-5.6"
             - "php-7.0"
             - "php-7.1"
+            - "php-7.2"

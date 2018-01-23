@@ -32,6 +32,7 @@ return [
         ->bootstrapper('flagrow/bazaar/main'),
 //    (new Locale(__DIR__ . '/resources/locale')),
     function (Application $app) {
+    /** @var Dispatcher $events */
         $events = $app['events'];
 
         $events->subscribe(Listeners\BazaarEnabled::class);
