@@ -27,7 +27,7 @@ export default class ExtensionListItem extends Component {
             (extension.installed() ? 'installed ' : 'uninstalled ') +
             (extension.outdated() ? 'outdated ' : '') +
             (extension.pending() ? 'pending ' : '')
-        }>
+        } key={extension.id()} data-id={extension.id()}>
             <div className="ExtensionListItem-content">
                       <span className="ExtensionListItem-icon ExtensionIcon" style={extension.icon() || ''} title={extension.description()}>
                         {extension.icon() ? icon(extension.icon().name) : ''}

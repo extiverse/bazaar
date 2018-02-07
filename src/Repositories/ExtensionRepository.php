@@ -4,6 +4,7 @@ namespace Flagrow\Bazaar\Repositories;
 
 use Flagrow\Bazaar\Events\ExtensionWasInstalled;
 use Flagrow\Bazaar\Events\ExtensionWasUpdated;
+use Flagrow\Bazaar\Events\SearchingExtensions;
 use Flagrow\Bazaar\Extensions\Extension;
 use Flagrow\Bazaar\Extensions\ExtensionUtils;
 use Flagrow\Bazaar\Extensions\PackageManager;
@@ -147,9 +148,20 @@ final class ExtensionRepository
 
         $params = collect($params)->filter();
 
-        if (! $params->has('sort')) {
+        if ($params->has('q') && ! $params->has('sort')) {
             $params->put('sort', 'name');
         }
+        else if (! $params->has('sort')) {
+            $params->put('sort', '-downloads');
+        }
+
+        if (! $params->has('filter') && ! $params->has('q')) {
+            $params->put('filter', 'not-flarum');
+        }
+
+        $this->events->fire(
+            new SearchingExtensions($params)
+        );
 
         $response = $this->client->get('packages', ['query' => $params->toArray()]);
 

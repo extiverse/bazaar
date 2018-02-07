@@ -1,51 +1,9 @@
 import app from "flarum/app";
-import debounce from 'flagrow/bazaar/utils/debounce';
-import popupPromise from 'flagrow/bazaar/utils/popupPromise';
+import popupPromise from './popupPromise';
 
 export default class ExtensionRepository {
     constructor(loading) {
         this.extensions = m.prop([]);
-        this.nextPageUrl = null;
-        this.loading = loading;
-        this.resetNavigation();
-
-        this.filters = {
-            installed: null,
-            pending: null,
-            update_required: null,
-            favorited: null,
-            is_premium: null,
-            subscribed: null,
-            languages: null,
-            search: '',
-        };
-
-        // Code to run once after a serie of filterBy() calls
-        // Must be done in constructor to save a single reference to the output of debounce
-        this.filterByDebounce = debounce(() => {
-            this.resetNavigation();
-            this.loadNextPage();
-        }, 500);
-    }
-
-    /**
-     * Change the value of a filter
-     * @param {string} filter
-     * @param {string} filterBy
-     */
-    filterBy(filter, filterBy) {
-        this.filters[filter] = filterBy;
-
-        this.filterByDebounce();
-    }
-
-    /**
-     * Get the value of a filter
-     * @param {string} filter
-     * @returns {string}
-     */
-    filteredBy(filter) {
-        return this.filters[filter];
     }
 
     /**
@@ -59,41 +17,6 @@ export default class ExtensionRepository {
         // Depending on how fast the "Oops! Something went wrong" popup appears,
         // the loading change is not taken into account. Use redraw to force remove the overlay
         m.redraw();
-    }
-
-    /**
-     * Loads next page or resets based on nextPageUrl.
-     */
-    loadNextPage() {
-        if (this.loading() || !this.nextPageUrl) {
-            return;
-        }
-
-        this.loading(true);
-
-        app.request({
-            method: 'GET',
-            url: this.nextPageUrl,
-            data: {
-                filter: this.filters,
-            },
-        }).then(result => {
-            const newExtensions = result.data.map(data => app.store.createRecord('bazaar-extensions', data));
-            this.extensions(newExtensions);
-            this.nextPageUrl = result.links.next;
-            this.loading(false);
-
-            m.redraw();
-        }).catch(() => this.requestError());
-    }
-
-    /**
-     * Resets the navigation to start all over.
-     */
-    resetNavigation() {
-        this.loading(false); // Might cause problems if an update is in process
-        this.nextPageUrl = app.forum.attribute('apiUrl') + '/bazaar/extensions';
-        this.extensions([]);
     }
 
     /**
