@@ -74,6 +74,12 @@ export default class ExtensionList extends Component {
         );
     }
 
+    update(params) {
+        this.props.params = params;
+
+        this.refresh();
+    }
+
     /**
      * Clear and reload the discussion list.
      *

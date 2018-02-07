@@ -160,13 +160,21 @@ System.register("flagrow/bazaar/components/BazaarPage", ["flarum/Component", "./
                             repository: this.repository,
                             connected: this.connected
                         });
+                        this.search = ExtensionSearch.component({ params: this.params, onsubmit: this.updateResults.bind(this) });
+                    }
+                }, {
+                    key: "updateResults",
+                    value: function updateResults(params) {
+                        this.params = params;
+
+                        this.extensionList.update(params);
                     }
                 }, {
                     key: "view",
                     value: function view() {
                         return m('div', { className: 'ExtensionsPage Bazaar' }, [BazaarPageHeader.component({
                             connected: this.connected
-                        }), m('div', { className: 'ExtensionsPage-list' }, [m('div', { className: 'container' }, [ExtensionSearch.component({ params: this.params }), this.extensionList.render()])])]);
+                        }), m('div', { className: 'ExtensionsPage-list' }, [m('div', { className: 'container' }, [this.search, this.extensionList.render()])])]);
                     }
                 }, {
                     key: "items",
@@ -543,6 +551,13 @@ System.register('flagrow/bazaar/components/ExtensionList', ['flarum/Component', 
                                 loading
                             )
                         );
+                    }
+                }, {
+                    key: 'update',
+                    value: function update(params) {
+                        this.props.params = params;
+
+                        this.refresh();
                     }
                 }, {
                     key: 'refresh',
@@ -1694,7 +1709,7 @@ System.register('flagrow/bazaar/utils/ExtensionRepository', ['flarum/app', './po
         }],
         execute: function () {
             ExtensionRepository = function () {
-                function ExtensionRepository(loading) {
+                function ExtensionRepository() {
                     babelHelpers.classCallCheck(this, ExtensionRepository);
 
                     this.extensions = m.prop([]);
@@ -1984,15 +1999,17 @@ System.register('flagrow/bazaar/utils/TaskRepository', ['flarum/app'], function 
 });;
 "use strict";
 
-System.register("flagrow/bazaar/components/ExtensionSearch", ["flarum/Component", "./CustomCheckbox"], function (_export, _context) {
+System.register("flagrow/bazaar/components/ExtensionSearch", ["flarum/Component", "./CustomCheckbox", "./../utils/debounce"], function (_export, _context) {
     "use strict";
 
-    var Component, CustomCheckbox, ExtensionSearch;
+    var Component, CustomCheckbox, debounce, ExtensionSearch;
     return {
         setters: [function (_flarumComponent) {
             Component = _flarumComponent.default;
         }, function (_CustomCheckbox) {
             CustomCheckbox = _CustomCheckbox.default;
+        }, function (_utilsDebounce) {
+            debounce = _utilsDebounce.default;
         }],
         execute: function () {
             ExtensionSearch = function (_Component) {
@@ -2004,14 +2021,23 @@ System.register("flagrow/bazaar/components/ExtensionSearch", ["flarum/Component"
                 }
 
                 babelHelpers.createClass(ExtensionSearch, [{
+                    key: "init",
+                    value: function init() {
+                        var _this2 = this;
+
+                        this.updateDebounce = debounce(function () {
+                            if (_this2.props.onsubmit) _this2.props.onsubmit(_this2.props.params);
+                        }, 500);
+                    }
+                }, {
                     key: "view",
                     value: function view() {
-                        var _this2 = this;
+                        var _this3 = this;
 
                         return m('div', [m('fieldset', { className: 'ExtensionSearch' }, m('input[type=text].FormControl', {
                             value: this.props.params.q || '',
                             oninput: m.withAttr('value', function (term) {
-                                return _this2.props.params.q = term;
+                                return _this3.search(term);
                             }),
                             placeholder: app.translator.trans('flagrow-bazaar.admin.search.placeholder')
                         })), m('div', { className: 'ExtensionFilters ButtonGroup' }, [CustomCheckbox.component({
@@ -2019,7 +2045,7 @@ System.register("flagrow/bazaar/components/ExtensionSearch", ["flarum/Component"
                             className: 'Button hasIcon',
                             state: this.props.params.filter == 'update_required',
                             onchange: function onchange(checked) {
-                                return _this2.toggleFilter('update_required', checked);
+                                return _this3.toggleFilter('update_required', checked);
                             },
                             children: app.translator.trans('flagrow-bazaar.admin.search.filter_update_required')
                         }), CustomCheckbox.component({
@@ -2027,7 +2053,7 @@ System.register("flagrow/bazaar/components/ExtensionSearch", ["flarum/Component"
                             className: 'Button hasIcon',
                             state: this.props.params.filter == 'pending',
                             onchange: function onchange(checked) {
-                                return _this2.toggleFilter('pending', checked);
+                                return _this3.toggleFilter('pending', checked);
                             },
                             children: app.translator.trans('flagrow-bazaar.admin.search.filter_pending')
                         }), CustomCheckbox.component({
@@ -2035,7 +2061,7 @@ System.register("flagrow/bazaar/components/ExtensionSearch", ["flarum/Component"
                             className: 'Button hasIcon',
                             state: this.props.params.filter == 'installed',
                             onchange: function onchange(checked) {
-                                return _this2.toggleFilter('installed', checked);
+                                return _this3.toggleFilter('installed', checked);
                             },
                             children: app.translator.trans('flagrow-bazaar.admin.search.filter_installed')
                         }), CustomCheckbox.component({
@@ -2043,7 +2069,7 @@ System.register("flagrow/bazaar/components/ExtensionSearch", ["flarum/Component"
                             className: 'Button hasIcon',
                             state: this.props.params.filter == 'languages',
                             onchange: function onchange(checked) {
-                                return _this2.toggleFilter('languages', checked);
+                                return _this3.toggleFilter('languages', checked);
                             },
                             children: app.translator.trans('flagrow-bazaar.admin.search.filter_languages')
                         }), this.connected ? [CustomCheckbox.component({
@@ -2051,7 +2077,7 @@ System.register("flagrow/bazaar/components/ExtensionSearch", ["flarum/Component"
                             className: 'Button hasIcon',
                             state: this.props.params.filter == 'favorited',
                             onchange: function onchange(checked) {
-                                return _this2.toggleFilter('favorited', checked);
+                                return _this3.toggleFilter('favorited', checked);
                             },
                             children: app.translator.trans('flagrow-bazaar.admin.search.filter_favorited')
                         }), CustomCheckbox.component({
@@ -2059,7 +2085,7 @@ System.register("flagrow/bazaar/components/ExtensionSearch", ["flarum/Component"
                             className: 'Button hasIcon',
                             state: this.props.params.filter == 'subscribed',
                             onchange: function onchange(checked) {
-                                return _this2.toggleFilter('subscribed', checked);
+                                return _this3.toggleFilter('subscribed', checked);
                             },
                             children: app.translator.trans('flagrow-bazaar.admin.search.filter_subscribed')
                         })] : '', CustomCheckbox.component({
@@ -2067,7 +2093,7 @@ System.register("flagrow/bazaar/components/ExtensionSearch", ["flarum/Component"
                             className: 'Button hasIcon',
                             state: this.props.params.filter == 'is_premium',
                             onchange: function onchange(checked) {
-                                return _this2.toggleFilter('is_premium', checked);
+                                return _this3.toggleFilter('is_premium', checked);
                             },
                             children: app.translator.trans('flagrow-bazaar.admin.search.filter_premium')
                         })])]);
@@ -2080,6 +2106,15 @@ System.register("flagrow/bazaar/components/ExtensionSearch", ["flarum/Component"
                         } else {
                             this.props.params.filter = null;
                         }
+
+                        this.updateDebounce();
+                    }
+                }, {
+                    key: "search",
+                    value: function search(term) {
+                        this.props.params.q = term;
+
+                        this.updateDebounce();
                     }
                 }]);
                 return ExtensionSearch;

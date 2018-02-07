@@ -2,7 +2,7 @@ import app from "flarum/app";
 import popupPromise from './popupPromise';
 
 export default class ExtensionRepository {
-    constructor(loading) {
+    constructor() {
         this.extensions = m.prop([]);
     }
 

@@ -22,6 +22,13 @@ export default class BazaarPage extends Component {
             repository: this.repository,
             connected: this.connected
         });
+        this.search = ExtensionSearch.component({params: this.params, onsubmit: this.updateResults.bind(this)});
+    }
+
+    updateResults(params) {
+        this.params = params;
+
+        this.extensionList.update(params);
     }
 
     view() {
@@ -31,7 +38,7 @@ export default class BazaarPage extends Component {
             }),
             m('div', {className: 'ExtensionsPage-list'}, [
                 m('div', {className: 'container'}, [
-                    ExtensionSearch.component({params: this.params}),
+                    this.search,
                     this.extensionList.render()
                 ])
             ]),

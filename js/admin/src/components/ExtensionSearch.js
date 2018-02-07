@@ -1,13 +1,20 @@
 import Component from "flarum/Component";
 import CustomCheckbox from "./CustomCheckbox";
+import debounce from "./../utils/debounce";
 
 export default class ExtensionSearch extends Component {
+    init() {
+        this.updateDebounce = debounce(() => {
+            if (this.props.onsubmit) this.props.onsubmit(this.props.params);
+        }, 500);
+    }
+
     view() {
         return m('div', [
             m('fieldset', {className: 'ExtensionSearch'},
                 m('input[type=text].FormControl', {
                     value: this.props.params.q || '',
-                    oninput: m.withAttr('value', term => this.props.params.q = term),
+                    oninput: m.withAttr('value', term => this.search(term)),
                     placeholder: app.translator.trans('flagrow-bazaar.admin.search.placeholder'),
                 })
             ),
@@ -73,5 +80,13 @@ export default class ExtensionSearch extends Component {
         } else {
             this.props.params.filter = null;
         }
+
+        this.updateDebounce();
+    }
+
+    search(term) {
+        this.props.params.q = term;
+
+        this.updateDebounce();
     }
 }
