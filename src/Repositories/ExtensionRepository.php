@@ -99,7 +99,6 @@ final class ExtensionRepository
 
     protected function payloadToExtensions(array $data): Collection
     {
-
         $collection = Collection::make($data)->map(function ($package) {
             return $this->createExtension($package);
         })->keyBy('id');
@@ -146,11 +145,9 @@ final class ExtensionRepository
     {
         $params = $request->getQueryParams();
 
-        $params = collect($params)->filter(function ($filter) {
-            return empty($filter);
-        });
+        $params = collect($params)->filter();
 
-        if (!$params->has('sort')) {
+        if (! $params->has('sort')) {
             $params->put('sort', 'name');
         }
 
