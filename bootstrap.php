@@ -41,6 +41,7 @@ return [
         $events->subscribe(Listeners\SyncWasSet::class);
         $events->subscribe(Listeners\SyncVersion::class);
         $events->subscribe(Listeners\RegisterConsoleCommand::class);
+        $events->subscribe(Listeners\SearchForInstalledExtensions::class);
 
         // @todo Temporary solution until we can use an extender to add a locale yaml.
         $events->listen(ConfigureLocales::class, function (ConfigureLocales $event) {

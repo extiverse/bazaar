@@ -10,6 +10,7 @@ export default class BazaarPage extends Component {
     init() {
         app.current = this;
 
+        this.authorized = (app.data.settings['flagrow.bazaar.api_token'] || '').length > 0;
         this.connected = app.data.settings['flagrow.bazaar.connected'] && app.data.settings['flagrow.bazaar.connected'] !== '0';
         this.loading = m.prop(false);
 
@@ -20,7 +21,8 @@ export default class BazaarPage extends Component {
             params: this.params,
             loading: this.loading,
             repository: this.repository,
-            connected: this.connected
+            connected: this.connected,
+            authorized: this.authorized
         });
         this.search = ExtensionSearch.component({params: this.params, onsubmit: this.updateResults.bind(this)});
     }

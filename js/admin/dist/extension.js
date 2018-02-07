@@ -148,6 +148,7 @@ System.register("flagrow/bazaar/components/BazaarPage", ["flarum/Component", "./
                     value: function init() {
                         app.current = this;
 
+                        this.authorized = (app.data.settings['flagrow.bazaar.api_token'] || '').length > 0;
                         this.connected = app.data.settings['flagrow.bazaar.connected'] && app.data.settings['flagrow.bazaar.connected'] !== '0';
                         this.loading = m.prop(false);
 
@@ -158,7 +159,8 @@ System.register("flagrow/bazaar/components/BazaarPage", ["flarum/Component", "./
                             params: this.params,
                             loading: this.loading,
                             repository: this.repository,
-                            connected: this.connected
+                            connected: this.connected,
+                            authorized: this.authorized
                         });
                         this.search = ExtensionSearch.component({ params: this.params, onsubmit: this.updateResults.bind(this) });
                     }
@@ -453,10 +455,10 @@ System.register('flagrow/bazaar/components/CustomCheckbox', ['flarum/components/
 });;
 'use strict';
 
-System.register('flagrow/bazaar/components/ExtensionList', ['flarum/Component', 'flarum/components/Button', './ExtensionListItem', './BazaarLoader'], function (_export, _context) {
+System.register('flagrow/bazaar/components/ExtensionList', ['flarum/Component', 'flarum/components/Button', './ExtensionListItem', './BazaarLoader', 'flarum/components/Placeholder'], function (_export, _context) {
     "use strict";
 
-    var Component, Button, ExtensionListItem, BazaarLoader, ExtensionList;
+    var Component, Button, ExtensionListItem, BazaarLoader, Placeholder, ExtensionList;
     return {
         setters: [function (_flarumComponent) {
             Component = _flarumComponent.default;
@@ -466,6 +468,8 @@ System.register('flagrow/bazaar/components/ExtensionList', ['flarum/Component', 
             ExtensionListItem = _ExtensionListItem.default;
         }, function (_BazaarLoader) {
             BazaarLoader = _BazaarLoader.default;
+        }, function (_flarumComponentsPlaceholder) {
+            Placeholder = _flarumComponentsPlaceholder.default;
         }],
         execute: function () {
             ExtensionList = function (_Component) {
@@ -522,7 +526,12 @@ System.register('flagrow/bazaar/components/ExtensionList', ['flarum/Component', 
                         }
 
                         if (this.extensions.length === 0 && !this.loading) {
-                            var text = app.translator.trans('core.forum.discussion_list.empty_text');
+                            var text = app.translator.trans('flagrow-bazaar.admin.page.state.no_results_available');
+
+                            if (!this.props.authorized) {
+                                text = app.translator.trans('flagrow-bazaar.admin.page.state.not_authorized');
+                            }
+
                             return m(
                                 'div',
                                 { className: 'DiscussionList' },
@@ -617,6 +626,10 @@ System.register('flagrow/bazaar/components/ExtensionList', ['flarum/Component', 
 
                         if (params.q) {
                             out.filter.q = params.q;
+                        }
+
+                        if (params.filter) {
+                            out.filter[params.filter] = true;
                         }
 
                         return out;
@@ -893,10 +906,129 @@ System.register("flagrow/bazaar/components/ExtensionListItem", ["flarum/Componen
 });;
 "use strict";
 
+System.register("flagrow/bazaar/components/ExtensionSearch", ["flarum/Component", "./CustomCheckbox", "./../utils/debounce"], function (_export, _context) {
+    "use strict";
+
+    var Component, CustomCheckbox, debounce, ExtensionSearch;
+    return {
+        setters: [function (_flarumComponent) {
+            Component = _flarumComponent.default;
+        }, function (_CustomCheckbox) {
+            CustomCheckbox = _CustomCheckbox.default;
+        }, function (_utilsDebounce) {
+            debounce = _utilsDebounce.default;
+        }],
+        execute: function () {
+            ExtensionSearch = function (_Component) {
+                babelHelpers.inherits(ExtensionSearch, _Component);
+
+                function ExtensionSearch() {
+                    babelHelpers.classCallCheck(this, ExtensionSearch);
+                    return babelHelpers.possibleConstructorReturn(this, (ExtensionSearch.__proto__ || Object.getPrototypeOf(ExtensionSearch)).apply(this, arguments));
+                }
+
+                babelHelpers.createClass(ExtensionSearch, [{
+                    key: "init",
+                    value: function init() {
+                        var _this2 = this;
+
+                        this.updateDebounce = debounce(function () {
+                            if (_this2.props.onsubmit) _this2.props.onsubmit(_this2.props.params);
+                        }, 500);
+                    }
+                }, {
+                    key: "view",
+                    value: function view() {
+                        var _this3 = this;
+
+                        return m('div', [m('fieldset', { className: 'ExtensionSearch' }, m('input[type=text].FormControl', {
+                            value: this.props.params.q || '',
+                            oninput: m.withAttr('value', function (term) {
+                                return _this3.search(term);
+                            }),
+                            placeholder: app.translator.trans('flagrow-bazaar.admin.search.placeholder')
+                        })), m('div', { className: 'ExtensionFilters ButtonGroup' }, [CustomCheckbox.component({
+                            icon: 'toggle-up',
+                            className: 'Button hasIcon',
+                            state: this.props.params.filter == 'update_required',
+                            onchange: function onchange(checked) {
+                                return _this3.toggleFilter('update_required', checked);
+                            },
+                            children: app.translator.trans('flagrow-bazaar.admin.search.filter_update_required')
+                        }), CustomCheckbox.component({
+                            icon: 'circle-o-notch',
+                            className: 'Button hasIcon',
+                            state: this.props.params.filter == 'pending',
+                            onchange: function onchange(checked) {
+                                return _this3.toggleFilter('pending', checked);
+                            },
+                            children: app.translator.trans('flagrow-bazaar.admin.search.filter_pending')
+                        }), CustomCheckbox.component({
+                            icon: 'plus-square',
+                            className: 'Button hasIcon',
+                            state: this.props.params.filter == 'installed',
+                            onchange: function onchange(checked) {
+                                return _this3.toggleFilter('installed', checked);
+                            },
+                            children: app.translator.trans('flagrow-bazaar.admin.search.filter_installed')
+                        }), this.connected ? [CustomCheckbox.component({
+                            icon: 'heart',
+                            className: 'Button hasIcon',
+                            state: this.props.params.filter == 'favorited',
+                            onchange: function onchange(checked) {
+                                return _this3.toggleFilter('favorited', checked);
+                            },
+                            children: app.translator.trans('flagrow-bazaar.admin.search.filter_favorited')
+                        }), CustomCheckbox.component({
+                            icon: 'shopping-cart',
+                            className: 'Button hasIcon',
+                            state: this.props.params.filter == 'subscribed',
+                            onchange: function onchange(checked) {
+                                return _this3.toggleFilter('subscribed', checked);
+                            },
+                            children: app.translator.trans('flagrow-bazaar.admin.search.filter_subscribed')
+                        })] : '', CustomCheckbox.component({
+                            icon: 'certificate',
+                            className: 'Button hasIcon',
+                            state: this.props.params.filter == 'is_premium',
+                            onchange: function onchange(checked) {
+                                return _this3.toggleFilter('is_premium', checked);
+                            },
+                            children: app.translator.trans('flagrow-bazaar.admin.search.filter_premium')
+                        })])]);
+                    }
+                }, {
+                    key: "toggleFilter",
+                    value: function toggleFilter(filter, checked) {
+                        if (checked) {
+                            this.props.params.filter = filter;
+                        } else {
+                            this.props.params.filter = null;
+                        }
+
+                        this.updateDebounce();
+                    }
+                }, {
+                    key: "search",
+                    value: function search(term) {
+                        this.props.params.q = term;
+
+                        this.updateDebounce();
+                    }
+                }]);
+                return ExtensionSearch;
+            }(Component);
+
+            _export("default", ExtensionSearch);
+        }
+    };
+});;
+"use strict";
+
 System.register("flagrow/bazaar/components/TaskListItem", ["flarum/app", "flarum/Component", "flarum/helpers/icon", "flarum/components/Button", "flarum/helpers/humanTime", "flarum/helpers/fullTime"], function (_export, _context) {
     "use strict";
 
-    var app, Component, icon, Button, humanTime, fullTime, ExtensionListItem;
+    var app, Component, icon, Button, humanTime, fullTime, TaskListItem;
     return {
         setters: [function (_flarumApp) {
             app = _flarumApp.default;
@@ -912,15 +1044,15 @@ System.register("flagrow/bazaar/components/TaskListItem", ["flarum/app", "flarum
             fullTime = _flarumHelpersFullTime.default;
         }],
         execute: function () {
-            ExtensionListItem = function (_Component) {
-                babelHelpers.inherits(ExtensionListItem, _Component);
+            TaskListItem = function (_Component) {
+                babelHelpers.inherits(TaskListItem, _Component);
 
-                function ExtensionListItem() {
-                    babelHelpers.classCallCheck(this, ExtensionListItem);
-                    return babelHelpers.possibleConstructorReturn(this, (ExtensionListItem.__proto__ || Object.getPrototypeOf(ExtensionListItem)).apply(this, arguments));
+                function TaskListItem() {
+                    babelHelpers.classCallCheck(this, TaskListItem);
+                    return babelHelpers.possibleConstructorReturn(this, (TaskListItem.__proto__ || Object.getPrototypeOf(TaskListItem)).apply(this, arguments));
                 }
 
-                babelHelpers.createClass(ExtensionListItem, [{
+                babelHelpers.createClass(TaskListItem, [{
                     key: "init",
                     value: function init() {
                         this.extended = m.prop(false);
@@ -1050,10 +1182,10 @@ System.register("flagrow/bazaar/components/TaskListItem", ["flarum/app", "flarum
                         );
                     }
                 }]);
-                return ExtensionListItem;
+                return TaskListItem;
             }(Component);
 
-            _export("default", ExtensionListItem);
+            _export("default", TaskListItem);
         }
     };
 });;
@@ -1994,133 +2126,6 @@ System.register('flagrow/bazaar/utils/TaskRepository', ['flarum/app'], function 
             }();
 
             _export('default', ExtensionRepository);
-        }
-    };
-});;
-"use strict";
-
-System.register("flagrow/bazaar/components/ExtensionSearch", ["flarum/Component", "./CustomCheckbox", "./../utils/debounce"], function (_export, _context) {
-    "use strict";
-
-    var Component, CustomCheckbox, debounce, ExtensionSearch;
-    return {
-        setters: [function (_flarumComponent) {
-            Component = _flarumComponent.default;
-        }, function (_CustomCheckbox) {
-            CustomCheckbox = _CustomCheckbox.default;
-        }, function (_utilsDebounce) {
-            debounce = _utilsDebounce.default;
-        }],
-        execute: function () {
-            ExtensionSearch = function (_Component) {
-                babelHelpers.inherits(ExtensionSearch, _Component);
-
-                function ExtensionSearch() {
-                    babelHelpers.classCallCheck(this, ExtensionSearch);
-                    return babelHelpers.possibleConstructorReturn(this, (ExtensionSearch.__proto__ || Object.getPrototypeOf(ExtensionSearch)).apply(this, arguments));
-                }
-
-                babelHelpers.createClass(ExtensionSearch, [{
-                    key: "init",
-                    value: function init() {
-                        var _this2 = this;
-
-                        this.updateDebounce = debounce(function () {
-                            if (_this2.props.onsubmit) _this2.props.onsubmit(_this2.props.params);
-                        }, 500);
-                    }
-                }, {
-                    key: "view",
-                    value: function view() {
-                        var _this3 = this;
-
-                        return m('div', [m('fieldset', { className: 'ExtensionSearch' }, m('input[type=text].FormControl', {
-                            value: this.props.params.q || '',
-                            oninput: m.withAttr('value', function (term) {
-                                return _this3.search(term);
-                            }),
-                            placeholder: app.translator.trans('flagrow-bazaar.admin.search.placeholder')
-                        })), m('div', { className: 'ExtensionFilters ButtonGroup' }, [CustomCheckbox.component({
-                            icon: 'toggle-up',
-                            className: 'Button hasIcon',
-                            state: this.props.params.filter == 'update_required',
-                            onchange: function onchange(checked) {
-                                return _this3.toggleFilter('update_required', checked);
-                            },
-                            children: app.translator.trans('flagrow-bazaar.admin.search.filter_update_required')
-                        }), CustomCheckbox.component({
-                            icon: 'circle-o-notch',
-                            className: 'Button hasIcon',
-                            state: this.props.params.filter == 'pending',
-                            onchange: function onchange(checked) {
-                                return _this3.toggleFilter('pending', checked);
-                            },
-                            children: app.translator.trans('flagrow-bazaar.admin.search.filter_pending')
-                        }), CustomCheckbox.component({
-                            icon: 'plus-square',
-                            className: 'Button hasIcon',
-                            state: this.props.params.filter == 'installed',
-                            onchange: function onchange(checked) {
-                                return _this3.toggleFilter('installed', checked);
-                            },
-                            children: app.translator.trans('flagrow-bazaar.admin.search.filter_installed')
-                        }), CustomCheckbox.component({
-                            icon: 'inr',
-                            className: 'Button hasIcon',
-                            state: this.props.params.filter == 'languages',
-                            onchange: function onchange(checked) {
-                                return _this3.toggleFilter('languages', checked);
-                            },
-                            children: app.translator.trans('flagrow-bazaar.admin.search.filter_languages')
-                        }), this.connected ? [CustomCheckbox.component({
-                            icon: 'heart',
-                            className: 'Button hasIcon',
-                            state: this.props.params.filter == 'favorited',
-                            onchange: function onchange(checked) {
-                                return _this3.toggleFilter('favorited', checked);
-                            },
-                            children: app.translator.trans('flagrow-bazaar.admin.search.filter_favorited')
-                        }), CustomCheckbox.component({
-                            icon: 'shopping-cart',
-                            className: 'Button hasIcon',
-                            state: this.props.params.filter == 'subscribed',
-                            onchange: function onchange(checked) {
-                                return _this3.toggleFilter('subscribed', checked);
-                            },
-                            children: app.translator.trans('flagrow-bazaar.admin.search.filter_subscribed')
-                        })] : '', CustomCheckbox.component({
-                            icon: 'certificate',
-                            className: 'Button hasIcon',
-                            state: this.props.params.filter == 'is_premium',
-                            onchange: function onchange(checked) {
-                                return _this3.toggleFilter('is_premium', checked);
-                            },
-                            children: app.translator.trans('flagrow-bazaar.admin.search.filter_premium')
-                        })])]);
-                    }
-                }, {
-                    key: "toggleFilter",
-                    value: function toggleFilter(filter, checked) {
-                        if (checked) {
-                            this.props.params.filter = filter;
-                        } else {
-                            this.props.params.filter = null;
-                        }
-
-                        this.updateDebounce();
-                    }
-                }, {
-                    key: "search",
-                    value: function search(term) {
-                        this.props.params.q = term;
-
-                        this.updateDebounce();
-                    }
-                }]);
-                return ExtensionSearch;
-            }(Component);
-
-            _export("default", ExtensionSearch);
         }
     };
 });

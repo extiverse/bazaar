@@ -55,6 +55,12 @@ flagrow-bazaar:
                         Although we try to increase the memory limit during runtime, success depends on your hosting environment.
                         For further information, refer to <a>the wiki</a>.
         page:
+            state:
+                no_results_available: >
+                    It seems no results were available at this time.
+                not_authorized: >
+                    Your authorization against our flagrow.io api failed. Possibly an unstable internet connection is causing this.
+                    Please refresh the page once your connection stabilised. If the problem persists, please get in touch with us.
             button:
                 more: More
                 install: Install

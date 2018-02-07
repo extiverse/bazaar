@@ -18,8 +18,8 @@ use Flarum\Search\SearchResults;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Arr;
-use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Log\LoggerInterface;
 
 final class ExtensionRepository
 {
@@ -48,6 +48,10 @@ final class ExtensionRepository
      * @var CacheClearJob
      */
     private $flush;
+    /**
+     * @var LoggerInterface
+     */
+    private $log;
 
     /**
      * ExtensionRepository constructor.
@@ -62,7 +66,8 @@ final class ExtensionRepository
         PackageManager $packages,
         Api $client,
         Dispatcher $events,
-        CacheClearJob $flush
+        CacheClearJob $flush,
+        LoggerInterface $log
     )
     {
         $this->manager = $manager;
@@ -70,6 +75,7 @@ final class ExtensionRepository
         $this->packages = $packages;
         $this->events = $events;
         $this->flush = $flush;
+        $this->log = $log;
     }
 
     /**
@@ -165,6 +171,10 @@ final class ExtensionRepository
         );
 
         $response = $this->client->get('packages', ['query' => $params->toArray()]);
+
+        if ($response->getStatusCode() >= 400) {
+            $this->log->alert("Failed Bazaar call to flagrow.io: {$response->getReasonPhrase()}");
+        }
 
         $json = json_decode($response->getBody()->getContents(), true);
 

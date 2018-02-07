@@ -40,13 +40,6 @@ export default class ExtensionSearch extends Component {
                     onchange: (checked) => this.toggleFilter('installed', checked),
                     children: app.translator.trans('flagrow-bazaar.admin.search.filter_installed')
                 }),
-                CustomCheckbox.component({
-                    icon: 'inr',
-                    className: 'Button hasIcon',
-                    state: this.props.params.filter == 'languages',
-                    onchange: (checked) => this.toggleFilter('languages', checked),
-                    children: app.translator.trans('flagrow-bazaar.admin.search.filter_languages')
-                }),
                 this.connected ? [
                     CustomCheckbox.component({
                         icon: 'heart',

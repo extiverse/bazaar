@@ -2,6 +2,7 @@ import Component from 'flarum/Component';
 import Button from 'flarum/components/Button';
 import ExtensionListItem from './ExtensionListItem';
 import BazaarLoader from "./BazaarLoader";
+import Placeholder from 'flarum/components/Placeholder';
 
 export default class ExtensionList extends Component {
     init() {
@@ -47,7 +48,12 @@ export default class ExtensionList extends Component {
         }
 
         if (this.extensions.length === 0 && !this.loading) {
-            const text = app.translator.trans('core.forum.discussion_list.empty_text');
+            let text = app.translator.trans('flagrow-bazaar.admin.page.state.no_results_available');
+
+            if (! this.props.authorized) {
+                text = app.translator.trans('flagrow-bazaar.admin.page.state.not_authorized');
+            }
+
             return (
                 <div className="DiscussionList">
                     {Placeholder.component({text})}
@@ -161,6 +167,10 @@ export default class ExtensionList extends Component {
 
         if (params.q) {
             out.filter.q = params.q;
+        }
+
+        if (params.filter) {
+            out.filter[params.filter] = true;
         }
 
         return out;

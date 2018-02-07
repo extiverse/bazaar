@@ -7,10 +7,13 @@ use Flagrow\Bazaar\Extensions\ExtensionUtils;
 use Flarum\Extension\Extension;
 use Flarum\Extension\ExtensionManager;
 use Illuminate\Contracts\Events\Dispatcher;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 
 class SearchForInstalledExtensions
 {
+    const MARKS = ['installed', 'update_required'];
+
     /**
      * @var Collection
      */
@@ -37,10 +40,18 @@ class SearchForInstalledExtensions
 
     public function installed(SearchingExtensions $event)
     {
-        $filter = $event->params->get('filter');
+        $filter = (array) $event->params->pull('filter', []);
 
-        if (in_array($filter, 'installed', 'update_required')) {
-            // mutate the api params to use the installedExtensions
-        }
+        collect($filter)
+            ->keys()
+            ->first(function ($key) use (&$event, &$filter) {
+                if (in_array($key, static::MARKS, true)) {
+                    $filter['id'] = $this->installedExtensions->implode(',');
+                }
+            });
+
+        Arr::forget($filter, static::MARKS);
+
+        $event->params->put('filter', $filter);
     }
 }
