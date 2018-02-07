@@ -40,6 +40,7 @@ return [
         $events->subscribe(Listeners\AddSatisConfiguration::class);
         $events->subscribe(Listeners\SyncWasSet::class);
         $events->subscribe(Listeners\SyncVersion::class);
+        $events->subscribe(Listeners\RegisterConsoleCommand::class);
 
         // @todo Temporary solution until we can use an extender to add a locale yaml.
         $events->listen(ConfigureLocales::class, function (ConfigureLocales $event) {
