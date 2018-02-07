@@ -148,7 +148,7 @@ export default class ExtensionList extends Component {
      * @api
      */
     requestParams() {
-        const params = this.props.params();
+        const params = this.props.params;
         const out = {include: [], filter: {}};
 
         out.sort = this.sortMap()[params.sort];

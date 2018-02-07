@@ -4,6 +4,7 @@ namespace Flagrow\Bazaar\Repositories;
 
 use Flagrow\Bazaar\Events\ExtensionWasInstalled;
 use Flagrow\Bazaar\Events\ExtensionWasUpdated;
+use Flagrow\Bazaar\Events\SearchedExtensions;
 use Flagrow\Bazaar\Events\SearchingExtensions;
 use Flagrow\Bazaar\Extensions\Extension;
 use Flagrow\Bazaar\Extensions\ExtensionUtils;
@@ -169,6 +170,12 @@ final class ExtensionRepository
 
         $data = Arr::get($json, 'data', []);
         $hasMore = Arr::get($json, 'meta.pages_total', 1) > Arr::get($json, 'meta.pages_current', 1);
+
+        $extensions = $this->payloadToExtensions($data);
+
+        $this->events->fire(
+            new SearchedExtensions($extensions, $params, $hasMore)
+        );
 
         return new SearchResults($this->payloadToExtensions($data), $hasMore);
     }
