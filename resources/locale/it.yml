@@ -9,7 +9,7 @@ flagrow-bazaar:
             title: Bazaar
             description: Il mercato delle estensioni.
         header:
-            extensions: Esplora le estenzioni
+            extensions: Esplora le estensioni
             tasks: Cronologia attività
         modal:
             settings:
@@ -22,7 +22,7 @@ flagrow-bazaar:
                 description: >
                     Collega il forum al tuo account personale su {host} per sbloccare funzioni avanzate; compreso
                     una dashboard che ti offre una panoramica di tutte le tue installazioni di Flarum.
-                    Aggiungeremo nuove funzionalità come le notifiche se il tuo forum contiene estenzioni obsolete
+                    Aggiungeremo nuove funzionalità come le notifiche se il tuo forum contiene estensioni obsolete
                     o di aggiornare tutte le tue installazioni centralmente.
             requirements:
                 file-permissions:
