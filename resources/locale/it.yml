@@ -2,7 +2,7 @@ flagrow-bazaar:
     admin:
         loader:
             is_loading: Elaborazione...
-            error: Si è verificato un errore. Per ulteriori dettagli controlla la cronologia e i logs di Flarum. Non aver paura di riferircelo.
+            error: Si è verificato un errore. Per ulteriori dettagli controlla la cronologia e i logs di Flarum.
             refresh: Ricarica pagina
             report_issue: Segnala un problema
         nav:
