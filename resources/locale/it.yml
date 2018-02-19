@@ -2,23 +2,84 @@ flagrow-bazaar:
     admin:
         loader:
             is_loading: Elaborazione...
-        popup:
-            title: Flagrow Bazaar
-            field:
-                token:
-                  label: API token
-                  description: API token � richiesto per accedere al Flagrow extension api. Se gi� impostato, sei pronto per iniziare!
+            error: Si è verificato un errore. Per ulteriori dettagli controlla la cronologia e i logs di Flarum.
+            refresh: Ricarica pagina
+            report_issue: Segnala un problema
         nav:
             title: Bazaar
             description: Il mercato delle estensioni.
+        header:
+            extensions: Esplora le estensioni
+            tasks: Cronologia attività
+        modal:
+            settings:
+                title: Flagrow Bazaar
+                field:
+                    apiToken: API token
+                    apiTokenDescription: La chiave api è richiesta per accedere al Flagrow extensions api. Se già impostato, puoi iniziare!
+            connect-bazaar:
+                title: Connettere
+                description: >
+                    Collega il forum al tuo account personale su {host} per sbloccare funzioni avanzate; compreso
+                    una dashboard che ti offre una panoramica di tutte le tue installazioni di Flarum.
+                    Aggiungeremo nuove funzionalità come le notifiche se il tuo forum contiene estensioni obsolete
+                    o di aggiornare tutte le tue installazioni centralmente.
+            requirements:
+                file-permissions:
+                    title: Permessi File
+                    description: >
+                        Sembra che Bazaar abbia sufficienti autorizzazioni per scrivere
+                        file e/o cartelle, controlla la lista in basso. Per ulteriori
+                        informazioni, fai riferimento <a>alla wiki</a>.
+                php-memory_limit:
+                    title: Limite memoria
+                    description: >
+                        Consigliamo di far utilizzare a PHP almeno {required} di memoria, il tuo php.ini al momento utilizza {limit}.
+                        Anche se cerchiamo di aumentare il limite durante il runtime, il successo dipende da te.
+                        Per maggiori informazioni, fai riferimento <a>alla wiki</a>.
         page:
             button:
-                more: Di pi�
+                more: Di più
                 install: Installa
                 uninstall: Disinstalla
                 enable: Attiva
                 disable: Disattiva
+                update: Aggiorna
+                connect: Connetti
+                favorite_button: "Estensione preferita"
+                remove_favorite_button: "Rimuovi l'estensione dalla tua lista dei preferiti"
             extension:
                 installed: Estensione installata
                 enabled: Estensione attivata
-                vendor: By {vendor}
+                vendor: Da {vendor}
+                favorited: Una delle tue preferite
+                outdated: "Estensione obsoleta, aggiorna alla versione {new}"
+            task:
+                header:
+                    status: Stato
+                    command: Comando
+                    output: Output
+                    time: Tempo
+                    details: Dettagli
+                attribute:
+                    created_at: Creato il
+                    started_at: Iniziato il
+                    finished_at: Finito il
+                status:
+                    success: Successo
+                    exception: Si è verificato un errore
+                    working: Lavori in corso
+                    unknown: Sconosciuto
+                command:
+                    install: Installa {extension}
+                    update: Aggiorna {extension}
+                    uninstall: Rimuovi {extension}
+                group:
+                    today: Oggi
+                    lastmonth: Ultimo mese
+                    older: Più vecchio
+        search:
+            placeholder: Cerca estensione
+            filter_installed: Mostra solo le estensioni installate
+            filter_update_required: Mostra solo le estensioni con un aggiornamento disponibile
+            filter_favorited: Mostra solo le estensioni preferite
