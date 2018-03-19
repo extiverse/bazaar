@@ -55,11 +55,13 @@ final class ExtensionRepository
 
     /**
      * ExtensionRepository constructor.
+     *
      * @param ExtensionManager $manager
-     * @param PackageManager $packages
-     * @param Api $client
-     * @param Dispatcher $events
-     * @param CacheClearJob $flush
+     * @param PackageManager   $packages
+     * @param Api              $client
+     * @param Dispatcher       $events
+     * @param CacheClearJob    $flush
+     * @param LoggerInterface  $log
      */
     function __construct(
         ExtensionManager $manager,
@@ -151,7 +153,7 @@ final class ExtensionRepository
      */
     public function index(ServerRequestInterface $request)
     {
-        $params = $request->getQueryParams();
+        $params = $orig = $request->getQueryParams();
 
         $params = collect($params)->filter();
 
@@ -165,6 +167,13 @@ final class ExtensionRepository
         if (! $params->has('filter') && ! $params->has('q')) {
             $params->put('filter', 'not-flarum');
         }
+
+        $page = Arr::get($orig, 'page', []);
+        $offset = Arr::pull($page, 'offset', 0);
+        $page['number'] = ($offset+25)/25;
+        $params->put('page', $page);
+
+        $this->log->info("pagination", $params->toArray());
 
         $this->events->fire(
             new SearchingExtensions($params)

@@ -2,11 +2,10 @@
 
 namespace Flagrow\Bazaar;
 
-use DirectoryIterator;
 use Flagrow\Bazaar\Api\Controllers;
-use Flarum\Event\ConfigureLocales;
 use Flarum\Extend\Assets;
 use Flarum\Extend\Locale;
+use Flarum\Extend\Locales;
 use Flarum\Extend\Routes;
 use Flarum\Foundation\Application;
 use Illuminate\Contracts\Events\Dispatcher;
@@ -30,7 +29,7 @@ return [
         ->asset(__DIR__ . '/resources/less/extension.less')
         ->asset(__DIR__ . '/js/admin/dist/extension.js')
         ->bootstrapper('flagrow/bazaar/main'),
-//    (new Locale(__DIR__ . '/resources/locale')),
+    new Locales(__DIR__ . '/resources/locale'),
     function (Application $app) {
     /** @var Dispatcher $events */
         $events = $app['events'];
@@ -42,15 +41,6 @@ return [
         $events->subscribe(Listeners\SyncVersion::class);
         $events->subscribe(Listeners\RegisterConsoleCommand::class);
         $events->subscribe(Listeners\SearchForInstalledExtensions::class);
-
-        // @todo Temporary solution until we can use an extender to add a locale yaml.
-        $events->listen(ConfigureLocales::class, function (ConfigureLocales $event) {
-            foreach (new DirectoryIterator(__DIR__ . '/resources/locale') as $file) {
-                if ($file->isFile() && in_array($file->getExtension(), ['yml', 'yaml'])) {
-                    $event->locales->addTranslations($file->getBasename('.' . $file->getExtension()), $file->getPathname());
-                }
-            }
-        });
 
         $app->register(Providers\ComposerEnvironmentProvider::class);
         $app->register(Providers\ExtensionProvider::class);
