@@ -5,7 +5,7 @@ import Button from "flarum/components/Button";
 import humanTime from 'flarum/helpers/humanTime';
 import fullTime from 'flarum/helpers/fullTime';
 
-export default class ExtensionListItem extends Component {
+export default class TaskListItem extends Component {
     init() {
         this.extended = m.prop(false);
     }

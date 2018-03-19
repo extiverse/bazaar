@@ -6,8 +6,8 @@ use Flagrow\Bazaar\Api\Serializers\ExtensionSerializer;
 use Flagrow\Bazaar\Repositories\ExtensionRepository;
 use Flagrow\Bazaar\Search\AbstractExtensionSearcher;
 use Flarum\Api\Controller\AbstractCollectionController;
-use Flarum\Api\UrlGenerator;
 use Flarum\Core\Access\AssertPermissionTrait;
+use Flarum\Forum\UrlGenerator;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 
@@ -44,13 +44,13 @@ class ListExtensionController extends AbstractCollectionController
 
         $offset = $this->extractOffset($request);
 
-        $results = $this->extensions->index($request->getQueryParams());
+        $results = $this->extensions->index($request);
 
         $document->addPaginationLinks(
             $this->url->toRoute('bazaar.extensions.index'),
             $request->getQueryParams(),
             $offset,
-            1, // Add one to the offset to get next page number
+            1,
             $results->areMoreResults() ? null : 0
         );
 
