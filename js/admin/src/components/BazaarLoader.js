@@ -13,7 +13,7 @@ export default class BazaarLoader extends Component {
             hidden: this.props.loading() === false
         }, [
             m('.Loader-modal', [
-                m('.Loader-icon', icon(error ? 'exclamation-triangle' : 'shopping-cart')),
+                m('.Loader-icon', icon(error ? 'fas fa-exclamation-triangle' : 'fas fa-shopping-bag')),
                 m('div', [
                     m('p', app.translator.trans(error ? 'flagrow-bazaar.admin.loader.error' : 'flagrow-bazaar.admin.loader.is_loading')),
                     error ? [

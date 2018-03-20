@@ -30,7 +30,7 @@ export default class ExtensionListItem extends Component {
         } key={extension.id()} data-id={extension.id()}>
             <div className="ExtensionListItem-content">
                       <span className="ExtensionListItem-icon ExtensionIcon" style={extension.icon() || ''} title={extension.description()}>
-                        {extension.icon() ? icon(extension.icon().name) : ''}
+                        {extension.icon() ? icon('fas fa-' + extension.icon().name) : ''}
                       </span>
 
 
@@ -42,7 +42,7 @@ export default class ExtensionListItem extends Component {
                         className="ExtensionListItem-controls"
                         buttonClassName="Button Button--icon Button--flat"
                         menuClassName="Dropdown-menu--right"
-                        icon="ellipsis-h">
+                        icon="fas fa-ellipsis-h">
                         {controls}
                     </Dropdown>
                 ) : ''}
@@ -66,7 +66,7 @@ export default class ExtensionListItem extends Component {
 
         if (connected) {
             items.add('favorite', Button.component({
-                icon: 'heart',
+                icon: 'fas fa-heart',
                 children: app.translator.trans(favoriteTrans),
                 onclick: () => {
                     repository().favoriteExtension(extension);
@@ -77,7 +77,7 @@ export default class ExtensionListItem extends Component {
         if (! extension.pending()) {
             if (extension.enabled() && app.extensionSettings[name]) {
                 items.add('settings', Button.component({
-                    icon: 'cog',
+                    icon: 'fas fa-cog',
                     children: app.translator.trans('core.admin.extensions.settings_button'),
                     onclick: app.extensionSettings[name]
                 }));
@@ -85,7 +85,7 @@ export default class ExtensionListItem extends Component {
 
             if (extension.can_uninstall()) {
                 items.add('uninstall', Button.component({
-                    icon: 'minus-square-o',
+                    icon: 'fas fa-minus-square',
                     children: app.translator.trans('flagrow-bazaar.admin.page.button.uninstall'),
                     onclick: () => {
                         repository()
@@ -96,7 +96,7 @@ export default class ExtensionListItem extends Component {
 
             if (extension.can_enable()) {
                 items.add('enable', Button.component({
-                    icon: 'check-square-o',
+                    icon: 'fas fa-check-square',
                     children: app.translator.trans('flagrow-bazaar.admin.page.button.enable'),
                     onclick: () => {
                         repository()
@@ -107,7 +107,7 @@ export default class ExtensionListItem extends Component {
 
             if (extension.installed() && extension.outdated()) {
                 items.add('update', Button.component({
-                    icon: 'toggle-up',
+                    icon: 'fas fa-toggle-up',
                     children: app.translator.trans('flagrow-bazaar.admin.page.button.update'),
                     onclick: () => {
                         repository()
@@ -118,7 +118,7 @@ export default class ExtensionListItem extends Component {
 
             if (extension.can_disable()) {
                 items.add('disable', Button.component({
-                    icon: 'square-o',
+                    icon: 'fas fa-square',
                     children: app.translator.trans('flagrow-bazaar.admin.page.button.disable'),
                     onclick: () => {
                         repository()
@@ -129,7 +129,7 @@ export default class ExtensionListItem extends Component {
 
             if (extension.can_install()) {
                 items.add('install', Button.component({
-                    icon: 'plus-square-o',
+                    icon: 'fas fa-plus-square',
                     children: app.translator.trans('flagrow-bazaar.admin.page.button.install'),
                     onclick: () => {
                         repository()
@@ -142,14 +142,14 @@ export default class ExtensionListItem extends Component {
         if (extension.premium() && !connected) {
             items.add('subscribe', Button.component({
                 disabled: true,
-                icon: 'shopping-cart',
+                icon: 'fas fa-shopping-cart',
                 children: app.translator.trans('flagrow-bazaar.admin.page.button.connect_to_subscribe'),
             }));
         }
 
         if (extension.canCheckout() && connected) {
             items.add('subscribe', Button.component({
-                icon: 'shopping-cart',
+                icon: 'fas fa-shopping-cart',
                 children: app.translator.trans('flagrow-bazaar.admin.page.button.subscribe'),
                 onclick: () => {
                     repository().premiumExtensionSubscribe(extension);
@@ -159,7 +159,7 @@ export default class ExtensionListItem extends Component {
 
         if (extension.canSafelyUnsubscribe() && connected) {
             items.add('unsubscribe', Button.component({
-                icon: 'ban',
+                icon: 'fas fa-ban',
                 children: app.translator.trans('flagrow-bazaar.admin.page.button.unsubscribe'),
                 onclick: () => {
                     repository().premiumExtensionUnsubscribe(extension);
@@ -180,41 +180,41 @@ export default class ExtensionListItem extends Component {
         const items = new ItemList();
 
         if (extension.subscribed()) {
-            items.add('subscribed', <Badge icon="shopping-cart"
+            items.add('subscribed', <Badge icon="fas fa-shopping-cart"
                 type="subscribed"
                 label={app.translator.trans('flagrow-bazaar.admin.page.extension.subscribed')} />);
         } else if (extension.premium()) {
-            items.add('premium', <Badge icon="certificate"
+            items.add('premium', <Badge icon="fas fa-certificate"
                 type="premium"
                 label={app.translator.trans('flagrow-bazaar.admin.page.extension.premium')} />);
         }
         if (extension.pending()) {
-            items.add('pending', <Badge icon="circle-o-notch fa-spin"
+            items.add('pending', <Badge icon="fas fa-circle-notch fa-spin"
                 type="pending"
                 label={app.translator.trans('flagrow-bazaar.admin.page.extension.pending')} />);
         }
 
         if (extension.installed() && extension.outdated()) {
-            items.add('outdated', <Badge icon="warning"
+            items.add('outdated', <Badge icon="fas fa-warning"
                 type="outdated"
                 label={app.translator.trans('flagrow-bazaar.admin.page.extension.outdated',
                     { new: extension.highest_version() })} />)
         }
 
         if (extension.favorited()) {
-            items.add('favorited', <Badge icon="heart"
+            items.add('favorited', <Badge icon="fas fa-heart"
                 type="favorited"
                 label={app.translator.trans('flagrow-bazaar.admin.page.extension.favorited')} />)
         }
 
         if (extension.installed() && !extension.enabled()) {
-            items.add('installed', <Badge icon="plus-square"
+            items.add('installed', <Badge icon="fas fa-plus-square"
                 type="installed"
                 label={app.translator.trans('flagrow-bazaar.admin.page.extension.installed')} />)
         }
 
         if (extension.enabled()) {
-            items.add('enabled', <Badge icon="check-square"
+            items.add('enabled', <Badge icon="fas fa-check-square"
                 type="enabled"
                 label={app.translator.trans('flagrow-bazaar.admin.page.extension.enabled')} />)
         }

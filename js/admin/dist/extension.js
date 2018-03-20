@@ -90,7 +90,7 @@ System.register('flagrow/bazaar/components/BazaarLoader', ['flarum/Component', '
                         return m('div', {
                             className: 'Bazaar--Loader ' + (error ? 'Error' : null),
                             hidden: this.props.loading() === false
-                        }, [m('.Loader-modal', [m('.Loader-icon', icon(error ? 'exclamation-triangle' : 'shopping-cart')), m('div', [m('p', app.translator.trans(error ? 'flagrow-bazaar.admin.loader.error' : 'flagrow-bazaar.admin.loader.is_loading')), error ? [Button.component({
+                        }, [m('.Loader-modal', [m('.Loader-icon', icon(error ? 'fas fa-exclamation-triangle' : 'fas fa-shopping-bag')), m('div', [m('p', app.translator.trans(error ? 'flagrow-bazaar.admin.loader.error' : 'flagrow-bazaar.admin.loader.is_loading')), error ? [Button.component({
                             className: 'Button Button--block',
                             icon: 'refresh',
                             onclick: function onclick() {
@@ -707,7 +707,7 @@ System.register("flagrow/bazaar/components/ExtensionListItem", ["flarum/Componen
                                 m(
                                     "span",
                                     { className: "ExtensionListItem-icon ExtensionIcon", style: extension.icon() || '', title: extension.description() },
-                                    extension.icon() ? icon(extension.icon().name) : ''
+                                    extension.icon() ? icon('fas fa-' + extension.icon().name) : ''
                                 ),
                                 m(
                                     "ul",
@@ -720,7 +720,7 @@ System.register("flagrow/bazaar/components/ExtensionListItem", ["flarum/Componen
                                         className: "ExtensionListItem-controls",
                                         buttonClassName: "Button Button--icon Button--flat",
                                         menuClassName: "Dropdown-menu--right",
-                                        icon: "ellipsis-h" },
+                                        icon: "fas fa-ellipsis-h" },
                                     controls
                                 ) : '',
                                 m(
@@ -752,7 +752,7 @@ System.register("flagrow/bazaar/components/ExtensionListItem", ["flarum/Componen
 
                         if (connected) {
                             items.add('favorite', Button.component({
-                                icon: 'heart',
+                                icon: 'fas fa-heart',
                                 children: app.translator.trans(favoriteTrans),
                                 onclick: function onclick() {
                                     repository().favoriteExtension(extension);
@@ -763,7 +763,7 @@ System.register("flagrow/bazaar/components/ExtensionListItem", ["flarum/Componen
                         if (!extension.pending()) {
                             if (extension.enabled() && app.extensionSettings[name]) {
                                 items.add('settings', Button.component({
-                                    icon: 'cog',
+                                    icon: 'fas fa-cog',
                                     children: app.translator.trans('core.admin.extensions.settings_button'),
                                     onclick: app.extensionSettings[name]
                                 }));
@@ -771,7 +771,7 @@ System.register("flagrow/bazaar/components/ExtensionListItem", ["flarum/Componen
 
                             if (extension.can_uninstall()) {
                                 items.add('uninstall', Button.component({
-                                    icon: 'minus-square-o',
+                                    icon: 'fas fa-minus-square',
                                     children: app.translator.trans('flagrow-bazaar.admin.page.button.uninstall'),
                                     onclick: function onclick() {
                                         repository().uninstallExtension(extension);
@@ -781,7 +781,7 @@ System.register("flagrow/bazaar/components/ExtensionListItem", ["flarum/Componen
 
                             if (extension.can_enable()) {
                                 items.add('enable', Button.component({
-                                    icon: 'check-square-o',
+                                    icon: 'fas fa-check-square',
                                     children: app.translator.trans('flagrow-bazaar.admin.page.button.enable'),
                                     onclick: function onclick() {
                                         repository().enableExtension(extension);
@@ -791,7 +791,7 @@ System.register("flagrow/bazaar/components/ExtensionListItem", ["flarum/Componen
 
                             if (extension.installed() && extension.outdated()) {
                                 items.add('update', Button.component({
-                                    icon: 'toggle-up',
+                                    icon: 'fas fa-toggle-up',
                                     children: app.translator.trans('flagrow-bazaar.admin.page.button.update'),
                                     onclick: function onclick() {
                                         repository().updateExtension(extension);
@@ -801,7 +801,7 @@ System.register("flagrow/bazaar/components/ExtensionListItem", ["flarum/Componen
 
                             if (extension.can_disable()) {
                                 items.add('disable', Button.component({
-                                    icon: 'square-o',
+                                    icon: 'fas fa-square',
                                     children: app.translator.trans('flagrow-bazaar.admin.page.button.disable'),
                                     onclick: function onclick() {
                                         repository().disableExtension(extension);
@@ -811,7 +811,7 @@ System.register("flagrow/bazaar/components/ExtensionListItem", ["flarum/Componen
 
                             if (extension.can_install()) {
                                 items.add('install', Button.component({
-                                    icon: 'plus-square-o',
+                                    icon: 'fas fa-plus-square',
                                     children: app.translator.trans('flagrow-bazaar.admin.page.button.install'),
                                     onclick: function onclick() {
                                         repository().installExtension(extension);
@@ -823,14 +823,14 @@ System.register("flagrow/bazaar/components/ExtensionListItem", ["flarum/Componen
                         if (extension.premium() && !connected) {
                             items.add('subscribe', Button.component({
                                 disabled: true,
-                                icon: 'shopping-cart',
+                                icon: 'fas fa-shopping-cart',
                                 children: app.translator.trans('flagrow-bazaar.admin.page.button.connect_to_subscribe')
                             }));
                         }
 
                         if (extension.canCheckout() && connected) {
                             items.add('subscribe', Button.component({
-                                icon: 'shopping-cart',
+                                icon: 'fas fa-shopping-cart',
                                 children: app.translator.trans('flagrow-bazaar.admin.page.button.subscribe'),
                                 onclick: function onclick() {
                                     repository().premiumExtensionSubscribe(extension);
@@ -840,7 +840,7 @@ System.register("flagrow/bazaar/components/ExtensionListItem", ["flarum/Componen
 
                         if (extension.canSafelyUnsubscribe() && connected) {
                             items.add('unsubscribe', Button.component({
-                                icon: 'ban',
+                                icon: 'fas fa-ban',
                                 children: app.translator.trans('flagrow-bazaar.admin.page.button.unsubscribe'),
                                 onclick: function onclick() {
                                     repository().premiumExtensionUnsubscribe(extension);
@@ -856,40 +856,40 @@ System.register("flagrow/bazaar/components/ExtensionListItem", ["flarum/Componen
                         var items = new ItemList();
 
                         if (extension.subscribed()) {
-                            items.add('subscribed', m(Badge, { icon: "shopping-cart",
+                            items.add('subscribed', m(Badge, { icon: "fas fa-shopping-cart",
                                 type: "subscribed",
                                 label: app.translator.trans('flagrow-bazaar.admin.page.extension.subscribed') }));
                         } else if (extension.premium()) {
-                            items.add('premium', m(Badge, { icon: "certificate",
+                            items.add('premium', m(Badge, { icon: "fas fa-certificate",
                                 type: "premium",
                                 label: app.translator.trans('flagrow-bazaar.admin.page.extension.premium') }));
                         }
                         if (extension.pending()) {
-                            items.add('pending', m(Badge, { icon: "circle-o-notch fa-spin",
+                            items.add('pending', m(Badge, { icon: "fas fa-circle-notch fa-spin",
                                 type: "pending",
                                 label: app.translator.trans('flagrow-bazaar.admin.page.extension.pending') }));
                         }
 
                         if (extension.installed() && extension.outdated()) {
-                            items.add('outdated', m(Badge, { icon: "warning",
+                            items.add('outdated', m(Badge, { icon: "fas fa-warning",
                                 type: "outdated",
                                 label: app.translator.trans('flagrow-bazaar.admin.page.extension.outdated', { new: extension.highest_version() }) }));
                         }
 
                         if (extension.favorited()) {
-                            items.add('favorited', m(Badge, { icon: "heart",
+                            items.add('favorited', m(Badge, { icon: "fas fa-heart",
                                 type: "favorited",
                                 label: app.translator.trans('flagrow-bazaar.admin.page.extension.favorited') }));
                         }
 
                         if (extension.installed() && !extension.enabled()) {
-                            items.add('installed', m(Badge, { icon: "plus-square",
+                            items.add('installed', m(Badge, { icon: "fas fa-plus-square",
                                 type: "installed",
                                 label: app.translator.trans('flagrow-bazaar.admin.page.extension.installed') }));
                         }
 
                         if (extension.enabled()) {
-                            items.add('enabled', m(Badge, { icon: "check-square",
+                            items.add('enabled', m(Badge, { icon: "fas fa-check-square",
                                 type: "enabled",
                                 label: app.translator.trans('flagrow-bazaar.admin.page.extension.enabled') }));
                         }
