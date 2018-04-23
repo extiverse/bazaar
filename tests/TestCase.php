@@ -2,9 +2,9 @@
 
 namespace Flagrow\Bazaar\Tests;
 
-use Flagrow\Steamroller\TestCase as Test;
+use Flarum\Tests\Test\TestCase as NativeTestCase;
 
-class TestCase extends Test
+class TestCase extends NativeTestCase
 {
     //
 }
