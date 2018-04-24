@@ -1,0 +1,117 @@
+flagrow-bazaar:
+    admin:
+        loader:
+            is_loading: Przetwarzanie..
+            error: Wystąpił błąd. Sprawdź kartę Historia i swój dziennik Flarum, aby uzyskać szczegółowe informacje. Nie zapomnij tego zgłosić.
+            refresh: Odśwież stronę
+            report_issue: Zgłoś problem
+        nav:
+            title: Bazaar
+            description: Rozszerzenie Sklepu.
+        header:
+            extensions: Przeglądaj rozszerzenia
+            tasks: Historia zadań
+        modal:
+            dashboard:
+                title: Nawigacja
+                visit-remote-dashboard: Odwiedź pulpit nawigacyjny
+                sync:
+                    switch: Synchronizuj
+                    description: >
+                        Zsynchronizuj informacje o rozszerzeniu z {host}, aby otrzymywać aktualne powiadomienia o nowych wersjach
+                        z zainstalowanych rozszerzeń. Ponadto wyślemy ci regularne powiadomienie o nieaktualnym wydaniu
+                        rozszerzenia we wszystkich zsynchronizowanych instalacjach Flarum z bazarem.
+            settings:
+                title: Flagrow Bazaar
+                field:
+                    token:
+                        label: API token
+                        description: Ten znacznik API jest wymagany, aby uzyskać dostęp do api rozszerzenia Flagrow. Jeśli już go ustawiłeś, jest gotowy!
+                    use_cron_for_tasks:
+                        label: Prace Cron
+                        description: >
+                           Poprzez umożliwienie zadań cron do przetwarzania zadań Bazaar, Procesy te mają mniejszą szansę na przekroczenie limitu czasu. 
+                           Pamiętaj, że musisz skonfigurować cronjob, zapoznaj się z <a>the wiki</a>.
+                        toggle: Użyj cronów do przetwarzania zadań
+            connect-bazaar:
+                title: Połącz
+                description: >
+                    Połącz swoje forum Flarum ze swoim kontem osobistym w witrynie {host}, aby odblokować zaawansowane funkcje; włącznie z
+                    pulpit nawigacyjny, który daje przegląd stanu zdrowia wszystkich podłączonych instalacji Flarum. 
+                    Dodamy więcej funkcji, takich jak powiadomienia, gdy twoje forum zawiera nieaktualne rozszerzenia lub możliwość centralnego aktualizowania wszystkich instalacji Flarum.
+            requirements:
+                file-permissions:
+                    title: Uprawnienia plików
+                    description: >
+                       Wydaje się, że Bazaar ma niewystarczające uprawnienia do zapisu plików i / lub katalogów, przejrzyj poniższą listę. Aby uzyskać więcej informacji, zapoznaj się z <a> wiki </a>.
+                php-memory_limit:
+                    title: Limit pamięci
+                    description: >
+                        Zalecamy, aby PHP mogło używać co najmniej {required} pamięci, twój php.ini dopuszcza obecnie {limit}.
+                        Chociaż staramy się zwiększyć limit pamięci podczas uruchamiania, sukces zależy od środowiska hostingowego.
+                        Aby uzyskać więcej informacji, zapoznaj się z <a>the wiki</a>.
+        page:
+            state:
+                no_results_available: >
+                    Wygląda na to, że obecnie nie są dostępne żadne wyniki.
+                not_authorized: >
+                    Twoje upoważnienie wobec flagrow.io api nie powiodło się. Prawdopodobnie przyczyną jest niestabilne połączenie internetowe. 
+                    Odśwież stronę po ustabilizowaniu się połączenia. Jeśli problem będzie się powtarzał, skontaktuj się z nami.
+            button:
+                more: Więcej
+                install: Zainstaluj
+                uninstall: Odinstaluj
+                enable: Włącz
+                disable: Wyłącz
+                update: Aktualizuj
+                connect: Połącz
+                favorite_button: "Ulubione rozszerzenie"
+                remove_favorite_button: "Usuń rozszerzenie z ulubionych"
+                subscribe: Kup subskrypcje
+                unsubscribe: Anuluj subskrypcje
+                connect_to_subscribe: Połącz swój bazar, aby zasubskrybować rozszerzenia
+            extension:
+                installed: Rozszerzenie jest zainstalowane
+                enabled: Rozszerzenie jest włączone
+                vendor: Przez {vendor}
+                favorited: Jeden z twoich ulubionych
+                pending: Rozszerzenie czeka na wykonanie zadania w tle
+                outdated: "Rozszerzenie jest nieaktualne, zaktualizuj do wersji {new}"
+                premium: Premium
+                subscribed: Subskrybujesz
+                subscribe_check_failed: Wygląda na to, że anulowałeś proces realizacji transakcji.
+            task:
+                header:
+                    status: Status
+                    command: Komenda
+                    output: Wyjscie
+                    time: Czas
+                    details: Details
+                attribute:
+                    created_at: Utworzono o
+                    started_at: Rozpoczął o
+                    finished_at: Zakończył się o
+                status:
+                    success: Sukces
+                    exception: Wystąpił wyjątek
+                    working: Praca w toku
+                    unknown: Nieznany
+                command:
+                    sync-lock: Synchronizuj plik composer.lock
+                    sync-version: Synchronizuj wersje {extension}
+                    install: Zainstaluj {extension}
+                    update: Aktualizuj {extension}
+                    uninstall: Odinstaluj {extension}
+                group:
+                    today: Dzisiaj
+                    lastmonth: W zeszłym miesiącu
+                    older: Starsze
+        search:
+            placeholder: Wyszukiwanie rozszerzenia
+            filter_installed: Zainstalowany
+            filter_update_required: Ma aktualizację
+            filter_favorited: Ulubione
+            filter_subscribed: Subskrybujesz
+            filter_premium: Premium
+            filter_pending: Oczekuję
+            filter_languages: Języki
