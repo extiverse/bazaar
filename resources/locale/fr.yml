@@ -1,0 +1,122 @@
+flagrow-bazaar:
+    admin:
+        loader:
+            is_loading: Traitement ...
+            error: ne erreur est survenue. Consultez l'onglet Historique et votre journal Flarum pour plus de détails. N'ayez pas peur de nous le signaler
+            refresh: Actualiser la page
+            report_issue: Signaler un problème
+        nav:
+            title: Bazaar
+            description: Le marché des extensions.
+        header:
+            extensions: Parcourir les extensions
+            tasks: Historique des tâches
+        modal:
+            dashboard:
+                title: Tableau de bord
+                visit-remote-dashboard: Visiter le tableau de bord
+                sync:
+                    switch: Sync
+                    description: >
+                        Synchronisez vos informations d'extension avec {host} pour recevoir des notifications en temps opportun sur les nouvelles versions
+                        des extensions que vous avez installées. En outre, nous vous enverrons une notification régulière sur
+                        des extensions sur toutes vos installations Flarum synchronisées avec Bazaar.
+            settings:
+                title: Flagrow Bazaar
+                field:
+                    token:
+                        label: API token
+                        description: Ce jeton d'api est requis pour accéder à l'extension de Flagrow. Si déjà défini, vous êtes prêt à partir!
+                    use_cron_for_tasks:
+                        label: Cronjobs
+                        description: >
+                          En permettant à cronjobs de traiter les tâches Bazaar, ces processus
+                           sont moins susceptibles d'expirer. S'il vous plaît noter que vous devez être en mesure de
+                           configurez le cronjob, reportez-vous à <a>le wiki</a>.
+                        toggle: Utiliser des crons pour le traitement des tâches
+            connect-bazaar:
+                title: Connect
+                description: >
+                    Connectez votre forum Flarum à votre compte personnel sur {host} pour débloquer des fonctionnalités avancées; comprenant
+                    un tableau de bord qui vous donne un aperçu de la santé de toutes vos installations Flarum connectées. Nous allons
+                    ajouter plus de fonctionnalités comme des notifications lorsque votre forum contient des extensions obsolètes ou la capacité
+                    mettre à jour toutes les installations de Flarum de manière centralisée.
+            requirements:
+                file-permissions:
+                    title: Autorisations de fichier
+                    description: >
+                        Il semble que Bazaar n'ait pas les permissions suffisantes pour écrire des fichiers
+                        et / ou des répertoires, veuillez consulter la liste ci-dessous. Pour de plus amples
+                        consultez le <a>wiki</a>.
+                php-memory_limit:
+                    title: Limite de mémoire
+                    description: >
+                        Nous vous recommandons d'autoriser PHP à utiliser au moins {required} de la mémoire, votre php.ini autorise actuellement {limit}.
+                        Bien que nous essayions d'augmenter la limite de mémoire pendant l'exécution, le succès dépend de votre environnement d'hébergement.
+                        Pour plus d'informations, reportez-vous à <a>le wiki</a>.
+        page:
+            state:
+                no_results_available: >
+                    Il semble qu'aucun résultat n'était disponible pour le moment.
+                not_authorized: >
+                    otre autorisation contre notre flagrow.io api a échoué. Peut-être une connexion Internet instable est à l'origine de cela.
+                    Veuillez actualiser la page une fois votre connexion stabilisée. Si le problème persiste, veuillez nous contacter.
+            button:
+                more: More
+                install: Installer
+                uninstall: Désinstaller
+                enable: Activer
+                disable: Désactiver
+                update: Mettre à jour
+                connect: Connect
+                favorite_button: "Extension préférée"
+                remove_favorite_button: "Supprimer l'extension de vos favoris"
+                subscribe: Acheter un abonnement
+                unsubscribe: Annuler l'abonnement
+                connect_to_subscribe: Connectez votre Bazar pour vous abonner aux extensions
+            extension:
+                installed: l'extension est installée
+                enabled: l'extension est activer
+                vendor: Par {vendor}
+                favorited: Mes préférences
+                pending: L'extension attend une tâche d'arrière-plan pour terminer
+                outdated: "L'extension est obsolète, veuillez mettre à jour vers la version {new}"
+                premium: Premium
+                subscribed: Abonné
+                subscribe_check_failed: Il semble que vous ayez annulé le processus de paiement.
+            task:
+                header:
+                    status: Status
+                    command: Commander
+                    output: Sortie
+                    time: Temps
+                    details: Details
+                attribute:
+                    created_at: Créé à
+                    started_at: Commencé à
+                    finished_at: Terminé à
+                 status:
+                    success: Succès
+                    exception: Une erreur est survenue
+                    working: Tache en cours
+                    unknown: Inconnu
+                command:
+                    sync-lock: Synchroniser le fichier composer.lock
+                    sync-version: Synchroniser la version de {extension} 
+                    install: Installer {extension}
+                    update: Mettre à jour {extension}
+                    uninstall: Désinstaller {extension}
+                group:
+                    today: Aujourd'hui
+                    lastmonth: Le mois dernier
+                    older: Plus âgée
+        search:
+            placeholder: Rechercher des extensions
+            filter_installed: Installée
+            filter_update_required: Mise à jour disponible
+            filter_favorited: Favorisé
+            filter_subscribed: Abonné
+            filter_premium: Premium
+            filter_pending: En attente
+            filter_languages: Langues
+                    
