@@ -30,4 +30,4 @@ flagrow-bazaar:
                 enabled: Erweiterung ist aktiviert
                 vendor: Von {vendor}
                 favorited: Einer deiner Favoriten
-outdated: "Die Erweiterung ist veraltet, bitte aktualisiere auf Version {new}"
+                outdated: "Die Erweiterung ist veraltet, bitte aktualisiere auf Version {new}"
