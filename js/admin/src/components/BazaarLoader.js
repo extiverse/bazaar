@@ -19,13 +19,13 @@ export default class BazaarLoader extends Component {
                     error ? [
                         Button.component({
                             className: 'Button Button--block',
-                            icon: 'refresh',
+                            icon: 'fas fa-refresh',
                             onclick: () => location.reload(),
                             children: app.translator.trans('flagrow-bazaar.admin.loader.refresh')
                         }),
                         LinkButton.component({
                             className: 'Button Button--block',
-                            icon: 'bug',
+                            icon: 'fas fa-bug',
                             href: 'https://github.com/flagrow/bazaar/issues',
                             target: '_blank',
                             config: {}, // Disable internal Mithril routing

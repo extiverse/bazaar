@@ -20,21 +20,21 @@ export default class ExtensionSearch extends Component {
             ),
             m('div', {className: 'ExtensionFilters ButtonGroup'}, [
                 CustomCheckbox.component({
-                    icon: 'toggle-up',
+                    icon: 'fas fa-toggle-up',
                     className: 'Button hasIcon',
                     state: this.props.params.filter == 'update_required',
                     onchange: (checked) => this.toggleFilter('update_required', checked),
                     children: app.translator.trans('flagrow-bazaar.admin.search.filter_update_required')
                 }),
                 CustomCheckbox.component({
-                    icon: 'circle-o-notch',
+                    icon: 'fas fa-circle-notch',
                     className: 'Button hasIcon',
                     state: this.props.params.filter == 'pending',
                     onchange: (checked) => this.toggleFilter('pending', checked),
                     children: app.translator.trans('flagrow-bazaar.admin.search.filter_pending')
                 }),
                 CustomCheckbox.component({
-                    icon: 'plus-square',
+                    icon: 'fas fa-plus-square',
                     className: 'Button hasIcon',
                     state: this.props.params.filter == 'installed',
                     onchange: (checked) => this.toggleFilter('installed', checked),
@@ -42,14 +42,14 @@ export default class ExtensionSearch extends Component {
                 }),
                 this.connected ? [
                     CustomCheckbox.component({
-                        icon: 'heart',
+                        icon: 'fas fa-heart',
                         className: 'Button hasIcon',
                         state: this.props.params.filter == 'favorited',
                         onchange: (checked) => this.toggleFilter('favorited', checked),
                         children: app.translator.trans('flagrow-bazaar.admin.search.filter_favorited')
                     }),
                     CustomCheckbox.component({
-                        icon: 'shopping-cart',
+                        icon: 'fas fa-shopping-cart',
                         className: 'Button hasIcon',
                         state: this.props.params.filter == 'subscribed',
                         onchange: (checked) => this.toggleFilter('subscribed', checked),
@@ -57,7 +57,7 @@ export default class ExtensionSearch extends Component {
                     }),
                 ] : '',
                 CustomCheckbox.component({
-                    icon: 'certificate',
+                    icon: 'fas fa-certificate',
                     className: 'Button hasIcon',
                     state: this.props.params.filter == 'is_premium',
                     onchange: (checked) => this.toggleFilter('is_premium', checked),

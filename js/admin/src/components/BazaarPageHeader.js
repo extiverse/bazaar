@@ -34,7 +34,7 @@ export default class BazaarPageHeader extends Component {
       return [
         Button.component({
           className: 'Button Button--icon',
-          icon: 'cog',
+          icon: 'fas fa-cog',
           onclick: () => app.modal.show(new BazaarSettingsModal)
         })
       ];
@@ -55,7 +55,7 @@ export default class BazaarPageHeader extends Component {
             components.push(
                 Button.component({
                     className: 'Button Button--icon Requirement-MemoryLimit',
-                    icon: 'signal',
+                    icon: 'fas fa-signal',
                     onclick: () => app.modal.show(new MemoryLimitModal({memory_requested, memory_limit}))
                 })
             );
@@ -64,7 +64,7 @@ export default class BazaarPageHeader extends Component {
         if (file_permissions.length > 0) {
             components.push(Button.component({
                 className: 'Button Button--icon Requirement-FilePermissions',
-                icon: 'hdd-o',
+                icon: 'fas fa-hdd',
                 onclick: () => app.modal.show(new FilePermissionsModal({file_permissions}))
             }));
         }
@@ -80,7 +80,7 @@ export default class BazaarPageHeader extends Component {
             return [
                 Button.component({
                     className: 'Button Button--icon Connected',
-                    icon: 'dashboard',
+                    icon: 'fas fa-dashboard',
                     onclick: () => app.modal.show(new DashboardModal({
                         flagrowHost
                     }))
@@ -91,7 +91,7 @@ export default class BazaarPageHeader extends Component {
         return [
             Button.component({
                 className: 'Button Button--icon Connect',
-                icon: 'plug',
+                icon: 'fas fa-plug',
                 onclick: () => app.modal.show(new BazaarConnectModal({flagrowHost: flagrowHost}))
             }),
         ]
@@ -109,7 +109,7 @@ export default class BazaarPageHeader extends Component {
         if (routeName !== 'flagrow-bazaar') {
             links.push(LinkButton.component({
                 className: 'Button Button--icon',
-                icon: 'shopping-bag',
+                icon: 'fas fa-shopping-bag',
                 href: app.route('flagrow-bazaar'),
                 title: app.translator.trans('flagrow-bazaar.admin.header.extensions')
             }));
@@ -118,7 +118,7 @@ export default class BazaarPageHeader extends Component {
         if (routeName !== 'flagrow-bazaar-tasks') {
             links.push(LinkButton.component({
                 className: 'Button Button--icon',
-                icon: 'history',
+                icon: 'fas fa-history',
                 href: app.route('flagrow-bazaar-tasks'),
                 title: app.translator.trans('flagrow-bazaar.admin.header.tasks')
             }));

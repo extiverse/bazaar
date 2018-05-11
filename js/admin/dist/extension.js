@@ -13,7 +13,7 @@ System.register('flagrow/bazaar/addBazaarPage', ['flarum/extend', 'flarum/app', 
         extend(AdminNav.prototype, 'items', function (items) {
             items.add('flagrow-bazaar', AdminLinkButton.component({
                 href: app.route('flagrow-bazaar'),
-                icon: 'shopping-bag',
+                icon: 'fas fa-shopping-bag',
                 children: app.translator.trans('flagrow-bazaar.admin.nav.title'),
                 description: app.translator.trans('flagrow-bazaar.admin.nav.description')
             }));
@@ -92,14 +92,14 @@ System.register('flagrow/bazaar/components/BazaarLoader', ['flarum/Component', '
                             hidden: this.props.loading() === false
                         }, [m('.Loader-modal', [m('.Loader-icon', icon(error ? 'fas fa-exclamation-triangle' : 'fas fa-shopping-bag')), m('div', [m('p', app.translator.trans(error ? 'flagrow-bazaar.admin.loader.error' : 'flagrow-bazaar.admin.loader.is_loading')), error ? [Button.component({
                             className: 'Button Button--block',
-                            icon: 'refresh',
+                            icon: 'fas fa-refresh',
                             onclick: function onclick() {
                                 return location.reload();
                             },
                             children: app.translator.trans('flagrow-bazaar.admin.loader.refresh')
                         }), LinkButton.component({
                             className: 'Button Button--block',
-                            icon: 'bug',
+                            icon: 'fas fa-bug',
                             href: 'https://github.com/flagrow/bazaar/issues',
                             target: '_blank',
                             config: {}, // Disable internal Mithril routing
@@ -277,7 +277,7 @@ System.register('flagrow/bazaar/components/BazaarPageHeader', ['flarum/app', 'fl
                     value: function settingsButton() {
                         return [Button.component({
                             className: 'Button Button--icon',
-                            icon: 'cog',
+                            icon: 'fas fa-cog',
                             onclick: function onclick() {
                                 return app.modal.show(new BazaarSettingsModal());
                             }
@@ -296,7 +296,7 @@ System.register('flagrow/bazaar/components/BazaarPageHeader', ['flarum/app', 'fl
                         if (!memory_limit_met) {
                             components.push(Button.component({
                                 className: 'Button Button--icon Requirement-MemoryLimit',
-                                icon: 'signal',
+                                icon: 'fas fa-signal',
                                 onclick: function onclick() {
                                     return app.modal.show(new MemoryLimitModal({ memory_requested: memory_requested, memory_limit: memory_limit }));
                                 }
@@ -306,7 +306,7 @@ System.register('flagrow/bazaar/components/BazaarPageHeader', ['flarum/app', 'fl
                         if (file_permissions.length > 0) {
                             components.push(Button.component({
                                 className: 'Button Button--icon Requirement-FilePermissions',
-                                icon: 'hdd-o',
+                                icon: 'fas fa-hdd',
                                 onclick: function onclick() {
                                     return app.modal.show(new FilePermissionsModal({ file_permissions: file_permissions }));
                                 }
@@ -324,7 +324,7 @@ System.register('flagrow/bazaar/components/BazaarPageHeader', ['flarum/app', 'fl
                         if (connected) {
                             return [Button.component({
                                 className: 'Button Button--icon Connected',
-                                icon: 'dashboard',
+                                icon: 'fas fa-dashboard',
                                 onclick: function onclick() {
                                     return app.modal.show(new DashboardModal({
                                         flagrowHost: flagrowHost
@@ -335,7 +335,7 @@ System.register('flagrow/bazaar/components/BazaarPageHeader', ['flarum/app', 'fl
 
                         return [Button.component({
                             className: 'Button Button--icon Connect',
-                            icon: 'plug',
+                            icon: 'fas fa-plug',
                             onclick: function onclick() {
                                 return app.modal.show(new BazaarConnectModal({ flagrowHost: flagrowHost }));
                             }
@@ -355,7 +355,7 @@ System.register('flagrow/bazaar/components/BazaarPageHeader', ['flarum/app', 'fl
                         if (routeName !== 'flagrow-bazaar') {
                             links.push(LinkButton.component({
                                 className: 'Button Button--icon',
-                                icon: 'shopping-bag',
+                                icon: 'fas fa-shopping-bag',
                                 href: app.route('flagrow-bazaar'),
                                 title: app.translator.trans('flagrow-bazaar.admin.header.extensions')
                             }));
@@ -364,7 +364,7 @@ System.register('flagrow/bazaar/components/BazaarPageHeader', ['flarum/app', 'fl
                         if (routeName !== 'flagrow-bazaar-tasks') {
                             links.push(LinkButton.component({
                                 className: 'Button Button--icon',
-                                icon: 'history',
+                                icon: 'fas fa-history',
                                 href: app.route('flagrow-bazaar-tasks'),
                                 title: app.translator.trans('flagrow-bazaar.admin.header.tasks')
                             }));
@@ -948,7 +948,7 @@ System.register("flagrow/bazaar/components/ExtensionSearch", ["flarum/Component"
                             }),
                             placeholder: app.translator.trans('flagrow-bazaar.admin.search.placeholder')
                         })), m('div', { className: 'ExtensionFilters ButtonGroup' }, [CustomCheckbox.component({
-                            icon: 'toggle-up',
+                            icon: 'fas fa-toggle-up',
                             className: 'Button hasIcon',
                             state: this.props.params.filter == 'update_required',
                             onchange: function onchange(checked) {
@@ -956,7 +956,7 @@ System.register("flagrow/bazaar/components/ExtensionSearch", ["flarum/Component"
                             },
                             children: app.translator.trans('flagrow-bazaar.admin.search.filter_update_required')
                         }), CustomCheckbox.component({
-                            icon: 'circle-o-notch',
+                            icon: 'fas fa-circle-notch',
                             className: 'Button hasIcon',
                             state: this.props.params.filter == 'pending',
                             onchange: function onchange(checked) {
@@ -964,7 +964,7 @@ System.register("flagrow/bazaar/components/ExtensionSearch", ["flarum/Component"
                             },
                             children: app.translator.trans('flagrow-bazaar.admin.search.filter_pending')
                         }), CustomCheckbox.component({
-                            icon: 'plus-square',
+                            icon: 'fas fa-plus-square',
                             className: 'Button hasIcon',
                             state: this.props.params.filter == 'installed',
                             onchange: function onchange(checked) {
@@ -972,7 +972,7 @@ System.register("flagrow/bazaar/components/ExtensionSearch", ["flarum/Component"
                             },
                             children: app.translator.trans('flagrow-bazaar.admin.search.filter_installed')
                         }), this.connected ? [CustomCheckbox.component({
-                            icon: 'heart',
+                            icon: 'fas fa-heart',
                             className: 'Button hasIcon',
                             state: this.props.params.filter == 'favorited',
                             onchange: function onchange(checked) {
@@ -980,7 +980,7 @@ System.register("flagrow/bazaar/components/ExtensionSearch", ["flarum/Component"
                             },
                             children: app.translator.trans('flagrow-bazaar.admin.search.filter_favorited')
                         }), CustomCheckbox.component({
-                            icon: 'shopping-cart',
+                            icon: 'fas fa-shopping-cart',
                             className: 'Button hasIcon',
                             state: this.props.params.filter == 'subscribed',
                             onchange: function onchange(checked) {
@@ -988,7 +988,7 @@ System.register("flagrow/bazaar/components/ExtensionSearch", ["flarum/Component"
                             },
                             children: app.translator.trans('flagrow-bazaar.admin.search.filter_subscribed')
                         })] : '', CustomCheckbox.component({
-                            icon: 'certificate',
+                            icon: 'fas fa-certificate',
                             className: 'Button hasIcon',
                             state: this.props.params.filter == 'is_premium',
                             onchange: function onchange(checked) {
@@ -1111,7 +1111,7 @@ System.register("flagrow/bazaar/components/TaskListItem", ["flarum/app", "flarum
                                     "td",
                                     { className: "details-column" },
                                     Button.component({
-                                        icon: 'plus',
+                                        icon: 'fas fa-plus',
                                         className: 'Button',
                                         onclick: function onclick() {
                                             _this2.extended(!_this2.extended());

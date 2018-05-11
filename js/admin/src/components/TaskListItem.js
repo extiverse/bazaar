@@ -37,7 +37,7 @@ export default class TaskListItem extends Component {
                     </td>
                     <td className="details-column">
                         { Button.component({
-                            icon: 'plus',
+                            icon: 'fas fa-plus',
                             className: 'Button',
                             onclick: () => { this.extended(!this.extended()); }
                         }) }

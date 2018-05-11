@@ -12,7 +12,7 @@ export default function () {
     extend(AdminNav.prototype, 'items', items => {
         items.add('flagrow-bazaar', AdminLinkButton.component({
             href: app.route('flagrow-bazaar'),
-            icon: 'shopping-bag',
+            icon: 'fas fa-shopping-bag',
             children: app.translator.trans('flagrow-bazaar.admin.nav.title'),
             description: app.translator.trans('flagrow-bazaar.admin.nav.description')
         }));
