@@ -11,7 +11,7 @@ export default class ExtensionList extends Component {
          *
          * @type {Boolean}
          */
-        this.loading = this.props.loading();
+        this.loading = this.props.loading;
 
         /**
          * Whether or not there are more results that can be loaded.
@@ -19,6 +19,7 @@ export default class ExtensionList extends Component {
          * @type {Boolean}
          */
         this.moreResults = false;
+        this.resultMeta = {};
 
         // this.repository = new ExtensionRepository(this.loading);
 
@@ -37,14 +38,16 @@ export default class ExtensionList extends Component {
     view() {
         let loading;
 
-        if (this.loading) {
-            loading = BazaarLoader.component({loading: this.props.loading});
+        if (this.loading()) {
+            loading = BazaarLoader.component({loading: this.loading});
         } else if (this.moreResults) {
-            loading = Button.component({
-                children: app.translator.trans('core.forum.discussion_list.load_more_button'),
-                className: 'Button',
-                onclick: this.loadMore.bind(this)
-            });
+            loading = [
+                Button.component({
+                    children: app.translator.trans('flagrow-bazaar.admin.page.button.more', {current: this.resultMeta.pages_current + 1, total: this.resultMeta.pages_total}),
+                    className: 'Button Button--primary',
+                    onclick: this.loadMore.bind(this)
+                })
+            ];
         }
 
         if (this.extensions.length === 0 && !this.loading) {
@@ -93,7 +96,7 @@ export default class ExtensionList extends Component {
      */
     refresh(clear = true) {
         if (clear) {
-            this.loading = true;
+            this.loading(true);
             this.extensions = [];
         }
 
@@ -103,7 +106,7 @@ export default class ExtensionList extends Component {
                 this.parseResults(results);
             },
             () => {
-                this.loading = false;
+                this.loading(false);
                 m.redraw();
             }
         );
@@ -132,8 +135,9 @@ export default class ExtensionList extends Component {
     parseResults(results) {
         [].push.apply(this.extensions, results);
 
-        this.loading = false;
+        this.loading(false);
         this.moreResults = !!results.payload.links.next;
+        this.resultMeta = results.payload.meta || {};
 
         m.lazyRedraw();
 
@@ -146,7 +150,7 @@ export default class ExtensionList extends Component {
      * @public
      */
     loadMore() {
-        this.loading = true;
+        this.loading(true);
 
         this.loadResults(this.extensions.length)
             .then(this.parseResults.bind(this));

@@ -11,12 +11,12 @@ use Flagrow\Bazaar\Extensions\ExtensionUtils;
 use Flagrow\Bazaar\Extensions\PackageManager;
 use Flagrow\Bazaar\Jobs\CacheClearJob;
 use Flagrow\Bazaar\Search\FlagrowApi as Api;
+use Flagrow\Bazaar\Search\SearchResults;
 use Flagrow\Bazaar\Traits\Cachable;
 use Flarum\Extension\Event\Uninstalled as ExtensionWasUninstalled;
 use Flarum\Extension\ExtensionManager;
-use Flarum\Search\SearchResults;
 use Illuminate\Contracts\Events\Dispatcher;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
@@ -100,20 +100,16 @@ final class ExtensionRepository
             return Arr::get($json, 'data', []);
         });
 
-        $collection = Collection::make($data)->map(function ($package) {
+        return Collection::make($data)->map(function ($package) {
             return $this->createExtension($package);
         })->keyBy('id');
-
-        return Collection::make($collection);
     }
 
     protected function payloadToExtensions(array $data): Collection
     {
-        $collection = Collection::make($data)->map(function ($package) {
+        return Collection::make($data)->map(function ($package) {
             return $this->createExtension($package);
         })->keyBy('id');
-
-        return Collection::make($collection);
     }
 
     /**
@@ -188,15 +184,15 @@ final class ExtensionRepository
         $json = json_decode($response->getBody()->getContents(), true);
 
         $data = Arr::get($json, 'data', []);
-        $hasMore = Arr::get($json, 'meta.pages_total', 1) > Arr::get($json, 'meta.pages_current', 1);
 
         $extensions = $this->payloadToExtensions($data);
+        $meta = Arr::get($json, 'meta', []);
 
         $this->events->fire(
-            new SearchedExtensions($extensions, $params, $hasMore)
+            new SearchedExtensions($extensions, $params, $meta)
         );
 
-        return new SearchResults($this->payloadToExtensions($data), $hasMore);
+        return new SearchResults($this->payloadToExtensions($data), $meta);
     }
 
     /**

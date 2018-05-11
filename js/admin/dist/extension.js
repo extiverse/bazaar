@@ -1,14 +1,17 @@
 'use strict';
 
-System.register('flagrow/bazaar/addBazaarPage', ['flarum/extend', 'flarum/app', 'flarum/components/AdminNav', 'flarum/components/AdminLinkButton', 'flagrow/bazaar/components/BazaarPage'], function (_export, _context) {
+System.register('flagrow/bazaar/addBazaarPage', ['flarum/extend', 'flarum/app', 'flarum/components/AdminNav', 'flarum/components/AdminLinkButton', 'flagrow/bazaar/components/BazaarPage', 'flagrow/bazaar/modals/BazaarSettingsModal'], function (_export, _context) {
     "use strict";
 
-    var extend, app, AdminNav, AdminLinkButton, BazaarPage;
+    var extend, app, AdminNav, AdminLinkButton, BazaarPage, BazaarSettingsModal;
 
     _export('default', function () {
         // create the route
         app.routes['flagrow-bazaar'] = { path: '/flagrow/bazaar', component: BazaarPage.component() };
-
+        // settings toggle on native extensions page
+        app.extensionSettings['flagrow-bazaar'] = function () {
+            return m.route(app.route('flagrow-bazaar'));
+        };
         // Add tab to admin menu
         extend(AdminNav.prototype, 'items', function (items) {
             items.add('flagrow-bazaar', AdminLinkButton.component({
@@ -31,6 +34,8 @@ System.register('flagrow/bazaar/addBazaarPage', ['flarum/extend', 'flarum/app', 
             AdminLinkButton = _flarumComponentsAdminLinkButton.default;
         }, function (_flagrowBazaarComponentsBazaarPage) {
             BazaarPage = _flagrowBazaarComponentsBazaarPage.default;
+        }, function (_flagrowBazaarModalsBazaarSettingsModal) {
+            BazaarSettingsModal = _flagrowBazaarModalsBazaarSettingsModal.default;
         }],
         execute: function () {}
     };
@@ -85,6 +90,8 @@ System.register('flagrow/bazaar/components/BazaarLoader', ['flarum/Component', '
                 babelHelpers.createClass(BazaarLoader, [{
                     key: 'view',
                     value: function view() {
+                        var _this2 = this;
+
                         var error = this.props.loading() === 'error';
 
                         return m('div', {
@@ -92,11 +99,18 @@ System.register('flagrow/bazaar/components/BazaarLoader', ['flarum/Component', '
                             hidden: this.props.loading() === false
                         }, [m('.Loader-modal', [m('.Loader-icon', icon(error ? 'fas fa-exclamation-triangle' : 'fas fa-shopping-bag')), m('div', [m('p', app.translator.trans(error ? 'flagrow-bazaar.admin.loader.error' : 'flagrow-bazaar.admin.loader.is_loading')), error ? [Button.component({
                             className: 'Button Button--block',
-                            icon: 'fas fa-refresh',
+                            icon: 'fas fa-sync',
                             onclick: function onclick() {
                                 return location.reload();
                             },
                             children: app.translator.trans('flagrow-bazaar.admin.loader.refresh')
+                        }), Button.component({
+                            className: 'Button Button--block',
+                            icon: 'fas fa-times',
+                            onclick: function onclick() {
+                                return _this2.props.loading(false);
+                            },
+                            children: app.translator.trans('flagrow-bazaar.admin.loader.close')
                         }), LinkButton.component({
                             className: 'Button Button--block',
                             icon: 'fas fa-bug',
@@ -116,10 +130,10 @@ System.register('flagrow/bazaar/components/BazaarLoader', ['flarum/Component', '
 });;
 "use strict";
 
-System.register("flagrow/bazaar/components/BazaarPage", ["flarum/Component", "./../utils/ExtensionRepository", "./ExtensionList", "./ExtensionListItem", "./ExtensionSearch", "./BazaarPageHeader"], function (_export, _context) {
+System.register("flagrow/bazaar/components/BazaarPage", ["flarum/Component", "./../utils/ExtensionRepository", "./ExtensionList", "./ExtensionSearch", "./BazaarPageHeader"], function (_export, _context) {
     "use strict";
 
-    var Component, ExtensionRepository, ExtensionList, ExtensionListItem, ExtensionSearch, BazaarPageHeader, BazaarPage;
+    var Component, ExtensionRepository, ExtensionList, ExtensionSearch, BazaarPageHeader, BazaarPage;
     return {
         setters: [function (_flarumComponent) {
             Component = _flarumComponent.default;
@@ -127,8 +141,6 @@ System.register("flagrow/bazaar/components/BazaarPage", ["flarum/Component", "./
             ExtensionRepository = _utilsExtensionRepository.default;
         }, function (_ExtensionList) {
             ExtensionList = _ExtensionList.default;
-        }, function (_ExtensionListItem) {
-            ExtensionListItem = _ExtensionListItem.default;
         }, function (_ExtensionSearch) {
             ExtensionSearch = _ExtensionSearch.default;
         }, function (_BazaarPageHeader) {
@@ -150,11 +162,12 @@ System.register("flagrow/bazaar/components/BazaarPage", ["flarum/Component", "./
 
                         this.authorized = (app.data.settings['flagrow.bazaar.api_token'] || '').length > 0;
                         this.connected = app.data.settings['flagrow.bazaar.connected'] && app.data.settings['flagrow.bazaar.connected'] !== '0';
-                        this.loading = m.prop(false);
+                        this.loading = m.prop(true);
 
                         this.params = this.params();
 
-                        this.repository = new ExtensionRepository();
+                        this.repository = new ExtensionRepository(this.loading);
+
                         this.extensionList = new ExtensionList({
                             params: this.params,
                             loading: this.loading,
@@ -162,6 +175,7 @@ System.register("flagrow/bazaar/components/BazaarPage", ["flarum/Component", "./
                             connected: this.connected,
                             authorized: this.authorized
                         });
+
                         this.search = ExtensionSearch.component({ params: this.params, onsubmit: this.updateResults.bind(this) });
                     }
                 }, {
@@ -177,20 +191,6 @@ System.register("flagrow/bazaar/components/BazaarPage", ["flarum/Component", "./
                         return m('div', { className: 'ExtensionsPage Bazaar' }, [BazaarPageHeader.component({
                             connected: this.connected
                         }), m('div', { className: 'ExtensionsPage-list' }, [m('div', { className: 'container' }, [this.search, this.extensionList.render()])])]);
-                    }
-                }, {
-                    key: "items",
-                    value: function items() {
-                        var _this2 = this;
-
-                        return m('ul', { className: 'ExtensionList' }, [this.repository.extensions().map(function (extension) {
-                            return ExtensionListItem.component({
-                                extension: extension,
-                                repository: _this2.repository,
-                                connected: _this2.connected,
-                                key: extension.package()
-                            });
-                        })]);
                     }
                 }, {
                     key: "stickyParams",
@@ -268,7 +268,7 @@ System.register('flagrow/bazaar/components/BazaarPageHeader', ['flarum/app', 'fl
                 }, {
                     key: 'header',
                     value: function header() {
-                        var buttons = [].concat(this.settingsButton(), this.requirementsButtons(), this.connectedButtons(), this.pagesButtons());
+                        var buttons = [].concat(this.pagesButtons(), this.settingsButton(), this.requirementsButtons(), this.connectedButtons());
 
                         return m('div', { className: 'ButtonGroup' }, buttons);
                     }
@@ -352,23 +352,21 @@ System.register('flagrow/bazaar/components/BazaarPageHeader', ['flarum/app', 'fl
                         var routeName = app.current.props.routeName;
                         var links = [];
 
-                        if (routeName !== 'flagrow-bazaar') {
-                            links.push(LinkButton.component({
-                                className: 'Button Button--icon',
-                                icon: 'fas fa-shopping-bag',
-                                href: app.route('flagrow-bazaar'),
-                                title: app.translator.trans('flagrow-bazaar.admin.header.extensions')
-                            }));
-                        }
+                        links.push(LinkButton.component({
+                            className: 'Button Button--icon',
+                            icon: 'fas fa-shopping-bag',
+                            href: app.route('flagrow-bazaar'),
+                            title: app.translator.trans('flagrow-bazaar.admin.header.extensions'),
+                            active: routeName === 'flagrow-bazaar'
+                        }));
 
-                        if (routeName !== 'flagrow-bazaar-tasks') {
-                            links.push(LinkButton.component({
-                                className: 'Button Button--icon',
-                                icon: 'fas fa-history',
-                                href: app.route('flagrow-bazaar-tasks'),
-                                title: app.translator.trans('flagrow-bazaar.admin.header.tasks')
-                            }));
-                        }
+                        links.push(LinkButton.component({
+                            className: 'Button Button--icon',
+                            icon: 'fas fa-history',
+                            href: app.route('flagrow-bazaar-tasks'),
+                            title: app.translator.trans('flagrow-bazaar.admin.header.tasks'),
+                            active: routeName === 'flagrow-bazaar-tasks'
+                        }));
 
                         return links;
                     }
@@ -488,7 +486,7 @@ System.register('flagrow/bazaar/components/ExtensionList', ['flarum/Component', 
                          *
                          * @type {Boolean}
                          */
-                        this.loading = this.props.loading();
+                        this.loading = this.props.loading;
 
                         /**
                          * Whether or not there are more results that can be loaded.
@@ -496,6 +494,7 @@ System.register('flagrow/bazaar/components/ExtensionList', ['flarum/Component', 
                          * @type {Boolean}
                          */
                         this.moreResults = false;
+                        this.resultMeta = {};
 
                         // this.repository = new ExtensionRepository(this.loading);
 
@@ -515,14 +514,14 @@ System.register('flagrow/bazaar/components/ExtensionList', ['flarum/Component', 
 
                         var loading = void 0;
 
-                        if (this.loading) {
-                            loading = BazaarLoader.component({ loading: this.props.loading });
+                        if (this.loading()) {
+                            loading = BazaarLoader.component({ loading: this.loading });
                         } else if (this.moreResults) {
-                            loading = Button.component({
-                                children: app.translator.trans('core.forum.discussion_list.load_more_button'),
-                                className: 'Button',
+                            loading = [Button.component({
+                                children: app.translator.trans('flagrow-bazaar.admin.page.button.more', { current: this.resultMeta.pages_current + 1, total: this.resultMeta.pages_total }),
+                                className: 'Button Button--primary',
                                 onclick: this.loadMore.bind(this)
-                            });
+                            })];
                         }
 
                         if (this.extensions.length === 0 && !this.loading) {
@@ -576,7 +575,7 @@ System.register('flagrow/bazaar/components/ExtensionList', ['flarum/Component', 
                         var clear = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
 
                         if (clear) {
-                            this.loading = true;
+                            this.loading(true);
                             this.extensions = [];
                         }
 
@@ -584,7 +583,7 @@ System.register('flagrow/bazaar/components/ExtensionList', ['flarum/Component', 
                             _this3.extensions = [];
                             _this3.parseResults(results);
                         }, function () {
-                            _this3.loading = false;
+                            _this3.loading(false);
                             m.redraw();
                         });
                     }
@@ -602,8 +601,9 @@ System.register('flagrow/bazaar/components/ExtensionList', ['flarum/Component', 
                     value: function parseResults(results) {
                         [].push.apply(this.extensions, results);
 
-                        this.loading = false;
+                        this.loading(false);
                         this.moreResults = !!results.payload.links.next;
+                        this.resultMeta = results.payload.meta || {};
 
                         m.lazyRedraw();
 
@@ -612,7 +612,7 @@ System.register('flagrow/bazaar/components/ExtensionList', ['flarum/Component', 
                 }, {
                     key: 'loadMore',
                     value: function loadMore() {
-                        this.loading = true;
+                        this.loading(true);
 
                         this.loadResults(this.extensions.length).then(this.parseResults.bind(this));
                     }
@@ -748,6 +748,7 @@ System.register("flagrow/bazaar/components/ExtensionListItem", ["flarum/Componen
                     value: function controlItems(extension, connected) {
                         var items = new ItemList();
                         var repository = this.props.repository;
+
                         var favoriteTrans = extension.favorited() ? 'flagrow-bazaar.admin.page.button.remove_favorite_button' : 'flagrow-bazaar.admin.page.button.favorite_button';
 
                         if (connected) {
@@ -755,7 +756,7 @@ System.register("flagrow/bazaar/components/ExtensionListItem", ["flarum/Componen
                                 icon: 'fas fa-heart',
                                 children: app.translator.trans(favoriteTrans),
                                 onclick: function onclick() {
-                                    repository().favoriteExtension(extension);
+                                    repository.favoriteExtension(extension);
                                 }
                             }));
                         }
@@ -774,7 +775,7 @@ System.register("flagrow/bazaar/components/ExtensionListItem", ["flarum/Componen
                                     icon: 'fas fa-minus-square',
                                     children: app.translator.trans('flagrow-bazaar.admin.page.button.uninstall'),
                                     onclick: function onclick() {
-                                        repository().uninstallExtension(extension);
+                                        repository.uninstallExtension(extension);
                                     }
                                 }));
                             }
@@ -784,17 +785,17 @@ System.register("flagrow/bazaar/components/ExtensionListItem", ["flarum/Componen
                                     icon: 'fas fa-check-square',
                                     children: app.translator.trans('flagrow-bazaar.admin.page.button.enable'),
                                     onclick: function onclick() {
-                                        repository().enableExtension(extension);
+                                        repository.enableExtension(extension);
                                     }
                                 }));
                             }
 
                             if (extension.installed() && extension.outdated()) {
                                 items.add('update', Button.component({
-                                    icon: 'fas fa-toggle-up',
+                                    icon: 'fas fa-level-up',
                                     children: app.translator.trans('flagrow-bazaar.admin.page.button.update'),
                                     onclick: function onclick() {
-                                        repository().updateExtension(extension);
+                                        repository.updateExtension(extension);
                                     }
                                 }));
                             }
@@ -804,7 +805,7 @@ System.register("flagrow/bazaar/components/ExtensionListItem", ["flarum/Componen
                                     icon: 'fas fa-square',
                                     children: app.translator.trans('flagrow-bazaar.admin.page.button.disable'),
                                     onclick: function onclick() {
-                                        repository().disableExtension(extension);
+                                        repository.disableExtension(extension);
                                     }
                                 }));
                             }
@@ -814,7 +815,7 @@ System.register("flagrow/bazaar/components/ExtensionListItem", ["flarum/Componen
                                     icon: 'fas fa-plus-square',
                                     children: app.translator.trans('flagrow-bazaar.admin.page.button.install'),
                                     onclick: function onclick() {
-                                        repository().installExtension(extension);
+                                        repository.installExtension(extension);
                                     }
                                 }));
                             }
@@ -833,7 +834,7 @@ System.register("flagrow/bazaar/components/ExtensionListItem", ["flarum/Componen
                                 icon: 'fas fa-shopping-cart',
                                 children: app.translator.trans('flagrow-bazaar.admin.page.button.subscribe'),
                                 onclick: function onclick() {
-                                    repository().premiumExtensionSubscribe(extension);
+                                    repository.premiumExtensionSubscribe(extension);
                                 }
                             }));
                         }
@@ -843,7 +844,7 @@ System.register("flagrow/bazaar/components/ExtensionListItem", ["flarum/Componen
                                 icon: 'fas fa-ban',
                                 children: app.translator.trans('flagrow-bazaar.admin.page.button.unsubscribe'),
                                 onclick: function onclick() {
-                                    repository().premiumExtensionUnsubscribe(extension);
+                                    repository.premiumExtensionUnsubscribe(extension);
                                 }
                             }));
                         }
@@ -948,7 +949,7 @@ System.register("flagrow/bazaar/components/ExtensionSearch", ["flarum/Component"
                             }),
                             placeholder: app.translator.trans('flagrow-bazaar.admin.search.placeholder')
                         })), m('div', { className: 'ExtensionFilters ButtonGroup' }, [CustomCheckbox.component({
-                            icon: 'fas fa-toggle-up',
+                            icon: 'fas fa-level-up',
                             className: 'Button hasIcon',
                             state: this.props.params.filter == 'update_required',
                             onchange: function onchange(checked) {
@@ -1066,13 +1067,13 @@ System.register("flagrow/bazaar/components/TaskListItem", ["flarum/app", "flarum
                         var iconName = function () {
                             switch (task.status()) {
                                 case 'success':
-                                    return 'check';
+                                    return 'fas fa-check';
                                 case 'exception':
-                                    return 'exclamation';
+                                    return 'fas fa-exclamation';
                                 case 'working':
-                                    return 'spinner';
+                                    return 'fas fa-spinner';
                             }
-                            return 'clock-o';
+                            return 'fas fa-clock';
                         }();
 
                         // We need to wrap items in a tbody because Mithril 0.2 and therefore flarum/Component does not allow a list of vnodes to be returned from a view
@@ -1349,17 +1350,15 @@ System.register('flagrow/bazaar/components/TasksPage', ['flarum/app', 'flarum/Co
 });;
 'use strict';
 
-System.register('flagrow/bazaar/main', ['flarum/extend', 'flarum/app', 'flagrow/bazaar/modals/BazaarSettingsModal', 'flagrow/bazaar/models/Extension', 'flagrow/bazaar/models/Task', 'flagrow/bazaar/addBazaarPage', 'flagrow/bazaar/addTasksPage'], function (_export, _context) {
+System.register('flagrow/bazaar/main', ['flarum/extend', 'flarum/app', 'flagrow/bazaar/models/Extension', 'flagrow/bazaar/models/Task', 'flagrow/bazaar/addBazaarPage', 'flagrow/bazaar/addTasksPage'], function (_export, _context) {
     "use strict";
 
-    var extend, app, BazaarSettingsModal, Extension, Task, addBazaarPage, addTasksPage;
+    var extend, app, Extension, Task, addBazaarPage, addTasksPage;
     return {
         setters: [function (_flarumExtend) {
             extend = _flarumExtend.extend;
         }, function (_flarumApp) {
             app = _flarumApp.default;
-        }, function (_flagrowBazaarModalsBazaarSettingsModal) {
-            BazaarSettingsModal = _flagrowBazaarModalsBazaarSettingsModal.default;
         }, function (_flagrowBazaarModelsExtension) {
             Extension = _flagrowBazaarModelsExtension.default;
         }, function (_flagrowBazaarModelsTask) {
@@ -1372,9 +1371,6 @@ System.register('flagrow/bazaar/main', ['flarum/extend', 'flarum/app', 'flagrow/
         execute: function () {
 
             app.initializers.add('flagrow-bazaar', function (app) {
-                app.extensionSettings['flagrow-bazaar'] = function () {
-                    return app.modal.show(new BazaarSettingsModal());
-                };
                 app.store.models['bazaar-extensions'] = Extension;
                 app.store.models['bazaar-tasks'] = Task;
 
@@ -1841,10 +1837,11 @@ System.register('flagrow/bazaar/utils/ExtensionRepository', ['flarum/app', './po
         }],
         execute: function () {
             ExtensionRepository = function () {
-                function ExtensionRepository() {
+                function ExtensionRepository(loading) {
                     babelHelpers.classCallCheck(this, ExtensionRepository);
 
                     this.extensions = m.prop([]);
+                    this.loading = loading;
                 }
 
                 /**

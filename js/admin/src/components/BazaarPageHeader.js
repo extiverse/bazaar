@@ -21,10 +21,10 @@ export default class BazaarPageHeader extends Component {
 
     header() {
         let buttons = [].concat(
+          this.pagesButtons(),
           this.settingsButton(),
           this.requirementsButtons(),
           this.connectedButtons(),
-          this.pagesButtons()
         );
 
         return m('div', {className: 'ButtonGroup'}, buttons);
@@ -92,7 +92,7 @@ export default class BazaarPageHeader extends Component {
             Button.component({
                 className: 'Button Button--icon Connect',
                 icon: 'fas fa-plug',
-                onclick: () => app.modal.show(new BazaarConnectModal({flagrowHost: flagrowHost}))
+                onclick: () => app.modal.show(new BazaarConnectModal({flagrowHost}))
             }),
         ]
     }
@@ -106,23 +106,21 @@ export default class BazaarPageHeader extends Component {
         const routeName = app.current.props.routeName;
         let links = [];
 
-        if (routeName !== 'flagrow-bazaar') {
-            links.push(LinkButton.component({
-                className: 'Button Button--icon',
-                icon: 'fas fa-shopping-bag',
-                href: app.route('flagrow-bazaar'),
-                title: app.translator.trans('flagrow-bazaar.admin.header.extensions')
-            }));
-        }
+        links.push(LinkButton.component({
+            className: 'Button Button--icon',
+            icon: 'fas fa-shopping-bag',
+            href: app.route('flagrow-bazaar'),
+            title: app.translator.trans('flagrow-bazaar.admin.header.extensions'),
+            active: routeName === 'flagrow-bazaar'
+        }));
 
-        if (routeName !== 'flagrow-bazaar-tasks') {
-            links.push(LinkButton.component({
-                className: 'Button Button--icon',
-                icon: 'fas fa-history',
-                href: app.route('flagrow-bazaar-tasks'),
-                title: app.translator.trans('flagrow-bazaar.admin.header.tasks')
-            }));
-        }
+        links.push(LinkButton.component({
+            className: 'Button Button--icon',
+            icon: 'fas fa-history',
+            href: app.route('flagrow-bazaar-tasks'),
+            title: app.translator.trans('flagrow-bazaar.admin.header.tasks'),
+            active: routeName === 'flagrow-bazaar-tasks'
+        }));
 
         return links;
     }

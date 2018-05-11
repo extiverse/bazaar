@@ -2,13 +2,12 @@
 
 namespace Flagrow\Bazaar\Events;
 
-use Illuminate\Database\Eloquent\Collection as Eloquent;
 use Illuminate\Support\Collection;
 
 class SearchedExtensions
 {
     /**
-     * @var Eloquent
+     * @var Collection
      */
     public $extensions;
     /**
@@ -19,11 +18,22 @@ class SearchedExtensions
      * @var bool
      */
     public $hasMore;
+    /**
+     * @var array
+     */
+    public $meta;
 
-    public function __construct(Eloquent $extensions, Collection $params, bool $hasMore)
+    /**
+     * SearchedExtensions constructor.
+     *
+     * @param Collection   $extensions
+     * @param Collection $params
+     * @param array      $meta
+     */
+    public function __construct(Collection $extensions, Collection $params, array &$meta = [])
     {
         $this->extensions = $extensions;
         $this->params = $params;
-        $this->hasMore = $hasMore;
+        $this->meta = &$meta;
     }
 }

@@ -1,7 +1,6 @@
 import Component from "flarum/Component";
 import ExtensionRepository from "./../utils/ExtensionRepository";
 import ExtensionList from "./ExtensionList";
-import ExtensionListItem from "./ExtensionListItem";
 import ExtensionSearch from "./ExtensionSearch";
 import BazaarPageHeader from './BazaarPageHeader';
 
@@ -12,11 +11,12 @@ export default class BazaarPage extends Component {
 
         this.authorized = (app.data.settings['flagrow.bazaar.api_token'] || '').length > 0;
         this.connected = app.data.settings['flagrow.bazaar.connected'] && app.data.settings['flagrow.bazaar.connected'] !== '0';
-        this.loading = m.prop(false);
+        this.loading = m.prop(true);
 
         this.params = this.params();
 
-        this.repository = new ExtensionRepository();
+        this.repository = new ExtensionRepository(this.loading);
+
         this.extensionList = new ExtensionList({
             params: this.params,
             loading: this.loading,
@@ -24,6 +24,7 @@ export default class BazaarPage extends Component {
             connected: this.connected,
             authorized: this.authorized
         });
+
         this.search = ExtensionSearch.component({params: this.params, onsubmit: this.updateResults.bind(this)});
     }
 
@@ -44,19 +45,6 @@ export default class BazaarPage extends Component {
                     this.extensionList.render()
                 ])
             ]),
-        ]);
-    }
-
-    items() {
-        return m('ul', {className: 'ExtensionList'}, [
-            this.repository.extensions().map(
-                extension => ExtensionListItem.component({
-                    extension: extension,
-                    repository: this.repository,
-                    connected: this.connected,
-                    key: extension.package(),
-                })
-            )
         ]);
     }
 

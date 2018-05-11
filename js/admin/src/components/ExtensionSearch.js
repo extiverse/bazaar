@@ -20,7 +20,7 @@ export default class ExtensionSearch extends Component {
             ),
             m('div', {className: 'ExtensionFilters ButtonGroup'}, [
                 CustomCheckbox.component({
-                    icon: 'fas fa-toggle-up',
+                    icon: 'fas fa-level-up',
                     className: 'Button hasIcon',
                     state: this.props.params.filter == 'update_required',
                     onchange: (checked) => this.toggleFilter('update_required', checked),

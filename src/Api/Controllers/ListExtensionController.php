@@ -55,6 +55,10 @@ class ListExtensionController extends AbstractListController
             $results->areMoreResults() ? null : 0
         );
 
+        foreach ($results->getMeta() as $item => $value) {
+            $document->addMeta($item, $value);
+        }
+
         return $results->getResults();
     }
 }

@@ -19,9 +19,15 @@ export default class BazaarLoader extends Component {
                     error ? [
                         Button.component({
                             className: 'Button Button--block',
-                            icon: 'fas fa-refresh',
+                            icon: 'fas fa-sync',
                             onclick: () => location.reload(),
                             children: app.translator.trans('flagrow-bazaar.admin.loader.refresh')
+                        }),
+                        Button.component({
+                            className: 'Button Button--block',
+                            icon: 'fas fa-times',
+                            onclick: () => this.props.loading(false),
+                            children: app.translator.trans('flagrow-bazaar.admin.loader.close')
                         }),
                         LinkButton.component({
                             className: 'Button Button--block',

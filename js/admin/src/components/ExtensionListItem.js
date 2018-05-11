@@ -62,6 +62,7 @@ export default class ExtensionListItem extends Component {
     controlItems(extension, connected) {
         const items = new ItemList();
         const repository = this.props.repository;
+
         const favoriteTrans = extension.favorited() ? 'flagrow-bazaar.admin.page.button.remove_favorite_button' : 'flagrow-bazaar.admin.page.button.favorite_button';
 
         if (connected) {
@@ -69,7 +70,7 @@ export default class ExtensionListItem extends Component {
                 icon: 'fas fa-heart',
                 children: app.translator.trans(favoriteTrans),
                 onclick: () => {
-                    repository().favoriteExtension(extension);
+                    repository.favoriteExtension(extension);
                 }
             }));
         }
@@ -88,8 +89,7 @@ export default class ExtensionListItem extends Component {
                     icon: 'fas fa-minus-square',
                     children: app.translator.trans('flagrow-bazaar.admin.page.button.uninstall'),
                     onclick: () => {
-                        repository()
-                            .uninstallExtension(extension);
+                        repository.uninstallExtension(extension);
                     }
                 }));
             }
@@ -99,19 +99,17 @@ export default class ExtensionListItem extends Component {
                     icon: 'fas fa-check-square',
                     children: app.translator.trans('flagrow-bazaar.admin.page.button.enable'),
                     onclick: () => {
-                        repository()
-                            .enableExtension(extension);
+                        repository.enableExtension(extension);
                     }
                 }));
             }
 
             if (extension.installed() && extension.outdated()) {
                 items.add('update', Button.component({
-                    icon: 'fas fa-toggle-up',
+                    icon: 'fas fa-level-up',
                     children: app.translator.trans('flagrow-bazaar.admin.page.button.update'),
                     onclick: () => {
-                        repository()
-                            .updateExtension(extension);
+                        repository.updateExtension(extension);
                     }
                 }));
             }
@@ -121,8 +119,7 @@ export default class ExtensionListItem extends Component {
                     icon: 'fas fa-square',
                     children: app.translator.trans('flagrow-bazaar.admin.page.button.disable'),
                     onclick: () => {
-                        repository()
-                            .disableExtension(extension);
+                        repository.disableExtension(extension);
                     }
                 }));
             }
@@ -132,8 +129,7 @@ export default class ExtensionListItem extends Component {
                     icon: 'fas fa-plus-square',
                     children: app.translator.trans('flagrow-bazaar.admin.page.button.install'),
                     onclick: () => {
-                        repository()
-                            .installExtension(extension);
+                        repository.installExtension(extension);
                     }
                 }));
             }
@@ -152,7 +148,7 @@ export default class ExtensionListItem extends Component {
                 icon: 'fas fa-shopping-cart',
                 children: app.translator.trans('flagrow-bazaar.admin.page.button.subscribe'),
                 onclick: () => {
-                    repository().premiumExtensionSubscribe(extension);
+                    repository.premiumExtensionSubscribe(extension);
                 }
             }));
         }
@@ -162,7 +158,7 @@ export default class ExtensionListItem extends Component {
                 icon: 'fas fa-ban',
                 children: app.translator.trans('flagrow-bazaar.admin.page.button.unsubscribe'),
                 onclick: () => {
-                    repository().premiumExtensionUnsubscribe(extension);
+                    repository.premiumExtensionUnsubscribe(extension);
                 }
             }));
         }

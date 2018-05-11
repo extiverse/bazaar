@@ -15,13 +15,13 @@ export default class TaskListItem extends Component {
         const iconName = (function() {
             switch (task.status()) {
                 case 'success':
-                    return 'check';
+                    return 'fas fa-check';
                 case 'exception':
-                    return 'exclamation';
+                    return 'fas fa-exclamation';
                 case 'working':
-                    return 'spinner';
+                    return 'fas fa-spinner';
             }
-            return 'clock-o';
+            return 'fas fa-clock';
         })();
 
         // We need to wrap items in a tbody because Mithril 0.2 and therefore flarum/Component does not allow a list of vnodes to be returned from a view

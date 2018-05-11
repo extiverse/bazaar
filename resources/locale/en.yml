@@ -4,6 +4,7 @@ flagrow-bazaar:
             is_loading: Processing..
             error: An error occured. Check the History tab and your Flarum log for details. Don't be afraid to report it to us.
             refresh: Refresh page
+            close: Close
             report_issue: Report an issue
         nav:
             title: Bazaar
@@ -62,7 +63,7 @@ flagrow-bazaar:
                     Your authorization against our flagrow.io api failed. Possibly an unstable internet connection is causing this.
                     Please refresh the page once your connection stabilised. If the problem persists, please get in touch with us.
             button:
-                more: More
+                more: "More, load page {current} of {total}"
                 install: Install
                 uninstall: Uninstall
                 enable: Enable
