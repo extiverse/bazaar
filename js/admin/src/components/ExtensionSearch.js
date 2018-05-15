@@ -59,8 +59,8 @@ export default class ExtensionSearch extends Component {
                 CustomCheckbox.component({
                     icon: 'fas fa-certificate',
                     className: 'Button hasIcon',
-                    state: this.props.params.filter == 'is_premium',
-                    onchange: (checked) => this.toggleFilter('is_premium', checked),
+                    state: this.props.params.filter == 'premium',
+                    onchange: (checked) => this.toggleFilter('premium', checked),
                     children: app.translator.trans('flagrow-bazaar.admin.search.filter_premium')
                 }),
             ])

@@ -991,9 +991,9 @@ System.register("flagrow/bazaar/components/ExtensionSearch", ["flarum/Component"
                         })] : '', CustomCheckbox.component({
                             icon: 'fas fa-certificate',
                             className: 'Button hasIcon',
-                            state: this.props.params.filter == 'is_premium',
+                            state: this.props.params.filter == 'premium',
                             onchange: function onchange(checked) {
-                                return _this3.toggleFilter('is_premium', checked);
+                                return _this3.toggleFilter('premium', checked);
                             },
                             children: app.translator.trans('flagrow-bazaar.admin.search.filter_premium')
                         })])]);
