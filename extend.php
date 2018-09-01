@@ -3,7 +3,7 @@
 namespace Flagrow\Bazaar;
 
 use Flagrow\Bazaar\Api\Controllers;
-use Flarum\Extend\Assets;
+use Flarum\Extend\Frontend;
 use Flarum\Extend\Locale;
 use Flarum\Extend\Locales;
 use Flarum\Extend\Routes;
@@ -25,10 +25,9 @@ return [
         ->get('/bazaar/tasks', 'bazaar.tasks.index', Controllers\ListTaskController::class)
         ->get('/bazaar/sync/composer-lock', 'bazaar.composer-lock', Controllers\RetrieveComposerLockController::class)
         ->get('/bazaar/sync/extensions/{id}/version', 'bazaar.extensions.version', Controllers\RetrieveExtensionVersionController::class),
-    (new Assets('admin'))
-        ->asset(__DIR__ . '/resources/less/extension.less')
-        ->asset(__DIR__ . '/js/admin/dist/extension.js')
-        ->bootstrapper('flagrow/bazaar/main'),
+    (new Frontend('admin'))
+        ->css(__DIR__ . '/resources/less/admin.less')
+        ->js(__DIR__ . '/js/dist/admin.js'),
     new Locales(__DIR__ . '/resources/locale'),
     function (Application $app) {
     /** @var Dispatcher $events */

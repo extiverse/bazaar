@@ -2,11 +2,11 @@ import app from 'flarum/app';
 import Component from 'flarum/Component';
 import LinkButton from 'flarum/components/LinkButton';
 import Button from 'flarum/components/Button';
-import FilePermissionsModal from './../modals/FilePermissionsModal';
-import MemoryLimitModal from './../modals/MemoryLimitModal';
-import BazaarConnectModal from './../modals/BazaarConnectModal';
-import BazaarSettingsModal from './../modals/BazaarSettingsModal';
-import DashboardModal from './../modals/DashboardModal';
+import FilePermissionsModal from '../modals/FilePermissionsModal';
+import MemoryLimitModal from '../modals/MemoryLimitModal';
+import BazaarConnectModal from '../modals/BazaarConnectModal';
+import BazaarSettingsModal from '../modals/BazaarSettingsModal';
+import DashboardModal from '../modals/DashboardModal';
 
 export default class BazaarPageHeader extends Component {
     view() {

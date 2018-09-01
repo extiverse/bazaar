@@ -1,6 +1,6 @@
 import Component from "flarum/Component";
 import CustomCheckbox from "./CustomCheckbox";
-import debounce from "./../utils/debounce";
+import debounce from "../utils/debounce";
 
 export default class ExtensionSearch extends Component {
     init() {

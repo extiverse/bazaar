@@ -1,9 +1,9 @@
 import app from 'flarum/app';
 import Component from 'flarum/Component';
-import TaskRepository from 'flagrow/bazaar/utils/TaskRepository';
-import BazaarPageHeader from 'flagrow/bazaar/components/BazaarPageHeader';
-import TaskListItem from 'flagrow/bazaar/components/TaskListItem';
-import BazaarLoader from 'flagrow/bazaar/components/BazaarLoader';
+import TaskRepository from './../utils/TaskRepository';
+import BazaarPageHeader from './BazaarPageHeader';
+import TaskListItem from './TaskListItem';
+import BazaarLoader from './BazaarLoader';
 
 export default class TasksPage extends Component {
     init() {

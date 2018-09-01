@@ -1,5 +1,5 @@
 import Component from "flarum/Component";
-import ExtensionRepository from "./../utils/ExtensionRepository";
+import ExtensionRepository from "../utils/ExtensionRepository";
 import ExtensionList from "./ExtensionList";
 import ExtensionSearch from "./ExtensionSearch";
 import BazaarPageHeader from './BazaarPageHeader';

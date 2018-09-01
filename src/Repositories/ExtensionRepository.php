@@ -9,7 +9,6 @@ use Flagrow\Bazaar\Events\SearchingExtensions;
 use Flagrow\Bazaar\Extensions\Extension;
 use Flagrow\Bazaar\Extensions\ExtensionUtils;
 use Flagrow\Bazaar\Extensions\PackageManager;
-use Flagrow\Bazaar\Jobs\CacheClearJob;
 use Flagrow\Bazaar\Search\FlagrowApi as Api;
 use Flagrow\Bazaar\Search\SearchResults;
 use Flagrow\Bazaar\Traits\Cachable;
@@ -45,10 +44,6 @@ final class ExtensionRepository
      */
     protected $events;
     /**
-     * @var CacheClearJob
-     */
-    private $flush;
-    /**
      * @var LoggerInterface
      */
     private $log;
@@ -60,7 +55,6 @@ final class ExtensionRepository
      * @param PackageManager   $packages
      * @param Api              $client
      * @param Dispatcher       $events
-     * @param CacheClearJob    $flush
      * @param LoggerInterface  $log
      */
     function __construct(
@@ -68,7 +62,6 @@ final class ExtensionRepository
         PackageManager $packages,
         Api $client,
         Dispatcher $events,
-        CacheClearJob $flush,
         LoggerInterface $log
     )
     {
@@ -76,7 +69,6 @@ final class ExtensionRepository
         $this->client = $client;
         $this->packages = $packages;
         $this->events = $events;
-        $this->flush = $flush;
         $this->log = $log;
     }
 
@@ -254,8 +246,6 @@ final class ExtensionRepository
 
         $extension = $this->getExtension($package);
 
-        $this->flush->fire();
-
         if ($extension->getInstalledExtension() !== null) {
             $this->events->fire(
                 new ExtensionWasInstalled($extension->getInstalledExtension())
@@ -276,8 +266,6 @@ final class ExtensionRepository
         $this->packages->updatePackage($extension->getPackage());
 
         $this->manager->migrate($extension->getInstalledExtension());
-
-        $this->flush->fire();
 
         $this->refreshInstalledExtension($extension);
 
@@ -307,8 +295,6 @@ final class ExtensionRepository
         $installedExtension = $extension->getInstalledExtension();
 
         $extension->setInstalledExtension(null);
-
-        $this->flush->fire();
 
         $this->events->fire(
             new ExtensionWasUninstalled($installedExtension)

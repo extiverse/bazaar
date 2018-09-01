@@ -4,8 +4,8 @@ namespace Flagrow\Bazaar\Listeners;
 
 use Flagrow\Bazaar\Events\TokenSet;
 use Flagrow\Bazaar\Search\FlagrowApi;
+use Flarum\Event\ConfigureMiddleware;
 use Flarum\Extension\ExtensionManager;
-use Flarum\Frontend\Event\Rendering;
 use Flarum\Settings\SettingsRepositoryInterface;
 use Illuminate\Contracts\Events\Dispatcher;
 use Psr\Http\Message\ResponseInterface;
@@ -48,13 +48,13 @@ class BazaarEnabled
      */
     public function subscribe(Dispatcher $events)
     {
-        $events->listen(Rendering::class, [$this, 'authenticate'], -10);
+        $events->listen(ConfigureMiddleware::class, [$this, 'authenticate'], -10);
     }
 
     /**
-     * @param Rendering $event
+     * @param ConfigureMiddleware $event
      */
-    public function authenticate(Rendering $event)
+    public function authenticate(ConfigureMiddleware $event)
     {
         if (!$event->isAdmin()) {
             return;
@@ -66,8 +66,6 @@ class BazaarEnabled
             $response = $this->client->post('bazaar/beckons');
 
             $this->storeTokenFromRequest($response);
-
-            $event->view->setVariable('settings', $this->settings->all());
         }
     }
 

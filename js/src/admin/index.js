@@ -1,9 +1,9 @@
 import { extend } from 'flarum/extend';
 import app from 'flarum/app';
-import Extension from 'flagrow/bazaar/models/Extension';
-import Task from 'flagrow/bazaar/models/Task';
-import addBazaarPage from 'flagrow/bazaar/addBazaarPage';
-import addTasksPage from 'flagrow/bazaar/addTasksPage';
+import Extension from './models/Extension';
+import Task from './models/Task';
+import addBazaarPage from './addBazaarPage';
+import addTasksPage from './addTasksPage';
 
 app.initializers.add('flagrow-bazaar', app => {
     app.store.models['bazaar-extensions'] = Extension;

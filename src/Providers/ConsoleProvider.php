@@ -10,10 +10,6 @@ class ConsoleProvider extends AbstractServiceProvider
 {
     public function register()
     {
-        if (! $this->app->isInstalled()) {
-            return;
-        }
-
         // Force registering the Schedule as singleton.
         $this->app->register(Console::class);
 
