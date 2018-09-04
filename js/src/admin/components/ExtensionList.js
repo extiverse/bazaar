@@ -66,7 +66,7 @@ export default class ExtensionList extends Component {
 
         return (
             <div className="ExtensionList-wrapper">
-                <ul className="ExtensionList">
+                <div className="ExtensionList">
                     {this.extensions.map(extension => {
                         return ExtensionListItem.component({
                                 extension: extension,
@@ -75,7 +75,7 @@ export default class ExtensionList extends Component {
                                 key: extension.package(),
                             });
                     })}
-                </ul>
+                </div>
                 <div className="ExtensionList-loadMore">
                     {loading}
                 </div>

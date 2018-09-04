@@ -35,7 +35,7 @@ export default class BazaarPage extends Component {
     }
 
     view() {
-        return m('div', {className: 'ExtensionsPage Bazaar'}, [
+        return m('div', {className: 'Bazaar Extensions'}, [
             BazaarPageHeader.component({
                 connected: this.connected
             }),

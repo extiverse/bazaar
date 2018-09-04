@@ -6,8 +6,6 @@ import Dropdown from "flarum/components/Dropdown";
 import Badge from 'flarum/components/Badge';
 
 export default class ExtensionListItem extends Component {
-
-
     config(isInitialized) {
         if (isInitialized) return;
 
@@ -21,19 +19,17 @@ export default class ExtensionListItem extends Component {
         const controls = this.controlItems(extension, connected).toArray();
         const badges = this.badges(extension).toArray();
 
-        return <li className={
-            'ExtensionListItem ' +
+        return <div className={
+            'Extension ' +
             (extension.enabled() ? 'enabled ' : 'disabled ') +
             (extension.installed() ? 'installed ' : 'uninstalled ') +
             (extension.outdated() ? 'outdated ' : '') +
             (extension.pending() ? 'pending ' : '')
         } key={extension.id()} data-id={extension.id()}>
-            <div className="ExtensionListItem-content">
-                      <span className="ExtensionListItem-icon ExtensionIcon" style={extension.icon() || ''} title={extension.description()}>
-                        {extension.icon() ? icon('fas fa-' + extension.icon().name) : ''}
-                      </span>
-
-
+            <span className="Extension-icon" style={extension.icon() || ''} title={extension.description()}>
+              {extension.icon() ? icon('fas fa-' + extension.icon().name) : ''}
+            </span>
+            <div className="Extension-meta">
                 <ul className="ExtensionListItem-badges badges">
                     {badges}
                 </ul>
@@ -56,7 +52,7 @@ export default class ExtensionListItem extends Component {
                 </label>
                 <div className="ExtensionListItem-version">{extension.installed_version() || extension.highest_version()}</div>
             </div>
-        </li>;
+        </div>;
     }
 
     controlItems(extension, connected) {

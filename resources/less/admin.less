@@ -1,6 +1,6 @@
 @flagrow-color: #5f4bb6;
 
-.ExtensionsPage.Bazaar {
+.Bazaar.Extensions {
     .ExtensionsPage-header {
         background: @flagrow-color;
         .box-shadow(0 1px 5px @shadow-color);
@@ -18,8 +18,43 @@
     }
     .container {
     }
-    .ExtensionListItem {
-        //height: 180px;
+
+    .ExtensionList {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: stretch;
+    }
+    .Extension {
+        flex: 1 0;
+        display: flex;
+        flex-direction: row;
+        padding: 5px;
+        margin: 5px;
+        border-radius: 4px;
+
+        &:hover {
+          background: @control-bg;
+        }
+
+        .Extension-icon {
+          width: 40px;
+          height: 40px;
+          background: @control-bg;
+          color: @control-color;
+          border-radius: 6px;
+          font-size: 20px;
+          line-height: 40px;
+          text-align: center;
+          margin: 5px;
+        }
+
+        .Extension-meta {
+          min-width: 150px;
+          min-height: 40px;
+          display: flex;
+          flex-direction: column;
+          position: relative;
+        }
 
         &.outdated {
             .ExtensionListItem-version {
