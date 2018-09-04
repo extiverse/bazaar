@@ -24,7 +24,8 @@ export default class ExtensionListItem extends Component {
             (extension.enabled() ? 'enabled ' : 'disabled ') +
             (extension.installed() ? 'installed ' : 'uninstalled ') +
             (extension.outdated() ? 'outdated ' : '') +
-            (extension.pending() ? 'pending ' : '')
+            (extension.pending() ? 'pending ' : '') +
+            (controls.length > 0 ? 'hasControls' : '')
         } key={extension.id()} data-id={extension.id()}>
             <span className="Extension-icon" style={extension.icon() || ''} title={extension.description()}>
               {extension.icon() ? icon('fas fa-' + extension.icon().name) : ''}
@@ -33,15 +34,6 @@ export default class ExtensionListItem extends Component {
                 <ul className="ExtensionListItem-badges badges">
                     {badges}
                 </ul>
-                {controls.length ? (
-                    <Dropdown
-                        className="ExtensionListItem-controls"
-                        buttonClassName="Button Button--icon Button--flat"
-                        menuClassName="Dropdown-menu--right"
-                        icon="fas fa-ellipsis-h">
-                        {controls}
-                    </Dropdown>
-                ) : ''}
                 <label className="ExtensionListItem-title">
                     {extension.title() || extension.package()}
                 </label>
@@ -51,6 +43,16 @@ export default class ExtensionListItem extends Component {
                     })}
                 </label>
                 <div className="ExtensionListItem-version">{extension.installed_version() || extension.highest_version()}</div>
+                {controls.length ? (
+                    <div className="Extension-controls">
+                        <Dropdown
+                            buttonClassName="Button Button--icon Button--flat"
+                            menuClassName="Dropdown-menu--right"
+                            icon="fas fa-ellipsis-h">
+                            {controls}
+                        </Dropdown>
+                    </div>
+                ) : ''}
             </div>
         </div>;
     }

@@ -950,7 +950,7 @@ function (_Component) {
     var controls = this.controlItems(extension, connected).toArray();
     var badges = this.badges(extension).toArray();
     return m("div", {
-      className: 'Extension ' + (extension.enabled() ? 'enabled ' : 'disabled ') + (extension.installed() ? 'installed ' : 'uninstalled ') + (extension.outdated() ? 'outdated ' : '') + (extension.pending() ? 'pending ' : ''),
+      className: 'Extension ' + (extension.enabled() ? 'enabled ' : 'disabled ') + (extension.installed() ? 'installed ' : 'uninstalled ') + (extension.outdated() ? 'outdated ' : '') + (extension.pending() ? 'pending ' : '') + (controls.length > 0 ? 'hasControls' : ''),
       key: extension.id(),
       "data-id": extension.id()
     }, m("span", {
@@ -961,12 +961,7 @@ function (_Component) {
       className: "Extension-meta"
     }, m("ul", {
       className: "ExtensionListItem-badges badges"
-    }, badges), controls.length ? m(flarum_components_Dropdown__WEBPACK_IMPORTED_MODULE_5___default.a, {
-      className: "ExtensionListItem-controls",
-      buttonClassName: "Button Button--icon Button--flat",
-      menuClassName: "Dropdown-menu--right",
-      icon: "fas fa-ellipsis-h"
-    }, controls) : '', m("label", {
+    }, badges), m("label", {
       className: "ExtensionListItem-title"
     }, extension.title() || extension.package()), m("label", {
       className: "ExtensionListItem-vendor"
@@ -974,7 +969,13 @@ function (_Component) {
       vendor: extension.package().split('/')[0]
     })), m("div", {
       className: "ExtensionListItem-version"
-    }, extension.installed_version() || extension.highest_version())));
+    }, extension.installed_version() || extension.highest_version()), controls.length ? m("div", {
+      className: "Extension-controls"
+    }, m(flarum_components_Dropdown__WEBPACK_IMPORTED_MODULE_5___default.a, {
+      buttonClassName: "Button Button--icon Button--flat",
+      menuClassName: "Dropdown-menu--right",
+      icon: "fas fa-ellipsis-h"
+    }, controls)) : ''));
   };
 
   _proto.controlItems = function controlItems(extension, connected) {

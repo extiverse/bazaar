@@ -28,12 +28,13 @@
         flex: 1 0;
         display: flex;
         flex-direction: row;
-        padding: 5px;
+        padding: 10px;
         margin: 5px;
         border-radius: 4px;
 
-        &:hover {
+        &.hasControls:hover {
           background: @control-bg;
+          cursor: pointer;
         }
 
         .Extension-icon {
@@ -54,6 +55,7 @@
           display: flex;
           flex-direction: column;
           position: relative;
+          flex: 1;
         }
 
         &.outdated {
@@ -68,6 +70,12 @@
             font-weight: normal;
             padding-right: 10px;
         }
+
+
+        .Extension-controls {
+          text-align: right;
+        }
+
 
         .ExtensionListItem-badges {
             right: -2px;
