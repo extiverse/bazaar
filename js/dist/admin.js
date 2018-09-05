@@ -949,8 +949,9 @@ function (_Component) {
     var connected = this.props.connected || false;
     var controls = this.controlItems(extension, connected).toArray();
     var badges = this.badges(extension).toArray();
+    var repository = this.props.repository;
     return m("div", {
-      className: 'Extension ' + (extension.enabled() ? 'enabled ' : 'disabled ') + (extension.installed() ? 'installed ' : 'uninstalled ') + (extension.outdated() ? 'outdated ' : '') + (extension.pending() ? 'pending ' : '') + (controls.length > 0 ? 'hasControls' : ''),
+      className: 'Extension ' + (extension.enabled() ? 'enabled ' : 'disabled ') + (extension.installed() ? 'installed ' : 'uninstalled ') + (extension.outdated() ? 'outdated ' : '') + (extension.pending() ? 'pending ' : '') + (controls.length > 0 ? 'hasControls' : '') + (extension.favorited() ? 'favorited' : ''),
       key: extension.id(),
       "data-id": extension.id()
     }, m("span", {
@@ -962,20 +963,56 @@ function (_Component) {
     }, m("ul", {
       className: "ExtensionListItem-badges badges"
     }, badges), m("label", {
-      className: "ExtensionListItem-title"
-    }, extension.title() || extension.package()), m("label", {
-      className: "ExtensionListItem-vendor"
-    }, app.translator.trans('flagrow-bazaar.admin.page.extension.vendor', {
-      vendor: extension.package().split('/')[0]
-    })), m("div", {
-      className: "ExtensionListItem-version"
-    }, extension.installed_version() || extension.highest_version()), controls.length ? m("div", {
+      className: "Meta-Title"
+    }, extension.title() || extension.package()), m("div", {
+      className: "Meta-Item vendor"
+    }, m("div", {
+      className: "label"
+    }, app.translator.trans('flagrow-bazaar.admin.page.extension.vendor')), m("div", {
+      className: "value"
+    }, extension.package().split('/')[0])), m("div", {
+      className: "Meta-Item downloads"
+    }, m("div", {
+      className: "label"
+    }, app.translator.trans('flagrow-bazaar.admin.page.extension.downloads')), m("div", {
+      className: "value"
+    }, extension.downloads())), m("div", {
+      className: "Meta-Item favorites"
+    }, m("div", {
+      className: "label"
+    }, app.translator.trans('flagrow-bazaar.admin.page.extension.favorites')), m("div", {
+      className: "value"
+    }, extension.favorites())), m("div", {
+      className: "Meta-Item version"
+    }, m("div", {
+      className: "label"
+    }, app.translator.trans('flagrow-bazaar.admin.page.extension.version')), m("div", {
+      className: "value"
+    }, extension.installed_version() || extension.highest_version())), m("div", {
       className: "Extension-controls"
-    }, m(flarum_components_Dropdown__WEBPACK_IMPORTED_MODULE_5___default.a, {
+    }, connected ? m(flarum_components_Button__WEBPACK_IMPORTED_MODULE_4___default.a, {
+      className: "Button Button--icon Button--flat favorite",
+      icon: (extension.favorited() ? 'fas' : 'far') + ' fa-heart',
+      onclick: function onclick() {
+        return repository.favoriteExtension(extension);
+      }
+    }) : '', extension.discuss_link() ? m(flarum_components_Button__WEBPACK_IMPORTED_MODULE_4___default.a, {
+      className: "Button Button--icon Button--flat",
+      icon: "fas fa-comments",
+      onclick: function onclick() {
+        return window.open(extension.discuss_link());
+      }
+    }) : '', extension.landing_link() ? m(flarum_components_Button__WEBPACK_IMPORTED_MODULE_4___default.a, {
+      className: "Button Button--icon Button--flat",
+      icon: "fas fa-chart-line",
+      onclick: function onclick() {
+        return window.open(extension.landing_link());
+      }
+    }) : '', m(flarum_components_Dropdown__WEBPACK_IMPORTED_MODULE_5___default.a, {
       buttonClassName: "Button Button--icon Button--flat",
       menuClassName: "Dropdown-menu--right",
       icon: "fas fa-ellipsis-h"
-    }, controls)) : ''));
+    }, controls))));
   };
 
   _proto.controlItems = function controlItems(extension, connected) {
@@ -1956,8 +1993,8 @@ function (_mixin) {
   license: flarum_Model__WEBPACK_IMPORTED_MODULE_1___default.a.attribute('license'),
   icon: flarum_Model__WEBPACK_IMPORTED_MODULE_1___default.a.attribute('icon'),
   locale: flarum_Model__WEBPACK_IMPORTED_MODULE_1___default.a.attribute('locale'),
-  stars: flarum_Model__WEBPACK_IMPORTED_MODULE_1___default.a.attribute('stars'),
-  forks: flarum_Model__WEBPACK_IMPORTED_MODULE_1___default.a.attribute('forks'),
+  discuss_link: flarum_Model__WEBPACK_IMPORTED_MODULE_1___default.a.attribute('discuss_link'),
+  landing_link: flarum_Model__WEBPACK_IMPORTED_MODULE_1___default.a.attribute('landing_link'),
   downloads: flarum_Model__WEBPACK_IMPORTED_MODULE_1___default.a.attribute('downloads'),
   installed: flarum_Model__WEBPACK_IMPORTED_MODULE_1___default.a.attribute('installed'),
   enabled: flarum_Model__WEBPACK_IMPORTED_MODULE_1___default.a.attribute('enabled'),
@@ -1988,6 +2025,7 @@ function (_mixin) {
   canSafelyUnsubscribe: flarum_utils_computed__WEBPACK_IMPORTED_MODULE_3___default()('canUnsubscribe', 'installed', function (canUnsubscribe, installed) {
     return canUnsubscribe && !installed;
   }),
+  favorites: flarum_Model__WEBPACK_IMPORTED_MODULE_1___default.a.attribute('favorites'),
   favorited: flarum_Model__WEBPACK_IMPORTED_MODULE_1___default.a.attribute('favorited')
 }));
 

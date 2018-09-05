@@ -3,10 +3,11 @@
 namespace Flagrow\Bazaar\Api\Controllers;
 
 use Flagrow\Bazaar\Search\FlagrowApi;
-use Flarum\Http\Controller\ControllerInterface;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 
-class ConnectController implements ControllerInterface
+class ConnectController implements RequestHandlerInterface
 {
     /**
      * @var FlagrowApi
@@ -20,10 +21,10 @@ class ConnectController implements ControllerInterface
 
     /**
      * @param ServerRequestInterface $request
-     * @return string
+     * @return ResponseInterface
      * @throws \Exception
      */
-    public function handle(ServerRequestInterface $request)
+    public function handle(ServerRequestInterface $request): ResponseInterface
     {
         $response = $this->api->get('bazaar/connect');
 

@@ -18,6 +18,7 @@ export default class ExtensionListItem extends Component {
         const connected = this.props.connected || false;
         const controls = this.controlItems(extension, connected).toArray();
         const badges = this.badges(extension).toArray();
+        const repository = this.props.repository;
 
         return <div className={
             'Extension ' +
@@ -25,7 +26,8 @@ export default class ExtensionListItem extends Component {
             (extension.installed() ? 'installed ' : 'uninstalled ') +
             (extension.outdated() ? 'outdated ' : '') +
             (extension.pending() ? 'pending ' : '') +
-            (controls.length > 0 ? 'hasControls' : '')
+            (controls.length > 0 ? 'hasControls' : '') +
+            (extension.favorited() ? 'favorited' : '')
         } key={extension.id()} data-id={extension.id()}>
             <span className="Extension-icon" style={extension.icon() || ''} title={extension.description()}>
               {extension.icon() ? icon('fas fa-' + extension.icon().name) : ''}
@@ -34,25 +36,55 @@ export default class ExtensionListItem extends Component {
                 <ul className="ExtensionListItem-badges badges">
                     {badges}
                 </ul>
-                <label className="ExtensionListItem-title">
+                <label className="Meta-Title">
                     {extension.title() || extension.package()}
                 </label>
-                <label className="ExtensionListItem-vendor">
-                    {app.translator.trans('flagrow-bazaar.admin.page.extension.vendor', {
-                        vendor: extension.package().split('/')[0]
-                    })}
-                </label>
-                <div className="ExtensionListItem-version">{extension.installed_version() || extension.highest_version()}</div>
-                {controls.length ? (
-                    <div className="Extension-controls">
-                        <Dropdown
-                            buttonClassName="Button Button--icon Button--flat"
-                            menuClassName="Dropdown-menu--right"
-                            icon="fas fa-ellipsis-h">
-                            {controls}
-                        </Dropdown>
-                    </div>
-                ) : ''}
+
+                <div className="Meta-Item vendor">
+                    <div className="label">{app.translator.trans('flagrow-bazaar.admin.page.extension.vendor')}</div>
+                    <div className="value">{extension.package().split('/')[0]}</div>
+                </div>
+                <div className="Meta-Item downloads">
+                    <div className="label">{app.translator.trans('flagrow-bazaar.admin.page.extension.downloads')}</div>
+                    <div className="value">{extension.downloads()}</div>
+                </div>
+                <div className="Meta-Item favorites">
+                    <div className="label">{app.translator.trans('flagrow-bazaar.admin.page.extension.favorites')}</div>
+                    <div className="value">{extension.favorites()}</div>
+                </div>
+                <div className="Meta-Item version">
+                    <div className="label">{app.translator.trans('flagrow-bazaar.admin.page.extension.version')}</div>
+                    <div className="value">{extension.installed_version() || extension.highest_version()}</div>
+                </div>
+                <div className="Extension-controls">
+                    {connected ? (
+                        <Button
+                            className="Button Button--icon Button--flat favorite"
+                            icon={(extension.favorited() ? 'fas' : 'far') + ' fa-heart'}
+                            onclick={() => repository.favoriteExtension(extension)}>
+                        </Button>
+                    ) : ''}
+                    {extension.discuss_link() ? (
+                        <Button
+                            className="Button Button--icon Button--flat"
+                            icon="fas fa-comments"
+                            onclick={() => window.open(extension.discuss_link())}>
+                        </Button>
+                    ) : ''}
+                    {extension.landing_link() ? (
+                        <Button
+                            className="Button Button--icon Button--flat"
+                            icon="fas fa-chart-line"
+                            onclick={() => window.open(extension.landing_link())}>
+                        </Button>
+                    ) : ''}
+                    <Dropdown
+                        buttonClassName="Button Button--icon Button--flat"
+                        menuClassName="Dropdown-menu--right"
+                        icon="fas fa-ellipsis-h">
+                        {controls}
+                    </Dropdown>
+                </div>
             </div>
         </div>;
     }

@@ -117,7 +117,7 @@ final class ExtensionRepository
         }
 
         return $extensions->filter(function ($extension) use ($search) {
-            // Look for the serch term in all these things
+            // Look for the search term in all these things
             $searchIn = [
                 $extension->getPackage(),
                 $extension->getTitle(),

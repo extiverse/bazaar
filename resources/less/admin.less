@@ -56,9 +56,48 @@
           flex-direction: column;
           position: relative;
           flex: 1;
+
+          .Meta-Title {
+            display: inline-block;
+            font-size: 15px;
+            font-weight: bold;
+            font-variant: small-caps;
+            padding: 0 5px 5px 0;
+          }
+
+          .Meta-Item {
+            display: flex;
+            flex-direction: row;
+
+            .label, .value {
+              color: @muted-more-color;
+              font-size: 11px;
+              padding-right: 10px;
+              border-bottom: 1px dotted lighten(@muted-more-color, 15%);
+            }
+            .label {
+              font-weight: bold;
+              width: 70px;
+              padding: 0 5px;
+            }
+            .value {
+              font-weight: normal;
+              width: 70px;
+              text-align: right;
+              flex: 1 0;
+            }
+          }
+        }
+
+        &.pending {
+            background: @alert-bg;
+        }
+        &.enabled {
+            background: @alert-success-bg;
         }
 
         &.outdated {
+            background: @control-danger-bg;
             .ExtensionListItem-version {
                 text-decoration: line-through;
             }
@@ -74,9 +113,27 @@
 
         .Extension-controls {
           text-align: right;
+          margin: 3px 5px 0;
+
+          .favorite {
+            color: #d66;
+          }
         }
 
 
+        &:hover .ExtensionListItem-badges {
+          .Badge--enabled,
+          .Badge--subscribed {
+            background: @alert-success-bg;
+            color: @alert-success-color;
+          }
+          .Badge--installed {
+          }
+          .Badge--outdated {
+            background: @alert-error-bg;
+            color: @alert-error-color;
+          }
+        }
         .ExtensionListItem-badges {
             right: -2px;
             top: -2px;
@@ -87,18 +144,6 @@
                 margin-left: -5px;
                 position: relative;
                 pointer-events: auto;
-
-                &.Badge--enabled,
-                &.Badge--subscribed {
-                    background: @alert-success-bg;
-                    color: @alert-success-color;
-                }
-                &.Badge--installed {
-                }
-                &.Badge--outdated {
-                    background: @alert-error-bg;
-                    color: @alert-error-color;
-                }
                 &.Badge--favorited {
                     background: @alert-error-bg;
                     color: @alert-error-color;

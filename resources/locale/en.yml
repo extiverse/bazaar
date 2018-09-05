@@ -79,6 +79,9 @@ flagrow-bazaar:
                 installed: Extension is installed
                 enabled: Extension is enabled
                 vendor: By {vendor}
+                downloads: Downloads
+                version: Version
+                favorites: Favorited
                 favorited: One of your favorites
                 pending: Extension waits on a background task to complete
                 outdated: "Extension is outdated, please update to version {new}"

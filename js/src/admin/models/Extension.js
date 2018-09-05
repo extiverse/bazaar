@@ -10,8 +10,9 @@ export default class Extension extends mixin(Model, {
     icon: Model.attribute('icon'),
     locale: Model.attribute('locale'),
 
-    stars: Model.attribute('stars'),
-    forks: Model.attribute('forks'),
+    discuss_link: Model.attribute('discuss_link'),
+    landing_link: Model.attribute('landing_link'),
+
     downloads: Model.attribute('downloads'),
 
     installed: Model.attribute('installed'),
@@ -39,5 +40,6 @@ export default class Extension extends mixin(Model, {
     canUnsubscribe: Model.attribute('canUnsubscribe'),
     canSafelyUnsubscribe: computed('canUnsubscribe', 'installed', (canUnsubscribe, installed) => canUnsubscribe && !installed),
 
+    favorites: Model.attribute('favorites'),
     favorited: Model.attribute('favorited'),
 }) {}

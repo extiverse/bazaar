@@ -2,6 +2,7 @@
 
 namespace Flagrow\Bazaar\Listeners;
 
+use Flagrow\Bazaar\Events\SearchedExtensions;
 use Flagrow\Bazaar\Events\SearchingExtensions;
 use Flagrow\Bazaar\Extensions\ExtensionUtils;
 use Flarum\Extension\Extension;
@@ -36,6 +37,7 @@ class SearchForInstalledExtensions
     public function subscribe(Dispatcher $events)
     {
         $events->listen(SearchingExtensions::class, [$this, 'installed']);
+        $events->listen(SearchedExtensions::class, [$this, 'updateRequired']);
     }
 
     public function installed(SearchingExtensions $event)
@@ -47,11 +49,17 @@ class SearchForInstalledExtensions
             ->first(function ($key) use (&$event, &$filter) {
                 if (in_array($key, static::MARKS, true)) {
                     $filter['id'] = $this->installedExtensions->implode(',');
+
+                    return true;
                 }
             });
 
         Arr::forget($filter, static::MARKS);
 
         $event->params->put('filter', $filter);
+    }
+
+    public function updateRequired(SearchedExtensions $event)
+    {
     }
 }
