@@ -965,6 +965,8 @@ function (_Component) {
     }, badges), m("label", {
       className: "Meta-Title"
     }, extension.title() || extension.package()), m("div", {
+      className: "Meta-Item description"
+    }, extension.description()), m("div", {
       className: "Meta-Item vendor"
     }, m("div", {
       className: "label"

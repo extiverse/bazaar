@@ -40,6 +40,10 @@ export default class ExtensionListItem extends Component {
                     {extension.title() || extension.package()}
                 </label>
 
+                <div className="Meta-Item description">
+                    {extension.description()}
+                </div>
+
                 <div className="Meta-Item vendor">
                     <div className="label">{app.translator.trans('flagrow-bazaar.admin.page.extension.vendor')}</div>
                     <div className="value">{extension.package().split('/')[0]}</div>
