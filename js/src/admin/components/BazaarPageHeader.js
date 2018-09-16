@@ -80,7 +80,7 @@ export default class BazaarPageHeader extends Component {
             return [
                 Button.component({
                     className: 'Button Button--icon Connected',
-                    icon: 'fas fa-dashboard',
+                    icon: 'fas fa-plug',
                     onclick: () => app.modal.show(new DashboardModal({
                         flagrowHost
                     }))

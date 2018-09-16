@@ -519,7 +519,7 @@ function (_Component) {
     if (connected) {
       return [flarum_components_Button__WEBPACK_IMPORTED_MODULE_4___default.a.component({
         className: 'Button Button--icon Connected',
-        icon: 'fas fa-dashboard',
+        icon: 'fas fa-plug',
         onclick: function onclick() {
           return flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.modal.show(new _modals_DashboardModal__WEBPACK_IMPORTED_MODULE_9__["default"]({
             flagrowHost: flagrowHost
