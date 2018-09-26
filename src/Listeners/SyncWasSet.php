@@ -37,10 +37,10 @@ class SyncWasSet
 
     public function notifyRemote(Saved $event)
     {
-        if ($event->key === 'flagrow.bazaar.sync') {
+        if (in_array('flagrow.bazaar.sync', $event->settings)) {
             $response = $this->api->post('bazaar/sync-configured', [
                 'json' => [
-                    'sync' => $event->value
+                    'sync' => $event->settings['flagrow.bazaar.sync']
                 ]
             ]);
 

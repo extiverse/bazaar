@@ -222,6 +222,8 @@ class Extension implements Arrayable
             'subscribed' => $this->getAttributeIfPresent('subscribed', false),
             'canCheckout' => $this->getAttributeIfPresent('canCheckout', false),
             'canUnsubscribe' => $this->getAttributeIfPresent('canUnsubscribe', false),
+            'flarumCompatibilityLatest' => $this->getAttributeIfPresent('flarumCompatibilityLatest', null),
+            'flarumCompatibilityNext' => $this->getAttributeIfPresent('flarumCompatibilityNext', null),
         ];
     }
 }
