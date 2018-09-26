@@ -1296,7 +1296,7 @@ function (_Component) {
       className: 'Button hasIcon',
       state: this.props.params.filter == 'premium',
       onchange: function onchange(checked) {
-        return _this2.toggleFilter('premium', checked);
+        return _this2.toggleFilter('is_premium', checked);
       },
       children: app.translator.trans('flagrow-bazaar.admin.search.filter_premium')
     })])]);

@@ -85,15 +85,19 @@ final class FlagrowApi extends Client
     protected function readBazaarConnectedState(HandlerStack &$stack)
     {
         $stack->push(Middleware::mapResponse(function (ResponseInterface $response) {
+            /** @var SettingsRepositoryInterface $settings */
+            $settings = app()->make(SettingsRepositoryInterface::class);
 
-            if ($response->getStatusCode() > 201) {
-                return $response;
+            if ($response->getStatusCode() === 401) {
+                $settings->delete('flagrow.bazaar.api_token');
             }
 
-            // Bazaar-Connected will contain the date of connection as a Iso8601 date or "0" if not connected
-            $connectedHeaders = $response->getHeader('Bazaar-Connected');
-            $connected = count($connectedHeaders) > 0 && $connectedHeaders[0] !== '0';
-            app()->make(SettingsRepositoryInterface::class)->set('flagrow.bazaar.connected', $connected ? 1 : 0);
+            if ($response->getStatusCode() === 200) {
+                // Bazaar-Connected will contain the date of connection as a Iso8601 date or "0" if not connected
+                $connectedHeaders = $response->getHeader('Bazaar-Connected');
+                $connected = count($connectedHeaders) > 0 && $connectedHeaders[0] !== '0';
+                $settings->set('flagrow.bazaar.connected', $connected ? 1 : 0);
+            }
 
             return $response;
         }));

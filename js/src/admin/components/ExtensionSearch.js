@@ -60,7 +60,7 @@ export default class ExtensionSearch extends Component {
                     icon: 'fas fa-certificate',
                     className: 'Button hasIcon',
                     state: this.props.params.filter == 'premium',
-                    onchange: (checked) => this.toggleFilter('premium', checked),
+                    onchange: (checked) => this.toggleFilter('is_premium', checked),
                     children: app.translator.trans('flagrow-bazaar.admin.search.filter_premium')
                 }),
             ])
