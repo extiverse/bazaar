@@ -1147,7 +1147,7 @@ function (_Component) {
 
     if (!extension.flarumCompatibilityNext()) {
       items.add('nextIncompatible', m(flarum_components_Badge__WEBPACK_IMPORTED_MODULE_6___default.a, {
-        icon: "fas fa-exclamation-triangle",
+        icon: "fas fa-exclamation",
         type: "nextIncompatible",
         label: app.translator.trans('flagrow-bazaar.admin.page.extension.next_incompatible')
       }));
@@ -1155,7 +1155,7 @@ function (_Component) {
 
     if (!extension.flarumCompatibilityLatest()) {
       items.add('latestIncompatible', m(flarum_components_Badge__WEBPACK_IMPORTED_MODULE_6___default.a, {
-        icon: "fas fa-exclamation-triangle",
+        icon: "fas fa-exclamation-circle",
         type: "latestIncompatible",
         label: app.translator.trans('flagrow-bazaar.admin.page.extension.latest_incompatible')
       }));

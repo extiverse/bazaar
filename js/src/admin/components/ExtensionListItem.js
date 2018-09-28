@@ -217,12 +217,12 @@ export default class ExtensionListItem extends Component {
         const items = new ItemList();
 
         if (!extension.flarumCompatibilityNext()) {
-            items.add('nextIncompatible', <Badge icon="fas fa-exclamation-triangle"
+            items.add('nextIncompatible', <Badge icon="fas fa-exclamation"
                    type="nextIncompatible"
                    label={app.translator.trans('flagrow-bazaar.admin.page.extension.next_incompatible')} />)
         }
         if (!extension.flarumCompatibilityLatest()) {
-            items.add('latestIncompatible', <Badge icon="fas fa-exclamation-triangle"
+            items.add('latestIncompatible', <Badge icon="fas fa-exclamation-circle"
                  type="latestIncompatible"
                  label={app.translator.trans('flagrow-bazaar.admin.page.extension.latest_incompatible')} />)
         }
