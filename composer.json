@@ -30,6 +30,9 @@
         "guzzlehttp/guzzle": "^6.2",
         "flagrow/console": "^0.4"
     },
+    "require-dev": {
+        "phpunit/phpunit": "*"
+    },
     "extra": {
         "flarum-extension": {
             "title": "Flagrow Bazaar",
