@@ -55,7 +55,8 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Flagrow\\Bazaar\\Tests\\": "tests/"
+            "Flagrow\\Bazaar\\Tests\\": "tests/",
+            "Flarum\\Tests\\": "vendor/flarum/core/tests/"
         }
     }
 }
