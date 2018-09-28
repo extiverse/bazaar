@@ -28,7 +28,7 @@ export default class ExtensionListItem extends Component {
             (extension.pending() ? 'pending ' : '') +
             (controls.length > 0 ? 'hasControls' : '') +
             (extension.favorited() ? 'favorited' : '') +
-            (extension.flarumCompatibilityCurrent() ? ' compatible' : '')
+            (extension.flarumCompatibilityCurrent() ? ' compatible' : 'incompatible')
         } key={extension.id()} data-id={extension.id()}>
             <span className="Extension-icon" style={extension.icon() || ''} title={extension.description()}>
               {extension.icon() ? icon('fas fa-' + extension.icon().name) : ''}
@@ -216,6 +216,21 @@ export default class ExtensionListItem extends Component {
     badges(extension) {
         const items = new ItemList();
 
+        if (!extension.flarumCompatibilityNext()) {
+            items.add('nextIncompatible', <Badge icon="fas fa-exclamation-triangle"
+                   type="nextIncompatible"
+                   label={app.translator.trans('flagrow-bazaar.admin.page.extension.next_incompatible')} />)
+        }
+        if (!extension.flarumCompatibilityLatest()) {
+            items.add('latestIncompatible', <Badge icon="fas fa-exclamation-triangle"
+                 type="latestIncompatible"
+                 label={app.translator.trans('flagrow-bazaar.admin.page.extension.latest_incompatible')} />)
+        }
+        if (!extension.flarumCompatibilityCurrent()) {
+            items.add('incompatible', <Badge icon="fas fa-exclamation-triangle"
+                 type="incompatible"
+                 label={app.translator.trans('flagrow-bazaar.admin.page.extension.incompatible')} />)
+        }
         if (extension.subscribed()) {
             items.add('subscribed', <Badge icon="fas fa-shopping-cart"
                 type="subscribed"
@@ -230,26 +245,22 @@ export default class ExtensionListItem extends Component {
                 type="pending"
                 label={app.translator.trans('flagrow-bazaar.admin.page.extension.pending')} />);
         }
-
         if (extension.installed() && extension.outdated()) {
             items.add('outdated', <Badge icon="fas fa-warning"
                 type="outdated"
                 label={app.translator.trans('flagrow-bazaar.admin.page.extension.outdated',
                     { new: extension.highest_version() })} />)
         }
-
         if (extension.favorited()) {
             items.add('favorited', <Badge icon="fas fa-heart"
                 type="favorited"
                 label={app.translator.trans('flagrow-bazaar.admin.page.extension.favorited')} />)
         }
-
         if (extension.installed() && !extension.enabled()) {
             items.add('installed', <Badge icon="fas fa-plus-square"
                 type="installed"
                 label={app.translator.trans('flagrow-bazaar.admin.page.extension.installed')} />)
         }
-
         if (extension.enabled()) {
             items.add('enabled', <Badge icon="fas fa-check-square"
                 type="enabled"

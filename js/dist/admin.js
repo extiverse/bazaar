@@ -951,7 +951,7 @@ function (_Component) {
     var badges = this.badges(extension).toArray();
     var repository = this.props.repository;
     return m("div", {
-      className: 'Extension ' + (extension.enabled() ? 'enabled ' : 'disabled ') + (extension.installed() ? 'installed ' : 'uninstalled ') + (extension.outdated() ? 'outdated ' : '') + (extension.pending() ? 'pending ' : '') + (controls.length > 0 ? 'hasControls' : '') + (extension.favorited() ? 'favorited' : '') + (extension.flarumCompatibilityCurrent() ? ' compatible' : ''),
+      className: 'Extension ' + (extension.enabled() ? 'enabled ' : 'disabled ') + (extension.installed() ? 'installed ' : 'uninstalled ') + (extension.outdated() ? 'outdated ' : '') + (extension.pending() ? 'pending ' : '') + (controls.length > 0 ? 'hasControls' : '') + (extension.favorited() ? 'favorited' : '') + (extension.flarumCompatibilityCurrent() ? ' compatible' : 'incompatible'),
       key: extension.id(),
       "data-id": extension.id()
     }, m("span", {
@@ -1144,6 +1144,30 @@ function (_Component) {
 
   _proto.badges = function badges(extension) {
     var items = new flarum_utils_ItemList__WEBPACK_IMPORTED_MODULE_3___default.a();
+
+    if (!extension.flarumCompatibilityNext()) {
+      items.add('nextIncompatible', m(flarum_components_Badge__WEBPACK_IMPORTED_MODULE_6___default.a, {
+        icon: "fas fa-exclamation-triangle",
+        type: "nextIncompatible",
+        label: app.translator.trans('flagrow-bazaar.admin.page.extension.next_incompatible')
+      }));
+    }
+
+    if (!extension.flarumCompatibilityLatest()) {
+      items.add('latestIncompatible', m(flarum_components_Badge__WEBPACK_IMPORTED_MODULE_6___default.a, {
+        icon: "fas fa-exclamation-triangle",
+        type: "latestIncompatible",
+        label: app.translator.trans('flagrow-bazaar.admin.page.extension.latest_incompatible')
+      }));
+    }
+
+    if (!extension.flarumCompatibilityCurrent()) {
+      items.add('incompatible', m(flarum_components_Badge__WEBPACK_IMPORTED_MODULE_6___default.a, {
+        icon: "fas fa-exclamation-triangle",
+        type: "incompatible",
+        label: app.translator.trans('flagrow-bazaar.admin.page.extension.incompatible')
+      }));
+    }
 
     if (extension.subscribed()) {
       items.add('subscribed', m(flarum_components_Badge__WEBPACK_IMPORTED_MODULE_6___default.a, {

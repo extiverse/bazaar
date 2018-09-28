@@ -89,6 +89,9 @@ flagrow-bazaar:
                 premium: Premium
                 subscribed: Subscribed
                 subscribe_check_failed: It looks like you cancelled the checkout process.
+                incompatible: Incompatible with your current Flarum version
+                next_incompatible: Incompatible with the upcoming Flarum version
+                latest_incompatible: Incompatible with the latest Flarum version
             task:
                 header:
                     status: Status
