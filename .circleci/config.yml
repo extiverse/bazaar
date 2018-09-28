@@ -12,6 +12,7 @@ references:
             - run: chmod +x composer.phar
             - run: mv composer.phar /usr/local/bin/composer
             - run: composer config -g github-oauth.github.com $GITHUB_TOKEN
+            - run: composer require "flarum/core:dev-master" --no-update
             - run: composer install -n --prefer-dist --no-progress -o
             - run:
                 name: Wait for other docker instances to be up
@@ -31,12 +32,6 @@ references:
         - DB_PASSWORD: ""
 
 jobs:
-    "php-7.0":
-        docker:
-            - image: php:7.0
-              environment: *environment
-            - *mysql
-        <<: *steps
     "php-7.1":
         docker:
             - image: php:7.1
@@ -49,11 +44,17 @@ jobs:
               environment: *environment
             - *mysql
         <<: *steps
+    "php-7.3":
+        docker:
+            - image: php:7.3
+              environment: *environment
+            - *mysql
+        <<: *steps
 
 workflows:
     version: 2
     test:
         jobs:
-            - "php-7.0"
             - "php-7.1"
             - "php-7.2"
+            - "php-7.3"
