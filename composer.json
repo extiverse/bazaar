@@ -31,7 +31,7 @@
         "flagrow/console": "^0.4"
     },
     "require-dev": {
-        "phpunit/phpunit": "*"
+        "flagrow/steamroller": "dev-master"
     },
     "extra": {
         "flarum-extension": {
@@ -55,8 +55,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Flagrow\\Bazaar\\Tests\\": "tests/",
-            "Flarum\\Tests\\": "vendor/flarum/core/tests/"
+            "Flagrow\\Bazaar\\Tests\\": "tests/"
         }
     }
 }
