@@ -224,6 +224,7 @@ class Extension implements Arrayable
             'canUnsubscribe' => $this->getAttributeIfPresent('canUnsubscribe', false),
             'flarumCompatibilityLatest' => $this->getAttributeIfPresent('flarumCompatibilityLatest', null),
             'flarumCompatibilityNext' => $this->getAttributeIfPresent('flarumCompatibilityNext', null),
+            'flarumCompatibilityCurrent' => $this->getAttributeIfPresent('flarumCompatibilityCurrent', null),
         ];
     }
 }

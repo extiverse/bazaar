@@ -951,7 +951,7 @@ function (_Component) {
     var badges = this.badges(extension).toArray();
     var repository = this.props.repository;
     return m("div", {
-      className: 'Extension ' + (extension.enabled() ? 'enabled ' : 'disabled ') + (extension.installed() ? 'installed ' : 'uninstalled ') + (extension.outdated() ? 'outdated ' : '') + (extension.pending() ? 'pending ' : '') + (controls.length > 0 ? 'hasControls' : '') + (extension.favorited() ? 'favorited' : ''),
+      className: 'Extension ' + (extension.enabled() ? 'enabled ' : 'disabled ') + (extension.installed() ? 'installed ' : 'uninstalled ') + (extension.outdated() ? 'outdated ' : '') + (extension.pending() ? 'pending ' : '') + (controls.length > 0 ? 'hasControls' : '') + (extension.favorited() ? 'favorited' : '') + (extension.flarumCompatibilityCurrent() ? ' compatible' : ''),
       key: extension.id(),
       "data-id": extension.id()
     }, m("span", {
@@ -970,27 +970,39 @@ function (_Component) {
       className: "Meta-Item vendor"
     }, m("div", {
       className: "label"
-    }, app.translator.trans('flagrow-bazaar.admin.page.extension.vendor')), m("div", {
+    }, m("i", {
+      className: "fas fa-user"
+    }), " ", app.translator.trans('flagrow-bazaar.admin.page.extension.vendor')), m("div", {
       className: "value"
     }, extension.package().split('/')[0])), m("div", {
       className: "Meta-Item downloads"
     }, m("div", {
       className: "label"
-    }, app.translator.trans('flagrow-bazaar.admin.page.extension.downloads')), m("div", {
+    }, m("i", {
+      class: "fas fa-download"
+    }), " ", app.translator.trans('flagrow-bazaar.admin.page.extension.downloads')), m("div", {
       className: "value"
     }, extension.downloads())), m("div", {
       className: "Meta-Item favorites"
     }, m("div", {
       className: "label"
-    }, app.translator.trans('flagrow-bazaar.admin.page.extension.favorites')), m("div", {
+    }, m("i", {
+      className: "fas fa-heart"
+    }), " ", app.translator.trans('flagrow-bazaar.admin.page.extension.favorites')), m("div", {
       className: "value"
-    }, extension.favorites())), m("div", {
+    }, extension.favorites())), extension.installed_version() ? m("div", {
       className: "Meta-Item version"
     }, m("div", {
       className: "label"
-    }, app.translator.trans('flagrow-bazaar.admin.page.extension.version')), m("div", {
+    }, app.translator.trans('flagrow-bazaar.admin.page.extension.installed_version')), m("div", {
       className: "value"
-    }, extension.installed_version() || extension.highest_version())), m("div", {
+    }, extension.installed_version())) : '', m("div", {
+      className: "Meta-Item version"
+    }, m("div", {
+      className: "label"
+    }, app.translator.trans('flagrow-bazaar.admin.page.extension.highest_version')), m("div", {
+      className: "value"
+    }, extension.highest_version())), m("div", {
       className: "Extension-controls"
     }, connected ? m(flarum_components_Button__WEBPACK_IMPORTED_MODULE_4___default.a, {
       className: "Button Button--icon Button--flat favorite",
@@ -2009,8 +2021,8 @@ function (_mixin) {
   subscribed: flarum_Model__WEBPACK_IMPORTED_MODULE_1___default.a.attribute('subscribed'),
   // Install/uninstall
   // Extension is available if it's either non-premium or premium & subscribed
-  can_install: flarum_utils_computed__WEBPACK_IMPORTED_MODULE_3___default()('installed', 'premium', 'subscribed', function (installed, premium, subscribed) {
-    return !installed && (!premium || subscribed);
+  can_install: flarum_utils_computed__WEBPACK_IMPORTED_MODULE_3___default()('installed', 'premium', 'subscribed', 'flarumCompatibilityCurrent', function (installed, premium, subscribed, flarumCompatibilityCurrent) {
+    return !installed && flarumCompatibilityCurrent && (!premium || subscribed);
   }),
   can_uninstall: flarum_utils_computed__WEBPACK_IMPORTED_MODULE_3___default()('installed', 'enabled', function (installed, enabled) {
     return installed && !enabled;
@@ -2028,7 +2040,10 @@ function (_mixin) {
     return canUnsubscribe && !installed;
   }),
   favorites: flarum_Model__WEBPACK_IMPORTED_MODULE_1___default.a.attribute('favorites'),
-  favorited: flarum_Model__WEBPACK_IMPORTED_MODULE_1___default.a.attribute('favorited')
+  favorited: flarum_Model__WEBPACK_IMPORTED_MODULE_1___default.a.attribute('favorited'),
+  flarumCompatibilityLatest: flarum_Model__WEBPACK_IMPORTED_MODULE_1___default.a.attribute('flarumCompatibilityLatest'),
+  flarumCompatibilityNext: flarum_Model__WEBPACK_IMPORTED_MODULE_1___default.a.attribute('flarumCompatibilityNext'),
+  flarumCompatibilityCurrent: flarum_Model__WEBPACK_IMPORTED_MODULE_1___default.a.attribute('flarumCompatibilityCurrent')
 }));
 
 

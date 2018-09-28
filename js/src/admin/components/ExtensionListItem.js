@@ -27,7 +27,8 @@ export default class ExtensionListItem extends Component {
             (extension.outdated() ? 'outdated ' : '') +
             (extension.pending() ? 'pending ' : '') +
             (controls.length > 0 ? 'hasControls' : '') +
-            (extension.favorited() ? 'favorited' : '')
+            (extension.favorited() ? 'favorited' : '') +
+            (extension.flarumCompatibilityCurrent() ? ' compatible' : '')
         } key={extension.id()} data-id={extension.id()}>
             <span className="Extension-icon" style={extension.icon() || ''} title={extension.description()}>
               {extension.icon() ? icon('fas fa-' + extension.icon().name) : ''}
@@ -45,20 +46,26 @@ export default class ExtensionListItem extends Component {
                 </div>
 
                 <div className="Meta-Item vendor">
-                    <div className="label">{app.translator.trans('flagrow-bazaar.admin.page.extension.vendor')}</div>
+                    <div className="label"><i className="fas fa-user"></i> {app.translator.trans('flagrow-bazaar.admin.page.extension.vendor')}</div>
                     <div className="value">{extension.package().split('/')[0]}</div>
                 </div>
                 <div className="Meta-Item downloads">
-                    <div className="label">{app.translator.trans('flagrow-bazaar.admin.page.extension.downloads')}</div>
+                    <div className="label"><i class="fas fa-download"></i> {app.translator.trans('flagrow-bazaar.admin.page.extension.downloads')}</div>
                     <div className="value">{extension.downloads()}</div>
                 </div>
                 <div className="Meta-Item favorites">
-                    <div className="label">{app.translator.trans('flagrow-bazaar.admin.page.extension.favorites')}</div>
+                    <div className="label"><i className="fas fa-heart"></i> {app.translator.trans('flagrow-bazaar.admin.page.extension.favorites')}</div>
                     <div className="value">{extension.favorites()}</div>
                 </div>
+                {extension.installed_version() ? (
+                    <div className="Meta-Item version">
+                        <div className="label">{app.translator.trans('flagrow-bazaar.admin.page.extension.installed_version')}</div>
+                        <div className="value">{extension.installed_version()}</div>
+                    </div>
+                ) : ''}
                 <div className="Meta-Item version">
-                    <div className="label">{app.translator.trans('flagrow-bazaar.admin.page.extension.version')}</div>
-                    <div className="value">{extension.installed_version() || extension.highest_version()}</div>
+                    <div className="label">{app.translator.trans('flagrow-bazaar.admin.page.extension.highest_version')}</div>
+                    <div className="value">{extension.highest_version()}</div>
                 </div>
                 <div className="Extension-controls">
                     {connected ? (

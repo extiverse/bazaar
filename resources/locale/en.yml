@@ -80,7 +80,8 @@ flagrow-bazaar:
                 enabled: Extension is enabled
                 vendor: By {vendor}
                 downloads: Downloads
-                version: Version
+                installed_version: Installed version
+                highest_version: Latest version
                 favorites: Favorited
                 favorited: One of your favorites
                 pending: Extension waits on a background task to complete

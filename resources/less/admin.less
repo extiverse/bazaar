@@ -20,12 +20,12 @@
     }
 
     .ExtensionList {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: stretch;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: stretch;
     }
     .Extension {
-        flex: 1 0;
+        flex: 0 0;
         display: flex;
         flex-direction: row;
         padding: 10px;
@@ -33,69 +33,75 @@
         border-radius: 4px;
 
         &.hasControls:hover {
-          background: @control-bg;
-          cursor: pointer;
+            background: @control-bg;
+            cursor: pointer;
+            .Extension-meta {
+                .Meta-Item {
+                    .label, .value {
+                        color: @muted-more-color;
+                    }
+                }
+            }
         }
 
         .Extension-icon {
-          width: 40px;
-          height: 40px;
-          background: @control-bg;
-          color: @control-color;
-          border-radius: 6px;
-          font-size: 20px;
-          line-height: 40px;
-          text-align: center;
-          margin: 5px;
+            width: 40px;
+            height: 40px;
+            background: @control-bg;
+            color: @control-color;
+            border-radius: 6px;
+            font-size: 20px;
+            line-height: 40px;
+            text-align: center;
+            margin: 5px;
         }
 
         .Extension-meta {
-          min-width: 150px;
-          min-height: 40px;
-          display: flex;
-          flex-direction: column;
-          position: relative;
-          flex: 1;
-
-          .Meta-Title {
-            display: inline-block;
-            font-size: 15px;
-            font-weight: bold;
-            font-variant: small-caps;
-            padding: 0 5px 5px 0;
-          }
-
-          .Meta-Item {
+            min-width: 180px;
+            min-height: 40px;
             display: flex;
-            flex-direction: row;
+            flex-direction: column;
+            position: relative;
+            flex: 1;
 
-            &.description {
-              padding: 3px 2px;
-              font-size: 12px;
-              font-style: italic;
-              text-align: center;
-              margin: 0 auto;
-              flex: 1 0;
+            .Meta-Title {
+                display: inline-block;
+                font-size: 15px;
+                font-weight: bold;
+                font-variant: small-caps;
+                padding: 0 5px 5px 0;
             }
 
-            .label, .value {
-              color: @muted-more-color;
-              font-size: 11px;
-              padding-right: 10px;
-              border-bottom: 1px dotted lighten(@muted-more-color, 15%);
+            .Meta-Item {
+                display: flex;
+                flex-direction: row;
+
+                &.description {
+                    padding: 3px 2px;
+                    font-size: 12px;
+                    font-style: italic;
+                    text-align: center;
+                    margin: 0 auto;
+                    flex: 1 0;
+                }
+
+                .label, .value {
+                    color: black;
+                    font-size: 11px;
+                    padding-right: 10px;
+                    border-bottom: 1px dotted lighten(@muted-more-color, 15%);
+                }
+                .label {
+                    width: 100px;
+                    padding: 0 5px;
+                }
+                .value {
+                    font-weight: normal;
+                    width: 70px;
+                    text-align: right;
+                    flex: 1 0;
+                }
             }
-            .label {
-              font-weight: bold;
-              width: 70px;
-              padding: 0 5px;
-            }
-            .value {
-              font-weight: normal;
-              width: 70px;
-              text-align: right;
-              flex: 1 0;
-            }
-          }
         }
 
         &.pending {
@@ -119,29 +125,27 @@
             padding-right: 10px;
         }
 
-
         .Extension-controls {
-          text-align: right;
-          margin: 3px 5px 0;
+            text-align: right;
+            margin: 3px 5px 0;
 
-          .favorite {
-            color: #d66;
-          }
+            .favorite {
+                color: #d66;
+            }
         }
 
-
         &:hover .ExtensionListItem-badges {
-          .Badge--enabled,
-          .Badge--subscribed {
-            background: @alert-success-bg;
-            color: @alert-success-color;
-          }
-          .Badge--installed {
-          }
-          .Badge--outdated {
-            background: @alert-error-bg;
-            color: @alert-error-color;
-          }
+            .Badge--enabled,
+            .Badge--subscribed {
+                background: @alert-success-bg;
+                color: @alert-success-color;
+            }
+            .Badge--installed {
+            }
+            .Badge--outdated {
+                background: @alert-error-bg;
+                color: @alert-error-color;
+            }
         }
         .ExtensionListItem-badges {
             right: -2px;

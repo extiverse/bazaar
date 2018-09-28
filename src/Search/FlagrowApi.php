@@ -39,36 +39,28 @@ final class FlagrowApi extends Client
             'headers' => array_merge([
                 'Accept' => 'application/vnd.api+json, application/json',
                 'Bazaar-From' => static::getFlarumHost(),
-                'Flarum-Version' => app()->version(),
+                'Flarum-Version' => static::getFlarumVersion(),
                 'Bazaar-Version' => static::getBazaarVersion()
             ], $headers)
         ], $config));
     }
 
-    /**
-     * The hostname to connect with Flagrow.io.
-     *
-     * @return string
-     */
-    public static function getFlagrowHost()
+    public static function getFlagrowHost(): string
     {
         return Arr::get(static::$flarumConfig, 'flagrow', 'https://flagrow.io');
     }
 
-    /**
-     * The url specified in the config.php.
-     *
-     * @return string
-     */
-    public static function getFlarumHost()
+    public static function getFlarumHost(): string
     {
         return Arr::get(static::$flarumConfig, 'url');
     }
 
-    /**
-     * @return null|string
-     */
-    public static function getBazaarVersion()
+    public static function getFlarumVersion(): string
+    {
+        return Arr::get(static::$flarumConfig, 'force-version', app()->version());
+    }
+
+    public static function getBazaarVersion(): ?string
     {
         /** @var ExtensionManager $extensions */
         $extensions = app(ExtensionManager::class);
@@ -77,11 +69,6 @@ final class FlagrowApi extends Client
         return $bazaar ? $bazaar->getVersion() : null;
     }
 
-    /**
-     * Injects updating the connected state for calls to Flagrow.
-     *
-     * @param HandlerStack $stack
-     */
     protected function readBazaarConnectedState(HandlerStack &$stack)
     {
         $stack->push(Middleware::mapResponse(function (ResponseInterface $response) {
@@ -103,10 +90,7 @@ final class FlagrowApi extends Client
         }));
     }
 
-    /**
-     * @return string|null
-     */
-    public static function getToken()
+    public static function getToken(): ?string
     {
         return app()->make(SettingsRepositoryInterface::class)->get('flagrow.bazaar.api_token');
     }

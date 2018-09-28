@@ -29,7 +29,7 @@ export default class Extension extends mixin(Model, {
 
     // Install/uninstall
     // Extension is available if it's either non-premium or premium & subscribed
-    can_install: computed('installed', 'premium', 'subscribed', (installed, premium, subscribed) => !installed && (!premium || subscribed)),
+    can_install: computed('installed', 'premium', 'subscribed', 'flarumCompatibilityCurrent', (installed, premium, subscribed, flarumCompatibilityCurrent) => !installed && flarumCompatibilityCurrent && (!premium || subscribed)),
     can_uninstall: computed('installed', 'enabled', (installed, enabled) => installed && !enabled),
 
     // Enable/disable
@@ -42,4 +42,8 @@ export default class Extension extends mixin(Model, {
 
     favorites: Model.attribute('favorites'),
     favorited: Model.attribute('favorited'),
+
+    flarumCompatibilityLatest: Model.attribute('flarumCompatibilityLatest'),
+    flarumCompatibilityNext: Model.attribute('flarumCompatibilityNext'),
+    flarumCompatibilityCurrent: Model.attribute('flarumCompatibilityCurrent'),
 }) {}
