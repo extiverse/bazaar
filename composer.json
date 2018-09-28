@@ -30,9 +30,6 @@
         "guzzlehttp/guzzle": "^6.2",
         "flagrow/console": "^0.4"
     },
-    "require-dev": {
-        "flagrow/steamroller": "dev-master"
-    },
     "extra": {
         "flarum-extension": {
             "title": "Flagrow Bazaar",
