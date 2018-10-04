@@ -121,7 +121,7 @@ flagrow-bazaar:
         search:
             placeholder: Search extensions
             filter_installed: Installed
-            filter_update_required: Has update
+            filter_update: Has update
             filter_favorited: Favorited
             filter_subscribed: Subscribed
             filter_premium: Premium

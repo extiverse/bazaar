@@ -25,6 +25,8 @@ class Extension implements Arrayable
      */
     protected $installedExtension;
 
+    protected $enabled = false;
+
     /**
      * @param string $id Extension `vendor/package` identifier
      */
@@ -33,7 +35,7 @@ class Extension implements Arrayable
         $this->id = $id;
     }
 
-    public static function createFromAttributes($attributes)
+    public static function createFromAttributes($attributes): Extension
     {
         $extension = new Extension(ExtensionUtils::packageToId($attributes['name']));
         $extension->attributes = $attributes;
@@ -53,7 +55,7 @@ class Extension implements Arrayable
     /**
      * @return InstalledExtension
      */
-    public function getInstalledExtension()
+    public function getInstalledExtension(): ?InstalledExtension
     {
         return $this->installedExtension;
     }
@@ -62,7 +64,7 @@ class Extension implements Arrayable
      * Get the Flarum extension id to search in the base ExtensionManager
      * @return string Flarum extension manager id
      */
-    public function getShortName()
+    public function getShortName(): string
     {
         return ExtensionUtils::idToShortName($this->id);
     }
@@ -78,7 +80,7 @@ class Extension implements Arrayable
         return Arr::get($this->attributes, $attribute, $default);
     }
 
-    public function getPackage()
+    public function getPackage(): string
     {
         return Arr::get(
             $this->attributes,
@@ -87,32 +89,22 @@ class Extension implements Arrayable
         );
     }
 
-    /**
-     * @return string
-     */
-    public function getTitle()
+    public function getTitle(): string
     {
         return Arr::get($this->attributes, 'title', 'Unknown');
     }
 
-    /**
-     * @return string
-     */
-    public function getDescription()
+    public function getDescription(): string
     {
         return Arr::get($this->attributes, 'description', '');
     }
 
-    public function isInstalled()
+    public function isInstalled(): bool
     {
-        // We dont need to check $this->installedExtension->isInstalled() because it's always true at the moment
-        return $this->installedExtension !== null;
+        return $this->installedExtension && $this->installedExtension->isInstalled();
     }
 
-    /**
-     * @return null|string
-     */
-    public function getInstalledVersion()
+    public function getInstalledVersion(): ?string
     {
         if ($this->installedExtension) {
             return $this->installedExtension->getVersion();
@@ -121,13 +113,14 @@ class Extension implements Arrayable
         return null;
     }
 
-    public function isEnabled()
+    public function isEnabled(): bool
     {
-        if ($this->installedExtension) {
-            return $this->installedExtension->isEnabled();
-        }
+        return $this->enabled;
+    }
 
-        return false;
+    public function setEnabled(bool $enabled = null)
+    {
+        $this->enabled = $enabled;
     }
 
     /**
@@ -137,7 +130,7 @@ class Extension implements Arrayable
      *
      * @return array|null
      */
-    public function getIcon()
+    public function getIcon(): ?array
     {
         if ($this->installedExtension) {
             return $this->installedExtension->getIcon();
@@ -154,12 +147,7 @@ class Extension implements Arrayable
         return null;
     }
 
-    /**
-     * Whether the package is outdated.
-     *
-     * @return bool|null
-     */
-    public function isOutdated()
+    public function isOutdated(): ?bool
     {
         if (!$this->isInstalled()) {
             return null;
@@ -171,10 +159,7 @@ class Extension implements Arrayable
         );
     }
 
-    /**
-     * @return bool
-     */
-    public function isPending()
+    public function isPending(): bool
     {
         return Task::query()
             ->where('package', $this->getPackage())

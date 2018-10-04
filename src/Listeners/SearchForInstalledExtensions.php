@@ -13,7 +13,7 @@ use Illuminate\Support\Collection;
 
 class SearchForInstalledExtensions
 {
-    const MARKS = ['installed', 'update_required'];
+    const MARKS = ['installed', 'update'];
 
     /**
      * @var Collection
@@ -37,15 +37,14 @@ class SearchForInstalledExtensions
     public function subscribe(Dispatcher $events)
     {
         $events->listen(SearchingExtensions::class, [$this, 'installed']);
-        $events->listen(SearchedExtensions::class, [$this, 'updateRequired']);
     }
 
     public function installed(SearchingExtensions $event)
     {
         $filter = (array) $event->params->pull('filter', []);
+        $is = Arr::get($filter, 'is', []);
 
-        collect($filter)
-            ->keys()
+        collect($is)
             ->first(function ($key) use (&$event, &$filter) {
                 if (in_array($key, static::MARKS, true)) {
                     $filter['id'] = $this->installedExtensions->implode(',');
@@ -54,12 +53,14 @@ class SearchForInstalledExtensions
                 }
             });
 
-        Arr::forget($filter, static::MARKS);
+        foreach (static::MARKS as $mark) {
+            if ($key = array_search($mark, $is)) {
+                Arr::forget($is, $key);
+            }
+        }
+
+        $filter['is'] = $is;
 
         $event->params->put('filter', $filter);
-    }
-
-    public function updateRequired(SearchedExtensions $event)
-    {
     }
 }

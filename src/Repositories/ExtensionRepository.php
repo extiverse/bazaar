@@ -153,7 +153,7 @@ final class ExtensionRepository
         }
 
         if (! $params->has('filter') && ! $params->has('q')) {
-            $params->put('filter', 'not-flarum');
+            $params->put('filter', ['is' => ['-flarum']]);
         }
 
         $page = Arr::get($orig, 'page', []);
@@ -227,6 +227,7 @@ final class ExtensionRepository
      */
     protected function refreshInstalledExtension(Extension &$extension)
     {
+        $extension->setEnabled($this->manager->isEnabled($extension->getShortName()));
         $installedExtension = $this->manager->getExtension($extension->getShortName());
 
         if (!is_null($installedExtension)) {

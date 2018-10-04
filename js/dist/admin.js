@@ -864,7 +864,7 @@ function (_Component) {
     }
 
     if (params.filter) {
-      out.filter[params.filter] = true;
+      out.filter = window.$.param(params.filter);
     }
 
     return out;
@@ -1290,11 +1290,11 @@ function (_Component) {
     }, [_CustomCheckbox__WEBPACK_IMPORTED_MODULE_2__["default"].component({
       icon: 'fas fa-level-up',
       className: 'Button hasIcon',
-      state: this.props.params.filter == 'update_required',
+      state: this.props.params.filter == 'update',
       onchange: function onchange(checked) {
-        return _this2.toggleFilter('update_required', checked);
+        return _this2.toggleFilter('update', checked);
       },
-      children: app.translator.trans('flagrow-bazaar.admin.search.filter_update_required')
+      children: app.translator.trans('flagrow-bazaar.admin.search.filter_update')
     }), _CustomCheckbox__WEBPACK_IMPORTED_MODULE_2__["default"].component({
       icon: 'fas fa-circle-notch',
       className: 'Button hasIcon',
@@ -1332,19 +1332,26 @@ function (_Component) {
       className: 'Button hasIcon',
       state: this.props.params.filter == 'premium',
       onchange: function onchange(checked) {
-        return _this2.toggleFilter('is_premium', checked);
+        return _this2.toggleFilter('premium', checked);
       },
       children: app.translator.trans('flagrow-bazaar.admin.search.filter_premium')
     })])]);
   };
 
-  _proto.toggleFilter = function toggleFilter(filter, checked) {
-    if (checked) {
-      this.props.params.filter = filter;
-    } else {
-      this.props.params.filter = null;
+  _proto.toggleFilter = function toggleFilter(name, checked) {
+    var filter = this.props.params.filter || {};
+    var is = filter.is || [];
+    var i = is.indexOf(name);
+
+    if (checked && i === -1) {
+      is.push(name);
+    } else if (!checked && i > 0) {
+      is.splice(i, 1);
     }
 
+    filter.is = is;
+    this.props.params.filter = filter;
+    console.log(this.props.params);
     this.updateDebounce();
   };
 

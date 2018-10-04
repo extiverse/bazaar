@@ -174,7 +174,7 @@ export default class ExtensionList extends Component {
         }
 
         if (params.filter) {
-            out.filter[params.filter] = true;
+            out.filter = window.$.param(params.filter);
         }
 
         return out;
