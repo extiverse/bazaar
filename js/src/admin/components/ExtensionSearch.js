@@ -22,21 +22,21 @@ export default class ExtensionSearch extends Component {
                 CustomCheckbox.component({
                     icon: 'fas fa-level-up',
                     className: 'Button hasIcon',
-                    state: this.props.params.filter == 'update',
+                    state: this.isToggled('update'),
                     onchange: (checked) => this.toggleFilter('update', checked),
                     children: app.translator.trans('flagrow-bazaar.admin.search.filter_update')
                 }),
                 CustomCheckbox.component({
                     icon: 'fas fa-circle-notch',
                     className: 'Button hasIcon',
-                    state: this.props.params.filter == 'pending',
+                    state: this.isToggled('pending'),
                     onchange: (checked) => this.toggleFilter('pending', checked),
                     children: app.translator.trans('flagrow-bazaar.admin.search.filter_pending')
                 }),
                 CustomCheckbox.component({
                     icon: 'fas fa-plus-square',
                     className: 'Button hasIcon',
-                    state: this.props.params.filter == 'installed',
+                    state: this.isToggled('installed'),
                     onchange: (checked) => this.toggleFilter('installed', checked),
                     children: app.translator.trans('flagrow-bazaar.admin.search.filter_installed')
                 }),
@@ -44,14 +44,14 @@ export default class ExtensionSearch extends Component {
                     CustomCheckbox.component({
                         icon: 'fas fa-heart',
                         className: 'Button hasIcon',
-                        state: this.props.params.filter == 'favorited',
+                        state: this.isToggled('favorited'),
                         onchange: (checked) => this.toggleFilter('favorited', checked),
                         children: app.translator.trans('flagrow-bazaar.admin.search.filter_favorited')
                     }),
                     CustomCheckbox.component({
                         icon: 'fas fa-shopping-cart',
                         className: 'Button hasIcon',
-                        state: this.props.params.filter == 'subscribed',
+                        state: this.isToggled('subscribed'),
                         onchange: (checked) => this.toggleFilter('subscribed', checked),
                         children: app.translator.trans('flagrow-bazaar.admin.search.filter_subscribed')
                     }),
@@ -59,12 +59,19 @@ export default class ExtensionSearch extends Component {
                 CustomCheckbox.component({
                     icon: 'fas fa-certificate',
                     className: 'Button hasIcon',
-                    state: this.props.params.filter == 'premium',
+                    state: this.isToggled('premium'),
                     onchange: (checked) => this.toggleFilter('premium', checked),
                     children: app.translator.trans('flagrow-bazaar.admin.search.filter_premium')
                 }),
             ])
         ])
+    }
+
+    isToggled(name) {
+        const filter = this.props.params.filter || {};
+        const is = filter.is || [];
+
+        return is.indexOf(name) >= 0;
     }
 
     toggleFilter(name, checked) {
@@ -75,14 +82,14 @@ export default class ExtensionSearch extends Component {
 
         if (checked && i === -1) {
             is.push(name);
-        } else if (!checked && i > 0) {
+        } else if (!checked && i >= 0) {
             is.splice(i, 1);
         }
 
         filter.is = is;
 
         this.props.params.filter = filter;
-console.log(this.props.params)
+
         this.updateDebounce();
     }
 

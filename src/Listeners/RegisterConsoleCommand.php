@@ -16,7 +16,7 @@ class RegisterConsoleCommand
 
     public function add(Configuring $event)
     {
-        if ($event->app->isInstalled() && $event->app->bound(Schedule::class)) {
+        if ($event->app->bound(Schedule::class)) {
             $event->addCommand(TaskCommand::class);
         }
     }

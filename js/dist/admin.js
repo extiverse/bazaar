@@ -1290,7 +1290,7 @@ function (_Component) {
     }, [_CustomCheckbox__WEBPACK_IMPORTED_MODULE_2__["default"].component({
       icon: 'fas fa-level-up',
       className: 'Button hasIcon',
-      state: this.props.params.filter == 'update',
+      state: this.isToggled('update'),
       onchange: function onchange(checked) {
         return _this2.toggleFilter('update', checked);
       },
@@ -1298,7 +1298,7 @@ function (_Component) {
     }), _CustomCheckbox__WEBPACK_IMPORTED_MODULE_2__["default"].component({
       icon: 'fas fa-circle-notch',
       className: 'Button hasIcon',
-      state: this.props.params.filter == 'pending',
+      state: this.isToggled('pending'),
       onchange: function onchange(checked) {
         return _this2.toggleFilter('pending', checked);
       },
@@ -1306,7 +1306,7 @@ function (_Component) {
     }), _CustomCheckbox__WEBPACK_IMPORTED_MODULE_2__["default"].component({
       icon: 'fas fa-plus-square',
       className: 'Button hasIcon',
-      state: this.props.params.filter == 'installed',
+      state: this.isToggled('installed'),
       onchange: function onchange(checked) {
         return _this2.toggleFilter('installed', checked);
       },
@@ -1314,7 +1314,7 @@ function (_Component) {
     }), this.connected ? [_CustomCheckbox__WEBPACK_IMPORTED_MODULE_2__["default"].component({
       icon: 'fas fa-heart',
       className: 'Button hasIcon',
-      state: this.props.params.filter == 'favorited',
+      state: this.isToggled('favorited'),
       onchange: function onchange(checked) {
         return _this2.toggleFilter('favorited', checked);
       },
@@ -1322,7 +1322,7 @@ function (_Component) {
     }), _CustomCheckbox__WEBPACK_IMPORTED_MODULE_2__["default"].component({
       icon: 'fas fa-shopping-cart',
       className: 'Button hasIcon',
-      state: this.props.params.filter == 'subscribed',
+      state: this.isToggled('subscribed'),
       onchange: function onchange(checked) {
         return _this2.toggleFilter('subscribed', checked);
       },
@@ -1330,12 +1330,18 @@ function (_Component) {
     })] : '', _CustomCheckbox__WEBPACK_IMPORTED_MODULE_2__["default"].component({
       icon: 'fas fa-certificate',
       className: 'Button hasIcon',
-      state: this.props.params.filter == 'premium',
+      state: this.isToggled('premium'),
       onchange: function onchange(checked) {
         return _this2.toggleFilter('premium', checked);
       },
       children: app.translator.trans('flagrow-bazaar.admin.search.filter_premium')
     })])]);
+  };
+
+  _proto.isToggled = function isToggled(name) {
+    var filter = this.props.params.filter || {};
+    var is = filter.is || [];
+    return is.indexOf(name) >= 0;
   };
 
   _proto.toggleFilter = function toggleFilter(name, checked) {
@@ -1345,13 +1351,12 @@ function (_Component) {
 
     if (checked && i === -1) {
       is.push(name);
-    } else if (!checked && i > 0) {
+    } else if (!checked && i >= 0) {
       is.splice(i, 1);
     }
 
     filter.is = is;
     this.props.params.filter = filter;
-    console.log(this.props.params);
     this.updateDebounce();
   };
 

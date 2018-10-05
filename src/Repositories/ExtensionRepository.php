@@ -14,6 +14,7 @@ use Flagrow\Bazaar\Search\SearchResults;
 use Flagrow\Bazaar\Traits\Cachable;
 use Flarum\Extension\Event\Uninstalled as ExtensionWasUninstalled;
 use Flarum\Extension\ExtensionManager;
+use function GuzzleHttp\Psr7\parse_query;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Arr;
@@ -105,36 +106,6 @@ final class ExtensionRepository
     }
 
     /**
-     * Filter by search term
-     * @param Collection $extensions
-     * @param string $search
-     * @return Collection
-     */
-    public function filterSearch(Collection $extensions, $search)
-    {
-        if (empty($search)) {
-            return $extensions;
-        }
-
-        return $extensions->filter(function ($extension) use ($search) {
-            // Look for the search term in all these things
-            $searchIn = [
-                $extension->getPackage(),
-                $extension->getTitle(),
-                $extension->getDescription(),
-            ];
-
-            foreach ($searchIn as $content) {
-                if (strpos(strtolower($content), strtolower($search)) !== false) {
-                    return true;
-                }
-            }
-
-            return false;
-        });
-    }
-
-    /**
      * @param ServerRequestInterface $request
      * @return SearchResults
      * @throws \Exception
@@ -152,8 +123,14 @@ final class ExtensionRepository
             $params->put('sort', '-downloads');
         }
 
-        if (! $params->has('filter') && ! $params->has('q')) {
+        $q = $params->get('q');
+        $filter = $params->get('filter');
+
+        if (! $filter && ! $q) {
             $params->put('filter', ['is' => ['-flarum']]);
+        } elseif ($filter) {
+            parse_str($filter, $filter);
+            $params->put('filter', $filter);
         }
 
         $page = Arr::get($orig, 'page', []);
