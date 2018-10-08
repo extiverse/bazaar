@@ -76,8 +76,8 @@ export default class ExtensionSearch extends Component {
 
     toggleFilter(name, checked) {
         let filter = this.props.params.filter || {};
-
         let is = filter.is || [];
+
         const i = is.indexOf(name);
 
         if (checked && i === -1) {
