@@ -15,10 +15,9 @@ abstract class SubscriptionRedirectController implements ControllerInterface
         $flarumApi = app(UrlGenerator::class);
 
         $url = sprintf(
-            '%s/premium/%s/%s?redirect=%s',
+            '%s/extensions/%s/subscription?redirect=%s',
             FlagrowApi::getFlagrowHost(),
             $package,
-            ($subscribe ? '' : 'un') . 'subscribe',
             urlencode($flarumApi->to('api')->route('bazaar.callback.subscription'))
         );
 
