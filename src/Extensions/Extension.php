@@ -135,10 +135,12 @@ class Extension implements Arrayable
         if ($this->installedExtension) {
             return $this->installedExtension->getIcon();
         }
-        if (($icon = $this->getAttributeIfPresent('icon'))) {
 
+        if (($icon = $this->getAttributeIfPresent('icon'))) {
             if (Arr::has($icon, 'image')) {
                 $icon['backgroundImage'] = sprintf("url('%s')", $icon['image']);
+                $icon['backgroundSize'] = 'cover';
+                array_forget($icon, 'name');
             }
 
             return $icon;
