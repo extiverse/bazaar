@@ -17,11 +17,11 @@ class FavoriteExtensionController extends ConnectedExtensionResourceController
     /**
      * @var bool
      */
-    private $connected;
+    protected $connected;
     /**
      * @var ExtensionRepository
      */
-    private $extensions;
+    protected $extensions;
 
     function __construct(FlagrowApi $api, SettingsRepositoryInterface $settings, ExtensionRepository $extensions)
     {

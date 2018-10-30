@@ -128,7 +128,7 @@ final class ExtensionRepository
 
         if (! $filter && ! $q) {
             $params->put('filter', ['is' => ['-flarum']]);
-        } elseif ($filter) {
+        } elseif (is_string($filter)) {
             parse_str($filter, $filter);
             $params->put('filter', $filter);
         }

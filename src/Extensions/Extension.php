@@ -91,7 +91,7 @@ class Extension implements Arrayable
 
     public function getTitle(): string
     {
-        return Arr::get($this->attributes, 'title', 'Unknown');
+        return Arr::get($this->attributes, 'title') ?? 'Unknown';
     }
 
     public function getDescription(): string
