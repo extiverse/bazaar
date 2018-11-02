@@ -7,7 +7,7 @@
         "flagrow"
     ],
     "type": "flarum-extension",
-    "license": "proprietary",
+    "license": "MIT",
     "authors": [
         {
             "name": "Daniël Klabbers",
