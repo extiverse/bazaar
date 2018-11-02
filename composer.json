@@ -7,7 +7,7 @@
         "flagrow"
     ],
     "type": "flarum-extension",
-    "license": "CC-BY-NC-ND-4.0",
+    "license": "proprietary",
     "authors": [
         {
             "name": "Daniël Klabbers",
