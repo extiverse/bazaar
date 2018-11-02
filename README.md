@@ -1,6 +1,6 @@
-# Bazaar by ![Flagrow logo](https://avatars0.githubusercontent.com/u/16413865?v=3&s=20) [Flagrow](https://discuss.flarum.org/d/1832-flagrow-extension-developer-group), a project of [Gravure](https://gravure.io/)
+# Bazaar by ![Flagrow logo](https://avatars0.githubusercontent.com/u/16413865?v=3&s=20) [Flagrow](https://discuss.flarum.org/d/1832-flagrow-extension-developer-group)
 
-[![Build status](https://travis-ci.org/flagrow/bazaar.svg?branch=master)](https://travis-ci.org/flagrow/bazaar) [![Latest Stable Version](https://img.shields.io/packagist/v/flagrow/bazaar.svg)](https://packagist.org/packages/flagrow/bazaar) [![Total Downloads](https://img.shields.io/packagist/dt/flagrow/bazaar.svg)](https://packagist.org/packages/flagrow/bazaar) [![Donate](https://img.shields.io/badge/patreon-support-yellow.svg)](https://www.patreon.com/flagrow) [![Join our Discord server](https://discordapp.com/api/guilds/240489109041315840/embed.png)](https://flagrow.io/join-discord)
+[![Build status](https://travis-ci.org/flagrow/bazaar.svg?branch=master)](https://travis-ci.org/flagrow/bazaar) [![Latest Stable Version](https://img.shields.io/packagist/v/flagrow/bazaar.svg)](https://packagist.org/packages/flagrow/bazaar) [![Total Downloads](https://img.shields.io/packagist/dt/flagrow/bazaar.svg)](https://packagist.org/packages/flagrow/bazaar) [![Join our Discord server](https://discordapp.com/api/guilds/240489109041315840/embed.png)](https://flagrow.io/join-discord)
 
 The marketplace extension that allows you to add and remove extensions without composer or a terminal.
 
@@ -47,6 +47,9 @@ php flarum cache:clear
 ## Configuration
 
 Enable the extension under the extensions tab in the admin area. A settings modal will popup asking you for a token, which most likely will already be there. You're good to go, open the Bazaar tab on the left and enjoy!
+
+For version 0.3 and up (for Flarum 0.1.0-beta.8+) please do consider to [enable cron processing](https://github.com/flagrow/bazaar/wiki/Cron-task-processing). Cron
+processing considerably speeds up actions on your extensions by moving those tasks outside of your current request.
 
 ## Extension developers
 
