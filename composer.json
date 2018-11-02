@@ -2,9 +2,10 @@
     "name": "flagrow/bazaar",
     "description": "The Flarum extension marketplace.",
     "keywords": [
-        "extension",
-        "flarum",
-        "flagrow"
+        "extension", "extend", "extensions",
+        "flarum", "flagrow",
+        "marketplace",
+        "premium", "paid"
     ],
     "type": "flarum-extension",
     "license": "MIT",
@@ -45,7 +46,7 @@
             }
         },
         "flagrow": {
-            "discuss": "https://discuss.flarum.org/d/5151-flagrow-bazaar-the-extension-marketplace"
+            "discuss": "https://discuss.flarum.org/d/5151"
         }
     },
     "autoload": {
