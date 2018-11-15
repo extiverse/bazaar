@@ -50,6 +50,7 @@ class Task extends AbstractModel
         $task->command = $command;
         $task->package = $package;
         $task->created_at = Carbon::now();
+        $task->output = '';
 
         return $task;
     }
