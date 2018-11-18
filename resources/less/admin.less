@@ -146,12 +146,11 @@
         }
         .ExtensionListItem-badges {
             right: -2px;
-            top: -2px;
+            top: -20px;
             position: absolute;
             pointer-events: auto;
 
             .Badge {
-                margin-left: -5px;
                 position: relative;
                 pointer-events: auto;
                 &.Badge--favorited {
@@ -160,6 +159,9 @@
                 }
                 &.Badge--premium {
                     background: #5f4bb6;
+                }
+                &:not(:first-of-type) {
+                    margin-left: -3px;
                 }
             }
         }
