@@ -130,20 +130,6 @@
                 color: #d66;
             }
         }
-
-        &:hover .ExtensionListItem-badges {
-            .Badge--enabled,
-            .Badge--subscribed {
-                background: @alert-success-bg;
-                color: @alert-success-color;
-            }
-            .Badge--installed {
-            }
-            .Badge--outdated {
-                background: @alert-error-bg;
-                color: @alert-error-color;
-            }
-        }
         .ExtensionListItem-badges {
             right: -2px;
             top: -20px;
@@ -162,6 +148,16 @@
                 }
                 &:not(:first-of-type) {
                     margin-left: -3px;
+                }
+                &.Badge--enabled,
+                &.Badge--subscribed {
+                    background: @alert-success-bg;
+                    color: @alert-success-color;
+                }
+                &.Badge--latestIncompatible,
+                &.Badge--outdated {
+                    background: @alert-error-bg;
+                    color: @alert-error-color;
                 }
             }
         }

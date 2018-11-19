@@ -1189,17 +1189,16 @@ function (_Component) {
         type: "pending",
         label: app.translator.trans('flagrow-bazaar.admin.page.extension.pending')
       }));
-    }
+    } // if (extension.installed() && extension.outdated()) {
 
-    if (extension.installed() && extension.outdated()) {
-      items.add('outdated', m(flarum_components_Badge__WEBPACK_IMPORTED_MODULE_6___default.a, {
-        icon: "fas fa-warning",
-        type: "outdated",
-        label: app.translator.trans('flagrow-bazaar.admin.page.extension.outdated', {
-          new: extension.highest_version()
-        })
-      }));
-    }
+
+    items.add('outdated', m(flarum_components_Badge__WEBPACK_IMPORTED_MODULE_6___default.a, {
+      icon: "fas fa-sort-numeric-down",
+      type: "outdated",
+      label: app.translator.trans('flagrow-bazaar.admin.page.extension.outdated', {
+        new: extension.highest_version()
+      })
+    })); // }
 
     if (extension.favorited()) {
       items.add('favorited', m(flarum_components_Badge__WEBPACK_IMPORTED_MODULE_6___default.a, {
