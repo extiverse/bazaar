@@ -10,14 +10,18 @@ class ConsoleProvider extends AbstractServiceProvider
 {
     public function register()
     {
+        if (!defined('ARTISAN_BINARY')) {
+            define('ARTISAN_BINARY', 'flarum');
+        }
+
         // Force registering the Schedule as singleton.
         $this->app->register(Console::class);
 
-        /** @var Schedule $schedule */
-        $schedule = $this->app->make(Schedule::class);
-
-        $schedule->command('bazaar:task')
-            ->everyMinute()
-            ->withoutOverlapping();
+        $this->app->resolving(Schedule::class, function (Schedule $schedule) {
+            $schedule->command('bazaar:task')
+                ->everyMinute()
+                ->withoutOverlapping()
+                ->appendOutputTo(storage_path('logs/bazaar-tasks.log'));
+        });
     }
 }

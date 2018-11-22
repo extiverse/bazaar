@@ -182,6 +182,7 @@ export default class ExtensionRepository {
 
         let extension = app.store.createRecord('bazaar-extensions', response.data);
         this.extensions()[this.getExtensionIndex(extension)] = extension;
+
         m.redraw();
     }
 }
