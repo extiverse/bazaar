@@ -123,7 +123,7 @@ export default class ExtensionList extends Component {
         params.page = {offset};
         params.include = params.include.join(',');
 
-        return app.store.find('bazaar/extensions', params);
+        return app.store.find('bazaar-extensions', params);
     }
 
     /**

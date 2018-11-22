@@ -29,7 +29,7 @@ export default class ExtensionRepository {
 
         app.request({
             method: 'POST',
-            url: app.forum.attribute('apiUrl') + '/bazaar/extensions',
+            url: app.forum.attribute('apiUrl') + '/bazaar-extensions',
             timeout: 0,
             data: {
                 id: extension.id()
@@ -58,7 +58,7 @@ export default class ExtensionRepository {
         app.request({
             method: 'DELETE',
             timeout: 0,
-            url: app.forum.attribute('apiUrl') + '/bazaar/extensions/' + extension.id()
+            url: app.forum.attribute('apiUrl') + '/bazaar-extensions/' + extension.id()
         }).then(response => {
             this.updateExtensionInRepository(response)
         }).catch(() => this.requestError());
@@ -82,7 +82,7 @@ export default class ExtensionRepository {
 
         app.request({
             method: 'post',
-            url: app.forum.attribute('apiUrl') + '/bazaar/extensions/' + extension.id() + '/favorite',
+            url: app.forum.attribute('apiUrl') + '/bazaar-extensions/' + extension.id() + '/favorite',
             data: {
                 favorite: extension.favorited() != true
             }
@@ -118,7 +118,7 @@ export default class ExtensionRepository {
         this.loading(true);
 
         app.request({
-            url: app.forum.attribute('apiUrl') + '/bazaar/extensions/' + extension.id(),
+            url: app.forum.attribute('apiUrl') + '/bazaar-extensions/' + extension.id(),
             timeout: 0,
             method: 'PATCH'
         }).then(response => {
@@ -138,7 +138,7 @@ export default class ExtensionRepository {
         const enabled = extension.enabled();
 
         app.request({
-            url: app.forum.attribute('apiUrl') + '/bazaar/extensions/' + extension.id() + '/toggle',
+            url: app.forum.attribute('apiUrl') + '/bazaar-extensions/' + extension.id() + '/toggle',
             method: 'PATCH',
             data: {enabled: !enabled}
         }).then(response => {
@@ -180,7 +180,7 @@ export default class ExtensionRepository {
     updateExtensionInRepository(response) {
         this.loading(false);
 
-        let extension = app.store.createRecord('bazaar-extensions', response.data);
+        let extension = app.store.pushObject(response.data);
         this.extensions()[this.getExtensionIndex(extension)] = extension;
 
         m.redraw();
