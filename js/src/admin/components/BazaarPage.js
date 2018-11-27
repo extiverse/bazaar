@@ -4,7 +4,6 @@ import ExtensionList from "./ExtensionList";
 import ExtensionSearch from "./ExtensionSearch";
 import BazaarPageHeader from './BazaarPageHeader';
 
-
 export default class BazaarPage extends Component {
     init() {
         app.current = this;

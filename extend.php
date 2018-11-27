@@ -12,15 +12,15 @@ use Illuminate\Contracts\Events\Dispatcher;
 
 return [
     (new Routes('api'))
-        ->get('/bazaar/extensions', 'bazaar.extensions.index', Controllers\ListExtensionController::class)
-        ->post('/bazaar/extensions', 'bazaar.extensions.install', Controllers\InstallExtensionController::class)
-        ->patch('/bazaar/extensions/{id}', 'bazaar.extensions.update', Controllers\UpdateExtensionController::class)
-        ->patch('/bazaar/extensions/{id}/toggle', 'bazaar.extensions.toggle', Controllers\ToggleExtensionController::class)
-        ->post('/bazaar/extensions/{id}/favorite', 'bazaar.extensions.favorite', Controllers\FavoriteExtensionController::class)
+        ->get('/bazaar-extensions', 'bazaar.extensions.index', Controllers\ListExtensionController::class)
+        ->post('/bazaar-extensions', 'bazaar.extensions.install', Controllers\InstallExtensionController::class)
+        ->patch('/bazaar-extensions/{id}', 'bazaar.extensions.update', Controllers\UpdateExtensionController::class)
+        ->patch('/bazaar-extensions/{id}/toggle', 'bazaar.extensions.toggle', Controllers\ToggleExtensionController::class)
+        ->post('/bazaar-extensions/{id}/favorite', 'bazaar.extensions.favorite', Controllers\FavoriteExtensionController::class)
+        ->delete('/bazaar-extensions/{id}', 'bazaar.extensions.delete', Controllers\UninstallExtensionController::class)
         ->get('/bazaar/redirect/subscribe/{id}', 'bazaar.redirect.subscribe', Controllers\SubscriptionRedirectSubscribeController::class)
         ->get('/bazaar/redirect/unsubscribe/{id}', 'bazaar.redirect.unsubscribe', Controllers\SubscriptionRedirectUnsubscribeController::class)
         ->get('/bazaar/callback/subscription', 'bazaar.callback.subscription', Controllers\SubscriptionRedirectCallbackController::class)
-        ->delete('/bazaar/extensions/{id}', 'bazaar.extensions.delete', Controllers\UninstallExtensionController::class)
         ->get('/bazaar/connect', 'bazaar.connect', Controllers\ConnectController::class)
         ->get('/bazaar/tasks', 'bazaar.tasks.index', Controllers\ListTaskController::class)
         ->get('/bazaar/sync/composer-lock', 'bazaar.composer-lock', Controllers\RetrieveComposerLockController::class)
@@ -30,7 +30,7 @@ return [
         ->js(__DIR__ . '/js/dist/admin.js'),
     new Locales(__DIR__ . '/resources/locale'),
     function (Application $app) {
-    /** @var Dispatcher $events */
+        /** @var Dispatcher $events */
         $events = $app['events'];
 
         $events->subscribe(Listeners\BazaarEnabled::class);

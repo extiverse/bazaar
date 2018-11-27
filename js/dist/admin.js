@@ -813,7 +813,7 @@ function (_Component) {
       offset: offset
     };
     params.include = params.include.join(',');
-    return app.store.find('bazaar/extensions', params);
+    return app.store.find('bazaar-extensions', params);
   };
   /**
    * Parse results and append them to the discussion list.
@@ -2178,7 +2178,7 @@ function () {
     this.loading(true);
     flarum_app__WEBPACK_IMPORTED_MODULE_0___default.a.request({
       method: 'POST',
-      url: flarum_app__WEBPACK_IMPORTED_MODULE_0___default.a.forum.attribute('apiUrl') + '/bazaar/extensions',
+      url: flarum_app__WEBPACK_IMPORTED_MODULE_0___default.a.forum.attribute('apiUrl') + '/bazaar-extensions',
       timeout: 0,
       data: {
         id: extension.id()
@@ -2212,7 +2212,7 @@ function () {
     flarum_app__WEBPACK_IMPORTED_MODULE_0___default.a.request({
       method: 'DELETE',
       timeout: 0,
-      url: flarum_app__WEBPACK_IMPORTED_MODULE_0___default.a.forum.attribute('apiUrl') + '/bazaar/extensions/' + extension.id()
+      url: flarum_app__WEBPACK_IMPORTED_MODULE_0___default.a.forum.attribute('apiUrl') + '/bazaar-extensions/' + extension.id()
     }).then(function (response) {
       _this2.updateExtensionInRepository(response);
     }).catch(function () {
@@ -2241,7 +2241,7 @@ function () {
     this.loading(true);
     flarum_app__WEBPACK_IMPORTED_MODULE_0___default.a.request({
       method: 'post',
-      url: flarum_app__WEBPACK_IMPORTED_MODULE_0___default.a.forum.attribute('apiUrl') + '/bazaar/extensions/' + extension.id() + '/favorite',
+      url: flarum_app__WEBPACK_IMPORTED_MODULE_0___default.a.forum.attribute('apiUrl') + '/bazaar-extensions/' + extension.id() + '/favorite',
       data: {
         favorite: extension.favorited() != true
       }
@@ -2283,7 +2283,7 @@ function () {
 
     this.loading(true);
     flarum_app__WEBPACK_IMPORTED_MODULE_0___default.a.request({
-      url: flarum_app__WEBPACK_IMPORTED_MODULE_0___default.a.forum.attribute('apiUrl') + '/bazaar/extensions/' + extension.id(),
+      url: flarum_app__WEBPACK_IMPORTED_MODULE_0___default.a.forum.attribute('apiUrl') + '/bazaar-extensions/' + extension.id(),
       timeout: 0,
       method: 'PATCH'
     }).then(function (response) {
@@ -2306,7 +2306,7 @@ function () {
     this.loading(true);
     var enabled = extension.enabled();
     flarum_app__WEBPACK_IMPORTED_MODULE_0___default.a.request({
-      url: flarum_app__WEBPACK_IMPORTED_MODULE_0___default.a.forum.attribute('apiUrl') + '/bazaar/extensions/' + extension.id() + '/toggle',
+      url: flarum_app__WEBPACK_IMPORTED_MODULE_0___default.a.forum.attribute('apiUrl') + '/bazaar-extensions/' + extension.id() + '/toggle',
       method: 'PATCH',
       data: {
         enabled: !enabled
@@ -2357,7 +2357,7 @@ function () {
 
   _proto.updateExtensionInRepository = function updateExtensionInRepository(response) {
     this.loading(false);
-    var extension = flarum_app__WEBPACK_IMPORTED_MODULE_0___default.a.store.createRecord('bazaar-extensions', response.data);
+    var extension = flarum_app__WEBPACK_IMPORTED_MODULE_0___default.a.store.pushObject(response.data);
     this.extensions()[this.getExtensionIndex(extension)] = extension;
     m.redraw();
   };
