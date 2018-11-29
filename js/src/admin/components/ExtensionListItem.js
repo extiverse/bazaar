@@ -245,11 +245,11 @@ export default class ExtensionListItem extends Component {
                 type="pending"
                 label={app.translator.trans('flagrow-bazaar.admin.page.extension.pending')} />);
         }
-        // if (extension.installed() && extension.outdated()) {
+        if (extension.installed() && extension.outdated()) {
             items.add('outdated', <Badge icon="fas fa-sort-numeric-down"
                 type="outdated"
                 label={app.translator.trans('flagrow-bazaar.admin.page.extension.outdated', {new: extension.highest_version() })} />)
-        // }
+        }
         if (extension.favorited()) {
             items.add('favorited', <Badge icon="fas fa-heart"
                 type="favorited"
