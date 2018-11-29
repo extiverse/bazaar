@@ -143,7 +143,7 @@ final class ExtensionRepository
         $this->events->fire(
             new SearchingExtensions($params)
         );
-
+        
         $response = $this->client->get('packages', ['query' => $params->toArray()]);
 
         if ($response->getStatusCode() >= 400) {
