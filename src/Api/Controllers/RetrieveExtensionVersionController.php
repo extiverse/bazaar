@@ -8,6 +8,7 @@ use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
 use Zend\Diactoros\Response\EmptyResponse;
+use Psr\Http\Message\ResponseInterface;
 
 class RetrieveExtensionVersionController extends AbstractAuthorizedController
 {
@@ -26,11 +27,7 @@ class RetrieveExtensionVersionController extends AbstractAuthorizedController
         $this->extensions = $extensions;
     }
 
-    /**
-     * @param ServerRequestInterface $request
-     * @return EmptyResponse
-     */
-    public function handle(ServerRequestInterface $request)
+    public function handle(ServerRequestInterface $request): ResponseInterface
     {
         parent::handle($request);
 

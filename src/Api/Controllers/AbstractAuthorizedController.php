@@ -2,11 +2,12 @@
 
 namespace Flagrow\Bazaar\Api\Controllers;
 
-use Flarum\Http\Controller\ControllerInterface;
 use Flarum\Settings\SettingsRepositoryInterface;
 use Flarum\User\Exception\PermissionDeniedException;
 use Illuminate\Contracts\Hashing\Hasher;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 
 /**
  * Class AbstractAuthorizedController
@@ -16,14 +17,10 @@ use Psr\Http\Message\ServerRequestInterface;
  *  This will only work in case the Bazaar enabled Flarum installation is connected
  *  to a user account.
  */
-class AbstractAuthorizedController implements ControllerInterface
+class AbstractAuthorizedController implements RequestHandlerInterface
 {
-    /**
-     * @param ServerRequestInterface $request
-     * @return \Psr\Http\Message\ResponseInterface
-     * @throws PermissionDeniedException
-     */
-    public function handle(ServerRequestInterface $request)
+
+    public function handle(ServerRequestInterface $request): ResponseInterface
     {
         $authorization = $request->getHeader('authorization') ?: [];
 
