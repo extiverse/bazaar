@@ -89,12 +89,14 @@ export default class ExtensionListItem extends Component {
                             onclick={() => window.open(extension.landing_link())}>
                         </Button>
                     ) : ''}
-                    <Dropdown
-                        buttonClassName="Button Button--icon Button--flat"
-                        menuClassName="Dropdown-menu--right"
-                        icon="fas fa-ellipsis-h">
-                        {controls}
-                    </Dropdown>
+                    {controls.length > 0 ? (
+                        <Dropdown
+                            buttonClassName="Button Button--icon Button--flat"
+                            menuClassName="Dropdown-menu--right"
+                            icon="fas fa-ellipsis-h">
+                            {controls}
+                        </Dropdown>
+                    ) : ''}
                 </div>
             </div>
         </div>;
@@ -130,7 +132,7 @@ export default class ExtensionListItem extends Component {
                     icon: 'fas fa-minus-square',
                     children: app.translator.trans('flagrow-bazaar.admin.page.button.uninstall'),
                     onclick: () => {
-                        repository.uninstallExtension(extension);
+                        this.props.extension = repository.uninstallExtension(extension);
                     }
                 }));
             }
@@ -150,7 +152,7 @@ export default class ExtensionListItem extends Component {
                     icon: 'fas fa-level-up',
                     children: app.translator.trans('flagrow-bazaar.admin.page.button.update'),
                     onclick: () => {
-                        repository.updateExtension(extension);
+                        this.props.extension = repository.updateExtension(extension);
                     }
                 }));
             }
@@ -160,7 +162,7 @@ export default class ExtensionListItem extends Component {
                     icon: 'fas fa-square',
                     children: app.translator.trans('flagrow-bazaar.admin.page.button.disable'),
                     onclick: () => {
-                        repository.disableExtension(extension);
+                        this.props.extension = repository.disableExtension(extension);
                     }
                 }));
             }
@@ -170,7 +172,7 @@ export default class ExtensionListItem extends Component {
                     icon: 'fas fa-plus-square',
                     children: app.translator.trans('flagrow-bazaar.admin.page.button.install'),
                     onclick: () => {
-                        repository.installExtension(extension);
+                        this.props.extension = repository.installExtension(extension);
                     }
                 }));
             }

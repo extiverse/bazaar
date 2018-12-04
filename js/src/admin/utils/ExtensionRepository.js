@@ -35,7 +35,7 @@ export default class ExtensionRepository {
                 id: extension.id()
             }
         }).then(response => {
-            this.updateExtensionInRepository(response)
+            return this.updateExtensionInRepository(response)
         }).catch(() => this.requestError());
     }
 
@@ -60,7 +60,7 @@ export default class ExtensionRepository {
             timeout: 0,
             url: app.forum.attribute('apiUrl') + '/bazaar-extensions/' + extension.id()
         }).then(response => {
-            this.updateExtensionInRepository(response)
+            return this.updateExtensionInRepository(response)
         }).catch(() => this.requestError());
     }
 
@@ -87,7 +87,7 @@ export default class ExtensionRepository {
                 favorite: extension.favorited() != true
             }
         }).then(response => {
-            this.updateExtensionInRepository(response)
+            return this.updateExtensionInRepository(response)
         }).catch(() => this.requestError());
     }
 
@@ -122,9 +122,7 @@ export default class ExtensionRepository {
             timeout: 0,
             method: 'PATCH'
         }).then(response => {
-            this.updateExtensionInRepository(response)
-        }).then(() => {
-            location.reload();
+            return this.updateExtensionInRepository(response)
         }).catch(() => this.requestError());
     }
 
@@ -142,7 +140,7 @@ export default class ExtensionRepository {
             method: 'PATCH',
             data: {enabled: !enabled}
         }).then(response => {
-            this.updateExtensionInRepository(response)
+            return this.updateExtensionInRepository(response)
         }).catch(() => this.requestError());
     }
 
@@ -151,7 +149,7 @@ export default class ExtensionRepository {
      * @param extension
      */
     disableExtension(extension) {
-        this.toggleExtension(extension);
+        return this.toggleExtension(extension);
     }
 
     /**
@@ -159,7 +157,7 @@ export default class ExtensionRepository {
      * @param extension
      */
     enableExtension(extension) {
-        this.toggleExtension(extension);
+        return this.toggleExtension(extension);
     }
 
     /**
@@ -184,5 +182,7 @@ export default class ExtensionRepository {
         this.extensions()[this.getExtensionIndex(extension)] = extension;
 
         m.redraw();
+
+        return extension;
     }
 }
