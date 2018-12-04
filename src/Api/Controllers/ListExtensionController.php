@@ -10,7 +10,6 @@ use Flarum\Http\UrlGenerator;
 use Flarum\User\AssertPermissionTrait;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
-use Tobscure\JsonApi\Parameters;
 
 class ListExtensionController extends AbstractListController
 {

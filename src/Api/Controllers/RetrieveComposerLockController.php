@@ -3,10 +3,10 @@
 namespace Flagrow\Bazaar\Api\Controllers;
 
 use Flagrow\Bazaar\Jobs\SyncLock;
-use Flarum\User\Exception\PermissionDeniedException;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Psr\Http\Message\ServerRequestInterface;
 use Zend\Diactoros\Response\EmptyResponse;
+use Psr\Http\Message\ResponseInterface;
 
 class RetrieveComposerLockController extends AbstractAuthorizedController
 {
@@ -20,12 +20,7 @@ class RetrieveComposerLockController extends AbstractAuthorizedController
         $this->bus = $bus;
     }
 
-    /**
-     * @param ServerRequestInterface $request
-     * @return \Psr\Http\Message\ResponseInterface
-     * @throws PermissionDeniedException
-     */
-    public function handle(ServerRequestInterface $request)
+    public function handle(ServerRequestInterface $request): ResponseInterface
     {
         parent::handle($request);
 

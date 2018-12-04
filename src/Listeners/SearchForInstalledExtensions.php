@@ -54,8 +54,8 @@ class SearchForInstalledExtensions
             });
 
         foreach (static::MARKS as $mark) {
-            if ($key = array_search($mark, $is)) {
-                Arr::forget($is, $key);
+            if (($key = array_search($mark, $is)) !== false) {
+                unset($is[$key]);
             }
         }
 
