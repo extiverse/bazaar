@@ -2,7 +2,6 @@
 
 namespace Flagrow\Bazaar\Listeners;
 
-use Flagrow\Bazaar\Events\SearchedExtensions;
 use Flagrow\Bazaar\Events\SearchingExtensions;
 use Flagrow\Bazaar\Extensions\ExtensionUtils;
 use Flarum\Extension\Extension;
@@ -13,7 +12,7 @@ use Illuminate\Support\Collection;
 
 class SearchForInstalledExtensions
 {
-    const MARKS = ['installed', 'update'];
+    const MARKS = ['installed', 'update', 'pending'];
 
     /**
      * @var Collection
