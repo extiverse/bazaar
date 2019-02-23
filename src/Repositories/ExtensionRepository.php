@@ -14,7 +14,6 @@ use Flagrow\Bazaar\Search\SearchResults;
 use Flagrow\Bazaar\Traits\Cachable;
 use Flarum\Extension\Event\Uninstalled as ExtensionWasUninstalled;
 use Flarum\Extension\ExtensionManager;
-use function GuzzleHttp\Psr7\parse_query;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Arr;
@@ -135,10 +134,8 @@ final class ExtensionRepository
 
         $page = Arr::get($orig, 'page', []);
         $offset = Arr::pull($page, 'offset', 0);
-        $page['number'] = ($offset+25)/25;
+        $page['number'] = round(($offset+25)/25);
         $params->put('page', $page);
-
-        $this->log->info("pagination", $params->toArray());
 
         $this->events->fire(
             new SearchingExtensions($params)
