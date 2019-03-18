@@ -9,7 +9,7 @@ flagrow-bazaar:
             report_issue: Signaler un problème
         nav:
             title: Bazaar
-            description: Le marché de l'extension.
+            description: Le marché d'extensions.
         header:
             extensions: Parcourir les extensions
             tasks: Historique des tâches
@@ -20,13 +20,13 @@ flagrow-bazaar:
                 sync:
                     switch: Sync
                     description: >
-                        Synchronisez les informations de votre extension avec {host} pour recevoir des notifications au bon moment lorsque des mises à jour existent pour vos extensions. De plus, nous vous enverrons une notification  régulière concernant les extensions obsolètes, concernant toutes celles synchronisées avec Bazaar.
+                        Synchronisez les informations de vos extensions avec {host} pour recevoir des notifications régulières lorsque des mises à jour existent pour vos extensions. De plus, nous vous enverrons une notification régulière concernant les extensions obsolètes, concernant toutes vos installations Flarum synchronisées avec Bazaar.
 
             settings:
                 title: Flagrow Bazaar
                 field:
                     token:
-                        label: jeton API
+                        label: API token
                         description: Ce jeton API est requis pour accéder à l'API d'exension Flagrow. Si c'est déjà configuré, vous êtes prêt! 
                     use_cron_for_tasks:
                         label: Tâches cron (cronjob)
@@ -36,10 +36,10 @@ flagrow-bazaar:
             connect-bazaar:
                 title: Connexion
                 description: >
-                    Connectez votre forum Flarum à votre compte personnel {host} pour déverrouiller des fonctionnalités avancées; comprenant un tableau de bord vous donnant un aperçu de la santé de toutes vos installations flarum. Nous ajouterons d'avantage de focntionnalités telles que des notfications lorsque votre forum contient des extensions obsolètes ou la possibilité de mettre à jour toutes les installations Flarum de manière centralisée.
+                    Connectez votre forum Flarum à votre compte personnel sur {host} pour déverrouiller des fonctionnalités avancées; comprenant un tableau de bord vous donnant un aperçu de la santé de toutes vos installations flarum. Nous ajouterons d'avantage de fonctionnalités telles que des notfications lorsque votre forum contient des extensions obsolètes ou la possibilité de mettre à jour toutes les installations Flarum de manière centralisée.
             requirements:
                 file-permissions:
-                    title: Autorisation de fichier
+                    title: Autorisation de système de fichier
                     description: >
                         Il semble que Bazaar ne dispose pas des autorisations suffisantes pour écrire des fichiers et / ou des répertoires. Veuillez consulter la liste ci-dessous. Pour plus d'informations, consultez <a>le wiki</a>.
                 php-memory_limit:
@@ -53,7 +53,7 @@ flagrow-bazaar:
                 not_authorized: >
                     Votre autorisation auprès de flagrow.io api a échouée. Ceci est peut-être causé par une connexion internet instable. Veuillez actualiser la page une fois votre connexion stabilisée. Si le problème persiste, veuillez nous contacter.
             button:
-                more: "Plus, page chargée {current} sur {total}"
+                more: "Davantage de résultats, charger la page {current} sur {total}"
                 install: Installer
                 uninstall: Désinstaller
                 enable: Activer
@@ -61,15 +61,15 @@ flagrow-bazaar:
                 update: Mettre à jour
                 connect: Connecter
                 favorite_button: "Extension favorite"
-                remove_favorite_button: "Retirer l'extension de vos favorites"
-                subscribe: Acheter un abonnement
+                remove_favorite_button: "Retirer l'extension de vos favoris"
+                subscribe: Souscrire un abonnement
                 unsubscribe: Annuler un abonnement
                 connect_to_subscribe: Connectez votre Bazaar pour vous abonner à des extensions
             extension:
                 installed: L'extension est installée
                 enabled: L'extension est activée
                 vendor: Par {vendor}
-                downloads: Télécahrgements
+                downloads: Téléchargements
                 installed_version: Version installée
                 highest_version: Dernière version
                 favorites: Favoris
@@ -115,5 +115,5 @@ flagrow-bazaar:
             filter_favorited: Favorite
             filter_subscribed: Abonné
             filter_premium: Premium
-            filter_pending: Suspendue
+            filter_pending: En traitement
             filter_languages: Langages
