@@ -27,7 +27,7 @@ flagrow-bazaar:
                 field:
                     token:
                         label: API token
-                        description: Ce jeton API est requis pour accéder à l'API d'exension Flagrow. Si c'est déjà configuré, vous êtes prêt! 
+                        description: Ce jeton API est requis pour accéder à l'API d'extension Flagrow. Si c'est déjà configuré, vous êtes prêt! 
                     use_cron_for_tasks:
                         label: Tâches cron (cronjob)
                         description: >
@@ -51,7 +51,7 @@ flagrow-bazaar:
                 no_results_available: >
                     Il semble qu'aucun résultat n'est disponible pour le moment.
                 not_authorized: >
-                    Votre autorisation auprès de flagrow.io api a échouée. Ceci est peut-être causé par une connexion internet instable. Veuillez actualiser la page une fois votre connexion stabilisée. Si le problème persiste, veuillez nous contacter.
+                    Votre autorisation auprès de l'API de flagrow.io a échouée. Ceci est peut-être causé par une connexion internet instable. Veuillez actualiser la page une fois votre connexion stabilisée. Si le problème persiste, veuillez nous contacter.
             button:
                 more: "Davantage de résultats, charger la page {current} sur {total}"
                 install: Installer
