@@ -20,7 +20,8 @@ flagrow-bazaar:
                 sync:
                     switch: Sync
                     description: >
-                        Synchronisez les informations de vos extensions avec {host} pour recevoir des notifications régulières lorsque des mises à jour existent pour vos extensions. De plus, nous vous enverrons une notification régulière concernant les extensions obsolètes, concernant toutes vos installations Flarum synchronisées avec Bazaar.
+                        Synchronisez les informations de vos extensions avec {host} pour recevoir des notifications régulières lorsque des mises à jour existent pour vos extensions.
+                        De plus, nous vous enverrons une notification régulière concernant les extensions obsolètes, concernant toutes vos installations Flarum synchronisées avec Bazaar.
 
             settings:
                 title: Flagrow Bazaar
@@ -31,12 +32,14 @@ flagrow-bazaar:
                     use_cron_for_tasks:
                         label: Tâches cron (cronjob)
                         description: >
-                           En autorisant cronjob à traiter les tâches de Bazaar, ces processus sont moins susceptibles d'expirer. Veuillez noter que vous devez être en mesure de configurer cronjob, consultez <a>le wiki</a>.
+                            En autorisant cronjob à traiter les tâches de Bazaar, ces processus sont moins susceptibles d'expirer.
+                            Veuillez noter que vous devez être en mesure de configurer cronjob, consultez <a>le wiki</a>.
                         toggle: Utiliser des crons pour le traitement des tâches
             connect-bazaar:
                 title: Connexion
                 description: >
-                    Connectez votre forum Flarum à votre compte personnel sur {host} pour déverrouiller des fonctionnalités avancées; comprenant un tableau de bord vous donnant un aperçu de la santé de toutes vos installations flarum. Nous ajouterons d'avantage de fonctionnalités telles que des notfications lorsque votre forum contient des extensions obsolètes ou la possibilité de mettre à jour toutes les installations Flarum de manière centralisée.
+                    Connectez votre forum Flarum à votre compte personnel sur {host} pour déverrouiller des fonctionnalités avancées; comprenant un tableau de bord vous donnant un aperçu de la santé de toutes vos installations flarum.
+                    Nous ajouterons d'avantage de fonctionnalités telles que des notfications lorsque votre forum contient des extensions obsolètes ou la possibilité de mettre à jour toutes les installations Flarum de manière centralisée.
             requirements:
                 file-permissions:
                     title: Autorisation de système de fichier
@@ -45,13 +48,18 @@ flagrow-bazaar:
                 php-memory_limit:
                     title: Limite de mémoire
                     description: >
-                        Nous vous recommandons d'autoriser PHP à utiliser au moins {required} de mémoire, votre php.ini autorise actuellement {limit}. Bien que nous essayions d'augmenter la limite de mémoire au moment de l'exécution, le succès dépend de votre environnement d'hébergement. Pour plus d'informations, consultez <a>le wiki</a>.
+                        Nous vous recommandons d'autoriser PHP à utiliser au moins {required} de mémoire, votre php.ini autorise actuellement {limit}.
+                        Bien que nous essayions d'augmenter la limite de mémoire au moment de l'exécution, le succès dépend de votre environnement d'hébergement.
+                        Pour plus d'informations, consultez <a>le wiki</a>.
         page:
             state:
                 no_results_available: >
                     Il semble qu'aucun résultat n'est disponible pour le moment.
                 not_authorized: >
-                    Votre autorisation auprès de l'API de flagrow.io a échouée. Ceci est peut-être causé par une connexion internet instable. Veuillez actualiser la page une fois votre connexion stabilisée. Si le problème persiste, veuillez nous contacter.
+                    Votre autorisation auprès de l'API de flagrow.io a échouée.
+                    Ceci est peut-être causé par une connexion internet instable.
+                    Veuillez actualiser la page une fois votre connexion stabilisée.
+                    Si le problème persiste, veuillez nous contacter.
             button:
                 more: "Davantage de résultats, charger la page {current} sur {total}"
                 install: Installer
@@ -105,15 +113,15 @@ flagrow-bazaar:
                     update: Mettre à jour {extension}
                     uninstall: Désinstaller {extension}
                 group:
-                    today: Aujoud'hui
+                    today: Aujourd'hui
                     lastmonth: Le mois dernier
                     older: Le plus ancien
         search:
             placeholder: Rechercher des extensions
             filter_installed: Installé
-            filter_update: Mis à jour
+            filter_update: Mise à jour disponible
             filter_favorited: Favorite
             filter_subscribed: Abonné
             filter_premium: Premium
             filter_pending: En traitement
-            filter_languages: Langages
+            filter_languages: Langues
