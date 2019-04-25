@@ -96,7 +96,7 @@ class Extension implements Arrayable
 
     public function getDescription(): string
     {
-        return Arr::get($this->attributes, 'description', '');
+        return Arr::get($this->attributes, 'description', '') ?? '';
     }
 
     public function isInstalled(): bool
