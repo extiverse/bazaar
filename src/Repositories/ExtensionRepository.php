@@ -134,7 +134,7 @@ final class ExtensionRepository
 
         $page = Arr::get($orig, 'page', []);
         $offset = Arr::pull($page, 'offset', 0);
-        $page['number'] = round(($offset+25)/25);
+        $page['number'] = floor(($offset+30)/30);
         $params->put('page', $page);
 
         $this->events->fire(
