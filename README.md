@@ -1,12 +1,10 @@
-# Bazaar by ![Flagrow logo](https://avatars0.githubusercontent.com/u/16413865?v=3&s=20) [Flagrow](https://discuss.flarum.org/d/1832-flagrow-extension-developer-group)
+# Bazaar
 
 [![Build status](https://travis-ci.org/flagrow/bazaar.svg?branch=master)](https://travis-ci.org/flagrow/bazaar) [![Latest Stable Version](https://img.shields.io/packagist/v/flagrow/bazaar.svg)](https://packagist.org/packages/flagrow/bazaar) [![Total Downloads](https://img.shields.io/packagist/dt/flagrow/bazaar.svg)](https://packagist.org/packages/flagrow/bazaar) [![Join our Discord server](https://discordapp.com/api/guilds/240489109041315840/embed.png)](https://flagrow.io/join-discord)
 
 The marketplace extension that allows you to add and remove extensions without composer or a terminal.
 
 > Read the disclaimers!
-
-![Bazaar in Action](https://discuss.hyn.me/assets/bazaar.gif)
 
 ## Disclaimers
 
@@ -22,7 +20,7 @@ The marketplace extension that allows you to add and remove extensions without c
 - Allow admins to connect to their Flagrow.io account and gain access to a dashboard showing the status of all forums.
 - Support paid extensions for Flagrow and other extension developers.
 
-For a complete overview of our changes, please visit the [changelog](https://github.com/flagrow/bazaar/blob/master/CHANGELOG.md) on Github.
+For a complete overview of our changes, please visit the [changelog](https://github.com/extiverse/bazaar/blob/master/CHANGELOG.md) on Github.
 
 ## Installation
 
@@ -48,7 +46,7 @@ php flarum cache:clear
 
 Enable the extension under the extensions tab in the admin area. A settings modal will popup asking you for a token, which most likely will already be there. You're good to go, open the Bazaar tab on the left and enjoy!
 
-For version 0.3 and up (for Flarum 0.1.0-beta.8+) please do consider to [enable cron processing](https://github.com/flagrow/bazaar/wiki/Cron-task-processing). Cron
+For version 0.3 and up (for Flarum 0.1.0-beta.8+) please do consider to [enable cron processing](https://github.com/extiverse/bazaar/wiki/Cron-task-processing). Cron
 processing considerably speeds up actions on your extensions by moving those tasks outside of your current request.
 
 ## Extension developers
@@ -77,14 +75,13 @@ Please include as many details as possible. You can use `php flarum info` to get
 
 - Where do I get a token or the token field is empty?
 
-> Please get in touch with us on our [issue tracker](https://github.com/flagrow/bazaar/issues).
+> Please get in touch with us on our [issue tracker](https://github.com/extiverse/bazaar/issues).
 
 ## Links
 
 - [Flarum Discuss post](https://discuss.flarum.org/d/5151)
-- [Source code on GitHub](https://github.com/flagrow/bazaar)
-- [Changelog](https://github.com/flagrow/bazaar/blob/master/CHANGELOG.md)
-- [Report an issue](https://github.com/flagrow/bazaar/issues)
+- [Source code on GitHub](https://github.com/extiverse/bazaar)
+- [Changelog](https://github.com/extiverse/bazaar/blob/master/CHANGELOG.md)
+- [Report an issue](https://github.com/extiverse/bazaar/issues)
 - [Download via Packagist](https://packagist.org/packages/flagrow/bazaar)
 
-An extension by [Flagrow](https://flagrow.io/).
