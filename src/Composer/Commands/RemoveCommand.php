@@ -1,8 +1,8 @@
 <?php
 
-namespace Flagrow\Bazaar\Composer\Commands;
+namespace Extiverse\Bazaar\Composer\Commands;
 
-use Flagrow\Bazaar\Exceptions\ComposerException;
+use Extiverse\Bazaar\Exceptions\ComposerException;
 
 class RemoveCommand extends BaseCommand
 {

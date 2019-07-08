@@ -102,7 +102,7 @@ export default class ExtensionRepository {
         popup.then(() => {
             window.location.reload();
         }).catch(() => {
-            alert(app.translator.trans('flagrow-bazaar.admin.page.extension.subscribe_check_failed'));
+            alert(app.translator.trans('bazaar.admin.page.extension.subscribe_check_failed'));
         });
     }
 

@@ -6,7 +6,7 @@ export default class MemoryLimitModal extends Modal {
     }
 
     title() {
-        return app.translator.trans('flagrow-bazaar.admin.modal.requirements.php-memory_limit.title');
+        return app.translator.trans('bazaar.admin.modal.requirements.php-memory_limit.title');
     }
 
     content() {
@@ -17,7 +17,7 @@ export default class MemoryLimitModal extends Modal {
             'div',
             {className: 'Modal-body'},
             app.translator.trans(
-                'flagrow-bazaar.admin.modal.requirements.php-memory_limit.description',
+                'bazaar.admin.modal.requirements.php-memory_limit.description',
                 {
                     required: memory_requested,
                     limit: memory_limit,

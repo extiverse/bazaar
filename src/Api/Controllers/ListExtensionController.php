@@ -1,10 +1,10 @@
 <?php
 
-namespace Flagrow\Bazaar\Api\Controllers;
+namespace Extiverse\Bazaar\Api\Controllers;
 
-use Flagrow\Bazaar\Api\Serializers\ExtensionSerializer;
-use Flagrow\Bazaar\Repositories\ExtensionRepository;
-use Flagrow\Bazaar\Search\AbstractExtensionSearcher;
+use Extiverse\Bazaar\Api\Serializers\ExtensionSerializer;
+use Extiverse\Bazaar\Repositories\ExtensionRepository;
+use Extiverse\Bazaar\Search\AbstractExtensionSearcher;
 use Flarum\Api\Controller\AbstractListController;
 use Flarum\Http\UrlGenerator;
 use Flarum\User\AssertPermissionTrait;

@@ -14,8 +14,8 @@ export default function () {
         items.add('flagrow-bazaar', AdminLinkButton.component({
             href: app.route('flagrow-bazaar'),
             icon: 'fas fa-shopping-bag',
-            children: app.translator.trans('flagrow-bazaar.admin.nav.title'),
-            description: app.translator.trans('flagrow-bazaar.admin.nav.description')
+            children: app.translator.trans('bazaar.admin.nav.title'),
+            description: app.translator.trans('bazaar.admin.nav.description')
         }));
     });
 }

@@ -1,8 +1,8 @@
 <?php
 
-namespace Flagrow\Bazaar\Tests\Composer;
+namespace Extiverse\Bazaar\Tests\Composer;
 
-use Flagrow\Bazaar\Tests\Satis\FakeServer;
+use Extiverse\Bazaar\Tests\Satis\FakeServer;
 
 class RequireCommandTest extends BaseCommandTest
 {

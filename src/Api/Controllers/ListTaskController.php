@@ -1,9 +1,9 @@
 <?php
 
-namespace Flagrow\Bazaar\Api\Controllers;
+namespace Extiverse\Bazaar\Api\Controllers;
 
-use Flagrow\Bazaar\Api\Serializers\TaskSerializer;
-use Flagrow\Bazaar\Models\Task;
+use Extiverse\Bazaar\Api\Serializers\TaskSerializer;
+use Extiverse\Bazaar\Models\Task;
 use Flarum\Api\Controller\AbstractListController;
 use Flarum\User\AssertPermissionTrait;
 use Psr\Http\Message\ServerRequestInterface;

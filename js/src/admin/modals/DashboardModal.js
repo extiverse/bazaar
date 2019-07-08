@@ -5,7 +5,7 @@ import Button from 'flarum/components/Button';
 
 export default class DashboardModal extends SettingsModal {
   title() {
-    return app.translator.trans('flagrow-bazaar.admin.modal.dashboard.title');
+    return app.translator.trans('bazaar.admin.modal.dashboard.title');
   }
 
   form() {
@@ -13,11 +13,11 @@ export default class DashboardModal extends SettingsModal {
     const syncing = this.setting('flagrow.bazaar.sync', false);
 
     return m('div', { className: 'Modal-body' }, [
-        m('p', app.translator.trans('flagrow-bazaar.admin.modal.dashboard.sync.description', { host: flagrowHost })),
+        m('p', app.translator.trans('bazaar.admin.modal.dashboard.sync.description', { host: flagrowHost })),
         Switch.component({
           state: (syncing() === true || syncing() == 1),
           onchange: this.updateSetting.bind(this, syncing, 'flagrow.bazaar.sync'),
-          children: app.translator.trans('flagrow-bazaar.admin.modal.dashboard.sync.switch', { host: flagrowHost })
+          children: app.translator.trans('bazaar.admin.modal.dashboard.sync.switch', { host: flagrowHost })
         }),
       ]
     );
@@ -29,7 +29,7 @@ export default class DashboardModal extends SettingsModal {
       Button.component({
         className: 'Button Connected',
         icon: 'dashboard',
-        children: app.translator.trans('flagrow-bazaar.admin.modal.dashboard.visit-remote-dashboard'),
+        children: app.translator.trans('bazaar.admin.modal.dashboard.visit-remote-dashboard'),
         onclick: () => window.open(flagrowHost + '/home')
       })
     ]);

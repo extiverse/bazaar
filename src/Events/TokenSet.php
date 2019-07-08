@@ -1,6 +1,6 @@
 <?php
 
-namespace Flagrow\Bazaar\Events;
+namespace Extiverse\Bazaar\Events;
 
 class TokenSet
 {

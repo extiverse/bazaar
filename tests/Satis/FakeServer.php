@@ -1,6 +1,6 @@
 <?php
 
-namespace Flagrow\Bazaar\Tests\Satis;
+namespace Extiverse\Bazaar\Tests\Satis;
 
 /**
  * Start a php dev server to use as a Satis endpoint

@@ -1,8 +1,8 @@
 <?php
 
-namespace Flagrow\Bazaar\Tests\Composer;
+namespace Extiverse\Bazaar\Tests\Composer;
 
-use Flagrow\Bazaar\Composer\Utils\ComposerFileEditor;
+use Extiverse\Bazaar\Composer\Utils\ComposerFileEditor;
 
 class AddRepositoryTest extends BaseCommandTest
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Flagrow\Bazaar\Api\Controllers;
+namespace Extiverse\Bazaar\Api\Controllers;
 
 use Illuminate\Support\Arr;
 use Psr\Http\Message\ResponseInterface;

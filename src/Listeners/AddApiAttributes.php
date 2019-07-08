@@ -1,11 +1,11 @@
 <?php
 
-namespace Flagrow\Bazaar\Listeners;
+namespace Extiverse\Bazaar\Listeners;
 
-use Flagrow\Bazaar\Composer\ComposerEnvironment;
-use Flagrow\Bazaar\Jobs\ComposerJob;
-use Flagrow\Bazaar\Search\FlagrowApi;
-use Flagrow\Bazaar\Traits\FileSizeHelper;
+use Extiverse\Bazaar\Composer\ComposerEnvironment;
+use Extiverse\Bazaar\Jobs\ComposerJob;
+use Extiverse\Bazaar\Search\FlagrowApi;
+use Extiverse\Bazaar\Traits\FileSizeHelper;
 use Flarum\Settings\Event\Deserializing;
 use Illuminate\Events\Dispatcher;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Flagrow\Bazaar\Search;
+namespace Extiverse\Bazaar\Search;
 
 use Flarum\Extension\ExtensionManager;
 use Flarum\Settings\SettingsRepositoryInterface;

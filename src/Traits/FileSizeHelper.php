@@ -1,6 +1,6 @@
 <?php
 
-namespace Flagrow\Bazaar\Traits;
+namespace Extiverse\Bazaar\Traits;
 
 trait FileSizeHelper
 {

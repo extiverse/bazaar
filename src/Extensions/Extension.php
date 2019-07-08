@@ -1,9 +1,9 @@
 <?php
 
-namespace Flagrow\Bazaar\Extensions;
+namespace Extiverse\Bazaar\Extensions;
 
 use Composer\Semver\Comparator;
-use Flagrow\Bazaar\Models\Task;
+use Extiverse\Bazaar\Models\Task;
 use Flarum\Extension\Extension as InstalledExtension;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Arr;

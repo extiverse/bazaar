@@ -1,4 +1,4 @@
-flagrow-bazaar:
+bazaar:
     admin:
         loader:
             is_loading: Processing..

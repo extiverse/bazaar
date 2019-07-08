@@ -1,6 +1,6 @@
 <?php
 
-namespace Flagrow\Bazaar\Composer\Utils;
+namespace Extiverse\Bazaar\Composer\Utils;
 
 use Composer\Factory;
 use Composer\IO\IOInterface;

@@ -1,12 +1,12 @@
 <?php
 
-namespace Flagrow\Bazaar\Jobs;
+namespace Extiverse\Bazaar\Jobs;
 
 use Carbon\Carbon;
-use Flagrow\Bazaar\Extensions\ExtensionUtils;
+use Extiverse\Bazaar\Extensions\ExtensionUtils;
 use Flarum\Extension\Extension;
-use Flagrow\Bazaar\Models\Task;
-use Flagrow\Bazaar\Search\FlagrowApi;
+use Extiverse\Bazaar\Models\Task;
+use Extiverse\Bazaar\Search\FlagrowApi;
 
 class SyncVersion
 {

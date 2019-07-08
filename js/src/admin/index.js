@@ -5,7 +5,7 @@ import Task from './models/Task';
 import addBazaarPage from './addBazaarPage';
 import addTasksPage from './addTasksPage';
 
-app.initializers.add('flagrow-bazaar', app => {
+app.initializers.add('extiverse-bazaar', app => {
     app.store.models['bazaar-extensions'] = Extension;
     app.store.models['bazaar-tasks'] = Task;
 

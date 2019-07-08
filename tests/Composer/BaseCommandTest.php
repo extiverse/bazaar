@@ -1,11 +1,11 @@
 <?php
 
-namespace Flagrow\Bazaar\Tests\Composer;
+namespace Extiverse\Bazaar\Tests\Composer;
 
-use Flagrow\Bazaar\Composer\ComposerCommand;
-use Flagrow\Bazaar\Composer\ComposerEnvironment;
+use Extiverse\Bazaar\Composer\ComposerCommand;
+use Extiverse\Bazaar\Composer\ComposerEnvironment;
 use Illuminate\Filesystem\Filesystem;
-use Flagrow\Bazaar\Tests\TestCase;
+use Extiverse\Bazaar\Tests\TestCase;
 
 abstract class BaseCommandTest extends TestCase
 {

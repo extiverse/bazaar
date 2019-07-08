@@ -188,8 +188,8 @@ __webpack_require__.r(__webpack_exports__);
     items.add('flagrow-bazaar', flarum_components_AdminLinkButton__WEBPACK_IMPORTED_MODULE_3___default.a.component({
       href: flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.route('flagrow-bazaar'),
       icon: 'fas fa-shopping-bag',
-      children: flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans('flagrow-bazaar.admin.nav.title'),
-      description: flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans('flagrow-bazaar.admin.nav.description')
+      children: flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans('bazaar.admin.nav.title'),
+      description: flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans('bazaar.admin.nav.description')
     }));
   });
 });
@@ -265,20 +265,20 @@ function (_Component) {
     return m('div', {
       className: 'Bazaar--Loader ' + (error ? 'Error' : null),
       hidden: this.props.loading() === false
-    }, [m('.Loader-modal', [m('.Loader-icon', flarum_helpers_icon__WEBPACK_IMPORTED_MODULE_2___default()(error ? 'fas fa-exclamation-triangle' : 'fas fa-shopping-bag')), m('div', [m('p', app.translator.trans(error ? 'flagrow-bazaar.admin.loader.error' : 'flagrow-bazaar.admin.loader.is_loading')), error ? [flarum_components_Button__WEBPACK_IMPORTED_MODULE_3___default.a.component({
+    }, [m('.Loader-modal', [m('.Loader-icon', flarum_helpers_icon__WEBPACK_IMPORTED_MODULE_2___default()(error ? 'fas fa-exclamation-triangle' : 'fas fa-shopping-bag')), m('div', [m('p', app.translator.trans(error ? 'bazaar.admin.loader.error' : 'bazaar.admin.loader.is_loading')), error ? [flarum_components_Button__WEBPACK_IMPORTED_MODULE_3___default.a.component({
       className: 'Button Button--block',
       icon: 'fas fa-sync',
       onclick: function onclick() {
         return location.reload();
       },
-      children: app.translator.trans('flagrow-bazaar.admin.loader.refresh')
+      children: app.translator.trans('bazaar.admin.loader.refresh')
     }), flarum_components_Button__WEBPACK_IMPORTED_MODULE_3___default.a.component({
       className: 'Button Button--block',
       icon: 'fas fa-times',
       onclick: function onclick() {
         return _this.props.loading(false);
       },
-      children: app.translator.trans('flagrow-bazaar.admin.loader.close')
+      children: app.translator.trans('bazaar.admin.loader.close')
     }), flarum_components_LinkButton__WEBPACK_IMPORTED_MODULE_4___default.a.component({
       className: 'Button Button--block',
       icon: 'fas fa-bug',
@@ -286,7 +286,7 @@ function (_Component) {
       target: '_blank',
       config: {},
       // Disable internal Mithril routing
-      children: app.translator.trans('flagrow-bazaar.admin.loader.report_issue')
+      children: app.translator.trans('bazaar.admin.loader.report_issue')
     })] : null])])]);
   };
 
@@ -551,14 +551,14 @@ function (_Component) {
       className: 'Button Button--icon',
       icon: 'fas fa-shopping-bag',
       href: flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.route('flagrow-bazaar'),
-      title: flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans('flagrow-bazaar.admin.header.extensions'),
+      title: flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans('bazaar.admin.header.extensions'),
       active: routeName === 'flagrow-bazaar'
     }));
     links.push(flarum_components_LinkButton__WEBPACK_IMPORTED_MODULE_3___default.a.component({
       className: 'Button Button--icon',
       icon: 'fas fa-history',
       href: flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.route('flagrow-bazaar-tasks'),
-      title: flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans('flagrow-bazaar.admin.header.tasks'),
+      title: flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans('bazaar.admin.header.tasks'),
       active: routeName === 'flagrow-bazaar-tasks'
     }));
     return links;
@@ -727,7 +727,7 @@ function (_Component) {
       });
     } else if (this.moreResults) {
       loading = [flarum_components_Button__WEBPACK_IMPORTED_MODULE_2___default.a.component({
-        children: app.translator.trans('flagrow-bazaar.admin.page.button.more', {
+        children: app.translator.trans('bazaar.admin.page.button.more', {
           current: this.resultMeta.pages_current + 1,
           total: this.resultMeta.pages_total
         }),
@@ -737,10 +737,10 @@ function (_Component) {
     }
 
     if (this.extensions.length === 0 && !this.loading) {
-      var text = app.translator.trans('flagrow-bazaar.admin.page.state.no_results_available');
+      var text = app.translator.trans('bazaar.admin.page.state.no_results_available');
 
       if (!this.props.authorized) {
-        text = app.translator.trans('flagrow-bazaar.admin.page.state.not_authorized');
+        text = app.translator.trans('bazaar.admin.page.state.not_authorized');
       }
 
       return m("div", {
@@ -972,7 +972,7 @@ function (_Component) {
       className: "label"
     }, m("i", {
       className: "fas fa-user"
-    }), " ", app.translator.trans('flagrow-bazaar.admin.page.extension.vendor')), m("div", {
+    }), " ", app.translator.trans('bazaar.admin.page.extension.vendor')), m("div", {
       className: "value"
     }, extension.package().split('/')[0])), m("div", {
       className: "Meta-Item downloads"
@@ -980,7 +980,7 @@ function (_Component) {
       className: "label"
     }, m("i", {
       class: "fas fa-download"
-    }), " ", app.translator.trans('flagrow-bazaar.admin.page.extension.downloads')), m("div", {
+    }), " ", app.translator.trans('bazaar.admin.page.extension.downloads')), m("div", {
       className: "value"
     }, extension.downloads())), m("div", {
       className: "Meta-Item favorites"
@@ -988,19 +988,19 @@ function (_Component) {
       className: "label"
     }, m("i", {
       className: "fas fa-heart"
-    }), " ", app.translator.trans('flagrow-bazaar.admin.page.extension.favorites')), m("div", {
+    }), " ", app.translator.trans('bazaar.admin.page.extension.favorites')), m("div", {
       className: "value"
     }, extension.favorites())), extension.installed_version() ? m("div", {
       className: "Meta-Item version"
     }, m("div", {
       className: "label"
-    }, app.translator.trans('flagrow-bazaar.admin.page.extension.installed_version')), m("div", {
+    }, app.translator.trans('bazaar.admin.page.extension.installed_version')), m("div", {
       className: "value"
     }, extension.installed_version())) : '', m("div", {
       className: "Meta-Item version"
     }, m("div", {
       className: "label"
-    }, app.translator.trans('flagrow-bazaar.admin.page.extension.highest_version')), m("div", {
+    }, app.translator.trans('bazaar.admin.page.extension.highest_version')), m("div", {
       className: "value"
     }, extension.highest_version())), m("div", {
       className: "Extension-controls"
@@ -1034,7 +1034,7 @@ function (_Component) {
 
     var items = new flarum_utils_ItemList__WEBPACK_IMPORTED_MODULE_3___default.a();
     var repository = this.props.repository;
-    var favoriteTrans = extension.favorited() ? 'flagrow-bazaar.admin.page.button.remove_favorite_button' : 'flagrow-bazaar.admin.page.button.favorite_button';
+    var favoriteTrans = extension.favorited() ? 'bazaar.admin.page.button.remove_favorite_button' : 'bazaar.admin.page.button.favorite_button';
 
     if (connected) {
       items.add('favorite', flarum_components_Button__WEBPACK_IMPORTED_MODULE_4___default.a.component({
@@ -1058,7 +1058,7 @@ function (_Component) {
       if (extension.can_uninstall()) {
         items.add('uninstall', flarum_components_Button__WEBPACK_IMPORTED_MODULE_4___default.a.component({
           icon: 'fas fa-minus-square',
-          children: app.translator.trans('flagrow-bazaar.admin.page.button.uninstall'),
+          children: app.translator.trans('bazaar.admin.page.button.uninstall'),
           onclick: function onclick() {
             _this.props.extension = repository.uninstallExtension(extension);
           }
@@ -1068,7 +1068,7 @@ function (_Component) {
       if (extension.can_enable()) {
         items.add('enable', flarum_components_Button__WEBPACK_IMPORTED_MODULE_4___default.a.component({
           icon: 'fas fa-check-square',
-          children: app.translator.trans('flagrow-bazaar.admin.page.button.enable'),
+          children: app.translator.trans('bazaar.admin.page.button.enable'),
           onclick: function onclick() {
             repository.enableExtension(extension);
           }
@@ -1078,7 +1078,7 @@ function (_Component) {
       if (extension.installed() && extension.outdated()) {
         items.add('update', flarum_components_Button__WEBPACK_IMPORTED_MODULE_4___default.a.component({
           icon: 'fas fa-level-up',
-          children: app.translator.trans('flagrow-bazaar.admin.page.button.update'),
+          children: app.translator.trans('bazaar.admin.page.button.update'),
           onclick: function onclick() {
             _this.props.extension = repository.updateExtension(extension);
           }
@@ -1088,7 +1088,7 @@ function (_Component) {
       if (extension.can_disable()) {
         items.add('disable', flarum_components_Button__WEBPACK_IMPORTED_MODULE_4___default.a.component({
           icon: 'fas fa-square',
-          children: app.translator.trans('flagrow-bazaar.admin.page.button.disable'),
+          children: app.translator.trans('bazaar.admin.page.button.disable'),
           onclick: function onclick() {
             _this.props.extension = repository.disableExtension(extension);
           }
@@ -1098,7 +1098,7 @@ function (_Component) {
       if (extension.can_install()) {
         items.add('install', flarum_components_Button__WEBPACK_IMPORTED_MODULE_4___default.a.component({
           icon: 'fas fa-plus-square',
-          children: app.translator.trans('flagrow-bazaar.admin.page.button.install'),
+          children: app.translator.trans('bazaar.admin.page.button.install'),
           onclick: function onclick() {
             _this.props.extension = repository.installExtension(extension);
           }
@@ -1110,14 +1110,14 @@ function (_Component) {
       items.add('subscribe', flarum_components_Button__WEBPACK_IMPORTED_MODULE_4___default.a.component({
         disabled: true,
         icon: 'fas fa-shopping-cart',
-        children: app.translator.trans('flagrow-bazaar.admin.page.button.connect_to_subscribe')
+        children: app.translator.trans('bazaar.admin.page.button.connect_to_subscribe')
       }));
     }
 
     if (extension.canCheckout() && connected) {
       items.add('subscribe', flarum_components_Button__WEBPACK_IMPORTED_MODULE_4___default.a.component({
         icon: 'fas fa-shopping-cart',
-        children: app.translator.trans('flagrow-bazaar.admin.page.button.subscribe'),
+        children: app.translator.trans('bazaar.admin.page.button.subscribe'),
         onclick: function onclick() {
           repository.premiumExtensionSubscribe(extension);
         }
@@ -1127,7 +1127,7 @@ function (_Component) {
     if (extension.canSafelyUnsubscribe() && connected) {
       items.add('unsubscribe', flarum_components_Button__WEBPACK_IMPORTED_MODULE_4___default.a.component({
         icon: 'fas fa-ban',
-        children: app.translator.trans('flagrow-bazaar.admin.page.button.unsubscribe'),
+        children: app.translator.trans('bazaar.admin.page.button.unsubscribe'),
         onclick: function onclick() {
           repository.premiumExtensionUnsubscribe(extension);
         }
@@ -1151,7 +1151,7 @@ function (_Component) {
       items.add('nextIncompatible', m(flarum_components_Badge__WEBPACK_IMPORTED_MODULE_6___default.a, {
         icon: "fas fa-exclamation",
         type: "nextIncompatible",
-        label: app.translator.trans('flagrow-bazaar.admin.page.extension.next_incompatible')
+        label: app.translator.trans('bazaar.admin.page.extension.next_incompatible')
       }));
     }
 
@@ -1159,7 +1159,7 @@ function (_Component) {
       items.add('latestIncompatible', m(flarum_components_Badge__WEBPACK_IMPORTED_MODULE_6___default.a, {
         icon: "fas fa-exclamation-circle",
         type: "latestIncompatible",
-        label: app.translator.trans('flagrow-bazaar.admin.page.extension.latest_incompatible')
+        label: app.translator.trans('bazaar.admin.page.extension.latest_incompatible')
       }));
     }
 
@@ -1167,7 +1167,7 @@ function (_Component) {
       items.add('incompatible', m(flarum_components_Badge__WEBPACK_IMPORTED_MODULE_6___default.a, {
         icon: "fas fa-exclamation-triangle",
         type: "incompatible",
-        label: app.translator.trans('flagrow-bazaar.admin.page.extension.incompatible')
+        label: app.translator.trans('bazaar.admin.page.extension.incompatible')
       }));
     }
 
@@ -1175,13 +1175,13 @@ function (_Component) {
       items.add('subscribed', m(flarum_components_Badge__WEBPACK_IMPORTED_MODULE_6___default.a, {
         icon: "fas fa-shopping-cart",
         type: "subscribed",
-        label: app.translator.trans('flagrow-bazaar.admin.page.extension.subscribed')
+        label: app.translator.trans('bazaar.admin.page.extension.subscribed')
       }));
     } else if (extension.premium()) {
       items.add('premium', m(flarum_components_Badge__WEBPACK_IMPORTED_MODULE_6___default.a, {
         icon: "fas fa-certificate",
         type: "premium",
-        label: app.translator.trans('flagrow-bazaar.admin.page.extension.premium')
+        label: app.translator.trans('bazaar.admin.page.extension.premium')
       }));
     }
 
@@ -1189,7 +1189,7 @@ function (_Component) {
       items.add('pending', m(flarum_components_Badge__WEBPACK_IMPORTED_MODULE_6___default.a, {
         icon: "fas fa-circle-notch fa-spin",
         type: "pending",
-        label: app.translator.trans('flagrow-bazaar.admin.page.extension.pending')
+        label: app.translator.trans('bazaar.admin.page.extension.pending')
       }));
     }
 
@@ -1197,7 +1197,7 @@ function (_Component) {
       items.add('outdated', m(flarum_components_Badge__WEBPACK_IMPORTED_MODULE_6___default.a, {
         icon: "fas fa-sort-numeric-down",
         type: "outdated",
-        label: app.translator.trans('flagrow-bazaar.admin.page.extension.outdated', {
+        label: app.translator.trans('bazaar.admin.page.extension.outdated', {
           new: extension.highest_version()
         })
       }));
@@ -1207,7 +1207,7 @@ function (_Component) {
       items.add('favorited', m(flarum_components_Badge__WEBPACK_IMPORTED_MODULE_6___default.a, {
         icon: "fas fa-heart",
         type: "favorited",
-        label: app.translator.trans('flagrow-bazaar.admin.page.extension.favorited')
+        label: app.translator.trans('bazaar.admin.page.extension.favorited')
       }));
     }
 
@@ -1215,7 +1215,7 @@ function (_Component) {
       items.add('installed', m(flarum_components_Badge__WEBPACK_IMPORTED_MODULE_6___default.a, {
         icon: "fas fa-plus-square",
         type: "installed",
-        label: app.translator.trans('flagrow-bazaar.admin.page.extension.installed')
+        label: app.translator.trans('bazaar.admin.page.extension.installed')
       }));
     }
 
@@ -1223,7 +1223,7 @@ function (_Component) {
       items.add('enabled', m(flarum_components_Badge__WEBPACK_IMPORTED_MODULE_6___default.a, {
         icon: "fas fa-check-square",
         type: "enabled",
-        label: app.translator.trans('flagrow-bazaar.admin.page.extension.enabled')
+        label: app.translator.trans('bazaar.admin.page.extension.enabled')
       }));
     }
 
@@ -1286,7 +1286,7 @@ function (_Component) {
       oninput: m.withAttr('value', function (term) {
         return _this2.search(term);
       }),
-      placeholder: app.translator.trans('flagrow-bazaar.admin.search.placeholder')
+      placeholder: app.translator.trans('bazaar.admin.search.placeholder')
     })), m('div', {
       className: 'ExtensionFilters ButtonGroup'
     }, [_CustomCheckbox__WEBPACK_IMPORTED_MODULE_2__["default"].component({
@@ -1296,7 +1296,7 @@ function (_Component) {
       onchange: function onchange(checked) {
         return _this2.toggleFilter('update', checked);
       },
-      children: app.translator.trans('flagrow-bazaar.admin.search.filter_update')
+      children: app.translator.trans('bazaar.admin.search.filter_update')
     }), _CustomCheckbox__WEBPACK_IMPORTED_MODULE_2__["default"].component({
       icon: 'fas fa-circle-notch',
       className: 'Button hasIcon',
@@ -1304,7 +1304,7 @@ function (_Component) {
       onchange: function onchange(checked) {
         return _this2.toggleFilter('pending', checked);
       },
-      children: app.translator.trans('flagrow-bazaar.admin.search.filter_pending')
+      children: app.translator.trans('bazaar.admin.search.filter_pending')
     }), _CustomCheckbox__WEBPACK_IMPORTED_MODULE_2__["default"].component({
       icon: 'fas fa-plus-square',
       className: 'Button hasIcon',
@@ -1312,7 +1312,7 @@ function (_Component) {
       onchange: function onchange(checked) {
         return _this2.toggleFilter('installed', checked);
       },
-      children: app.translator.trans('flagrow-bazaar.admin.search.filter_installed')
+      children: app.translator.trans('bazaar.admin.search.filter_installed')
     }), this.connected ? [_CustomCheckbox__WEBPACK_IMPORTED_MODULE_2__["default"].component({
       icon: 'fas fa-heart',
       className: 'Button hasIcon',
@@ -1320,7 +1320,7 @@ function (_Component) {
       onchange: function onchange(checked) {
         return _this2.toggleFilter('favorited', checked);
       },
-      children: app.translator.trans('flagrow-bazaar.admin.search.filter_favorited')
+      children: app.translator.trans('bazaar.admin.search.filter_favorited')
     }), _CustomCheckbox__WEBPACK_IMPORTED_MODULE_2__["default"].component({
       icon: 'fas fa-shopping-cart',
       className: 'Button hasIcon',
@@ -1328,7 +1328,7 @@ function (_Component) {
       onchange: function onchange(checked) {
         return _this2.toggleFilter('subscribed', checked);
       },
-      children: app.translator.trans('flagrow-bazaar.admin.search.filter_subscribed')
+      children: app.translator.trans('bazaar.admin.search.filter_subscribed')
     })] : '', _CustomCheckbox__WEBPACK_IMPORTED_MODULE_2__["default"].component({
       icon: 'fas fa-certificate',
       className: 'Button hasIcon',
@@ -1336,7 +1336,7 @@ function (_Component) {
       onchange: function onchange(checked) {
         return _this2.toggleFilter('premium', checked);
       },
-      children: app.translator.trans('flagrow-bazaar.admin.search.filter_premium')
+      children: app.translator.trans('bazaar.admin.search.filter_premium')
     })])]);
   };
 
@@ -1449,12 +1449,12 @@ function (_Component) {
       className: "time-column"
     }, flarum_helpers_humanTime__WEBPACK_IMPORTED_MODULE_5___default()(task.created_at())), m("td", {
       className: "status-column",
-      title: flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans('flagrow-bazaar.admin.page.task.status.' + (task.status() !== null ? task.status() : 'unknown'))
+      title: flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans('bazaar.admin.page.task.status.' + (task.status() !== null ? task.status() : 'unknown'))
     }, m("div", {
       className: "status"
     }, flarum_helpers_icon__WEBPACK_IMPORTED_MODULE_3___default()(iconName))), m("td", {
       className: "command-column"
-    }, flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans('flagrow-bazaar.admin.page.task.command.' + task.command(), {
+    }, flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans('bazaar.admin.page.task.command.' + task.command(), {
       extension: m("strong", null, task.package())
     })), m("td", {
       className: "details-column"
@@ -1467,7 +1467,7 @@ function (_Component) {
     }))), this.extended() ? m("tr", null, m("td", {
       className: "output-column",
       colspan: "4"
-    }, m("dl", null, m("dt", null, flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans('flagrow-bazaar.admin.page.task.attribute.created_at')), m("dd", null, flarum_helpers_fullTime__WEBPACK_IMPORTED_MODULE_6___default()(task.created_at()))), m("dl", null, m("dt", null, flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans('flagrow-bazaar.admin.page.task.attribute.started_at')), m("dd", null, flarum_helpers_fullTime__WEBPACK_IMPORTED_MODULE_6___default()(task.started_at()))), m("dl", null, m("dt", null, flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans('flagrow-bazaar.admin.page.task.attribute.finished_at')), m("dd", null, flarum_helpers_fullTime__WEBPACK_IMPORTED_MODULE_6___default()(task.finished_at()))), m("p", null, flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans('flagrow-bazaar.admin.page.task.header.output')), m("pre", {
+    }, m("dl", null, m("dt", null, flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans('bazaar.admin.page.task.attribute.created_at')), m("dd", null, flarum_helpers_fullTime__WEBPACK_IMPORTED_MODULE_6___default()(task.created_at()))), m("dl", null, m("dt", null, flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans('bazaar.admin.page.task.attribute.started_at')), m("dd", null, flarum_helpers_fullTime__WEBPACK_IMPORTED_MODULE_6___default()(task.started_at()))), m("dl", null, m("dt", null, flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans('bazaar.admin.page.task.attribute.finished_at')), m("dd", null, flarum_helpers_fullTime__WEBPACK_IMPORTED_MODULE_6___default()(task.finished_at()))), m("p", null, flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans('bazaar.admin.page.task.header.output')), m("pre", {
       className: "output"
     }, task.output()))) : null);
   };
@@ -1543,11 +1543,11 @@ function (_Component) {
         className: "TaskPage-table"
       }, m("thead", null, m("tr", null, m("th", {
         className: "time-column"
-      }, flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans('flagrow-bazaar.admin.page.task.header.time')), m("th", {
+      }, flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans('bazaar.admin.page.task.header.time')), m("th", {
         className: "status-column"
-      }, flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans('flagrow-bazaar.admin.page.task.header.status')), m("th", null, flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans('flagrow-bazaar.admin.page.task.header.command')), m("th", {
+      }, flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans('bazaar.admin.page.task.header.status')), m("th", null, flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans('bazaar.admin.page.task.header.command')), m("th", {
         className: "details-column"
-      }, flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans('flagrow-bazaar.admin.page.task.header.details')))), group.tasks.map(function (task) {
+      }, flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans('bazaar.admin.page.task.header.details')))), group.tasks.map(function (task) {
         return m(_TaskListItem__WEBPACK_IMPORTED_MODULE_5__["default"], {
           task: task
         });
@@ -1561,13 +1561,13 @@ function (_Component) {
 
   _proto.taskGroups = function taskGroups() {
     var taskGroups = [{
-      title: flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans('flagrow-bazaar.admin.page.task.group.today'),
+      title: flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans('bazaar.admin.page.task.group.today'),
       tasks: []
     }, {
-      title: flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans('flagrow-bazaar.admin.page.task.group.lastmonth'),
+      title: flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans('bazaar.admin.page.task.group.lastmonth'),
       tasks: []
     }, {
-      title: flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans('flagrow-bazaar.admin.page.task.group.older'),
+      title: flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans('bazaar.admin.page.task.group.older'),
       tasks: []
     }];
     var currentGroup = 0; // Milliseconds from 1 January 1970 00:00:00 UTC
@@ -1678,14 +1678,14 @@ function (_Modal) {
   };
 
   _proto.title = function title() {
-    return app.translator.trans('flagrow-bazaar.admin.modal.connect-bazaar.title');
+    return app.translator.trans('bazaar.admin.modal.connect-bazaar.title');
   };
 
   _proto.content = function content() {
     var flagrowHost = this.props.flagrowHost;
     return m('div', {
       className: 'Modal-body'
-    }, [m('p', app.translator.trans('flagrow-bazaar.admin.modal.connect-bazaar.description', {
+    }, [m('p', app.translator.trans('bazaar.admin.modal.connect-bazaar.description', {
       host: flagrowHost
     })), m('div', {
       className: "App-primaryControl"
@@ -1694,7 +1694,7 @@ function (_Modal) {
       className: 'Button Button--primary Button--block',
       disabled: false,
       icon: 'check',
-      children: app.translator.trans('flagrow-bazaar.admin.page.button.connect')
+      children: app.translator.trans('bazaar.admin.page.button.connect')
     })])]);
   };
 
@@ -1763,7 +1763,7 @@ function (_SettingsModal) {
   var _proto = BazaarSettingsModal.prototype;
 
   _proto.title = function title() {
-    return flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans('flagrow-bazaar.admin.modal.settings.title');
+    return flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans('bazaar.admin.modal.settings.title');
   };
 
   _proto.form = function form() {
@@ -1771,11 +1771,11 @@ function (_SettingsModal) {
       className: 'Form-group'
     }, [m('label', {
       for: 'use-cron'
-    }, flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans('flagrow-bazaar.admin.modal.settings.field.use_cron_for_tasks.label')), flarum_components_Switch__WEBPACK_IMPORTED_MODULE_3___default.a.component({
+    }, flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans('bazaar.admin.modal.settings.field.use_cron_for_tasks.label')), flarum_components_Switch__WEBPACK_IMPORTED_MODULE_3___default.a.component({
       state: this.setting('flagrow.bazaar.use_cron_for_tasks')(),
       onchange: this.setting('flagrow.bazaar.use_cron_for_tasks'),
-      children: flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans('flagrow-bazaar.admin.modal.settings.field.use_cron_for_tasks.toggle')
-    }), m('span', flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans('flagrow-bazaar.admin.modal.settings.field.use_cron_for_tasks.description', {
+      children: flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans('bazaar.admin.modal.settings.field.use_cron_for_tasks.toggle')
+    }), m('span', flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans('bazaar.admin.modal.settings.field.use_cron_for_tasks.description', {
       a: m("a", {
         href: "https://github.com/flagrow/bazaar/wiki/Cron-task-processing",
         target: "_blank"
@@ -1784,11 +1784,11 @@ function (_SettingsModal) {
       className: 'Form-group'
     }, [m('label', {
       for: 'bazaar-api-token'
-    }, flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans('flagrow-bazaar.admin.modal.settings.field.token.label')), m('input', {
+    }, flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans('bazaar.admin.modal.settings.field.token.label')), m('input', {
       id: 'bazaar-api-token',
       className: 'FormControl',
       bidi: this.setting('flagrow.bazaar.api_token')
-    }), m('span', flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans('flagrow-bazaar.admin.modal.settings.field.token.description'))])];
+    }), m('span', flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans('bazaar.admin.modal.settings.field.token.description'))])];
   };
 
   return BazaarSettingsModal;
@@ -1835,7 +1835,7 @@ function (_SettingsModal) {
   var _proto = DashboardModal.prototype;
 
   _proto.title = function title() {
-    return app.translator.trans('flagrow-bazaar.admin.modal.dashboard.title');
+    return app.translator.trans('bazaar.admin.modal.dashboard.title');
   };
 
   _proto.form = function form() {
@@ -1843,12 +1843,12 @@ function (_SettingsModal) {
     var syncing = this.setting('flagrow.bazaar.sync', false);
     return m('div', {
       className: 'Modal-body'
-    }, [m('p', app.translator.trans('flagrow-bazaar.admin.modal.dashboard.sync.description', {
+    }, [m('p', app.translator.trans('bazaar.admin.modal.dashboard.sync.description', {
       host: flagrowHost
     })), flarum_components_Switch__WEBPACK_IMPORTED_MODULE_1___default.a.component({
       state: syncing() === true || syncing() == 1,
       onchange: this.updateSetting.bind(this, syncing, 'flagrow.bazaar.sync'),
-      children: app.translator.trans('flagrow-bazaar.admin.modal.dashboard.sync.switch', {
+      children: app.translator.trans('bazaar.admin.modal.dashboard.sync.switch', {
         host: flagrowHost
       })
     })]);
@@ -1861,7 +1861,7 @@ function (_SettingsModal) {
     }, [flarum_components_Button__WEBPACK_IMPORTED_MODULE_4___default.a.component({
       className: 'Button Connected',
       icon: 'dashboard',
-      children: app.translator.trans('flagrow-bazaar.admin.modal.dashboard.visit-remote-dashboard'),
+      children: app.translator.trans('bazaar.admin.modal.dashboard.visit-remote-dashboard'),
       onclick: function onclick() {
         return window.open(flagrowHost + '/home');
       }
@@ -1921,7 +1921,7 @@ function (_Modal) {
   };
 
   _proto.title = function title() {
-    return app.translator.trans('flagrow-bazaar.admin.modal.requirements.file-permissions.title');
+    return app.translator.trans('bazaar.admin.modal.requirements.file-permissions.title');
   };
 
   _proto.content = function content() {
@@ -1934,7 +1934,7 @@ function (_Modal) {
     });
     return m('div', {
       className: 'Modal-body'
-    }, [m('p', app.translator.trans('flagrow-bazaar.admin.modal.requirements.file-permissions.description', {
+    }, [m('p', app.translator.trans('bazaar.admin.modal.requirements.file-permissions.description', {
       a: m("a", {
         href: "https://github.com/flagrow/bazaar/wiki/File-permissions",
         target: "_blank"
@@ -1981,7 +1981,7 @@ function (_Modal) {
   };
 
   _proto.title = function title() {
-    return app.translator.trans('flagrow-bazaar.admin.modal.requirements.php-memory_limit.title');
+    return app.translator.trans('bazaar.admin.modal.requirements.php-memory_limit.title');
   };
 
   _proto.content = function content() {
@@ -1989,7 +1989,7 @@ function (_Modal) {
     var memory_limit = this.props.memory_limit;
     return m('div', {
       className: 'Modal-body'
-    }, app.translator.trans('flagrow-bazaar.admin.modal.requirements.php-memory_limit.description', {
+    }, app.translator.trans('bazaar.admin.modal.requirements.php-memory_limit.description', {
       required: memory_requested,
       limit: memory_limit,
       a: m("a", {
@@ -2268,7 +2268,7 @@ function () {
     popup.then(function () {
       window.location.reload();
     }).catch(function () {
-      alert(flarum_app__WEBPACK_IMPORTED_MODULE_0___default.a.translator.trans('flagrow-bazaar.admin.page.extension.subscribe_check_failed'));
+      alert(flarum_app__WEBPACK_IMPORTED_MODULE_0___default.a.translator.trans('bazaar.admin.page.extension.subscribe_check_failed'));
     });
   };
 

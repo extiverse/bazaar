@@ -1,9 +1,9 @@
 <?php
 
-namespace Flagrow\Bazaar\Listeners;
+namespace Extiverse\Bazaar\Listeners;
 
-use Flagrow\Bazaar\Events\SearchingExtensions;
-use Flagrow\Bazaar\Extensions\ExtensionUtils;
+use Extiverse\Bazaar\Events\SearchingExtensions;
+use Extiverse\Bazaar\Extensions\ExtensionUtils;
 use Flarum\Extension\Extension;
 use Flarum\Extension\ExtensionManager;
 use Illuminate\Contracts\Events\Dispatcher;

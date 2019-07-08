@@ -1,8 +1,8 @@
 <?php
 
-namespace Flagrow\Bazaar\Providers;
+namespace Extiverse\Bazaar\Providers;
 
-use Flagrow\Bazaar\Composer\ComposerEnvironment;
+use Extiverse\Bazaar\Composer\ComposerEnvironment;
 use Flarum\Foundation\AbstractServiceProvider;
 use Illuminate\Filesystem\Filesystem;
 

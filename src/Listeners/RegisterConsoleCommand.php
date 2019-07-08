@@ -1,8 +1,8 @@
 <?php
 
-namespace Flagrow\Bazaar\Listeners;
+namespace Extiverse\Bazaar\Listeners;
 
-use Flagrow\Bazaar\Console\TaskCommand;
+use Extiverse\Bazaar\Console\TaskCommand;
 use Flarum\Console\Event\Configuring;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Contracts\Events\Dispatcher;

@@ -1,10 +1,10 @@
 <?php
 
-namespace Flagrow\Bazaar\Listeners;
+namespace Extiverse\Bazaar\Listeners;
 
-use Flagrow\Bazaar\Events\ExtensionWasInstalled;
-use Flagrow\Bazaar\Events\ExtensionWasUpdated;
-use Flagrow\Bazaar\Jobs\SyncVersion as Job;
+use Extiverse\Bazaar\Events\ExtensionWasInstalled;
+use Extiverse\Bazaar\Events\ExtensionWasUpdated;
+use Extiverse\Bazaar\Jobs\SyncVersion as Job;
 use Flarum\Extension\Event\Uninstalled;
 use Flarum\Settings\SettingsRepositoryInterface;
 use Illuminate\Contracts\Bus\Dispatcher as Bus;

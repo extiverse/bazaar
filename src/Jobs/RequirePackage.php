@@ -1,9 +1,9 @@
 <?php
 
-namespace Flagrow\Bazaar\Jobs;
+namespace Extiverse\Bazaar\Jobs;
 
-use Flagrow\Bazaar\Composer\ComposerCommand;
-use Flagrow\Bazaar\Models\Task;
+use Extiverse\Bazaar\Composer\ComposerCommand;
+use Extiverse\Bazaar\Models\Task;
 
 class RequirePackage extends ComposerJob
 {

@@ -1,11 +1,11 @@
 <?php
 
-namespace Flagrow\Bazaar\Listeners;
+namespace Extiverse\Bazaar\Listeners;
 
-use Flagrow\Bazaar\Composer\ComposerEnvironment;
-use Flagrow\Bazaar\Composer\Utils\ComposerFileEditor;
-use Flagrow\Bazaar\Events\TokenSet;
-use Flagrow\Bazaar\Search\FlagrowApi;
+use Extiverse\Bazaar\Composer\ComposerEnvironment;
+use Extiverse\Bazaar\Composer\Utils\ComposerFileEditor;
+use Extiverse\Bazaar\Events\TokenSet;
+use Extiverse\Bazaar\Search\FlagrowApi;
 use Illuminate\Contracts\Events\Dispatcher;
 use Psr\Log\LoggerInterface;
 

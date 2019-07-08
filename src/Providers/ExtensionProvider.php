@@ -1,8 +1,8 @@
 <?php
 
-namespace Flagrow\Bazaar\Providers;
+namespace Extiverse\Bazaar\Providers;
 
-use Flagrow\Bazaar\Search\FlagrowApi;
+use Extiverse\Bazaar\Search\FlagrowApi;
 use Flarum\Foundation\AbstractServiceProvider;
 
 class ExtensionProvider extends AbstractServiceProvider

@@ -1,6 +1,6 @@
 <?php
 
-namespace Flagrow\Bazaar\Composer\Commands;
+namespace Extiverse\Bazaar\Composer\Commands;
 
 class UpdateCommand extends BaseCommand
 {

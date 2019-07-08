@@ -1,8 +1,8 @@
 <?php
 
-namespace Flagrow\Bazaar\Composer;
+namespace Extiverse\Bazaar\Composer;
 
-use Flagrow\Bazaar\Composer\Utils\ComposerIO;
+use Extiverse\Bazaar\Composer\Utils\ComposerIO;
 
 class ComposerOutput
 {

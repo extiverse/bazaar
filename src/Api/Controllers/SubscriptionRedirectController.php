@@ -1,10 +1,10 @@
 <?php
 
-namespace Flagrow\Bazaar\Api\Controllers;
+namespace Extiverse\Bazaar\Api\Controllers;
 
-use Flagrow\Bazaar\Extensions\Extension;
-use Flagrow\Bazaar\Repositories\ExtensionRepository;
-use Flagrow\Bazaar\Search\FlagrowApi;
+use Extiverse\Bazaar\Extensions\Extension;
+use Extiverse\Bazaar\Repositories\ExtensionRepository;
+use Extiverse\Bazaar\Search\FlagrowApi;
 use Flarum\Http\UrlGenerator;
 use Psr\Http\Server\RequestHandlerInterface;
 use Zend\Diactoros\Response\RedirectResponse;

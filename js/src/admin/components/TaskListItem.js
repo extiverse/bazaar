@@ -31,9 +31,9 @@ export default class TaskListItem extends Component {
             <tbody className={ 'TaskListItem status-' + task.status() }>
                 <tr>
                     <td className="time-column">{ humanTime(task.created_at()) }</td>
-                    <td className="status-column" title={ app.translator.trans('flagrow-bazaar.admin.page.task.status.' + (task.status() !== null ? task.status() : 'unknown')) }><div className="status">{ icon(iconName) }</div></td>
+                    <td className="status-column" title={ app.translator.trans('bazaar.admin.page.task.status.' + (task.status() !== null ? task.status() : 'unknown')) }><div className="status">{ icon(iconName) }</div></td>
                     <td className="command-column">
-                        { app.translator.trans('flagrow-bazaar.admin.page.task.command.' + task.command(), {extension: (<strong>{ task.package() }</strong>)}) }
+                        { app.translator.trans('bazaar.admin.page.task.command.' + task.command(), {extension: (<strong>{ task.package() }</strong>)}) }
                     </td>
                     <td className="details-column">
                         { Button.component({
@@ -47,18 +47,18 @@ export default class TaskListItem extends Component {
                     <tr>
                         <td className="output-column" colspan="4">
                             <dl>
-                                <dt>{ app.translator.trans('flagrow-bazaar.admin.page.task.attribute.created_at') }</dt>
+                                <dt>{ app.translator.trans('bazaar.admin.page.task.attribute.created_at') }</dt>
                                 <dd>{ fullTime(task.created_at()) }</dd>
                             </dl>
                             <dl>
-                                <dt>{ app.translator.trans('flagrow-bazaar.admin.page.task.attribute.started_at') }</dt>
+                                <dt>{ app.translator.trans('bazaar.admin.page.task.attribute.started_at') }</dt>
                                 <dd>{ fullTime(task.started_at()) }</dd>
                             </dl>
                             <dl>
-                                <dt>{ app.translator.trans('flagrow-bazaar.admin.page.task.attribute.finished_at') }</dt>
+                                <dt>{ app.translator.trans('bazaar.admin.page.task.attribute.finished_at') }</dt>
                                 <dd>{ fullTime(task.finished_at()) }</dd>
                             </dl>
-                            <p>{ app.translator.trans('flagrow-bazaar.admin.page.task.header.output') }</p>
+                            <p>{ app.translator.trans('bazaar.admin.page.task.header.output') }</p>
                             <pre className="output">{ task.output() }</pre>
                         </td>
                     </tr>

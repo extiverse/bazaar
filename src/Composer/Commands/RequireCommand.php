@@ -1,9 +1,9 @@
 <?php
 
-namespace Flagrow\Bazaar\Composer\Commands;
+namespace Extiverse\Bazaar\Composer\Commands;
 
 use Composer\Package\Version\VersionSelector;
-use Flagrow\Bazaar\Exceptions\ComposerException;
+use Extiverse\Bazaar\Exceptions\ComposerException;
 
 class RequireCommand extends BaseCommand
 {

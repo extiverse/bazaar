@@ -1,6 +1,6 @@
 <?php
 
-namespace Flagrow\Bazaar\Search;
+namespace Extiverse\Bazaar\Search;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;

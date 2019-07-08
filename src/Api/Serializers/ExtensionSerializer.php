@@ -1,8 +1,8 @@
 <?php
 
-namespace Flagrow\Bazaar\Api\Serializers;
+namespace Extiverse\Bazaar\Api\Serializers;
 
-use Flagrow\Bazaar\Extensions\Extension;
+use Extiverse\Bazaar\Extensions\Extension;
 use Flarum\Api\Serializer\AbstractSerializer;
 
 class ExtensionSerializer extends AbstractSerializer

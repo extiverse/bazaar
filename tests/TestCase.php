@@ -1,6 +1,6 @@
 <?php
 
-namespace Flagrow\Bazaar\Tests;
+namespace Extiverse\Bazaar\Tests;
 
 use Flagrow\Steamroller\TestCase as Test;
 

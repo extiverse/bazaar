@@ -2,5 +2,5 @@
 
 require_once 'FakeServer.php';
 
-$server = new \Flagrow\Bazaar\Tests\Satis\FakeServer();
+$server = new \Extiverse\Bazaar\Tests\Satis\FakeServer();
 $server->handleRequest();

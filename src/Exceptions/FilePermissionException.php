@@ -1,6 +1,6 @@
 <?php
 
-namespace Flagrow\Bazaar\Exceptions;
+namespace Extiverse\Bazaar\Exceptions;
 
 class FilePermissionException extends \Exception
 {

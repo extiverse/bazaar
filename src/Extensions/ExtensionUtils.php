@@ -1,6 +1,6 @@
 <?php
 
-namespace Flagrow\Bazaar\Extensions;
+namespace Extiverse\Bazaar\Extensions;
 
 class ExtensionUtils
 {

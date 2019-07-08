@@ -1,14 +1,14 @@
 <?php
 
-namespace Flagrow\Bazaar\Composer\Commands;
+namespace Extiverse\Bazaar\Composer\Commands;
 
 use Composer\Installer;
-use Flagrow\Bazaar\Composer\ComposerEnvironment;
-use Flagrow\Bazaar\Composer\ComposerOutput;
-use Flagrow\Bazaar\Composer\Utils\ComposerFactory;
-use Flagrow\Bazaar\Composer\Utils\ComposerFileEditor;
-use Flagrow\Bazaar\Composer\Utils\ComposerIO;
-use Flagrow\Bazaar\Exceptions\ComposerException;
+use Extiverse\Bazaar\Composer\ComposerEnvironment;
+use Extiverse\Bazaar\Composer\ComposerOutput;
+use Extiverse\Bazaar\Composer\Utils\ComposerFactory;
+use Extiverse\Bazaar\Composer\Utils\ComposerFileEditor;
+use Extiverse\Bazaar\Composer\Utils\ComposerIO;
+use Extiverse\Bazaar\Exceptions\ComposerException;
 
 abstract class BaseCommand
 {

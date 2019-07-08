@@ -110,7 +110,7 @@ export default class BazaarPageHeader extends Component {
             className: 'Button Button--icon',
             icon: 'fas fa-shopping-bag',
             href: app.route('flagrow-bazaar'),
-            title: app.translator.trans('flagrow-bazaar.admin.header.extensions'),
+            title: app.translator.trans('bazaar.admin.header.extensions'),
             active: routeName === 'flagrow-bazaar'
         }));
 
@@ -118,7 +118,7 @@ export default class BazaarPageHeader extends Component {
             className: 'Button Button--icon',
             icon: 'fas fa-history',
             href: app.route('flagrow-bazaar-tasks'),
-            title: app.translator.trans('flagrow-bazaar.admin.header.tasks'),
+            title: app.translator.trans('bazaar.admin.header.tasks'),
             active: routeName === 'flagrow-bazaar-tasks'
         }));
 

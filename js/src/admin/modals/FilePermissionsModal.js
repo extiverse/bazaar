@@ -6,7 +6,7 @@ export default class FilePermissionsModal extends Modal {
     }
 
     title() {
-        return app.translator.trans('flagrow-bazaar.admin.modal.requirements.file-permissions.title');
+        return app.translator.trans('bazaar.admin.modal.requirements.file-permissions.title');
     }
 
     content() {
@@ -19,7 +19,7 @@ export default class FilePermissionsModal extends Modal {
 
         return m('div', {className: 'Modal-body'}, [
                 m('p', app.translator.trans(
-                    'flagrow-bazaar.admin.modal.requirements.file-permissions.description',
+                    'bazaar.admin.modal.requirements.file-permissions.description',
                     {a: <a href="https://github.com/flagrow/bazaar/wiki/File-permissions" target="_blank"/>}
                 )),
                 m('ul', paths)

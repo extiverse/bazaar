@@ -1,8 +1,8 @@
 <?php
 
-namespace Flagrow\Bazaar\Api\Controllers;
+namespace Extiverse\Bazaar\Api\Controllers;
 
-use Flagrow\Bazaar\Search\FlagrowApi;
+use Extiverse\Bazaar\Search\FlagrowApi;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;

@@ -5,6 +5,10 @@ use Illuminate\Database\Schema\Builder;
 
 return [
     'up' => function (Builder $schema) {
+        if ($schema->getConnection()->getSchemaBuilder()->hasTable('bazaar_tasks')) {
+            return;
+        }
+
         $schema->create('bazaar_tasks', function (Blueprint $table) {
             $table->increments('id');
             $table->string('status', 50)->nullable();

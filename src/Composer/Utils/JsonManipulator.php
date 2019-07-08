@@ -1,6 +1,6 @@
 <?php
 
-namespace Flagrow\Bazaar\Composer\Utils;
+namespace Extiverse\Bazaar\Composer\Utils;
 
 use Composer\Json\JsonFile;
 use Composer\Repository\PlatformRepository;

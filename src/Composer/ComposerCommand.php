@@ -1,10 +1,10 @@
 <?php
 
-namespace Flagrow\Bazaar\Composer;
+namespace Extiverse\Bazaar\Composer;
 
-use Flagrow\Bazaar\Composer\Commands\RemoveCommand;
-use Flagrow\Bazaar\Composer\Commands\RequireCommand;
-use Flagrow\Bazaar\Composer\Commands\UpdateCommand;
+use Extiverse\Bazaar\Composer\Commands\RemoveCommand;
+use Extiverse\Bazaar\Composer\Commands\RequireCommand;
+use Extiverse\Bazaar\Composer\Commands\UpdateCommand;
 
 class ComposerCommand
 {

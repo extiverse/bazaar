@@ -1,8 +1,8 @@
 <?php
 
-namespace Flagrow\Bazaar\Console;
+namespace Extiverse\Bazaar\Console;
 
-use Flagrow\Bazaar\Models\Task;
+use Extiverse\Bazaar\Models\Task;
 use Illuminate\Console\Command;
 
 class TaskCommand extends Command

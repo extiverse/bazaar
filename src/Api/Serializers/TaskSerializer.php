@@ -1,6 +1,6 @@
 <?php
 
-namespace Flagrow\Bazaar\Api\Serializers;
+namespace Extiverse\Bazaar\Api\Serializers;
 
 use Flarum\Api\Serializer\AbstractSerializer;
 

@@ -1,8 +1,8 @@
 <?php
 
-namespace Flagrow\Bazaar\Traits;
+namespace Extiverse\Bazaar\Traits;
 
-use Flagrow\Bazaar\Extensions\Extension;
+use Extiverse\Bazaar\Extensions\Extension;
 use Flarum\Extension\ExtensionManager;
 
 trait ExtensionCreation

@@ -1,9 +1,9 @@
 <?php
 
-namespace Flagrow\Bazaar\Composer\Utils;
+namespace Extiverse\Bazaar\Composer\Utils;
 
 use Composer\IO\BufferIO;
-use Flagrow\Bazaar\Exceptions\ComposerException;
+use Extiverse\Bazaar\Exceptions\ComposerException;
 use Symfony\Component\Console\Output\StreamOutput;
 
 class ComposerIO extends BufferIO

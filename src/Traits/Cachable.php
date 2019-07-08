@@ -1,6 +1,6 @@
 <?php
 
-namespace Flagrow\Bazaar\Traits;
+namespace Extiverse\Bazaar\Traits;
 
 use Illuminate\Contracts\Cache\Store;
 

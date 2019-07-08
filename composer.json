@@ -1,9 +1,9 @@
 {
-    "name": "flagrow/bazaar",
+    "name": "extiverse/bazaar",
     "description": "The Flarum extension marketplace.",
     "keywords": [
         "extension", "extend", "extensions",
-        "flarum", "flagrow",
+        "flarum", "extiverse",
         "marketplace",
         "premium", "paid"
     ],
@@ -22,14 +22,14 @@
         }
     ],
     "support": {
-        "issues": "https://github.com/flagrow/bazaar/issues",
-        "source": "https://github.com/flagrow/bazaar"
+        "issues": "https://github.com/extiverse/bazaar/issues",
+        "source": "https://github.com/extiverse/bazaar"
     },
     "require": {
-        "flarum/core": "^0.1.0-beta.8",
+        "flarum/core": "^0.1.0-beta.9",
         "composer/composer": "^1.3",
         "guzzlehttp/guzzle": "^6.2",
-        "flagrow/console": "^0.4"
+        "fof/console": "^0.5"
     },
     "require-dev": {
         "flagrow/steamroller": "dev-master"
@@ -51,12 +51,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Flagrow\\Bazaar\\": "src/"
+            "Extiverse\\Bazaar\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Flagrow\\Bazaar\\Tests\\": "tests/"
+            "Extiverse\\Bazaar\\Tests\\": "tests/"
         }
     }
 }

@@ -1,8 +1,8 @@
 <?php
 
-namespace Flagrow\Bazaar;
+namespace Extiverse\Bazaar;
 
-use Flagrow\Bazaar\Api\Controllers;
+use Extiverse\Bazaar\Api\Controllers;
 use Flarum\Extend\Frontend;
 use Flarum\Extend\Locale;
 use Flarum\Extend\Locales;

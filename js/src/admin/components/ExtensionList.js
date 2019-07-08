@@ -43,7 +43,7 @@ export default class ExtensionList extends Component {
         } else if (this.moreResults) {
             loading = [
                 Button.component({
-                    children: app.translator.trans('flagrow-bazaar.admin.page.button.more', {current: this.resultMeta.pages_current + 1, total: this.resultMeta.pages_total}),
+                    children: app.translator.trans('bazaar.admin.page.button.more', {current: this.resultMeta.pages_current + 1, total: this.resultMeta.pages_total}),
                     className: 'Button Button--primary',
                     onclick: this.loadMore.bind(this)
                 })
@@ -51,10 +51,10 @@ export default class ExtensionList extends Component {
         }
 
         if (this.extensions.length === 0 && !this.loading) {
-            let text = app.translator.trans('flagrow-bazaar.admin.page.state.no_results_available');
+            let text = app.translator.trans('bazaar.admin.page.state.no_results_available');
 
             if (! this.props.authorized) {
-                text = app.translator.trans('flagrow-bazaar.admin.page.state.not_authorized');
+                text = app.translator.trans('bazaar.admin.page.state.not_authorized');
             }
 
             return (

@@ -1,10 +1,10 @@
 <?php
 
-namespace Flagrow\Bazaar\Jobs;
+namespace Extiverse\Bazaar\Jobs;
 
 use Carbon\Carbon;
-use Flagrow\Bazaar\Models\Task;
-use Flagrow\Bazaar\Search\FlagrowApi;
+use Extiverse\Bazaar\Models\Task;
+use Extiverse\Bazaar\Search\FlagrowApi;
 use Flarum\Settings\SettingsRepositoryInterface;
 
 class SyncLock

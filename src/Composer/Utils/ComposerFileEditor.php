@@ -1,12 +1,12 @@
 <?php
 
-namespace Flagrow\Bazaar\Composer\Utils;
+namespace Extiverse\Bazaar\Composer\Utils;
 
 use Composer\Composer;
 use Composer\DependencyResolver\Pool;
 use Composer\Repository\CompositeRepository;
 use Composer\Repository\PlatformRepository;
-use Flagrow\Bazaar\Exceptions\CannotWriteComposerFileException;
+use Extiverse\Bazaar\Exceptions\CannotWriteComposerFileException;
 use Illuminate\Support\Arr;
 
 class ComposerFileEditor

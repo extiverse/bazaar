@@ -7,21 +7,21 @@ export default class BazaarConnectModal extends Modal {
     }
 
     title() {
-        return app.translator.trans('flagrow-bazaar.admin.modal.connect-bazaar.title');
+        return app.translator.trans('bazaar.admin.modal.connect-bazaar.title');
     }
 
     content() {
         let flagrowHost = this.props.flagrowHost;
 
         return m('div', {className: 'Modal-body'}, [
-                m('p', app.translator.trans('flagrow-bazaar.admin.modal.connect-bazaar.description', {host: flagrowHost})),
+                m('p', app.translator.trans('bazaar.admin.modal.connect-bazaar.description', {host: flagrowHost})),
                 m('div', {className: "App-primaryControl"}, [
                     Button.component({
                         type: 'submit',
                         className: 'Button Button--primary Button--block',
                         disabled: false,
                         icon: 'check',
-                        children: app.translator.trans('flagrow-bazaar.admin.page.button.connect')
+                        children: app.translator.trans('bazaar.admin.page.button.connect')
                     })
                 ])
             ]

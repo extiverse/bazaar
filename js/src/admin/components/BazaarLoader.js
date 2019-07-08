@@ -15,19 +15,19 @@ export default class BazaarLoader extends Component {
             m('.Loader-modal', [
                 m('.Loader-icon', icon(error ? 'fas fa-exclamation-triangle' : 'fas fa-shopping-bag')),
                 m('div', [
-                    m('p', app.translator.trans(error ? 'flagrow-bazaar.admin.loader.error' : 'flagrow-bazaar.admin.loader.is_loading')),
+                    m('p', app.translator.trans(error ? 'bazaar.admin.loader.error' : 'bazaar.admin.loader.is_loading')),
                     error ? [
                         Button.component({
                             className: 'Button Button--block',
                             icon: 'fas fa-sync',
                             onclick: () => location.reload(),
-                            children: app.translator.trans('flagrow-bazaar.admin.loader.refresh')
+                            children: app.translator.trans('bazaar.admin.loader.refresh')
                         }),
                         Button.component({
                             className: 'Button Button--block',
                             icon: 'fas fa-times',
                             onclick: () => this.props.loading(false),
-                            children: app.translator.trans('flagrow-bazaar.admin.loader.close')
+                            children: app.translator.trans('bazaar.admin.loader.close')
                         }),
                         LinkButton.component({
                             className: 'Button Button--block',
@@ -35,7 +35,7 @@ export default class BazaarLoader extends Component {
                             href: 'https://github.com/flagrow/bazaar/issues',
                             target: '_blank',
                             config: {}, // Disable internal Mithril routing
-                            children: app.translator.trans('flagrow-bazaar.admin.loader.report_issue')
+                            children: app.translator.trans('bazaar.admin.loader.report_issue')
                         }),
                     ] : null
                 ])

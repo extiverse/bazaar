@@ -1,6 +1,6 @@
 <?php
 
-namespace Flagrow\Bazaar\Api\Controllers;
+namespace Extiverse\Bazaar\Api\Controllers;
 
 use Flarum\Settings\SettingsRepositoryInterface;
 use Flarum\User\Exception\PermissionDeniedException;
@@ -11,7 +11,7 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 /**
  * Class AbstractAuthorizedController
- * @package Flagrow\Bazaar\Api\Controllers
+ * @package Extiverse\Bazaar\Api\Controllers
  *
  * @info Provides an authorized endpoint for our app to connect to this Bazaar.
  *  This will only work in case the Bazaar enabled Flarum installation is connected

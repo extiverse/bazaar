@@ -1,12 +1,12 @@
 <?php
 
-namespace Flagrow\Bazaar\Jobs;
+namespace Extiverse\Bazaar\Jobs;
 
 use Carbon\Carbon;
-use Flagrow\Bazaar\Composer\ComposerCommand;
-use Flagrow\Bazaar\Composer\ComposerEnvironment;
-use Flagrow\Bazaar\Composer\ComposerOutput;
-use Flagrow\Bazaar\Models\Task;
+use Extiverse\Bazaar\Composer\ComposerCommand;
+use Extiverse\Bazaar\Composer\ComposerEnvironment;
+use Extiverse\Bazaar\Composer\ComposerOutput;
+use Extiverse\Bazaar\Models\Task;
 use Psr\Log\LoggerInterface;
 
 abstract class ComposerJob

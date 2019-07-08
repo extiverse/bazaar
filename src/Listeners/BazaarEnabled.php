@@ -1,9 +1,9 @@
 <?php
 
-namespace Flagrow\Bazaar\Listeners;
+namespace Extiverse\Bazaar\Listeners;
 
-use Flagrow\Bazaar\Events\TokenSet;
-use Flagrow\Bazaar\Search\FlagrowApi;
+use Extiverse\Bazaar\Events\TokenSet;
+use Extiverse\Bazaar\Search\FlagrowApi;
 use Flarum\Event\ConfigureMiddleware;
 use Flarum\Extension\ExtensionManager;
 use Flarum\Settings\SettingsRepositoryInterface;

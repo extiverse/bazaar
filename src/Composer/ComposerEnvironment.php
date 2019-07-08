@@ -1,9 +1,9 @@
 <?php
 
-namespace Flagrow\Bazaar\Composer;
+namespace Extiverse\Bazaar\Composer;
 
-use Flagrow\Bazaar\Composer\Utils\ComposerFactory;
-use Flagrow\Bazaar\Exceptions\FilePermissionException;
+use Extiverse\Bazaar\Composer\Utils\ComposerFactory;
+use Extiverse\Bazaar\Exceptions\FilePermissionException;
 use Illuminate\Filesystem\Filesystem;
 
 class ComposerEnvironment

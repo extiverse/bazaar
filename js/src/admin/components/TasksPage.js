@@ -31,10 +31,10 @@ export default class TasksPage extends Component {
                                     <table className="TaskPage-table">
                                         <thead>
                                         <tr>
-                                            <th className="time-column">{ app.translator.trans('flagrow-bazaar.admin.page.task.header.time') }</th>
-                                            <th className="status-column">{ app.translator.trans('flagrow-bazaar.admin.page.task.header.status') }</th>
-                                            <th>{ app.translator.trans('flagrow-bazaar.admin.page.task.header.command') }</th>
-                                            <th className="details-column">{ app.translator.trans('flagrow-bazaar.admin.page.task.header.details') }</th>
+                                            <th className="time-column">{ app.translator.trans('bazaar.admin.page.task.header.time') }</th>
+                                            <th className="status-column">{ app.translator.trans('bazaar.admin.page.task.header.status') }</th>
+                                            <th>{ app.translator.trans('bazaar.admin.page.task.header.command') }</th>
+                                            <th className="details-column">{ app.translator.trans('bazaar.admin.page.task.header.details') }</th>
                                         </tr>
                                         </thead>
                                         { group.tasks.map(
@@ -57,15 +57,15 @@ export default class TasksPage extends Component {
     taskGroups() {
         let taskGroups = [
             {
-                title: app.translator.trans('flagrow-bazaar.admin.page.task.group.today'),
+                title: app.translator.trans('bazaar.admin.page.task.group.today'),
                 tasks: []
             },
             {
-                title: app.translator.trans('flagrow-bazaar.admin.page.task.group.lastmonth'),
+                title: app.translator.trans('bazaar.admin.page.task.group.lastmonth'),
                 tasks: []
             },
             {
-                title: app.translator.trans('flagrow-bazaar.admin.page.task.group.older'),
+                title: app.translator.trans('bazaar.admin.page.task.group.older'),
                 tasks: []
             }
         ];

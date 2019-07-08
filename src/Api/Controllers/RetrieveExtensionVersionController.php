@@ -1,9 +1,9 @@
 <?php
 
-namespace Flagrow\Bazaar\Api\Controllers;
+namespace Extiverse\Bazaar\Api\Controllers;
 
-use Flagrow\Bazaar\Jobs\SyncVersion;
-use Flagrow\Bazaar\Repositories\ExtensionRepository;
+use Extiverse\Bazaar\Jobs\SyncVersion;
+use Extiverse\Bazaar\Repositories\ExtensionRepository;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;

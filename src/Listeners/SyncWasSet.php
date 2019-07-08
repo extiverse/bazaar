@@ -1,8 +1,8 @@
 <?php
 
-namespace Flagrow\Bazaar\Listeners;
+namespace Extiverse\Bazaar\Listeners;
 
-use Flagrow\Bazaar\Search\FlagrowApi;
+use Extiverse\Bazaar\Search\FlagrowApi;
 use Flarum\Settings\Event\Saved;
 use Flarum\Settings\SettingsRepositoryInterface;
 use Illuminate\Contracts\Events\Dispatcher;

@@ -1,17 +1,17 @@
 <?php
 
-namespace Flagrow\Bazaar\Repositories;
+namespace Extiverse\Bazaar\Repositories;
 
-use Flagrow\Bazaar\Events\ExtensionWasInstalled;
-use Flagrow\Bazaar\Events\ExtensionWasUpdated;
-use Flagrow\Bazaar\Events\SearchedExtensions;
-use Flagrow\Bazaar\Events\SearchingExtensions;
-use Flagrow\Bazaar\Extensions\Extension;
-use Flagrow\Bazaar\Extensions\ExtensionUtils;
-use Flagrow\Bazaar\Extensions\PackageManager;
-use Flagrow\Bazaar\Search\FlagrowApi as Api;
-use Flagrow\Bazaar\Search\SearchResults;
-use Flagrow\Bazaar\Traits\Cachable;
+use Extiverse\Bazaar\Events\ExtensionWasInstalled;
+use Extiverse\Bazaar\Events\ExtensionWasUpdated;
+use Extiverse\Bazaar\Events\SearchedExtensions;
+use Extiverse\Bazaar\Events\SearchingExtensions;
+use Extiverse\Bazaar\Extensions\Extension;
+use Extiverse\Bazaar\Extensions\ExtensionUtils;
+use Extiverse\Bazaar\Extensions\PackageManager;
+use Extiverse\Bazaar\Search\FlagrowApi as Api;
+use Extiverse\Bazaar\Search\SearchResults;
+use Extiverse\Bazaar\Traits\Cachable;
 use Flarum\Extension\Event\Uninstalled as ExtensionWasUninstalled;
 use Flarum\Extension\ExtensionManager;
 use Illuminate\Contracts\Events\Dispatcher;

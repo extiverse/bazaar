@@ -1,10 +1,10 @@
 <?php
 
-namespace Flagrow\Bazaar\Api\Controllers;
+namespace Extiverse\Bazaar\Api\Controllers;
 
-use Flagrow\Bazaar\Api\Serializers\ExtensionSerializer;
-use Flagrow\Bazaar\Repositories\ExtensionRepository;
-use Flagrow\Bazaar\Search\FlagrowApi;
+use Extiverse\Bazaar\Api\Serializers\ExtensionSerializer;
+use Extiverse\Bazaar\Repositories\ExtensionRepository;
+use Extiverse\Bazaar\Search\FlagrowApi;
 use Flarum\Settings\SettingsRepositoryInterface;
 use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;

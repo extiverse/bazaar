@@ -1,6 +1,6 @@
 <?php
 
-namespace Flagrow\Bazaar\Models;
+namespace Extiverse\Bazaar\Models;
 
 use Carbon\Carbon;
 use Flarum\Database\AbstractModel;

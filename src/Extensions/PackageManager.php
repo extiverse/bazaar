@@ -1,10 +1,10 @@
 <?php
 
-namespace Flagrow\Bazaar\Extensions;
+namespace Extiverse\Bazaar\Extensions;
 
-use Flagrow\Bazaar\Jobs\RemovePackage;
-use Flagrow\Bazaar\Jobs\RequirePackage;
-use Flagrow\Bazaar\Models\Task;
+use Extiverse\Bazaar\Jobs\RemovePackage;
+use Extiverse\Bazaar\Jobs\RequirePackage;
+use Extiverse\Bazaar\Models\Task;
 use Flarum\Settings\SettingsRepositoryInterface;
 
 class PackageManager
