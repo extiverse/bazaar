@@ -49,6 +49,9 @@
             "discuss": "https://discuss.flarum.org/d/5151"
         }
     },
+    "replace": {
+        "flagrow/bazaar": "*"
+    },
     "autoload": {
         "psr-4": {
             "Extiverse\\Bazaar\\": "src/"
