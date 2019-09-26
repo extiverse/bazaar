@@ -60,7 +60,7 @@ bazaar:
                 no_results_available: >
                     It seems no results were available at this time.
                 not_authorized: >
-                    Your authorization against our flagrow.io api failed. Possibly an unstable internet connection is causing this.
+                    Your authorization against our flagrow.io API failed. Possibly an unstable internet connection is causing this.
                     Please refresh the page once your connection stabilised. If the problem persists, please get in touch with us.
             button:
                 more: "More, load page {current} of {total}"
