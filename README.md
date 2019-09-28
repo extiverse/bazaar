@@ -25,7 +25,7 @@ For a complete overview of our changes, please visit the [changelog](https://git
 ## Installation
 
 ```bash
-composer require flagrow/bazaar
+composer require extiverse/bazaar
 ```
 
 Make sure that the following directories and files are writable by the web/php user:
@@ -37,7 +37,7 @@ Make sure that the following directories and files are writable by the web/php u
 ## Updating
 
 ```bash
-composer update flagrow/bazaar
+composer update extiverse/bazaar
 php flarum migrate
 php flarum cache:clear
 ```
