@@ -1,7 +1,7 @@
 bazaar:
     admin:
         loader:
-            is_loading: Processing..
+            is_loading: Processing...
             error: An error occured. Check the History tab and your Flarum log for details. Don't be afraid to report it to us.
             refresh: Refresh page
             close: Close
@@ -27,14 +27,14 @@ bazaar:
                 field:
                     token:
                         label: API token
-                        description: This api token is required to access the Flagrow extension api. If already set, you're good to go!
+                        description: This API token is required to access the Flagrow extension API. If already set, you're good to go!
                     use_cron_for_tasks:
                         label: Cronjobs
                         description: >
                            By allowing cronjobs to process Bazaar tasks, these processes
                            are less likely to timeout. Please note you need to be able to
                            configure the cronjob, refer to <a>the wiki</a>.
-                        toggle: Use crons for task processing
+                        toggle: Use cron for task processing
             connect-bazaar:
                 title: Connect
                 description: >
@@ -60,7 +60,7 @@ bazaar:
                 no_results_available: >
                     It seems no results were available at this time.
                 not_authorized: >
-                    Your authorization against our flagrow.io api failed. Possibly an unstable internet connection is causing this.
+                    Your authorization against our flagrow.io API failed. Possibly an unstable internet connection is causing this.
                     Please refresh the page once your connection stabilised. If the problem persists, please get in touch with us.
             button:
                 more: "More, load page {current} of {total}"
